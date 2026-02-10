@@ -41,38 +41,44 @@ class TacTu:
             phatam("Không tìm thấy {}".format(HOITHANHPHUSIEUCAP))
             return
 
-        self._tenbandotruockhivebanrac = self.moitruong.get_tenbandohientai()
+        if self._tenbandotruockhivebanrac != self.moitruong.get_tenbandohientai():
+            self._tenbandotruockhivebanrac = self.moitruong.get_tenbandohientai()
+
+        time.sleep(1.)
 
         idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
         self.moitruong.action_sudungvatphamhanhtrang(idvatpham, vitrix, vitriy)
 
-        time.sleep(5.)
+        time.sleep(1.)
 
         self.action_bantoanbovatpham()
+
+        time.sleep(1.)
 
     def action_bantoanbovatpham(self):
         idnhanvat = self.moitruong.action_timkiemnhanvat(tennhanvat = "Đại phu")
         if idnhanvat < 0:
             phatam("Không tìm thấy Đại phu")
-            return
+            return False
 
         if self.moitruong.get_khoangcach(idnhanvat) > 450:
             self.moitruong.action_dichuyengiukhoangcachtoithieu(idnhanvat, 300)
-            time.sleep(0.5)
-            return
+            time.sleep(1.0)
+            return False
 
         self.moitruong.action_doithoai(idnhanvat)
-        time.sleep(0.5)
+        time.sleep(1.0)
 
         if not self.moitruong.get_is_dangdoithoai():
             phatam("Đối thoại thất bại")
-            return
+            return False
 
         self.moitruong.action_luachondoithoai(1)
-        time.sleep(0.5)
+        time.sleep(1.0)
 
         if not self.moitruong.get_is_dangmocuahang():
             phatam("Cửa hàng chưa mở")
+            return False
 
         for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
             vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
@@ -94,6 +100,8 @@ class TacTu:
             time.sleep(0.5)
 
         self.moitruong.action_dongcuahang()
+
+        return True
 
     def get_is_hanhtrangday(self):
         tongsovatphamhanhtrang = 0
@@ -118,10 +126,7 @@ class TacTu:
 
         if self.get_is_hanhtrangday():
             self.action_vebanrac()
-
-            if self._tenbandotruockhivebanrac:
-                tukhoadiemchuyentiep = (self.moitruong.get_tenbandohientai(), self._tenbandotruockhivebanrac)
-                print("tukhoadiemchuyentiep: {}".format(tukhoadiemchuyentiep))
-                if tukhoadiemchuyentiep in DIEMCHUYENTIEP_MAP:
-                    self.moitruong.action_dichuyen(*DIEMCHUYENTIEP_MAP.get(tukhoadiemchuyentiep))
-
+        elif self.moitruong.get_tenbandohientai() in TRONGTHANHs:
+            tukhoadiemchuyentiep = (self.moitruong.get_tenbandohientai(), self._tenbandotruockhivebanrac or self.moitruong.get_tenbandohientai())
+            if tukhoadiemchuyentiep in DIEMCHUYENTIEP_MAP:
+                self.moitruong.action_dichuyen(*DIEMCHUYENTIEP_MAP.get(tukhoadiemchuyentiep))

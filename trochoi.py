@@ -16,7 +16,7 @@ from moitruong import MoiTruong
 from tienich import phatam
 
 CREATE_NO_WINDOW = 0x08000000
-VK_F12 = 0x7B
+VK_F11 = 0x7A
 
 TEN_CARD_BLUETOOTH = "Bluetooth Network Connection"
 
@@ -68,7 +68,7 @@ class TroChoiWorker:
                     self.is_dangchay.set()
                     break
 
-                if win32api.GetAsyncKeyState(VK_F12) & 0x8000:
+                if win32api.GetAsyncKeyState(VK_F11) & 0x8000:
                     self.is_dangchay.set()
                     break
 
@@ -221,7 +221,7 @@ class TroChoiManager:
         time.sleep(1)
 
         while self.is_running:
-            if win32api.GetAsyncKeyState(VK_F12) & 0x8000:
+            if win32api.GetAsyncKeyState(VK_F11) & 0x8000:
                 self.stop_all()
                 break
 
