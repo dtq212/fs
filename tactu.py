@@ -14,6 +14,9 @@ from tienich import taithietlap as util_taithietlap, phatam
 class TacTu:
     def __init__(self, moitruong: MoiTruong):
         self.moitruong = moitruong
+        self._is_tudongvebanrac = True
+
+        self._tenbandotruockhivebanrac = False
 
     def __del__(self):
         try:
@@ -37,6 +40,9 @@ class TacTu:
         if not vitrivatpham:
             phatam("Không tìm thấy {}".format(HOITHANHPHUSIEUCAP))
             return
+
+        self._tenbandotruockhivebanrac = self.moitruong.get_tenbandohientai()
+
         idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
         self.moitruong.action_sudungvatphamhanhtrang(idvatpham, vitrix, vitriy)
 
@@ -49,6 +55,12 @@ class TacTu:
         if idnhanvat < 0:
             phatam("Không tìm thấy Đại phu")
             return
+
+        if self.moitruong.get_khoangcach(idnhanvat) > 450:
+            self.moitruong.action_dichuyengiukhoangcachtoithieu(idnhanvat, 300)
+            time.sleep(0.5)
+            return
+
         self.moitruong.action_doithoai(idnhanvat)
         time.sleep(0.5)
 
@@ -79,7 +91,7 @@ class TacTu:
                 continue
 
             self.moitruong.action_banvatpham(sothutuvatpham)
-            time.sleep(0.25)
+            time.sleep(0.5)
 
         self.moitruong.action_dongcuahang()
 
@@ -98,4 +110,18 @@ class TacTu:
 
             tongsovatphamhanhtrang += 1
 
-        return tongsovatphamhanhtrang >= 35
+        return tongsovatphamhanhtrang >= 34
+
+    def action_tudongvebanrac(self):
+        if not self._is_tudongvebanrac:
+            return
+
+        if self.get_is_hanhtrangday():
+            self.action_vebanrac()
+
+            if self._tenbandotruockhivebanrac:
+                tukhoadiemchuyentiep = (self.moitruong.get_tenbandohientai(), self._tenbandotruockhivebanrac)
+                print("tukhoadiemchuyentiep: {}".format(tukhoadiemchuyentiep))
+                if tukhoadiemchuyentiep in DIEMCHUYENTIEP_MAP:
+                    self.moitruong.action_dichuyen(*DIEMCHUYENTIEP_MAP.get(tukhoadiemchuyentiep))
+
