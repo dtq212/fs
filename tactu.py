@@ -32,23 +32,35 @@ class TacTu:
         if thietlap:
             pass
 
+    def action_vebanrac(self):
+        vitrivatpham = self.moitruong.action_timkiemvatpham(HOITHANHPHUSIEUCAP)
+        if not vitrivatpham:
+            phatam("Không tìm thấy {}".format(HOITHANHPHUSIEUCAP))
+            return
+        idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
+        self.moitruong.action_sudungvatphamhanhtrang(idvatpham, vitrix, vitriy)
+
+        time.sleep(2.)
+
+        self.action_bantoanbovatpham()
+
     def action_bantoanbovatpham(self):
         idnhanvat = self.moitruong.action_timkiemnhanvat(tennhanvat = "Đại phu")
         if idnhanvat < 0:
-            print("Không tìm thấy Đại phu")
+            phatam("Không tìm thấy Đại phu")
             return
         self.moitruong.action_doithoai(idnhanvat)
         time.sleep(0.5)
 
         if not self.moitruong.get_is_dangdoithoai():
-            print("Đối thoại thất bại")
+            phatam("Đối thoại thất bại")
             return
 
         self.moitruong.action_luachondoithoai(1)
         time.sleep(0.5)
 
         if not self.moitruong.get_is_dangmocuahang():
-            print("Cửa hàng chưa mở")
+            phatam("Cửa hàng chưa mở")
 
         for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
             vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
@@ -65,3 +77,5 @@ class TacTu:
 
             self.moitruong.action_banvatpham(sothutuvatpham)
             time.sleep(0.25)
+
+        self.moitruong.action_dongcuahang()

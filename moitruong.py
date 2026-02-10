@@ -51,6 +51,9 @@ class MoiTruong:
         self.diachihamluachondoithoai = self.tientrinh.allocate(1024)
         self.khoitaohamluachondoithoai()
 
+        self.diachihamsudungvatpham = self.tientrinh.allocate(1024)
+        self.khoitaohamsudungvatpham()
+
     def __del__(self):
         def safe_free(diachi):
             try:
@@ -65,6 +68,7 @@ class MoiTruong:
             "diachihamdongcuahang",
             "diachihamdoithoai",
             "diachihamluachondoithoai",
+            "diachihamsudungvatpham",
         ]
 
         for diachicangiaiphong in diachicangiaiphongs:
@@ -110,6 +114,7 @@ class MoiTruong:
     def get_vitrivatpham(self, sothutuvatpham):
         if sothutuvatpham <= 0 or sothutuvatpham > SOLUONGVITRIVATPHAMTOIDA:
             return False
+
         vitrivatpham = (
             read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOVITRIVATPHAM + sothutuvatpham * OFFSET_DIACHICOSOVITRIMOIVATPHAM), #ID vật phẩm
             read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOVITRIVATPHAM + 0x4 + sothutuvatpham * OFFSET_DIACHICOSOVITRIMOIVATPHAM), #Vị trí rương
@@ -139,7 +144,8 @@ class MoiTruong:
             mov ecx, dword ptr [{self.diachihambanvatpham + 0x40 + 0x4}]
             mov edx, dword ptr [{self.diachihambanvatpham + 0x40 + 0x8}]
             push edx
-            call {self.diachigame + 0x1811E0}
+            mov eax, {self.diachigame + 0x1811E0}
+            call eax
             add esp, 4
             ret
         """
@@ -176,7 +182,8 @@ class MoiTruong:
             push 03
             push {0x6FF178}
             mov ecx,{self.diachigame + 0x395560}
-            call {self.diachigame + 0x10F280}
+            mov eax, {self.diachigame + 0x10F280}
+            call eax
             ret
         """
 
@@ -191,7 +198,8 @@ class MoiTruong:
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
         asm_code = f"""
-            call {self.diachigame + 0xE3C30}
+            mov eax, {self.diachigame + 0xE3C30}
+            call eax
             ret
         """
 
@@ -209,7 +217,8 @@ class MoiTruong:
             mov ebx, dword ptr [{self.diachihamdoithoai + 0x40}]
             push ebx
             mov ecx, {self.diachigame + 0x395560}
-            call {self.diachigame + 0x1100B0}
+            mov eax, {self.diachigame + 0x1100B0}
+            call eax
             ret
         """
 
@@ -233,7 +242,8 @@ class MoiTruong:
 
         asm_code = f"""
             push 01
-            call {hex(self.diachigame + 0xC9450)}
+            mov eax, {self.diachigame + 0xC9450}
+            call eax
             add esp, 04
             
             mov eax, dword ptr [{self.diachihamluachondoithoai + 0x40}]
@@ -246,7 +256,8 @@ class MoiTruong:
             mov ecx, dword ptr [{self.diachigame + 0x29F794}]
             mov eax, dword ptr [edx + 0x04]
 
-            call {self.diachigame + 0x10AE00}
+            mov ebx, {self.diachigame + 0x10AE00}
+            call ebx
             ret
         """
 
@@ -259,15 +270,64 @@ class MoiTruong:
         write_int(self.tientrinh, diachidulieu, idluachon)
         self.tientrinh.start_thread(self.diachihamluachondoithoai)
 
+    def khoitaohamsudungvatpham(self):
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        asm_code = f"""
+            mov ebx, dword ptr [{self.diachihamsudungvatpham + 0x40}]
+            mov eax, dword ptr [{self.diachihamsudungvatpham + 0x40 + 0x4}]
+            mov ecx, dword ptr [{self.diachihamsudungvatpham + 0x40 + 0x8}]
+            mov esi, {VITRIRUONGHANHTRANG}
+            mov edx, 0
+            
+            push edx
+            push ecx
+            push eax
+            push esi
+
+            mov ecx, {hex(self.diachigame + 0x395560)}
+            push ebx
+
+            mov ebp, {hex(self.diachigame + 0x110BE0)}
+            call ebp
+            
+            ret
+        """
+
+        encoding, _ = ks.asm(asm_code)
+        self.tientrinh.write_bytes(self.diachihamsudungvatpham, bytes(encoding), len(encoding))
+
+    def action_sudungvatphamhanhtrang(self, idvatpham, vitrix, vitriy):
+        diachidulieu = self.diachihamsudungvatpham + 0x40
+        self.tientrinh.write_int(diachidulieu, idvatpham)
+        self.tientrinh.write_int(diachidulieu + 0x4, vitrix)
+        self.tientrinh.write_int(diachidulieu + 0x8, vitriy)
+        self.tientrinh.start_thread(self.diachihamsudungvatpham)
+
     def action_timkiemnhanvat(self, tennhanvat):
         if not tennhanvat:
             return -1
-        for i in range(SOLUONGNHANVATTOIDA):
-            if self.get_is_nhanvattontai(i):
-                tennhanvatxemxet = self.get_tennhanvat(i)
-                if tennhanvatxemxet and tennhanvatxemxet.strip() == tennhanvat.strip():
-                    return i
+        for idnhanvat in range(SOLUONGNHANVATTOIDA):
+            if not self.get_is_nhanvattontai(idnhanvat):
+                continue
+            tennhanvatxemxet = self.get_tennhanvat(idnhanvat)
+            if tennhanvatxemxet and tennhanvatxemxet.strip() == tennhanvat.strip():
+                return idnhanvat
         return -1
+
+    def action_timkiemvatpham(self, tenvatpham):
+        if not tenvatpham:
+            return False
+
+        for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
+            vitrivatpham = self.get_vitrivatpham(sothutuvatpham)
+            if not vitrivatpham:
+                continue
+            idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
+            tenvatphamxemxet = self.get_tenvatpham(idvatpham)
+            if tenvatphamxemxet and tenvatphamxemxet.strip() == tenvatpham.strip():
+                return vitrivatpham
+        return False
 
     def get_tenbandohientai(self):
         return read_string(self.tientrinh, self.diachigame + 0x28A1114)
