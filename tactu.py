@@ -40,7 +40,7 @@ class TacTu:
         idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
         self.moitruong.action_sudungvatphamhanhtrang(idvatpham, vitrix, vitriy)
 
-        time.sleep(2.)
+        time.sleep(5.)
 
         self.action_bantoanbovatpham()
 
@@ -67,7 +67,7 @@ class TacTu:
             if not vitrivatpham:
                 continue
 
-            _, vitriruong, vitrix, vitriy = vitrivatpham
+            idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
 
             if vitriruong != VITRIRUONGHANHTRANG:
                 continue
@@ -75,7 +75,27 @@ class TacTu:
             if vitriy <= 1:
                 continue
 
+            if self.moitruong.get_tenvatpham(idvatpham) in VATPHAMKHONGBANs:
+                continue
+
             self.moitruong.action_banvatpham(sothutuvatpham)
             time.sleep(0.25)
 
         self.moitruong.action_dongcuahang()
+
+    def get_is_hanhtrangday(self):
+        tongsovatphamhanhtrang = 0
+
+        for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
+            vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
+            if not vitrivatpham:
+                continue
+
+            idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
+
+            if vitriruong != VITRIRUONGHANHTRANG:
+                continue
+
+            tongsovatphamhanhtrang += 1
+
+        return tongsovatphamhanhtrang >= 35
