@@ -217,6 +217,10 @@ class MoiTruong:
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
         asm_code = f"""
+            push 01
+            call {hex(self.diachigame + 0xC9450)}
+            add esp, 04
+            
             mov eax, dword ptr [{self.diachihamluachondoithoai + 0x40}]
             push eax
             push 0x00
@@ -245,7 +249,12 @@ class MoiTruong:
             return -1
         for i in range(SOLUONGNHANVATTOIDA):
             if self.get_is_nhanvattontai(i):
-                tennhanvat = self.get_tennhanvat(i)
-                if tennhanvat and tennhanvat.strip() == tennhanvat.strip():
+                tennhanvatxemxet = self.get_tennhanvat(i)
+                if tennhanvatxemxet and tennhanvatxemxet.strip() == tennhanvat.strip():
                     return i
+                else:
+                    print(tennhanvatxemxet)
         return -1
+
+    def get_tenbandohientai(self):
+        return read_string(self.tientrinh, self.diachigame + 0x28A1114)

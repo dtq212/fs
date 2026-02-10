@@ -33,7 +33,7 @@ class TacTu:
             pass
 
     def action_bantoanbovatpham(self):
-        idnhanvat = self.moitruong.action_timkiemnhanvat(tennhanvat = "§¹i phu")
+        idnhanvat = self.moitruong.action_timkiemnhanvat(tennhanvat = "Đại phu")
         if idnhanvat < 0:
             print("Không tìm thấy Đại phu")
             return
