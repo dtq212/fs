@@ -45,7 +45,6 @@ class TacTu:
             return
 
         self.moitruong.action_luachondoithoai(1)
-        self.moitruong.action_ketthucdoithoai()
         time.sleep(0.5)
 
         if not self.moitruong.get_is_dangmocuahang():

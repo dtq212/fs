@@ -135,8 +135,7 @@ class MoiTruong:
             mov ecx, dword ptr [{self.diachihambanvatpham + 0x40 + 0x4}]
             mov edx, dword ptr [{self.diachihambanvatpham + 0x40 + 0x8}]
             push edx
-            mov eax, {self.diachigame + 0x1811E0}
-            call eax
+            call {self.diachigame + 0x1811E0}
             add esp, 4
             ret
         """
@@ -172,8 +171,7 @@ class MoiTruong:
             push 03
             push {0x6FF178}
             mov ecx,{self.diachigame + 0x395560}
-            mov eax, {self.diachigame + 0x10F280}
-            call eax
+            call {self.diachigame + 0x10F280}
             ret
         """
 
@@ -183,6 +181,20 @@ class MoiTruong:
     def action_mocuahang(self):
         self.tientrinh.start_thread(self.diachihammocuahang)
 
+    def khoitaohamdongcuahang(self):
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        asm_code = f"""
+            call {self.diachigame + 0xE3C30}
+            ret
+        """
+
+        encoding, _ = ks.asm(asm_code)
+        write_bytes(self.tientrinh, self.diachihamdongcuahang, bytes(encoding), len(encoding))
+
+    def action_dongcuahang(self):
+        self.tientrinh.start_thread(self.diachihamdongcuahang)
+
     def khoitaohamdoithoai(self):
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
@@ -190,8 +202,7 @@ class MoiTruong:
             mov ebx, dword ptr [{self.diachihamdoithoai + 0x40}]
             push ebx
             mov ecx, {self.diachigame + 0x395560}
-            mov eax, {self.diachigame + 0x1100B0}
-            call eax
+            call {self.diachigame + 0x1100B0}
             ret
         """
 
@@ -208,10 +219,6 @@ class MoiTruong:
 
     def get_is_dangdoithoai(self):
         return read_int(self.tientrinh, self.diachigame + 0x29F0C0) > 0
-
-    def action_ketthucdoithoai(self):
-        if self.get_is_dangdoithoai():
-            write_int(self.tientrinh, self.diachigame + 0x29F0C0, 0)
 
     def khoitaohamluachondoithoai(self):
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
@@ -231,8 +238,7 @@ class MoiTruong:
             mov ecx, dword ptr [{self.diachigame + 0x29F794}]
             mov eax, dword ptr [edx + 0x04]
 
-            mov ebx, {self.diachigame + 0x10AE00}
-            call ebx
+            call {self.diachigame + 0x10AE00}
             ret
         """
 
