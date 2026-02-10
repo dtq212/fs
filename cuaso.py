@@ -124,9 +124,6 @@ class CuaSo:
             if self.moitruong.get_is_cuasogamekichhoat():
 
                 if keyboard.is_pressed("ctrl+alt+shift+b"):
-                    self.tactu.action_bantoanbovatpham()
-                    time.sleep(0.3)
-                if keyboard.is_pressed("ctrl+alt+shift+m"):
-                    self.tactu.action_mocuahang()
+                    self.tactu.action_vebanrac()
                     time.sleep(0.3)
             time.sleep(0.05)
