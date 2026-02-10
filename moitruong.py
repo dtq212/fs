@@ -42,6 +42,9 @@ class MoiTruong:
         self.diachihammocuahang = self.tientrinh.allocate(1024)
         self.khoitaohammocuahang()
 
+        self.diachihamdongcuahang = self.tientrinh.allocate(1024)
+        self.khoitaohamdongcuahang()
+
         self.diachihamdoithoai = self.tientrinh.allocate(1024)
         self.khoitaohamdoithoai()
 
@@ -59,6 +62,7 @@ class MoiTruong:
         diachicangiaiphongs = [
             "diachihambanvatpham",
             "diachihammocuahang",
+            "diachihamdongcuahang",
             "diachihamdoithoai",
             "diachihamluachondoithoai",
         ]
@@ -147,6 +151,7 @@ class MoiTruong:
         return read_int(self.tientrinh, self.diachigame + 0x29F4FC) > 0
 
     def action_banvatpham(self, sothutuvatpham):
+        print("action_banvatpham: {}".format(sothutuvatpham))
         idvatpham = self.get_idvatpham(sothutuvatpham)
 
         if idvatpham <= 0:
@@ -179,6 +184,7 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihammocuahang, bytes(encoding), len(encoding))
 
     def action_mocuahang(self):
+        print("action_mocuahang")
         self.tientrinh.start_thread(self.diachihammocuahang)
 
     def khoitaohamdongcuahang(self):
@@ -193,6 +199,7 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamdongcuahang, bytes(encoding), len(encoding))
 
     def action_dongcuahang(self):
+        print("action_dongcuahang")
         self.tientrinh.start_thread(self.diachihamdongcuahang)
 
     def khoitaohamdoithoai(self):
@@ -210,6 +217,7 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamdoithoai, bytes(encoding), len(encoding))
 
     def action_doithoai(self, idnhanvat):
+        print("action_doithoai: {}".format(idnhanvat))
         if idnhanvat <= 0:
             return
 
@@ -246,6 +254,7 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamluachondoithoai, bytes(encoding), len(encoding))
 
     def action_luachondoithoai(self, idluachon):
+        print("action_luachondoithoai: {}".format(idluachon))
         diachidulieu = self.diachihamluachondoithoai + 0x40
         write_int(self.tientrinh, diachidulieu, idluachon)
         self.tientrinh.start_thread(self.diachihamluachondoithoai)
@@ -258,8 +267,6 @@ class MoiTruong:
                 tennhanvatxemxet = self.get_tennhanvat(i)
                 if tennhanvatxemxet and tennhanvatxemxet.strip() == tennhanvat.strip():
                     return i
-                else:
-                    print(tennhanvatxemxet)
         return -1
 
     def get_tenbandohientai(self):
