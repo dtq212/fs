@@ -126,4 +126,9 @@ class CuaSo:
                 if keyboard.is_pressed("ctrl+alt+shift+b"):
                     self.tactu.action_vebanrac()
                     time.sleep(0.3)
+
+                if keyboard.is_pressed("ctrl+alt+shift+h"):
+                    self.tactu.battat_tudongvebanrac()
+                    time.sleep(0.3)
+
             time.sleep(0.05)

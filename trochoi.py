@@ -17,6 +17,7 @@ from tienich import phatam
 
 CREATE_NO_WINDOW = 0x08000000
 VK_F11 = 0x7A
+VK_CONTROL = 0x11
 
 TEN_CARD_BLUETOOTH = "Bluetooth Network Connection"
 
@@ -68,7 +69,7 @@ class TroChoiWorker:
                     self.is_dangchay.set()
                     break
 
-                if win32api.GetAsyncKeyState(VK_F11) & 0x8000:
+                if win32api.GetAsyncKeyState(VK_CONTROL) & 0x8000 and win32api.GetAsyncKeyState(VK_F11) & 0x8000:
                     self.is_dangchay.set()
                     break
 
@@ -112,10 +113,7 @@ class TroChoiManager:
         print("1. Có cửa sổ đang đăng nhập -> Ưu tiên Bluetooth.")
         print("2. Tất cả cửa sổ đã vào game -> Ưu tiên Wifi (Nhường mạng).")
         print("-" * 50)
-        print("3. Ctrl+Alt+1: Ép dùng Bluetooth (Metric 1).")
-        print("4. Ctrl+Alt+2: Ép dùng Wifi (Metric 100).")
-        print("-" * 50)
-        print("Nhấn phím F12 để dừng toàn bộ!")
+        print("Nhấn phím Ctrl + F11 để dừng toàn bộ!")
         print("=" * 50)
 
     def stop_all(self):
@@ -129,25 +127,6 @@ class TroChoiManager:
                     pass
         time.sleep(1)
         os._exit(0)
-
-    def thiet_lap_mang_bluetooth(self, metric):
-        return
-        if self.current_metric == metric:
-            return
-
-        try:
-            cmd = f'powershell -Command "Get-NetAdapter \'{TEN_CARD_BLUETOOTH}\' | Set-NetIPInterface -InterfaceMetric {metric}"'
-
-            subprocess.run(cmd, shell = True, creationflags = CREATE_NO_WINDOW)
-
-            self.current_metric = metric
-
-            if metric == 1:
-                print(f"[Network] Bluetooth Metric = 1 (HIGH) -> Chế độ Đăng Nhập")
-            else:
-                print(f"[Network] Bluetooth Metric = 100 (LOW) -> Chế độ Treo Game")
-        except Exception as e:
-            print(f"Lỗi chỉnh mạng: {e}")
 
     def _tim_cua_so_game(self):
         ds_hwnd = []
@@ -188,49 +167,13 @@ class TroChoiManager:
             except Exception:
                 pass
 
-    def check_network_condition(self):
-        tat_ca_cua_so = self._tim_cua_so_game()
-
-        co_cua_so_chua_dang_nhap = False
-
-        if not tat_ca_cua_so:
-            self.thiet_lap_mang_bluetooth(100)
-            return
-
-        for hwnd in tat_ca_cua_so:
-            try:
-                mt = MoiTruong(hwnd)
-                if not mt.get_is_nhanvattontai():
-                    co_cua_so_chua_dang_nhap = True
-                    break
-
-                ten = mt.get_tendoituong()
-                if not ten or len(ten) == 0:
-                    co_cua_so_chua_dang_nhap = True
-                    break
-            except:
-                co_cua_so_chua_dang_nhap = True
-                break
-
-        if co_cua_so_chua_dang_nhap:
-            self.thiet_lap_mang_bluetooth(1)
-        else:
-            self.thiet_lap_mang_bluetooth(100)
-
     def run(self):
         time.sleep(1)
 
         while self.is_running:
-            if win32api.GetAsyncKeyState(VK_F11) & 0x8000:
+            if win32api.GetAsyncKeyState(VK_CONTROL) & 0x8000 and win32api.GetAsyncKeyState(VK_F11) & 0x8000:
                 self.stop_all()
                 break
-
-            if keyboard.is_pressed("ctrl+alt+1"):
-                self.thiet_lap_mang_bluetooth(1)
-                time.sleep(0.5)
-            elif keyboard.is_pressed("ctrl+alt+2"):
-                self.thiet_lap_mang_bluetooth(100)
-                time.sleep(0.5)
 
             with self.lock:
                 dead_hwnds = []
@@ -246,8 +189,6 @@ class TroChoiManager:
                 if hwnd not in self.managed_processes:
                     if self.kiem_tra_du_dieu_kien_manager(hwnd):
                         self.spawn_worker_for_hwnd(hwnd)
-
-            self.check_network_condition()
 
             time.sleep(0.5)
 

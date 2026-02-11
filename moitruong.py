@@ -12,7 +12,7 @@ OFFSET_DIACHICOSOMOINHANVAT = 0x8294
 
 #ĐỊA CHỈ CƠ SỞ THÔNG TIN VẬT PHẨM
 #Moi bằng id vị trí rương = 1 khi cầm vật phẩm lên và đặt xuống hành trang là 3
-OFFSET_DIACHICOSOVITRIVATPHAM = 0x3956B4
+OFFSET_DIACHICOSOVITRIVATPHAM = 0x3956A4
 OFFSET_DIACHICOSOVITRIMOIVATPHAM = 0x10
 
 #Moi từ địa chỉ số lượng hàng và cột tối đa trong hành trang (Tìm kiếm theo byte array 05 00 00 00 0E 00 00 00 rồi trừ cho 0x8
@@ -243,6 +243,7 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamdoithoai, bytes(encoding), len(encoding))
 
     def action_doithoai(self, idnhanvat):
+        print("{}: action_doithoai: {}".format(self.get_tennhanvat(), idnhanvat))
         if idnhanvat <= 0:
             return
 
@@ -371,6 +372,7 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamdichuyen, bytes(encoding), len(encoding))
 
     def action_dichuyen(self, toadox, toadoy):
+        print("{}: action_dichuyen: {} {}".format(self.get_tennhanvat(), toadox, toadoy))
         diachidulieu = self.diachihamdichuyen + 0x40
 
         write_int(self.tientrinh, diachidulieu, toadox)
@@ -378,18 +380,20 @@ class MoiTruong:
 
         self.tientrinh.start_thread(self.diachihamdichuyen)
 
-    def action_timkiemnhanvat(self, tennhanvat):
+    def action_timkiemnhanvat(self, tennhanvat, khoangcach = 2000):
+        print("{}: action_timkiemnhanvat: {}".format(self.get_tennhanvat(), tennhanvat))
         if not tennhanvat:
             return -1
         for idnhanvat in range(SOLUONGNHANVATTOIDA):
             if not self.get_is_nhanvattontai(idnhanvat):
                 continue
             tennhanvatxemxet = self.get_tennhanvat(idnhanvat)
-            if tennhanvatxemxet and tennhanvatxemxet.strip() == tennhanvat.strip():
+            if tennhanvatxemxet and tennhanvatxemxet.strip() == tennhanvat.strip() and self.get_khoangcach(idnhanvat) < khoangcach:
                 return idnhanvat
         return -1
 
     def action_timkiemvatpham(self, tenvatpham):
+        print("{}: action_timkiemvatpham: {}".format(self.get_tennhanvat(), tenvatpham))
         if not tenvatpham:
             return False
 
@@ -424,6 +428,7 @@ class MoiTruong:
         return khoangcach
 
     def action_dichuyengiukhoangcachtoithieu(self, idnhanvat2, khoangcachtoithieu):
+        print("{}: action_dichuyengiukhoangcachtoithieu: {}, {}".format(self.get_tennhanvat(), idnhanvat2, khoangcachtoithieu))
         if not self.get_is_nhanvattontai(idnhanvat2):
             return
 

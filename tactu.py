@@ -35,21 +35,30 @@ class TacTu:
         if thietlap:
             pass
 
+    def battat_tudongvebanrac(self):
+        self._is_tudongvebanrac = not self._is_tudongvebanrac
+
+        if self._is_tudongvebanrac:
+            phatam("Bật tự động về bán rác")
+        else:
+            phatam("Tắt tự động về bán rác")
+
     def action_vebanrac(self):
-        vitrivatpham = self.moitruong.action_timkiemvatpham(HOITHANHPHUSIEUCAP)
-        if not vitrivatpham:
-            phatam("Không tìm thấy {}".format(HOITHANHPHUSIEUCAP))
-            return
+        if self.moitruong.get_tenbandohientai() not in TRONGTHANHs:
+            vitrivatpham = self.moitruong.action_timkiemvatpham(HOITHANHPHUSIEUCAP)
+            if not vitrivatpham:
+                phatam("Không tìm thấy {}".format(HOITHANHPHUSIEUCAP))
+                return
 
-        if self._tenbandotruockhivebanrac != self.moitruong.get_tenbandohientai():
-            self._tenbandotruockhivebanrac = self.moitruong.get_tenbandohientai()
+            if self._tenbandotruockhivebanrac != self.moitruong.get_tenbandohientai():
+                self._tenbandotruockhivebanrac = self.moitruong.get_tenbandohientai()
 
-        time.sleep(1.)
+            time.sleep(1.)
 
-        idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
-        self.moitruong.action_sudungvatphamhanhtrang(idvatpham, vitrix, vitriy)
+            idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
+            self.moitruong.action_sudungvatphamhanhtrang(idvatpham, vitrix, vitriy)
 
-        time.sleep(1.)
+            time.sleep(1.)
 
         self.action_bantoanbovatpham()
 
@@ -62,7 +71,7 @@ class TacTu:
             return False
 
         if self.moitruong.get_khoangcach(idnhanvat) > 450:
-            self.moitruong.action_dichuyengiukhoangcachtoithieu(idnhanvat, 300)
+            self.moitruong.action_dichuyengiukhoangcachtoithieu(idnhanvat, 0)
             time.sleep(1.0)
             return False
 
@@ -118,7 +127,9 @@ class TacTu:
 
             tongsovatphamhanhtrang += 1
 
-        return tongsovatphamhanhtrang >= 34
+        print("{}: tongsovatphamhanhtrang: {}".format(self.moitruong.get_tennhanvat(), tongsovatphamhanhtrang))
+
+        return tongsovatphamhanhtrang >= 35
 
     def action_tudongvebanrac(self):
         if not self._is_tudongvebanrac:
