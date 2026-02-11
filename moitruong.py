@@ -16,10 +16,18 @@ OFFSET_DIACHICOSOVITRIVATPHAM = 0x3956A4
 OFFSET_DIACHICOSOVITRIMOIVATPHAM = 0x10
 
 #Moi từ địa chỉ số lượng hàng và cột tối đa trong hành trang (Tìm kiếm theo byte array 05 00 00 00 0E 00 00 00 rồi trừ cho 0x8
-OFFSET_DIACHICOSOIDVATPHAMHANHTRANG = 0x395778
+OFFSET_DIACHICOSOTHONGTINHANHTRANG = 0x395778
 #Moi ở hàm sửa đồ
-OFFSET_DIACHICOSOTHONGTINVATPHAM = 0x2A049C #lea edi,[esi+CoreClient.dll+OFFSET_DIACHICOSOTHONGTINVATPHAM] # game.g_NpcSetting
+OFFSET_DIACHICOSOTHONGTINVATPHAM = 0x2A8278 #lea edi,[esi+CoreClient.dll+OFFSET_DIACHICOSOTHONGTINVATPHAM] # game.g_NpcSetting
 OFFSET_DIACHICOSOMOIVATPHAM = 0x73C
+
+def phan_loai_pham_chat(pc):
+    mapping = {0: "Trắng/Lam", 1: "Lục", 2: "Vàng", 3: "Cam"}
+    return mapping.get(pc, f"Unknown({pc})")
+
+def phan_loai_trang_bi(ltb):
+    mapping = {0: "Vũ khí", 2: "Áo", 4: "Pháp bảo", 5: "Giày", 6: "Đai", 7: "Nón", 9: "Phi phong", 10: "Thú cưỡi"}
+    return mapping.get(ltb, f"Khác({ltb})")
 
 class MoiTruong:
     def __init__(self, idcuaso):
@@ -59,6 +67,9 @@ class MoiTruong:
 
         self.diachihamdichuyen = self.tientrinh.allocate(256)
         self.khoitaohamdichuyen()
+
+        self.diachihamsuavatpham = self.tientrinh.allocate(256)
+        self.khoitaohamsuavatpham()
 
     def __del__(self):
         def safe_free(diachi):
@@ -115,10 +126,10 @@ class MoiTruong:
         return win32gui.GetForegroundWindow() == self.idcuaso
 
     def get_soohanhtrangmoihang(self):
-        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOIDVATPHAMHANHTRANG + 0x8)
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINHANHTRANG + 0x8)
 
     def get_sohanghanhtrang(self):
-        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOIDVATPHAMHANHTRANG + 0xC)
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINHANHTRANG + 0xC)
 
     def get_soohanhtrangtoida(self):
         return self.get_sohanghanhtrang() * self.get_soohanhtrangmoihang() * SOHANHTRANGTOIDA
@@ -151,13 +162,65 @@ class MoiTruong:
         return vitrivatpham
 
     def get_soluongvatpham(self, idvatpham):
-        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x82A4 + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x4C8 + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
 
     def get_tenvatpham(self, idvatpham):
-        return read_string(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x7EFC + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
+        return read_string(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x120 + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
 
     def get_dbidvatpham(self, idvatpham):
-        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x8438 + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x65C + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
+
+    def get_loaivatpham(self, idvatpham):
+        if idvatpham <= 0 or idvatpham > SOLUONGVATPHAMTOIDA:
+            return False
+
+        diachicosothongtinvatpham = self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM
+
+        phamchat = read_short_int(self.tientrinh, diachicosothongtinvatpham + 0xFC, 1)
+        danhmucvattutieuhao = read_short_int(self.tientrinh, diachicosothongtinvatpham + 0xFE, 2)
+        danhmuctrangbi = read_int(self.tientrinh, diachicosothongtinvatpham + 0x100)
+        loaihinh = read_short_int(self.tientrinh, diachicosothongtinvatpham + 0x108, 1)
+
+        return phamchat, danhmucvattutieuhao, danhmuctrangbi, loaihinh
+
+    def get_thongtinvatpham_display(self, idvatpham):
+        loaivatpham = self.get_loaivatpham(idvatpham)
+        if not loaivatpham:
+            return None
+
+        phamchat, danhmucvattutieuhao, danhmuctrangbi, loaihinh = loaivatpham
+
+        tenphamchat = PHAMCHATVATPHAM_MAP.get(phamchat, f"Lạ({phamchat})")
+        tendanhmuctrangbi = DANHMUCTRANGBI_MAP.get(danhmuctrangbi, "Vật phẩm khác")
+
+        return {
+            "Tên": self.get_tenvatpham(idvatpham),
+            "Số lượng": self.get_soluongvatpham(idvatpham),
+            "Độ bền": f"{self.get_dobenhientaivatpham(idvatpham)}/{self.get_dobentoidavatpham(idvatpham)}",
+            "Danh mục trang bị": tendanhmuctrangbi,
+            "Phẩm chất": tenphamchat,
+            "DBID": self.get_dbidvatpham(idvatpham),
+            "Danh mục vật tư tiêu hao": danhmucvattutieuhao,
+            "Loại hình": loaihinh
+        }
+
+    def get_dobenhientaivatpham(self, idvatpham):
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x660 + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
+
+    def get_dobentoidavatpham(self, idvatpham):
+        if idvatpham <= 0 or idvatpham > SOLUONGVATPHAMTOIDA:
+            return -1
+
+        if int.from_bytes(read_bytes(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0xFE + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM, 2), sys.byteorder) != 0:
+            return -1
+
+        for i in range(5):
+            x = self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM + (i * 0x14)
+            if read_int(self.tientrinh, x) == 0x1F:
+                dobentoida = read_int(self.tientrinh, x + 4)
+                return dobentoida if dobentoida > 0 else -1
+
+        return -1
 
     def khoitaohambanvatpham(self):
         if not self.diachihambanvatpham:
@@ -470,3 +533,65 @@ class MoiTruong:
             ymoi = int(y2 - tile * (y2 - y1))
 
             self.action_dichuyen(xmoi, ymoi)
+
+    def khoitaohamsuavatpham(self):
+        if not self.diachihamsuavatpham:
+            print("Không xin được bộ nhớ sửa đồ")
+            return
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        diachidulieu = self.diachihamsuavatpham + 0x40
+
+        asm_code = f"""
+            mov ebx, dword ptr [{diachidulieu}]
+            mov ebp, dword ptr [{diachidulieu + 0x4}]
+            mov edi, dword ptr [{diachidulieu + 0x8}]
+            mov ecx, dword ptr [{diachidulieu + 0xC}]
+            mov esi, 1
+
+            push ecx
+            mov eax, {hex(self.diachigame + 0x181060)}
+            call eax
+            add esp, 4
+            ret
+        """
+
+        encoding, _ = ks.asm(asm_code)
+        write_bytes(self.tientrinh, self.diachihamsuavatpham, bytes(encoding), len(encoding))
+
+    def action_suavatpham(self, idvatpham):
+        if not self.diachihamsuavatpham:
+            return
+
+        if read_int(self.tientrinh, self.diachigame + 0x2B99A2C) == 0:
+            return
+
+        dobenhientai = self.get_dobenhientaivatpham(idvatpham)
+        dobentoida = self.get_dobentoidavatpham(idvatpham)
+
+        if dobentoida == -1 or dobenhientai >= dobentoida or dobenhientai < 0:
+            return
+
+        diachicosothongtinvatpham = self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM
+        val_param = read_int(self.tientrinh, diachicosothongtinvatpham + 0x10C)
+        global_factor = read_int(self.tientrinh, self.diachigame + 0x2B99A28)
+
+        product = (val_param * global_factor) * 0x51EB851F
+        edx_val = (product >> 32) & 0xFFFFFFFF
+        if edx_val & 0x80000000: edx_val -= 0x100000000
+
+        scaled_unit = (edx_val >> 5) + ((edx_val >> 5 >> 31) & 1)
+        final_price = (scaled_unit * (dobentoida - dobenhientai)) // dobentoida
+
+        factor_addr = self.diachigame + (0x2B99A38 if dobenhientai == 0 else 0x2B99A34)
+        final_price *= read_int(self.tientrinh, factor_addr)
+
+        dbid = self.get_dbidvatpham(idvatpham)
+        diachidulieu = self.diachihamsuavatpham + 0x40
+
+        write_int(self.tientrinh, diachidulieu, int(final_price))
+        write_int(self.tientrinh, diachidulieu + 0x4, dobenhientai)
+        write_int(self.tientrinh, diachidulieu + 0x8, idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
+        write_int(self.tientrinh, diachidulieu + 0xC, dbid)
+
+        self.tientrinh.start_thread(self.diachihamsuavatpham)

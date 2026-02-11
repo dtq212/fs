@@ -123,12 +123,16 @@ class CuaSo:
         while not self.main_stop.is_set():
             if self.moitruong.get_is_cuasogamekichhoat():
 
-                if keyboard.is_pressed("ctrl+alt+shift+b"):
-                    self.tactu.action_vebanrac()
-                    time.sleep(0.3)
-
                 if keyboard.is_pressed("ctrl+alt+shift+h"):
                     self.tactu.battat_tudongvebanrac()
+                    time.sleep(0.3)
+
+                if keyboard.is_pressed("ctrl+alt+shift+r"):
+                    self.tactu.battat_tudongsuavatpham()
+                    time.sleep(0.3)
+
+                if keyboard.is_pressed("ctrl+alt+shift+t"):
+                    self.tactu.action_test()
                     time.sleep(0.3)
 
             time.sleep(0.05)

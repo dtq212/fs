@@ -15,8 +15,11 @@ class TacTu:
     def __init__(self, moitruong: MoiTruong):
         self.moitruong = moitruong
         self._is_tudongvebanrac = True
-
+        self._is_tudongsuavatpham = True
         self._tenbandotruockhivebanrac = False
+
+        self._thoidiemkiemtravebanracgannhat = 0.
+        self._thoidiemkiemtrasuavatphamgannhat = 0.
 
     def __del__(self):
         try:
@@ -43,8 +46,23 @@ class TacTu:
         else:
             phatam("Tắt tự động về bán rác")
 
+    def battat_tudongsuavatpham(self):
+        self._is_tudongsuavatpham = not self._is_tudongsuavatpham
+
+        if self._is_tudongsuavatpham:
+            phatam("Bật tự động sửa vật phẩm")
+        else:
+            phatam("Tắt tự động sửa vật phẩm")
+
+    def action_test(self):
+        for i in range(SOLUONGVATPHAMTOIDA):
+            idvatpham = self.moitruong.get_idvatpham(i)
+            thongtin = self.moitruong.get_thongtinvatpham_display(idvatpham)
+            if thongtin:
+                print(thongtin)
+
     def action_vebanrac(self):
-        if self.moitruong.get_tenbandohientai() not in TRONGTHANHs:
+        if self.moitruong.get_tenbandohientai() not in BANDOTRONGTHANHs:
             vitrivatpham = self.action_timkiemvatpham(HOITHANHPHUSIEUCAP)
             if not vitrivatpham:
                 phatam("Không tìm thấy {}".format(HOITHANHPHUSIEUCAP))
@@ -63,6 +81,22 @@ class TacTu:
         self.action_bantoanbovatpham()
 
         time.sleep(2.)
+
+    def action_suatoanbovatpham(self):
+        for i in range(SOLUONGVATPHAMTOIDA):
+            idvatpham = self.moitruong.get_idvatpham(i)
+            if idvatpham <= 0:
+                continue
+            dobenhientai = self.moitruong.get_dobenhientaivatpham(idvatpham)
+            if dobenhientai < 0:
+                continue
+            dobentoida = self.moitruong.get_dobentoidavatpham(idvatpham)
+            if dobentoida < 0:
+                continue
+
+            if dobenhientai < dobentoida:
+                print("Sửa vật phẩm {}".format(self.moitruong.get_tenvatpham(idvatpham)))
+                self.moitruong.action_suavatpham(idvatpham)
 
     def action_bantoanbovatpham(self):
         idnhanvat = self.action_timkiemnhanvat(tennhanvat = "Đại phu")
@@ -109,8 +143,15 @@ class TacTu:
             if self.moitruong.get_tenvatpham(idvatpham) in VATPHAMKHONGBANs:
                 continue
 
+            loaivatpham = self.moitruong.get_loaivatpham(idvatpham)
+
+            if not loaivatpham:
+                continue
+
+            phamchat, _, loaitrangbi, _ = loaivatpham
+
             self.moitruong.action_banvatpham(sothutuvatpham)
-            time.sleep(0.5)
+            time.sleep(0.25)
 
         self.moitruong.action_dongcuahang()
 
@@ -131,21 +172,34 @@ class TacTu:
 
             tongsovatphamhanhtrang += 1
 
-        print("{}: tongsovatphamhanhtrang: {}".format(self.moitruong.get_tennhanvat(), tongsovatphamhanhtrang))
-
         return tongsovatphamhanhtrang >= 30
 
     def action_tudongvebanrac(self):
         if not self._is_tudongvebanrac:
             return
 
+        if time.time() - self._thoidiemkiemtravebanracgannhat < 1.:
+            return
+
+        self._thoidiemkiemtravebanracgannhat = time.time()
+
         if self.get_is_hanhtrangday():
             self.action_vebanrac()
-        elif self.moitruong.get_tenbandohientai() in TRONGTHANHs:
+        elif self.moitruong.get_tenbandohientai() in BANDOTRONGTHANHs:
             tukhoadiemchuyentiep = (self.moitruong.get_tenbandohientai(), self._tenbandotruockhivebanrac or self.moitruong.get_tenbandohientai())
             if tukhoadiemchuyentiep in DIEMCHUYENTIEP_MAP:
                 self.moitruong.action_dichuyen(*DIEMCHUYENTIEP_MAP.get(tukhoadiemchuyentiep))
 
+    def action_tudongsuavatpham(self):
+        if not self._is_tudongsuavatpham:
+            return
+
+        if time.time() - self._thoidiemkiemtrasuavatphamgannhat < 1.:
+            return
+
+        self._thoidiemkiemtrasuavatphamgannhat = time.time()
+
+        self.action_suatoanbovatpham()
 
     def action_timkiemnhanvat(self, tennhanvat, khoangcach = 2000):
         print("{}: action_timkiemnhanvat: {}".format(self.moitruong.get_tennhanvat(), tennhanvat))
