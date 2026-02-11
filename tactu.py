@@ -62,7 +62,7 @@ class TacTu:
                 print(thongtin)
 
     def action_vebanrac(self):
-        if self.moitruong.get_tenbandohientai() not in BANDOTRONGTHANHs:
+        if self.moitruong.get_is_khuvuccothetancong():
             vitrivatpham = self.action_timkiemvatpham(HOITHANHPHUSIEUCAP)
             if not vitrivatpham:
                 phatam("Không tìm thấy {}".format(HOITHANHPHUSIEUCAP))
@@ -188,7 +188,7 @@ class TacTu:
 
         if self.get_is_hanhtrangday():
             self.action_vebanrac()
-        elif self.moitruong.get_tenbandohientai() in BANDOTRONGTHANHs:
+        elif not self.moitruong.get_is_khuvuccothetancong():
             tukhoadiemchuyentiep = (self.moitruong.get_tenbandohientai(), self._tenbandotruockhivebanrac or self.moitruong.get_tenbandohientai())
             if tukhoadiemchuyentiep in TOADODIEMCHUYENTIEP_MAP:
                 self.moitruong.action_dichuyen(*TOADODIEMCHUYENTIEP_MAP.get(tukhoadiemchuyentiep))
