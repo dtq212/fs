@@ -150,7 +150,7 @@ class TacTu:
 
             phamchat, _, danhmuctrangbi, _ = loaivatpham
 
-            if danhmuctrangbi not in DANHMUCTRANGBI_MAP or phamchat != PHAMCHATVATPHAM_TRANGLAM:
+            if danhmuctrangbi not in DANHMUCTRANGBI_MAP or (danhmuctrangbi in DANHMUCTRANGBI_MAP and phamchat != PHAMCHATVATPHAM_TRANGLAM):
                 continue
 
             self.moitruong.action_banvatpham(sothutuvatpham)
