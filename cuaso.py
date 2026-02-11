@@ -29,7 +29,7 @@ class CuaSo:
         self.moitruong = MoiTruong(idcuaso)
         self.tactu = TacTu(self.moitruong)
         self.tennhanvat = False
-        self.idnguoichoi = 0
+        self.dbidnhanvat = 0
         self.main_stop = threading.Event()
 
         self.luongs = (
@@ -47,8 +47,8 @@ class CuaSo:
         if not os.path.exists(icon_path):
             icon_path = None
 
-        title_ban_dau = f"{CHUACHONHANVAT} ({idcuaso})"
-        self.systray = SysTrayIcon(icon_path, title_ban_dau, on_quit = self.tatauto)
+        titlebandau = f"{CHUACHONHANVAT} ({idcuaso})"
+        self.systray = SysTrayIcon(icon_path, titlebandau, on_quit = self.tatauto)
         self.systray.start()
 
         self.thoidiemluuthietlapgannhat = time.time()
@@ -72,47 +72,47 @@ class CuaSo:
             pass
 
     def loop(self):
-        last_hover_text = None
-        thoi_gian_mat_ket_noi = 0
+        title = None
+        thoigianmatketnoi = 0
 
         while not self.main_stop.is_set() and self.moitruong.get_is_cuasogametontai():
             if not self.moitruong.get_is_dangmatketnoi():
-                thoi_gian_mat_ket_noi = 0
+                thoigianmatketnoi = 0
 
-                tennhanvat = self.moitruong.get_tendoituong()
-                idnguoichoi = self.moitruong.get_idnguoichoi()
+                tennhanvat = self.moitruong.get_tennhanvat()
+                dbidnhanvat = self.moitruong.get_dbidnhanvat()
 
-                if idnguoichoi != self.idnguoichoi:
-                    if idnguoichoi:
-                        if self.idnguoichoi:
-                            self.tactu.luuthietlap(self.idnguoichoi)
-                        self.tactu.taithietlap(idnguoichoi)
-                        if tennhanvat and tennhanvat != last_hover_text:
+                if dbidnhanvat != self.dbidnhanvat:
+                    if dbidnhanvat:
+                        if self.dbidnhanvat:
+                            self.tactu.luuthietlap(self.dbidnhanvat)
+                        self.tactu.taithietlap(dbidnhanvat)
+                        if tennhanvat and tennhanvat != title:
                             self.systray.update(hover_text = tennhanvat)
-                            last_hover_text = tennhanvat
-                    elif self.idnguoichoi:
-                        self.tactu.luuthietlap(self.idnguoichoi)
-                        if CHUACHONHANVAT != last_hover_text:
+                            title = tennhanvat
+                    elif self.dbidnhanvat:
+                        self.tactu.luuthietlap(self.dbidnhanvat)
+                        if CHUACHONHANVAT != title:
                             self.systray.update(hover_text = CHUACHONHANVAT)
-                            last_hover_text = CHUACHONHANVAT
+                            title = CHUACHONHANVAT
 
-                    self.idnguoichoi = idnguoichoi
+                    self.dbidnhanvat = dbidnhanvat
                     self.tennhanvat = tennhanvat
 
-                elif idnguoichoi and time.time() - self.thoidiemluuthietlapgannhat > 1.:
+                elif dbidnhanvat and time.time() - self.thoidiemluuthietlapgannhat > 1.:
                     self.thoidiemluuthietlapgannhat = time.time()
-                    self.tactu.luuthietlap(idnguoichoi)
+                    self.tactu.luuthietlap(dbidnhanvat)
             else:
                 self.tennhanvat = False
-                self.idnguoichoi = 0
+                self.dbidnhanvat = 0
 
-                if CHUACHONHANVAT != last_hover_text:
+                if CHUACHONHANVAT != title:
                     self.systray.update(hover_text = CHUACHONHANVAT)
-                    last_hover_text = CHUACHONHANVAT
+                    title = CHUACHONHANVAT
 
-                if thoi_gian_mat_ket_noi == 0:
-                    thoi_gian_mat_ket_noi = time.time()
-                elif time.time() - thoi_gian_mat_ket_noi > 1.:
+                if thoigianmatketnoi == 0:
+                    thoigianmatketnoi = time.time()
+                elif time.time() - thoigianmatketnoi > 1.:
                     break
 
             time.sleep(1)

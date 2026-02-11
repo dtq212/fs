@@ -19,9 +19,6 @@ CREATE_NO_WINDOW = 0x08000000
 VK_F11 = 0x7A
 VK_CONTROL = 0x11
 
-TEN_CARD_BLUETOOTH = "Bluetooth Network Connection"
-
-
 def loop_cuaso(cuaso: CuaSo):
     try:
         cuaso.loop()
@@ -41,23 +38,25 @@ class TroChoiWorker:
 
         self.cuaso = CuaSo(self.target_hwnd)
 
-        if not self.kiem_tra_nhan_vat_hop_le():
+        if not self._kiemtranhanvathople():
             return
 
         threading.Thread(target = loop_cuaso, args = [self.cuaso], daemon = True).start()
         self.loop_quanly()
 
-    def kiem_tra_nhan_vat_hop_le(self):
+    def _kiemtranhanvathople(self):
         try:
-            if not self.cuaso.moitruong.get_is_nhanvattontai(): return False
-            ten = self.cuaso.moitruong.get_tendoituong()
-            if not ten or len(ten) == 0: return False
+            if not self.cuaso.moitruong.get_is_nhanvattontai():
+                return False
+            tennhanvat = self.cuaso.moitruong.get_tennhanvat()
+            if not tennhanvat or len(tennhanvat) == 0:
+                return False
             return True
         except:
             return False
 
     def loop_quanly(self):
-        thoi_gian_mat_nhan_vat = 0
+        thoigianmatnhanvat = 0
 
         while not self.is_dangchay.is_set():
             try:
@@ -73,14 +72,14 @@ class TroChoiWorker:
                     self.is_dangchay.set()
                     break
 
-                if not self.kiem_tra_nhan_vat_hop_le():
-                    if thoi_gian_mat_nhan_vat == 0:
-                        thoi_gian_mat_nhan_vat = time.time()
-                    elif time.time() - thoi_gian_mat_nhan_vat > 2:
+                if not self._kiemtranhanvathople():
+                    if thoigianmatnhanvat == 0:
+                        thoigianmatnhanvat = time.time()
+                    elif time.time() - thoigianmatnhanvat > 2:
                         os.kill(os.getpid(), signal.SIGTERM)
                         break
                 else:
-                    thoi_gian_mat_nhan_vat = 0
+                    thoigianmatnhanvat = 0
 
             except Exception:
                 os.kill(os.getpid(), signal.SIGTERM)
@@ -91,7 +90,7 @@ class TroChoiWorker:
         if self.cuaso:
             try:
                 self.cuaso.main_stop.set()
-                if hasattr(self.cuaso, 'systray'):
+                if hasattr(self.cuaso, "systray"):
                     self.cuaso.systray.shutdown()
             except:
                 pass
@@ -101,17 +100,13 @@ class TroChoiWorker:
 
 class TroChoiManager:
     def __init__(self):
-        self.managed_processes = {}
+        self.tientrinhautos = {}
         self.lock = threading.Lock()
         self.is_running = True
         self.current_metric = None
 
         print("=" * 50)
-        print("TOOL CHIẾN QUỐC (AUTO MẠNG BLUETOOTH)")
-        print("-" * 50)
-        print("LOGIC MẠNG:")
-        print("1. Có cửa sổ đang đăng nhập -> Ưu tiên Bluetooth.")
-        print("2. Tất cả cửa sổ đã vào game -> Ưu tiên Wifi (Nhường mạng).")
+        print("TOOL PHONG THẦN")
         print("-" * 50)
         print("Nhấn phím Ctrl + F11 để dừng toàn bộ!")
         print("=" * 50)
@@ -120,7 +115,7 @@ class TroChoiManager:
         print("\nĐang dừng toàn bộ hệ thống...")
         self.is_running = False
         with self.lock:
-            for hwnd, proc in self.managed_processes.items():
+            for hwnd, proc in self.tientrinhautos.items():
                 try:
                     proc.kill()
                 except:
@@ -128,7 +123,7 @@ class TroChoiManager:
         time.sleep(1)
         os._exit(0)
 
-    def _tim_cua_so_game(self):
+    def _timcuasogame(self):
         ds_hwnd = []
 
         def callback(hwnd, _):
@@ -140,20 +135,22 @@ class TroChoiManager:
         win32gui.EnumWindows(callback, None)
         return ds_hwnd
 
-    def kiem_tra_du_dieu_kien_manager(self, hwnd):
+    def _kiemtradudieukienkichhoatauto(self, hwnd):
         try:
-            mt = MoiTruong(hwnd)
-            if not mt.get_is_nhanvattontai():
+            moitruong = MoiTruong(hwnd)
+            if not moitruong.get_is_nhanvattontai():
                 return False
-            ten = mt.get_tennhanvat()
-            if not ten or len(ten) == 0: return False
+            tennhanvat = moitruong.get_tennhanvat()
+            if not tennhanvat or len(tennhanvat) == 0:
+                return False
             return True
-        except:
+        except Exception as err:
+            raise
             return False
 
-    def spawn_worker_for_hwnd(self, hwnd):
+    def _kichhoatauto(self, hwnd):
         with self.lock:
-            if hwnd in self.managed_processes:
+            if hwnd in self.tientrinhautos:
                 return
 
             print(f"-> Phát hiện cửa sổ {hwnd} đã vào game -> Kích hoạt Auto!")
@@ -163,13 +160,12 @@ class TroChoiManager:
 
             try:
                 proc = subprocess.Popen(cmd, stdout = sys.stdout, stderr = sys.stderr)
-                self.managed_processes[hwnd] = proc
+                self.tientrinhautos[hwnd] = proc
             except Exception:
                 pass
 
     def run(self):
         time.sleep(1)
-
         while self.is_running:
             if win32api.GetAsyncKeyState(VK_CONTROL) & 0x8000 and win32api.GetAsyncKeyState(VK_F11) & 0x8000:
                 self.stop_all()
@@ -177,18 +173,18 @@ class TroChoiManager:
 
             with self.lock:
                 dead_hwnds = []
-                for h, p in self.managed_processes.items():
+                for h, p in self.tientrinhautos.items():
                     if p.poll() is not None:
                         dead_hwnds.append(h)
 
                 for h in dead_hwnds:
-                    del self.managed_processes[h]
+                    del self.tientrinhautos[h]
 
-            game_hwnds = self._tim_cua_so_game()
+            game_hwnds = self._timcuasogame()
             for hwnd in game_hwnds:
-                if hwnd not in self.managed_processes:
-                    if self.kiem_tra_du_dieu_kien_manager(hwnd):
-                        self.spawn_worker_for_hwnd(hwnd)
+                if hwnd not in self.tientrinhautos:
+                    if self._kiemtradudieukienkichhoatauto(hwnd):
+                        self._kichhoatauto(hwnd)
 
             time.sleep(0.5)
 
