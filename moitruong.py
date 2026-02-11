@@ -161,6 +161,7 @@ class MoiTruong:
 
     def khoitaohambanvatpham(self):
         if not self.diachihambanvatpham:
+            print("Không xin được bộ nhớ")
             return
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
@@ -183,6 +184,7 @@ class MoiTruong:
 
     def action_banvatpham(self, sothutuvatpham):
         if not self.diachihambanvatpham:
+            print("Không xin được bộ nhớ")
             return
         idvatpham = self.get_idvatpham(sothutuvatpham)
 
@@ -203,6 +205,7 @@ class MoiTruong:
 
     def khoitaohammocuahang(self):
         if not self.diachihammocuahang:
+            print("Không xin được bộ nhớ")
             return
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
@@ -220,11 +223,13 @@ class MoiTruong:
 
     def action_mocuahang(self):
         if not self.diachihammocuahang:
+            print("Không xin được bộ nhớ")
             return
         self.tientrinh.start_thread(self.diachihammocuahang)
 
     def khoitaohamdongcuahang(self):
         if not self.diachihamdongcuahang:
+            print("Không xin được bộ nhớ")
             return
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
@@ -239,11 +244,13 @@ class MoiTruong:
 
     def action_dongcuahang(self):
         if not self.diachihamdongcuahang:
+            print("Không xin được bộ nhớ")
             return
         self.tientrinh.start_thread(self.diachihamdongcuahang)
 
     def khoitaohamdoithoai(self):
         if not self.diachihamdoithoai:
+            print("Không xin được bộ nhớ")
             return
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
@@ -261,6 +268,7 @@ class MoiTruong:
 
     def action_doithoai(self, idnhanvat):
         if not self.diachihamdoithoai:
+            print("Không xin được bộ nhớ")
             return
         print("{}: action_doithoai: {}".format(self.get_tennhanvat(), idnhanvat))
         if idnhanvat <= 0:
@@ -275,6 +283,7 @@ class MoiTruong:
 
     def khoitaohamluachondoithoai(self):
         if not self.diachihamluachondoithoai:
+            print("Không xin được bộ nhớ")
             return
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
@@ -304,6 +313,7 @@ class MoiTruong:
 
     def action_luachondoithoai(self, idluachon):
         if not self.diachihamluachondoithoai:
+            print("Không xin được bộ nhớ")
             return
         diachidulieu = self.diachihamluachondoithoai + 0x40
         write_int(self.tientrinh, diachidulieu, idluachon)
@@ -311,6 +321,7 @@ class MoiTruong:
 
     def khoitaohamsudungvatpham(self):
         if not self.diachihamsudungvatpham:
+            print("Không xin được bộ nhớ")
             return
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
@@ -340,6 +351,7 @@ class MoiTruong:
 
     def action_sudungvatphamhanhtrang(self, idvatpham, vitrix, vitriy):
         if not self.diachihamsudungvatpham:
+            print("Không xin được bộ nhớ")
             return
         diachidulieu = self.diachihamsudungvatpham + 0x40
         write_int(self.tientrinh, diachidulieu, idvatpham)
@@ -349,6 +361,7 @@ class MoiTruong:
 
     def khoitaohamtudongtimduong(self):
         if not self.diachihamtudongtimduong:
+            print("Không xin được bộ nhớ")
             return
         diachidulieu = self.diachihamtudongtimduong + 0x40
 
@@ -372,6 +385,7 @@ class MoiTruong:
 
     def action_tudongtimduong(self, toadox, toadoy):
         if not self.diachihamtudongtimduong:
+            print("Không xin được bộ nhớ")
             return
         diachidulieu = self.diachihamtudongtimduong + 0x40
         write_int(self.tientrinh, diachidulieu, toadox)
@@ -381,6 +395,7 @@ class MoiTruong:
 
     def khoitaohamdichuyen(self):
         if not self.diachihamdichuyen:
+            print("Không xin được bộ nhớ")
             return
         diachidulieu = self.diachihamdichuyen + 0x40
 
@@ -406,6 +421,7 @@ class MoiTruong:
 
     def action_dichuyen(self, toadox, toadoy):
         if not self.diachihamdichuyen:
+            print("Không xin được bộ nhớ")
             return
         print("{}: action_dichuyen: {} {}".format(self.get_tennhanvat(), toadox, toadoy))
         diachidulieu = self.diachihamdichuyen + 0x40
