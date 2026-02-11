@@ -116,6 +116,9 @@ class MoiTruong:
     def get_toadoysaptoi(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x102C + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
 
+    def get_is_khuvuccothetancong(self):
+        return read_int(self.tientrinh, self.diachigame + 0x28E6934) > 0
+
     def get_is_dangmatketnoi(self):
         return not self.get_is_nhanvattontai()
 

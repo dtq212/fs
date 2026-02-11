@@ -102,8 +102,8 @@ class TacTu:
         idnhanvat = self.action_timkiemnhanvat(tennhanvat = "Đại phu")
         if idnhanvat < 0:
             tenbandohientai = self.moitruong.get_tenbandohientai()
-            if tenbandohientai in DAIPHU_MAP:
-                self.moitruong.action_dichuyen(*DAIPHU_MAP.get(tenbandohientai))
+            if tenbandohientai in TOADODAIPHU_MAP:
+                self.moitruong.action_dichuyen(*TOADODAIPHU_MAP.get(tenbandohientai))
             else:
                 phatam("Không tìm thấy Đại phu")
             return False
@@ -148,7 +148,10 @@ class TacTu:
             if not loaivatpham:
                 continue
 
-            phamchat, _, loaitrangbi, _ = loaivatpham
+            phamchat, _, danhmuctrangbi, _ = loaivatpham
+
+            if danhmuctrangbi not in DANHMUCTRANGBI_MAP or phamchat != PHAMCHATVATPHAM_TRANGLAM:
+                continue
 
             self.moitruong.action_banvatpham(sothutuvatpham)
             time.sleep(0.25)
@@ -187,8 +190,8 @@ class TacTu:
             self.action_vebanrac()
         elif self.moitruong.get_tenbandohientai() in BANDOTRONGTHANHs:
             tukhoadiemchuyentiep = (self.moitruong.get_tenbandohientai(), self._tenbandotruockhivebanrac or self.moitruong.get_tenbandohientai())
-            if tukhoadiemchuyentiep in DIEMCHUYENTIEP_MAP:
-                self.moitruong.action_dichuyen(*DIEMCHUYENTIEP_MAP.get(tukhoadiemchuyentiep))
+            if tukhoadiemchuyentiep in TOADODIEMCHUYENTIEP_MAP:
+                self.moitruong.action_dichuyen(*TOADODIEMCHUYENTIEP_MAP.get(tukhoadiemchuyentiep))
 
     def action_tudongsuavatpham(self):
         if not self._is_tudongsuavatpham:
