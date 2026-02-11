@@ -45,7 +45,7 @@ class TacTu:
 
     def action_vebanrac(self):
         if self.moitruong.get_tenbandohientai() not in TRONGTHANHs:
-            vitrivatpham = self.moitruong.action_timkiemvatpham(HOITHANHPHUSIEUCAP)
+            vitrivatpham = self.action_timkiemvatpham(HOITHANHPHUSIEUCAP)
             if not vitrivatpham:
                 phatam("Không tìm thấy {}".format(HOITHANHPHUSIEUCAP))
                 return
@@ -65,7 +65,7 @@ class TacTu:
         time.sleep(1.)
 
     def action_bantoanbovatpham(self):
-        idnhanvat = self.moitruong.action_timkiemnhanvat(tennhanvat = "Đại phu")
+        idnhanvat = self.action_timkiemnhanvat(tennhanvat = "Đại phu")
         if idnhanvat < 0:
             phatam("Không tìm thấy Đại phu")
             return False
@@ -129,7 +129,7 @@ class TacTu:
 
         print("{}: tongsovatphamhanhtrang: {}".format(self.moitruong.get_tennhanvat(), tongsovatphamhanhtrang))
 
-        return tongsovatphamhanhtrang >= 35
+        return tongsovatphamhanhtrang >= 30
 
     def action_tudongvebanrac(self):
         if not self._is_tudongvebanrac:
@@ -141,3 +141,31 @@ class TacTu:
             tukhoadiemchuyentiep = (self.moitruong.get_tenbandohientai(), self._tenbandotruockhivebanrac or self.moitruong.get_tenbandohientai())
             if tukhoadiemchuyentiep in DIEMCHUYENTIEP_MAP:
                 self.moitruong.action_dichuyen(*DIEMCHUYENTIEP_MAP.get(tukhoadiemchuyentiep))
+
+
+    def action_timkiemnhanvat(self, tennhanvat, khoangcach = 2000):
+        print("{}: action_timkiemnhanvat: {}".format(self.moitruong.get_tennhanvat(), tennhanvat))
+        if not tennhanvat:
+            return -1
+        for idnhanvat in range(SOLUONGNHANVATTOIDA):
+            if not self.moitruong.get_is_nhanvattontai(idnhanvat):
+                continue
+            tennhanvatxemxet = self.moitruong.get_tennhanvat(idnhanvat)
+            if tennhanvatxemxet and tennhanvatxemxet.strip() == tennhanvat.strip() and self.moitruong.get_khoangcach(idnhanvat) < khoangcach:
+                return idnhanvat
+        return -1
+
+    def action_timkiemvatpham(self, tenvatpham):
+        print("{}: action_timkiemvatpham: {}".format(self.moitruong.get_tennhanvat(), tenvatpham))
+        if not tenvatpham:
+            return False
+
+        for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
+            vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
+            if not vitrivatpham:
+                continue
+            idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
+            tenvatphamxemxet = self.moitruong.get_tenvatpham(idvatpham)
+            if tenvatphamxemxet and tenvatphamxemxet.strip() == tenvatpham.strip():
+                return vitrivatpham
+        return False

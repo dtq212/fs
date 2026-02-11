@@ -431,33 +431,6 @@ class MoiTruong:
 
         self.tientrinh.start_thread(self.diachihamdichuyen)
 
-    def action_timkiemnhanvat(self, tennhanvat, khoangcach = 2000):
-        print("{}: action_timkiemnhanvat: {}".format(self.get_tennhanvat(), tennhanvat))
-        if not tennhanvat:
-            return -1
-        for idnhanvat in range(SOLUONGNHANVATTOIDA):
-            if not self.get_is_nhanvattontai(idnhanvat):
-                continue
-            tennhanvatxemxet = self.get_tennhanvat(idnhanvat)
-            if tennhanvatxemxet and tennhanvatxemxet.strip() == tennhanvat.strip() and self.get_khoangcach(idnhanvat) < khoangcach:
-                return idnhanvat
-        return -1
-
-    def action_timkiemvatpham(self, tenvatpham):
-        print("{}: action_timkiemvatpham: {}".format(self.get_tennhanvat(), tenvatpham))
-        if not tenvatpham:
-            return False
-
-        for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
-            vitrivatpham = self.get_vitrivatpham(sothutuvatpham)
-            if not vitrivatpham:
-                continue
-            idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
-            tenvatphamxemxet = self.get_tenvatpham(idvatpham)
-            if tenvatphamxemxet and tenvatphamxemxet.strip() == tenvatpham.strip():
-                return vitrivatpham
-        return False
-
     def get_tenbandohientai(self):
         return read_string(self.tientrinh, self.diachigame + 0x28A1114)
 
