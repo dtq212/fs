@@ -53,37 +53,41 @@ class TacTu:
             if self._tenbandotruockhivebanrac != self.moitruong.get_tenbandohientai():
                 self._tenbandotruockhivebanrac = self.moitruong.get_tenbandohientai()
 
-            time.sleep(1.)
+            time.sleep(2.)
 
             idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
             self.moitruong.action_sudungvatphamhanhtrang(idvatpham, vitrix, vitriy)
 
-            time.sleep(1.)
+            time.sleep(2.)
 
         self.action_bantoanbovatpham()
 
-        time.sleep(1.)
+        time.sleep(2.)
 
     def action_bantoanbovatpham(self):
         idnhanvat = self.action_timkiemnhanvat(tennhanvat = "Đại phu")
         if idnhanvat < 0:
-            phatam("Không tìm thấy Đại phu")
+            tenbandohientai = self.moitruong.get_tenbandohientai()
+            if tenbandohientai in DAIPHU_MAP:
+                self.moitruong.action_dichuyen(*DAIPHU_MAP.get(tenbandohientai))
+            else:
+                phatam("Không tìm thấy Đại phu")
             return False
 
         if self.moitruong.get_khoangcach(idnhanvat) > 450:
             self.moitruong.action_dichuyengiukhoangcachtoithieu(idnhanvat, 0)
-            time.sleep(1.0)
+            time.sleep(2.)
             return False
 
         self.moitruong.action_doithoai(idnhanvat)
-        time.sleep(1.0)
+        time.sleep(2.)
 
         if not self.moitruong.get_is_dangdoithoai():
             phatam("Đối thoại thất bại")
             return False
 
         self.moitruong.action_luachondoithoai(1)
-        time.sleep(1.0)
+        time.sleep(2.)
 
         if not self.moitruong.get_is_dangmocuahang():
             phatam("Cửa hàng chưa mở")
