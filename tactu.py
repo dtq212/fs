@@ -70,7 +70,7 @@ class TacTu:
             time.sleep(2.)
 
             idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
-            self.moitruong.action_sudungvatphamhanhtrang(idvatpham, vitrix, vitriy)
+            self.moitruong.action_sudungvatphamhanhtrang(idvatpham, vitrix, vitriy, delay = 0.)
 
             time.sleep(2.)
 
@@ -92,7 +92,8 @@ class TacTu:
 
             if dobenhientai < dobentoida:
                 print("Sửa vật phẩm {}".format(self.moitruong.get_tenvatpham(idvatpham)))
-                self.moitruong.action_suavatpham(idvatpham)
+                self.moitruong.action_suavatpham(idvatpham, delay = 0.)
+                time.sleep(0.25)
 
     def action_bantoanbovatpham(self):
         idnhanvat = self.action_timkiemnhanvat(tennhanvat = "Đại phu", khoangcach = 800)
@@ -109,14 +110,14 @@ class TacTu:
             time.sleep(2.)
             return False
 
-        self.moitruong.action_doithoai(idnhanvat)
+        self.moitruong.action_doithoai(idnhanvat, delay = 0.)
         time.sleep(2.)
 
         if not self.moitruong.get_is_dangdoithoai():
             phatam("Đối thoại thất bại")
             return False
 
-        self.moitruong.action_luachondoithoai(1)
+        self.moitruong.action_luachondoithoai(1, delay = 0.)
         time.sleep(2.)
 
         if not self.moitruong.get_is_dangmocuahang():
@@ -152,7 +153,7 @@ class TacTu:
             self.moitruong.action_banvatpham(sothutuvatpham, delay = 0.)
             time.sleep(0.25)
 
-        self.moitruong.action_dongcuahang()
+        self.moitruong.action_dongcuahang(delay = 0.)
 
         return True
 
@@ -203,7 +204,6 @@ class TacTu:
         self.action_suatoanbovatpham()
 
     def action_timkiemnhanvat(self, tennhanvat, khoangcach = 2000):
-        print("{}: action_timkiemnhanvat: {}".format(self.moitruong.get_tennhanvat(), tennhanvat))
         if not tennhanvat:
             return -1
         for idnhanvat in range(SOLUONGNHANVATTOIDA):
@@ -215,7 +215,6 @@ class TacTu:
         return -1
 
     def action_timkiemvatpham(self, tenvatpham):
-        print("{}: action_timkiemvatpham: {}".format(self.moitruong.get_tennhanvat(), tenvatpham))
         if not tenvatpham:
             return False
 

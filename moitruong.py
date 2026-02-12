@@ -643,7 +643,7 @@ class MoiTruong:
         khoangcach = ((x2 - toadox1) ** 2 + (y2 - toadoy1) ** 2) ** 0.5
         return int(khoangcach)
 
-    def action_dichuyengiukhoangcachtoithieu(self, idnhanvat2, khoangcachtoithieu):
+    def action_dichuyengiukhoangcachtoithieu(self, idnhanvat2, khoangcachtoithieu, delay = 0.25):
         if not self.get_is_nhanvattontai(idnhanvat2):
             return
 
@@ -660,7 +660,7 @@ class MoiTruong:
             xmoi = int(x2 - tile * (x2 - x1))
             ymoi = int(y2 - tile * (y2 - y1))
 
-            self.action_dichuyen(xmoi, ymoi)
+            self.action_dichuyen(xmoi, ymoi, delay = delay)
 
     def khoitaohamsuavatpham(self):
         if not self.diachihamsuavatpham:
