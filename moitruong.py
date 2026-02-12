@@ -160,6 +160,58 @@ class MoiTruong:
     def get_thoidiemhoiphuckynang(self, idkynang, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xB4 + 0x24 * idkynang + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
 
+    def get_diachicosohieuungbotro(self, idnhanvat = 1):
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x98 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+
+    def get_diachihieuungbotro(self, idhieuungbotro, idnhanvat = 1):
+        diachicosohieuungbotro = self.get_diachicosohieuungbotro(idnhanvat)
+        diachihieuungbotrotieptheo = diachicosohieuungbotro
+        while diachihieuungbotrotieptheo:
+            idhieuungbotroxemxet = read_int(self.tientrinh, diachihieuungbotrotieptheo + 0xC)
+            if idhieuungbotroxemxet == idhieuungbotro:
+                return diachihieuungbotrotieptheo
+            diachihieuungbotrotieptheo = read_int(self.tientrinh, diachihieuungbotrotieptheo + 0x4)
+        return False
+
+    def get_is_hieuungbotrodangbat(self, idkynangbotro, idnhanvat = 1):
+        diachihieuungbotro = self.get_diachihieuungbotro(idkynangbotro, idnhanvat)
+        return diachihieuungbotro and read_short_int(self.tientrinh, diachihieuungbotro + 0x1C) != 1
+
+    def get_is_cohieuungbotro(self, idhieuungbotro, idnhanvat = 1):
+        diachihieuungbotro = self.get_diachihieuungbotro(idhieuungbotro, idnhanvat)
+        if not diachihieuungbotro:
+            return False
+        return True
+
+    def get_hieuungbotros(self, idnhanvat = 1):
+        diachicosohieuungbotro = self.get_diachicosohieuungbotro(idnhanvat)
+        diachihieuungbotrotieptheo = diachicosohieuungbotro
+        hieuungbotros = []
+        while diachihieuungbotrotieptheo:
+            idhieuungbotroxemxet = read_int(self.tientrinh, diachihieuungbotrotieptheo + 0xC)
+            hieuungbotros.append(idhieuungbotroxemxet)
+            diachihieuungbotrotieptheo = read_int(self.tientrinh, diachihieuungbotrotieptheo + 0x4)
+        return hieuungbotros
+
+    def get_hieuungbotros_display(self, idnhanvat = 1):
+        diachicosohieuungbotro = self.get_diachicosohieuungbotro(idnhanvat)
+        diachihieuungbotrotieptheo = diachicosohieuungbotro
+        hieuungbotros = []
+        while diachihieuungbotrotieptheo:
+            idhieuungbotroxemxet = read_int(self.tientrinh, diachihieuungbotrotieptheo + 0xC)
+            hieuungbotros.append("{}: {}".format(idhieuungbotroxemxet, self.get_is_hieuungbotrodangbat(idhieuungbotroxemxet)))
+            diachihieuungbotrotieptheo = read_int(self.tientrinh, diachihieuungbotrotieptheo + 0x4)
+        return hieuungbotros
+
+    def get_donghothoigian(self):
+        return read_int(self.tientrinh, self.diachigame + 0x28DA838)
+
+    def get_is_kynangsansang(self, idkynang):
+        if not self.get_is_dahockynang(idkynang):
+            return False
+
+        thoidiemhoiphuckynang = self.get_thoidiemhoiphuckynang(idkynang)
+        return not thoidiemhoiphuckynang or thoidiemhoiphuckynang < self.get_donghothoigian()
 
     def get_is_khuvuccothetancong(self):
         return read_int(self.tientrinh, self.diachigame + 0x28E6934) > 0

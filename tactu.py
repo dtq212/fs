@@ -55,9 +55,7 @@ class TacTu:
             phatam("Tắt tự động sửa vật phẩm")
 
     def action_test(self):
-        idhephai = self.moitruong.get_idhephai()
-        for idkynang in IDDIACHIKYNANG_MAP[idhephai].keys():
-            print("#{}: {}".format(idkynang, self.moitruong.get_capdokynang(idkynang)))
+        print(self.moitruong.get_hieuungbotros_display())
 
     def action_vebanrac(self):
         if self.moitruong.get_is_khuvuccothetancong():
