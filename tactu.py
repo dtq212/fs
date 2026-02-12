@@ -22,6 +22,8 @@ class TacTu:
         self._thoidiemkiemtravebanracgannhat = 0.
         self._thoidiemkiemtrasuavatphamgannhat = 0.
 
+        self._thoidiemnhanvatdungimgannhat = 0.
+
     def __del__(self):
         try:
             pass
@@ -268,3 +270,11 @@ class TacTu:
                 continue
             tongtrongluongvatpham += self.moitruong.get_trongluongvatpham(idvatpham)
         return tongtrongluongvatpham
+
+    def action_lammoitrangthaitactu(self):
+        if self.moitruong.get_idtrangthainhanvat() != IDTRANGTHAINHANVAT_DUNGIM:
+            self._thoidiemnhanvatdungimgannhat = time.time()
+
+    def action_kiemtraxulyloitudongtimduong(self):
+        if self.moitruong.get_idtrangthainhanvat() == IDTRANGTHAINHANVAT_DUNGIM and time.time() - self._thoidiemnhanvatdungimgannhat > 2. and self.moitruong.get_is_dangtudongtimduong():
+            self.moitruong.set_is_dangtudongtimduong(False)
