@@ -800,11 +800,11 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihambattathieuungbotro, bytes(encoding), len(encoding))
 
     def action_bathieuungbotro(self, idhieuungbotro, delay = 0.5):
-        if not self.get_is_hieuungbotrodangbat(idhieuungbotro):
+        if self.get_is_cohieuungbotro(idhieuungbotro) and not self.get_is_hieuungbotrodangbat(idhieuungbotro):
             self.action_battathieuungbotro(idhieuungbotro, delay = delay)
 
     def action_tathieuungbotro(self, idhieuungbotro, delay = 0.5):
-        if self.get_is_hieuungbotrodangbat(idhieuungbotro):
+        if self.get_is_cohieuungbotro(idhieuungbotro) and self.get_is_hieuungbotrodangbat(idhieuungbotro):
             self.action_battathieuungbotro(idhieuungbotro, delay = delay)
 
     def action_battathieuungbotro(self, idhieuungbotro, delay = 0.5):
