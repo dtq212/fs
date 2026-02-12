@@ -483,7 +483,8 @@ class MoiTruong:
         write_int(self.tientrinh, diachidulieu, toadobandonhox * 16 + 8)
         write_int(self.tientrinh, diachidulieu + 4, toadobandonhoy * 16 + 8)
 
-        self.tientrinh.start_thread(self.diachihamtudongtimduong)
+
+        self.set_is_dangtudongtimduong(True)
 
     def khoitaohamdichuyen(self):
         if not self.diachihamdichuyen:
