@@ -25,6 +25,7 @@ OFFSET_DIACHICOSOMOIVATPHAM = 0x73C
 
 class MoiTruong:
     def __init__(self, idcuaso):
+        self._thoidiemdichuyengiukhoangcachtoithieu = 0.
         self._thoidiemtudongtimduonggannhat = 0.
         self._thoidiembanvatphamgannhat = 0.
         self._thoidiemmocuahanggannhat = 0.
@@ -645,7 +646,12 @@ class MoiTruong:
 
     def action_dichuyengiukhoangcachtoithieu(self, idnhanvat2, khoangcachtoithieu, delay = 0.25):
         if not self.get_is_nhanvattontai(idnhanvat2):
-            return
+            return False
+
+        if time.time() - self._thoidiemdichuyengiukhoangcachtoithieu < delay:
+            return False
+
+        self._thoidiemdichuyengiukhoangcachtoithieu = time.time()
 
         x1 = self.get_toadox(1)
         y1 = self.get_toadoy(1)
@@ -660,8 +666,9 @@ class MoiTruong:
             xmoi = int(x2 - tile * (x2 - x1))
             ymoi = int(y2 - tile * (y2 - y1))
 
-            self.action_dichuyen(xmoi, ymoi, delay = delay)
+            return self.action_dichuyen(xmoi, ymoi, delay = delay)
 
+        return False
     def khoitaohamsuavatpham(self):
         if not self.diachihamsuavatpham:
             return
