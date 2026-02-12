@@ -34,7 +34,6 @@ def lay_hwnd_tu_pid(pid):
             try:
                 _, found_pid = win32process.GetWindowThreadProcessId(hwnd)
                 if found_pid == pid:
-                    title = win32gui.GetWindowText(hwnd)
                     hwnd_found = hwnd
             except:
                 pass
@@ -146,6 +145,8 @@ def quy_trinh_dang_nhap(account):
             print(f"✅ Đăng nhập hoàn tất! Đang online nhân vật: {tennhanvat}")
         else:
             win32gui.PostMessage(hwnd, win32con.WM_CLOSE, 0, 0)
+            time.sleep(1)
+            BackgroundInput.press_key(hwnd, win32con.VK_RETURN)
     except:
         pass
 
