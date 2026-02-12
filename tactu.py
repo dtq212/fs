@@ -204,7 +204,7 @@ class TacTu:
         elif not self.moitruong.get_is_khuvuccothetancong() and not self.moitruong.get_is_dangtudongtimduong():
             tukhoadiemchuyentiep = (self.moitruong.get_tenbandohientai(), self._tenbandotruockhivebanrac or self.moitruong.get_tenbandohientai())
             if tukhoadiemchuyentiep in TOADODIEMCHUYENTIEP_MAP:
-                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP.get(tukhoadiemchuyentiep), delay = 2.)
+                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP[tukhoadiemchuyentiep], delay = 2.)
         elif self.moitruong.get_idtrangthainhanvat() == IDTRANGTHAINHANVAT_DUNGIM and self.moitruong.get_is_dangtudongtimduong():
             self.moitruong.set_is_dangtudongtimduong(False)
 
