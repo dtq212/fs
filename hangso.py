@@ -39,6 +39,7 @@ VATPHAMKHONGBANs = (
 
 XIVUUMO = "Xi Vưu Mộ"
 NGOCHUCUNG = "Ngọc Hư cung"
+SUNGTHANHDOANH = "Sùng Thành đại doanh"
 
 CHANNOICONLON = "Chân núi Côn Lôn"
 

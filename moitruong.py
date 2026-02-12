@@ -35,7 +35,9 @@ class MoiTruong:
         self._thoidiemsudungvatphamgannhat = 0.
         self._thoidiemdichuyengannhat = 0.
         self._thoidiemsuavatphamgannhat = 0.
+        self._thoidiemxacnhandoithoaigannhat = 0.
         self._thoidiembattathieuungbotrogannhat_map = {}
+
         self.idcuaso = idcuaso
         idtientrinh = ctypes.c_ulong()
         ctypes.windll.user32.GetWindowThreadProcessId(self.idcuaso, ctypes.byref(idtientrinh))
@@ -79,6 +81,8 @@ class MoiTruong:
         self.diachihambattathieuungbotro = self.tientrinh.allocate(256)
         self.khoitaohambattathieuungbotro()
 
+        self.diachihamxacnhandoithoai = self.tientrinh.allocate(256)
+        self.khoitaohamxacnhandoithoai()
     def __del__(self):
         def safe_free(diachi):
             try:
@@ -97,6 +101,7 @@ class MoiTruong:
             "diachihamtudongtimduong",
             "diachihamdichuyen",
             "diachihambattathieuungbotro",
+            "diachihamxacnhandoithoai",
         ]
 
         for diachicangiaiphong in diachicangiaiphongs:
@@ -487,6 +492,44 @@ class MoiTruong:
         diachidulieu = self.diachihamluachondoithoai + 0x40
         write_int(self.tientrinh, diachidulieu, idluachon)
         self.tientrinh.start_thread(self.diachihamluachondoithoai)
+        return True
+
+    def khoitaohamxacnhandoithoai(self):
+        if not self.diachihamxacnhandoithoai:
+            return
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        asm_code = f"""
+            push 00
+            push 00
+            push 0A
+            mov edx, dword ptr [{hex(self.diachigame + 0x29F794)}]
+            mov eax, dword ptr [edx]
+            mov ecx, dword ptr [{hex(self.diachigame + 0x29F794)}]
+            mov edx, dword ptr [eax + 0x04]
+            mov ebx, {hex(self.diachigame + 0x10AE00)}
+            call ebx
+
+            push 01
+            mov ebx, {hex(self.diachigame + 0x80E40)}
+            call ebx
+            add esp, 04
+            ret
+        """
+
+        encoding, _ = ks.asm(asm_code)
+        write_bytes(self.tientrinh, self.diachihamxacnhandoithoai, bytes(encoding), len(encoding))
+
+    def action_xacnhandoithoai(self, delay = 0.25):
+        if not self.diachihamxacnhandoithoai:
+            return False
+
+        if time.time() - self._thoidiemxacnhandoithoaigannhat < delay:
+            return False
+
+        self._thoidiemxacnhandoithoaigannhat = time.time()
+
+        self.tientrinh.start_thread(self.diachihamxacnhandoithoai)
         return True
 
     def khoitaohamsudungvatpham(self):
