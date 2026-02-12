@@ -546,7 +546,7 @@ class MoiTruong:
             mov ebx, dword ptr [{self.diachihamsudungvatpham + 0x40}]
             mov eax, dword ptr [{self.diachihamsudungvatpham + 0x40 + 0x4}]
             mov ecx, dword ptr [{self.diachihamsudungvatpham + 0x40 + 0x8}]
-            mov esi, {VITRIRUONGHANHTRANG}
+            mov esi, {IDVITRIRUONG_HANHTRANG}
             mov edx, 0
             
             push edx

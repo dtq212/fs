@@ -58,7 +58,7 @@ class TacTu:
     def action_test(self):
         for i in range(SOLUONGVATPHAMTOIDA):
             idvatpham = self.moitruong.get_idvatpham(i)
-            if idvatpham < 0:
+            if idvatpham <= 0:
                 continue
             thongtin = self.moitruong.get_thongtinvatpham_display(idvatpham)
             if thongtin:
@@ -151,7 +151,7 @@ class TacTu:
 
             idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
 
-            if vitriruong != VITRIRUONGHANHTRANG:
+            if vitriruong != IDVITRIRUONG_HANHTRANG:
                 continue
 
             if vitriy <= 1:
@@ -178,6 +178,9 @@ class TacTu:
         return True
 
     def get_is_hanhtrangday(self):
+        return self.get_tongsovatphamhanhtrang() >= 35 or self.get_tongtrongluongvatpham() >= 185
+
+    def get_tongsovatphamhanhtrang(self):
         tongsovatphamhanhtrang = 0
 
         for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
@@ -187,13 +190,11 @@ class TacTu:
 
             idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
 
-            if vitriruong != VITRIRUONGHANHTRANG:
+            if vitriruong != IDVITRIRUONG_HANHTRANG:
                 continue
 
             tongsovatphamhanhtrang += 1
-
-        return tongsovatphamhanhtrang >= 35
-
+        return tongsovatphamhanhtrang
     def action_tudongvebanrac(self):
         if not self._is_tudongvebanrac:
             return
@@ -256,3 +257,15 @@ class TacTu:
             self.moitruong.action_bathieuungbotro(IDHIEUUNGBOTRO_DAOTRAMTAN)
         else:
             self.moitruong.action_tathieuungbotro(IDHIEUUNGBOTRO_DAOTRAMTAN)
+
+    def get_tongtrongluongvatpham(self):
+        tongtrongluongvatpham = 0
+        for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
+            vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
+            if not vitrivatpham:
+                continue
+            idvatpham, vitriruong, _, _ = vitrivatpham
+            if vitriruong not in (IDVITRIRUONG_HANHTRANG, IDVITRIRUONG_TRANGBI):
+                continue
+            tongtrongluongvatpham += self.moitruong.get_trongluongvatpham(idvatpham)
+        return tongtrongluongvatpham
