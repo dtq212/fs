@@ -425,51 +425,32 @@ class MoiTruong:
         write_int(self.tientrinh, diachidulieu + 0x8, vitriy)
         self.tientrinh.start_thread(self.diachihamsudungvatpham)
 
+    def get_is_dangtudongtimduong(self):
+        return read_int(self.tientrinh, self.diachigame + 0x3955B4) > 0
+
     def khoitaohamtudongtimduong(self):
         if not self.diachihamtudongtimduong:
-            print("Không xin được bộ nhớ")
             return
         diachidulieu = self.diachihamtudongtimduong + 0x40
-
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
         asm_code = f"""
-            mov ecx, {hex(self.diachigame + 0x28E6948)}
-            mov esi, {hex(self.diachigame + 0x395560)}
+            mov esi, dword ptr [{diachidulieu}]
+            mov edi, dword ptr [{diachidulieu + 4}]
 
             push 01
-            push 00
-            push 01
-            push 01
+            push edi
+            push esi
 
-            mov eax, dword ptr [{diachidulieu + 4}]
-            push eax
+            mov ecx, {hex(self.diachigame + 0x395560)}
 
-            mov eax, dword ptr [{diachidulieu}]
-            cdq
-            sub eax, edx
-            sar eax, 1
-            push eax
-
-            mov eax, {hex(self.diachigame + 0x12CB80)}
-            call eax
-
-            mov ecx, eax
-            mov eax, {hex(self.diachigame + 0x12C810)}
+            mov eax, {hex(self.diachigame + 0x10E200)}
             call eax
 
             ret
         """
-
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamtudongtimduong, bytes(encoding), len(encoding))
-
-    def get_is_dangtudongtimduong(self):
-        return read_int(self.tientrinh, self.diachigame + 0x3955B4) > 0
-
-    def set_is_dangtudongtimduong(self, is_dangtudongtimduong):
-        if self.get_is_dangtudongtimduong() != is_dangtudongtimduong:
-            write_int(self.tientrinh, self.diachigame + 0x3955B4, int(is_dangtudongtimduong))
 
     def action_tudongtimduong(self, toadox, toadoy):
         if not self.diachihamtudongtimduong:
@@ -483,8 +464,7 @@ class MoiTruong:
         write_int(self.tientrinh, diachidulieu, toadobandonhox * 16 + 8)
         write_int(self.tientrinh, diachidulieu + 4, toadobandonhoy * 16 + 8)
 
-
-        self.set_is_dangtudongtimduong(True)
+        self.tientrinh.start_thread(self.diachihamtudongtimduong)
 
     def khoitaohamdichuyen(self):
         if not self.diachihamdichuyen:
