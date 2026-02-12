@@ -507,7 +507,7 @@ class MoiTruong:
             
             push 00
             push 00
-            push 0A
+            push 0x0A
             mov edx, dword ptr [{hex(self.diachigame + 0x29F794)}]
             mov eax, dword ptr [edx]
             mov ecx, dword ptr [{hex(self.diachigame + 0x29F794)}]
