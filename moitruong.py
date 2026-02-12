@@ -303,8 +303,12 @@ class MoiTruong:
             "Phẩm chất": tenphamchat,
             "DBID": self.get_dbidvatpham(idvatpham),
             "Danh mục vật tư tiêu hao": danhmucvattutieuhao,
-            "Loại hình": loaihinh
+            "Loại hình": loaihinh,
+            "Trọng lượng": self.get_trongluongvatpham(idvatpham),
         }
+
+    def get_trongluongvatpham(self, idvatpham):
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x4EC + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
 
     def get_dobenhientaivatpham(self, idvatpham):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x660 + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)

@@ -56,7 +56,11 @@ class TacTu:
             phatam("Tắt tự động sửa vật phẩm")
 
     def action_test(self):
-        print(self.moitruong.get_hieuungbotros())
+        for i in range(SOLUONGVATPHAMTOIDA):
+            idvatpham = self.moitruong.get_idvatpham(i)
+            if idvatpham < 0:
+                continue
+            print(self.moitruong.get_thongtinvatpham_display(idvatpham))
 
     def action_vebanrac(self):
         if self.moitruong.get_is_khuvuccothetancong():
@@ -100,7 +104,6 @@ class TacTu:
                 continue
 
             if dobenhientai < dobentoida:
-                print("Sửa vật phẩm {}".format(self.moitruong.get_tenvatpham(idvatpham)))
                 self.moitruong.action_suavatpham(idvatpham, delay = 0.)
                 time.sleep(0.25)
 
