@@ -4,6 +4,7 @@ import traceback
 
 import pymem.exception
 
+from hangso import IDTRANGTHAINHANVAT_DUNGIM
 from moitruong import MoiTruong
 from tactu import TacTu
 
@@ -89,6 +90,9 @@ class LoopPhu:
             return
         if self.moitruong.get_is_dangmatketnoi():
             return
+
+        if self.moitruong.get_idtrangthainhanvat() == IDTRANGTHAINHANVAT_DUNGIM and self.moitruong.get_is_dangtudongtimduong():
+            self.moitruong.set_is_dangtudongtimduong(False)
 
         self.tactu.action_tudongvebanrac()
         self.tactu.action_tudongsuavatpham()

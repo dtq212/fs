@@ -211,8 +211,6 @@ class TacTu:
             tukhoadiemchuyentiep = (self.moitruong.get_tenbandohientai(), self._tenbandotruockhivebanrac or self.moitruong.get_tenbandohientai())
             if tukhoadiemchuyentiep in TOADODIEMCHUYENTIEP_MAP:
                 self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP[tukhoadiemchuyentiep])
-        elif self.moitruong.get_idtrangthainhanvat() == IDTRANGTHAINHANVAT_DUNGIM and self.moitruong.get_is_dangtudongtimduong():
-            self.moitruong.set_is_dangtudongtimduong(False)
 
     def action_tudongsuavatpham(self):
         if not self._is_tudongsuavatpham:
