@@ -83,10 +83,9 @@ class TacTu:
                 self.moitruong.action_sudungvatphamhanhtrang(idvatpham, vitrix, vitriy, delay = 0.)
 
                 time.sleep(2.)
-
-        self.action_bantoanbovatpham()
-
-        time.sleep(2.)
+        else:
+            self.action_bantoanbovatpham()
+            time.sleep(2.)
 
     def action_suatoanbovatpham(self):
         for i in range(SOLUONGVATPHAMTOIDA):
