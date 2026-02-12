@@ -73,10 +73,12 @@ class TacTu:
                 self._tenbandotruockhivebanrac = tenbandohientai
 
             if tenbandohientai in (BANDO_CULOC, BANDO_DUHON):
-                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP[tenbandohientai, BANDO_XIVUUMO])
+                if not self.moitruong.get_is_dangtudongtimduong():
+                    self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP[tenbandohientai, BANDO_XIVUUMO])
                 time.sleep(2.)
             elif tenbandohientai in (BANDO_CHANNUICONLON,):
-                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP[tenbandohientai, BANDO_NGOCHUCUNG])
+                if not self.moitruong.get_is_dangtudongtimduong():
+                    self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP[tenbandohientai, BANDO_NGOCHUCUNG])
                 time.sleep(2.)
             else:
                 vitrivatpham = self.action_timkiemvatpham(HOITHANHPHUSIEUCAP)

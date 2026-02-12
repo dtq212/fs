@@ -110,8 +110,8 @@ def quy_trinh_dang_nhap(account):
 
     print(f"   -> Đã bắt được cửa sổ (HWND: {hwnd}).")
 
-    print("   -> Chờ 5s để game tải tài nguyên...")
-    time.sleep(5)
+    print("   -> Chờ 10s để game tải tài nguyên...")
+    time.sleep(6)
 
     print("   -> Ấn Enter (Vào màn hình đăng nhập)")
     BackgroundInput.press_key(hwnd, win32con.VK_RETURN)
@@ -135,7 +135,7 @@ def quy_trinh_dang_nhap(account):
     BackgroundInput.press_key(hwnd, win32con.VK_RETURN)
 
     print("   -> Chờ 5s server phản hồi...")
-    time.sleep(5)
+    time.sleep(2)
 
     print("   -> Ấn Enter (Chọn nhân vật/Vào game)")
     BackgroundInput.press_key(hwnd, win32con.VK_RETURN)
