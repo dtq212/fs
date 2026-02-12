@@ -467,14 +467,18 @@ class MoiTruong:
     def get_is_dangtudongtimduong(self):
         return read_int(self.tientrinh, self.diachigame + 0x3955B4) > 0
 
+    def set_is_dangtudongtimduong(self, is_dangtudongtimduong):
+        if self.get_is_dangtudongtimduong() != is_dangtudongtimduong:
+            write_int(self.tientrinh, self.diachigame + 0x3955B4, int(is_dangtudongtimduong))
+
     def action_tudongtimduong(self, toadox, toadoy):
         if not self.diachihamtudongtimduong:
             return
-        print("{}: tự động tìm đường {} {}".format(self.get_tennhanvat(), toadox, toadoy))
-        diachidulieu = self.diachihamtudongtimduong + 0x40
 
-        toadobandonhox = int((toadox - 129.) / 256.)
-        toadobandonhoy = int((toadoy - 257.) / 512.)
+        toadobandonhox = int(toadox / 256)
+        toadobandonhoy = int(toadoy / 512)
+
+        diachidulieu = self.diachihamtudongtimduong + 0x40
 
         write_int(self.tientrinh, diachidulieu, toadobandonhox * 16 + 8)
         write_int(self.tientrinh, diachidulieu + 4, toadobandonhoy * 16 + 8)
