@@ -500,6 +500,11 @@ class MoiTruong:
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
         asm_code = f"""
+            push 01
+            mov ebx, {hex(self.diachigame + 0x80E40)}
+            call ebx
+            add esp, 04
+            
             push 00
             push 00
             push 0A
@@ -507,13 +512,9 @@ class MoiTruong:
             mov eax, dword ptr [edx]
             mov ecx, dword ptr [{hex(self.diachigame + 0x29F794)}]
             mov edx, dword ptr [eax + 0x04]
+            
             mov ebx, {hex(self.diachigame + 0x10AE00)}
             call ebx
-
-            push 01
-            mov ebx, {hex(self.diachigame + 0x80E40)}
-            call ebx
-            add esp, 04
             ret
         """
 
