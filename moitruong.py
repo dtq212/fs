@@ -1,4 +1,5 @@
 import ctypes
+import time
 
 import pymem
 import win32gui
@@ -31,6 +32,7 @@ def phan_loai_trang_bi(ltb):
 
 class MoiTruong:
     def __init__(self, idcuaso):
+        self._thoidiemtudongtimduonggannhat = 0.
         self.idcuaso = idcuaso
         idtientrinh = ctypes.c_ulong()
         ctypes.windll.user32.GetWindowThreadProcessId(self.idcuaso, ctypes.byref(idtientrinh))
@@ -115,6 +117,49 @@ class MoiTruong:
 
     def get_toadoysaptoi(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x102C + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+
+    def get_is_nhanvatdachet(self, idnhanvat = 1):
+        return self.get_idtrangthainhanvat(idnhanvat) == IDTRANGTHAINHANVAT_DACHET
+
+    def get_idloainhanvat(self, idnhanvat = 1):
+        return read_short_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x20 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+
+    def get_idtrangthainhanvat(self, idnhanvat = 1):
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xB4 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+
+    def get_idhephai(self, idnhanvat = 1):
+        return read_short_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x21 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+
+    def get_idmaupk(self, idnhanvat = 1):
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xAC + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+
+    def get_idkynang(self, iddiachikynang):
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xC0 + 0x24 * iddiachikynang + 1 * OFFSET_DIACHICOSOMOINHANVAT)
+
+    def get_iddiachikynang(self, idkynang):
+        iddiachikynang_map = IDDIACHIKYNANG_MAP.get(self.get_idhephai(), 0)
+        if not iddiachikynang_map:
+            return 0
+        iddiachikynang = iddiachikynang_map.get(idkynang, 0)
+        if not iddiachikynang:
+            return 0
+        return iddiachikynang
+
+    def get_capdokynang(self, idkynang):
+        if idkynang > SOLUONGKYNANGTOIDA or idkynang < 0:
+            return 0
+        iddiachikynang = self.get_iddiachikynang(idkynang)
+        if not iddiachikynang:
+            return 0
+        return read_short_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xC4 + 0x24 * iddiachikynang + 1 * OFFSET_DIACHICOSOMOINHANVAT)
+
+    def get_is_dahockynang(self, idkynang):
+        capdokynang = self.get_capdokynang(idkynang)
+        return capdokynang > 0
+
+    def get_thoidiemhoiphuckynang(self, idkynang, idnhanvat = 1):
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xB4 + 0x24 * idkynang + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+
 
     def get_is_khuvuccothetancong(self):
         return read_int(self.tientrinh, self.diachigame + 0x28E6934) > 0
@@ -428,6 +473,10 @@ class MoiTruong:
     def get_is_dangtudongtimduong(self):
         return read_int(self.tientrinh, self.diachigame + 0x3955B4) > 0
 
+    def set_is_dangtudongtimduong(self, is_dangtudongtimduong):
+        if self.get_is_dangtudongtimduong() != is_dangtudongtimduong:
+            write_int(self.tientrinh, self.diachigame + 0x3955B4, 1 if is_dangtudongtimduong else 0)
+
     def khoitaohamtudongtimduong(self):
         if not self.diachihamtudongtimduong:
             return
@@ -452,9 +501,14 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamtudongtimduong, bytes(encoding), len(encoding))
 
-    def action_tudongtimduong(self, toadox, toadoy):
+    def action_tudongtimduong(self, toadox, toadoy, delay = 1.):
         if not self.diachihamtudongtimduong:
             return
+
+        if time.time() - self._thoidiemtudongtimduonggannhat < delay:
+            return
+
+        self._thoidiemtudongtimduonggannhat = time.time()
 
         toadobandonhox = int(toadox / 256)
         toadobandonhoy = int(toadoy / 512)

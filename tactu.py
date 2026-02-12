@@ -55,11 +55,9 @@ class TacTu:
             phatam("Tắt tự động sửa vật phẩm")
 
     def action_test(self):
-        for i in range(SOLUONGVATPHAMTOIDA):
-            idvatpham = self.moitruong.get_idvatpham(i)
-            thongtin = self.moitruong.get_thongtinvatpham_display(idvatpham)
-            if thongtin:
-                print(thongtin)
+        idhephai = self.moitruong.get_idhephai()
+        for idkynang in IDDIACHIKYNANG_MAP[idhephai].keys():
+            print("#{}: {}".format(idkynang, self.moitruong.get_capdokynang(idkynang)))
 
     def action_vebanrac(self):
         if self.moitruong.get_is_khuvuccothetancong():
@@ -150,7 +148,7 @@ class TacTu:
 
             phamchat, _, danhmuctrangbi, _ = loaivatpham
 
-            if danhmuctrangbi in DANHMUCTRANGBI_MAP and phamchat != PHAMCHATVATPHAM_TRANGLAM:
+            if danhmuctrangbi in DANHMUCTRANGBI_MAP and phamchat != IDPHAMCHATVATPHAM_TRANGLAM:
                 continue
 
             self.moitruong.action_banvatpham(sothutuvatpham)
@@ -191,7 +189,9 @@ class TacTu:
         elif not self.moitruong.get_is_khuvuccothetancong() and not self.moitruong.get_is_dangtudongtimduong():
             tukhoadiemchuyentiep = (self.moitruong.get_tenbandohientai(), self._tenbandotruockhivebanrac or self.moitruong.get_tenbandohientai())
             if tukhoadiemchuyentiep in TOADODIEMCHUYENTIEP_MAP:
-                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP.get(tukhoadiemchuyentiep))
+                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP.get(tukhoadiemchuyentiep), delay = 2.)
+        elif self.moitruong.get_idtrangthainhanvat() == IDTRANGTHAINHANVAT_DUNGIM and self.moitruong.get_is_dangtudongtimduong():
+            self.moitruong.set_is_dangtudongtimduong(False)
 
     def action_tudongsuavatpham(self):
         if not self._is_tudongsuavatpham:
