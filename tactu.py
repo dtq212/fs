@@ -188,7 +188,7 @@ class TacTu:
 
         if self.get_is_hanhtrangday():
             self.action_vebanrac()
-        elif not self.moitruong.get_is_khuvuccothetancong():
+        elif not self.moitruong.get_is_khuvuccothetancong() and not self.moitruong.get_is_dangtudongtimduong():
             tukhoadiemchuyentiep = (self.moitruong.get_tenbandohientai(), self._tenbandotruockhivebanrac or self.moitruong.get_tenbandohientai())
             if tukhoadiemchuyentiep in TOADODIEMCHUYENTIEP_MAP:
                 self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP.get(tukhoadiemchuyentiep))

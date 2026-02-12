@@ -464,6 +464,9 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamtudongtimduong, bytes(encoding), len(encoding))
 
+    def get_is_dangtudongtimduong(self):
+        return read_int(self.tientrinh, self.diachigame + 0x3955B4) > 0
+
     def action_tudongtimduong(self, toadox, toadoy):
         if not self.diachihamtudongtimduong:
             return
