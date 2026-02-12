@@ -34,6 +34,32 @@ class LoopTimKiemMucTieu:
         if self.moitruong.get_is_dangmatketnoi():
             return
 
+class LoopLamMoiTrangThaiTacTu:
+    def __init__(self, moitruong: MoiTruong, tactu: TacTu, stop: threading.Event):
+        self.moitruong = moitruong
+        self.tactu = tactu
+        self.stop = stop
+
+    def __del__(self):
+        if not self.stop.is_set():
+            self.stop.set()
+
+    def loop(self):
+        while not self.stop.is_set() and self.moitruong.get_is_cuasogametontai():
+            try:
+                self.step()
+            except (pymem.exception.PymemError, pymem.exception.WinAPIError) as err:
+                print("Luồng làm mới trạng thái tác tử: {}".format(err))
+                time.sleep(1)
+            time.sleep(0.15)
+
+    def step(self):
+        if not self.moitruong.get_is_nhanvattontai():
+            return
+        if self.moitruong.get_is_dangmatketnoi():
+            return
+        self.tactu.action_lammoitrangthaitactu()
+
 class LoopChinh:
     def __init__(self, moitruong: MoiTruong, tactu: TacTu, stop: threading.Event):
         self.moitruong = moitruong
