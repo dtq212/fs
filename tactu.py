@@ -114,7 +114,8 @@ class TacTu:
         if idnhanvat < 0:
             tenbandohientai = self.moitruong.get_tenbandohientai()
             if tenbandohientai in TOADODAIPHU_MAP:
-                self.moitruong.action_tudongtimduong(*TOADODAIPHU_MAP.get(tenbandohientai))
+                if not self.moitruong.get_is_dangtudongtimduong():
+                    self.moitruong.action_tudongtimduong(*TOADODAIPHU_MAP.get(tenbandohientai))
             else:
                 phatam("Không tìm thấy Đại phu")
             return False
