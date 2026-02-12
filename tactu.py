@@ -159,7 +159,7 @@ class TacTu:
             if vitriruong != IDVITRIRUONG_HANHTRANG:
                 continue
 
-            if vitriy <= 1:
+            if vitriy < 1:
                 continue
 
             if self.moitruong.get_tenvatpham(idvatpham) in VATPHAMKHONGBANs:
