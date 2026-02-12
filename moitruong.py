@@ -470,6 +470,7 @@ class MoiTruong:
     def action_tudongtimduong(self, toadox, toadoy):
         if not self.diachihamtudongtimduong:
             return
+        print("{}: tự động tìm đường {} {}".format(self.get_tennhanvat(), toadox, toadoy))
         diachidulieu = self.diachihamtudongtimduong + 0x40
 
         toadobandonhox = int((toadox - 129.) / 256.)
