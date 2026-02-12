@@ -65,10 +65,10 @@ class TacTu:
                 self._tenbandotruockhivebanrac = tenbandohientai
 
             if tenbandohientai in (BANDO_CULOC, BANDO_DUHON):
-                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP.get(tenbandohientai, BANDO_XIVUUMO), delay = 2.)
+                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP[tenbandohientai, BANDO_XIVUUMO], delay = 2.)
                 time.sleep(2.)
             elif tenbandohientai in (BANDO_CHANNUICONLON,):
-                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP.get(tenbandohientai, BANDO_NGOCHUCUNG), delay = 2.)
+                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP[tenbandohientai, BANDO_NGOCHUCUNG], delay = 2.)
                 time.sleep(2.)
             else:
                 vitrivatpham = self.action_timkiemvatpham(HOITHANHPHUSIEUCAP)
