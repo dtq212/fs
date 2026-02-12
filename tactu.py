@@ -16,6 +16,7 @@ class TacTu:
         self.moitruong = moitruong
         self._is_tudongvebanrac = True
         self._is_tudongsuavatpham = True
+        self._is_tudongbattathieuungbotro = True
         self._tenbandotruockhivebanrac = False
 
         self._thoidiemkiemtravebanracgannhat = 0.
@@ -227,3 +228,12 @@ class TacTu:
             if tenvatphamxemxet and tenvatphamxemxet == tenvatpham:
                 return vitrivatpham
         return False
+
+    def action_tudongbattathieuungbotro(self):
+        if not self._is_tudongbattathieuungbotro:
+            return
+
+        if self.moitruong.get_is_khuvuccothetancong():
+            self.moitruong.action_bathieuungbotro(IDHIEUUNGBOTRO_DAOTRAMTAN)
+        else:
+            self.moitruong.action_tathieuungbotro(IDHIEUUNGBOTRO_DAOTRAMTAN)

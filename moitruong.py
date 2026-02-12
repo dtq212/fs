@@ -779,3 +779,4 @@ class MoiTruong:
         self.tientrinh.start_thread(self.diachihambattathieuungbotro)
 
         return True
+
