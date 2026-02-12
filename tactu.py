@@ -60,7 +60,9 @@ class TacTu:
             idvatpham = self.moitruong.get_idvatpham(i)
             if idvatpham < 0:
                 continue
-            print(self.moitruong.get_thongtinvatpham_display(idvatpham))
+            thongtin = self.moitruong.get_thongtinvatpham_display(idvatpham)
+            if thongtin:
+                print(thongtin)
 
     def action_vebanrac(self):
         if self.moitruong.get_is_khuvuccothetancong():
