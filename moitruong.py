@@ -434,15 +434,30 @@ class MoiTruong:
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
         asm_code = f"""
-            mov ecx, dword ptr [{diachidulieu + 4}]
-            push ecx
-            mov edx, dword ptr [{diachidulieu}]
-            push edx
-            
-            mov eax, {hex(self.diachigame + 0x180E00)}
+            mov ecx, {hex(self.diachigame + 0x28E6948)}
+            mov esi, {hex(self.diachigame + 0x395560)}
+
+            push 01
+            push 00
+            push 01
+            push 01
+
+            mov eax, dword ptr [{diachidulieu + 4}]
+            push eax
+
+            mov eax, dword ptr [{diachidulieu}]
+            cdq
+            sub eax, edx
+            sar eax, 1
+            push eax
+
+            mov eax, {hex(self.diachigame + 0x12CB80)}
             call eax
-            
-            add esp,8
+
+            mov ecx, eax
+            mov eax, {hex(self.diachigame + 0x12C810)}
+            call eax
+
             ret
         """
 
@@ -451,11 +466,14 @@ class MoiTruong:
 
     def action_tudongtimduong(self, toadox, toadoy):
         if not self.diachihamtudongtimduong:
-            print("Không xin được bộ nhớ")
             return
         diachidulieu = self.diachihamtudongtimduong + 0x40
-        write_int(self.tientrinh, diachidulieu, toadox)
-        write_int(self.tientrinh, diachidulieu + 4, toadoy)
+
+        toadobandonhox = int((toadox - 129.) / 256.)
+        toadobandonhoy = int((toadoy - 257.) / 512.)
+
+        write_int(self.tientrinh, diachidulieu, toadobandonhox * 16 + 8)
+        write_int(self.tientrinh, diachidulieu + 4, toadobandonhoy * 16 + 8)
 
         self.tientrinh.start_thread(self.diachihamtudongtimduong)
 
