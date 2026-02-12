@@ -68,7 +68,7 @@ class TacTu:
                 self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP.get(tenbandohientai, BANDO_XIVUUMO), delay = 2.)
                 time.sleep(2.)
             elif tenbandohientai in (BANDO_CHANNUICONLON,):
-                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP.get(tenbandohientai, NGOCHUCUNG), delay = 2.)
+                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP.get(tenbandohientai, BANDO_NGOCHUCUNG), delay = 2.)
                 time.sleep(2.)
             else:
                 vitrivatpham = self.action_timkiemvatpham(HOITHANHPHUSIEUCAP)
@@ -127,7 +127,7 @@ class TacTu:
             phatam("Đối thoại thất bại")
             return False
 
-        if self.moitruong.get_idhephai() == IDHEPHAI_DAOSI and self.moitruong.get_tenbandohientai() == NGOCHUCUNG\
+        if self.moitruong.get_idhephai() == IDHEPHAI_DAOSI and self.moitruong.get_tenbandohientai() == BANDO_NGOCHUCUNG\
                 or self.moitruong.get_idhephai() == IDHEPHAI_DINHAN and self.moitruong.get_tenbandohientai() == BANDO_XIVUUMO\
                 or self.moitruong.get_idhephai() == IDHEPHAI_GIAPSI and self.moitruong.get_tenbandohientai() == BANDO_SUNGTHANHDOANH:
             self.moitruong.action_luachondoithoai(1, delay = 0.)
