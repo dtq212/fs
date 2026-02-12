@@ -6,7 +6,7 @@ import pymem.exception
 
 from moitruong import MoiTruong
 from tactu import TacTu
-from tienich import phatam
+
 
 class LoopTimKiemMucTieu:
     def __init__(self, moitruong: MoiTruong, tactu: TacTu, stop: threading.Event):
