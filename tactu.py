@@ -60,20 +60,29 @@ class TacTu:
 
     def action_vebanrac(self):
         if self.moitruong.get_is_khuvuccothetancong():
-            vitrivatpham = self.action_timkiemvatpham(HOITHANHPHUSIEUCAP)
-            if not vitrivatpham:
-                phatam("Không tìm thấy {}".format(HOITHANHPHUSIEUCAP))
-                return
+            tenbandohientai = self.moitruong.get_tenbandohientai()
+            if self._tenbandotruockhivebanrac != tenbandohientai:
+                self._tenbandotruockhivebanrac = tenbandohientai
 
-            if self._tenbandotruockhivebanrac != self.moitruong.get_tenbandohientai():
-                self._tenbandotruockhivebanrac = self.moitruong.get_tenbandohientai()
+            if tenbandohientai in (BANDO_CULOC, BANDO_DUHON):
+                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP.get(tenbandohientai, BANDO_XIVUUMO), delay = 2.)
+                time.sleep(2.)
+            elif tenbandohientai in (BANDO_CHANNUICONLON,):
+                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP.get(tenbandohientai, NGOCHUCUNG), delay = 2.)
+                time.sleep(2.)
+            else:
+                vitrivatpham = self.action_timkiemvatpham(HOITHANHPHUSIEUCAP)
+                if not vitrivatpham:
+                    phatam("Không tìm thấy {}".format(HOITHANHPHUSIEUCAP))
+                    return
 
-            time.sleep(2.)
 
-            idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
-            self.moitruong.action_sudungvatphamhanhtrang(idvatpham, vitrix, vitriy, delay = 0.)
+                time.sleep(2.)
 
-            time.sleep(2.)
+                idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
+                self.moitruong.action_sudungvatphamhanhtrang(idvatpham, vitrix, vitriy, delay = 0.)
+
+                time.sleep(2.)
 
         self.action_bantoanbovatpham()
 
@@ -119,8 +128,8 @@ class TacTu:
             return False
 
         if self.moitruong.get_idhephai() == IDHEPHAI_DAOSI and self.moitruong.get_tenbandohientai() == NGOCHUCUNG\
-                or self.moitruong.get_idhephai() == IDHEPHAI_DINHAN and self.moitruong.get_tenbandohientai() == XIVUUMO\
-                or self.moitruong.get_idhephai() == IDHEPHAI_GIAPSI and self.moitruong.get_tenbandohientai() == SUNGTHANHDOANH:
+                or self.moitruong.get_idhephai() == IDHEPHAI_DINHAN and self.moitruong.get_tenbandohientai() == BANDO_XIVUUMO\
+                or self.moitruong.get_idhephai() == IDHEPHAI_GIAPSI and self.moitruong.get_tenbandohientai() == BANDO_SUNGTHANHDOANH:
             self.moitruong.action_luachondoithoai(1, delay = 0.)
             time.sleep(2.)
         else:
