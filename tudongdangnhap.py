@@ -10,7 +10,7 @@ from moitruong import MoiTruong
 DUONGDAN_GAME = r"D:\TamGioiPhanTranhPC\game.exe"
 DANH_SACH_TAI_KHOAN = [
     {"user": "kngaivacham", "pass": "hateva12", "char_name": "KNgạiVaChạm"},
-    {"user": "thichvacham", "pass": "hateva12", "char_name": "ThíchVaChạm"},
+    {"user": "thichvacham2", "pass": "hateva12", "char_name": "ThíchVaChạm"},
     {"user": "laotsezu1", "pass": "hateva12", "char_name": "LaotsezuI"},
     {"user": "laotsezu2", "pass": "hateva12", "char_name": "LaotsezuII"},
     {"user": "laotsezu3", "pass": "hateva12", "char_name": "LaotsezuIII"},
@@ -67,6 +67,14 @@ def lay_danh_sach_nhan_vat_online():
     win32gui.EnumWindows(callback, None)
     return ds_online
 
+def force_kill_window(hwnd):
+    try:
+        if not hwnd: return
+        _, pid = win32process.GetWindowThreadProcessId(hwnd)
+        print(f"   -> Đang Force Kill process PID: {pid} để bỏ qua popup xác nhận...")
+        subprocess.run(f"taskkill /F /PID {pid}", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception as e:
+        print(f"❌ Lỗi khi kill game: {e}")
 
 def quy_trinh_dang_nhap(account):
     user = account["user"]
@@ -102,8 +110,8 @@ def quy_trinh_dang_nhap(account):
 
     print(f"   -> Đã bắt được cửa sổ (HWND: {hwnd}).")
 
-    print("   -> Chờ 15s để game tải tài nguyên...")
-    time.sleep(15)
+    print("   -> Chờ 5s để game tải tài nguyên...")
+    time.sleep(5)
 
     print("   -> Ấn Enter (Vào màn hình đăng nhập)")
     BackgroundInput.press_key(hwnd, win32con.VK_RETURN)
@@ -135,8 +143,8 @@ def quy_trinh_dang_nhap(account):
     time.sleep(2)
     BackgroundInput.press_key(hwnd, win32con.VK_RETURN)
 
-    print("   -> Chờ 15s để vào map...")
-    time.sleep(15)
+    print("   -> Chờ 5s để vào map...")
+    time.sleep(5)
 
     try:
         moitruong = MoiTruong(hwnd)
@@ -144,9 +152,7 @@ def quy_trinh_dang_nhap(account):
             tennhanvat = moitruong.get_tennhanvat()
             print(f"✅ Đăng nhập hoàn tất! Đang online nhân vật: {tennhanvat}")
         else:
-            win32gui.PostMessage(hwnd, win32con.WM_CLOSE, 0, 0)
-            time.sleep(1)
-            BackgroundInput.press_key(hwnd, win32con.VK_RETURN)
+            force_kill_window(hwnd)
     except:
         pass
 
