@@ -508,14 +508,14 @@ class MoiTruong:
         y2 = self.get_toadoy(idnhanvat2)
 
         khoangcach = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
-        return khoangcach
+        return int(khoangcach)
 
     def get_khoangcachdiem(self, idnhanvat2, toadox1, toadoy1):
         x2 = self.get_toadox(idnhanvat2)
         y2 = self.get_toadoy(idnhanvat2)
 
         khoangcach = ((x2 - toadox1) ** 2 + (y2 - toadoy1) ** 2) ** 0.5
-        return khoangcach
+        return int(khoangcach)
 
     def action_dichuyengiukhoangcachtoithieu(self, idnhanvat2, khoangcachtoithieu):
         print("{}: action_dichuyengiukhoangcachtoithieu: {}, {}".format(self.get_tennhanvat(), idnhanvat2, khoangcachtoithieu))

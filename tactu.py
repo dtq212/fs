@@ -99,7 +99,7 @@ class TacTu:
                 self.moitruong.action_suavatpham(idvatpham)
 
     def action_bantoanbovatpham(self):
-        idnhanvat = self.action_timkiemnhanvat(tennhanvat = "Đại phu")
+        idnhanvat = self.action_timkiemnhanvat(tennhanvat = "Đại phu", khoangcach = 800)
         if idnhanvat < 0:
             tenbandohientai = self.moitruong.get_tenbandohientai()
             if tenbandohientai in TOADODAIPHU_MAP:
@@ -108,7 +108,7 @@ class TacTu:
                 phatam("Không tìm thấy Đại phu")
             return False
 
-        if self.moitruong.get_khoangcach(idnhanvat) > 450:
+        if self.moitruong.get_khoangcach(idnhanvat) > 300:
             self.moitruong.action_dichuyengiukhoangcachtoithieu(idnhanvat, 0)
             time.sleep(2.)
             return False
@@ -150,7 +150,7 @@ class TacTu:
 
             phamchat, _, danhmuctrangbi, _ = loaivatpham
 
-            if danhmuctrangbi not in DANHMUCTRANGBI_MAP or (danhmuctrangbi in DANHMUCTRANGBI_MAP and phamchat != PHAMCHATVATPHAM_TRANGLAM):
+            if danhmuctrangbi in DANHMUCTRANGBI_MAP and phamchat != PHAMCHATVATPHAM_TRANGLAM:
                 continue
 
             self.moitruong.action_banvatpham(sothutuvatpham)
@@ -212,7 +212,7 @@ class TacTu:
             if not self.moitruong.get_is_nhanvattontai(idnhanvat):
                 continue
             tennhanvatxemxet = self.moitruong.get_tennhanvat(idnhanvat)
-            if tennhanvatxemxet and tennhanvatxemxet.strip() == tennhanvat.strip() and self.moitruong.get_khoangcach(idnhanvat) < khoangcach:
+            if tennhanvatxemxet and tennhanvatxemxet == tennhanvat and self.moitruong.get_khoangcach(idnhanvat) < khoangcach:
                 return idnhanvat
         return -1
 
@@ -227,6 +227,6 @@ class TacTu:
                 continue
             idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
             tenvatphamxemxet = self.moitruong.get_tenvatpham(idvatpham)
-            if tenvatphamxemxet and tenvatphamxemxet.strip() == tenvatpham.strip():
+            if tenvatphamxemxet and tenvatphamxemxet == tenvatpham:
                 return vitrivatpham
         return False
