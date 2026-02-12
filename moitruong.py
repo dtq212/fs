@@ -11,28 +11,30 @@ from tienich import *
 OFFSET_DIACHICOSONHANVAT = 0x3B0CD0
 OFFSET_DIACHICOSOMOINHANVAT = 0x8294
 
-#ĐỊA CHỈ CƠ SỞ THÔNG TIN VẬT PHẨM
-#Moi bằng id vị trí rương = 1 khi cầm vật phẩm lên và đặt xuống hành trang là 3
+# ĐỊA CHỈ CƠ SỞ THÔNG TIN VẬT PHẨM
+# Moi bằng id vị trí rương = 1 khi cầm vật phẩm lên và đặt xuống hành trang là 3
 OFFSET_DIACHICOSOVITRIVATPHAM = 0x3956A4
 OFFSET_DIACHICOSOVITRIMOIVATPHAM = 0x10
 
-#Moi từ địa chỉ số lượng hàng và cột tối đa trong hành trang (Tìm kiếm theo byte array 05 00 00 00 0E 00 00 00 rồi trừ cho 0x8
+# Moi từ địa chỉ số lượng hàng và cột tối đa trong hành trang (Tìm kiếm theo byte array 05 00 00 00 0E 00 00 00 rồi trừ cho 0x8
 OFFSET_DIACHICOSOTHONGTINHANHTRANG = 0x395778
-#Moi ở hàm sửa đồ
-OFFSET_DIACHICOSOTHONGTINVATPHAM = 0x2A8278 #lea edi,[esi+CoreClient.dll+OFFSET_DIACHICOSOTHONGTINVATPHAM] # game.g_NpcSetting
+# Moi ở hàm sửa đồ
+OFFSET_DIACHICOSOTHONGTINVATPHAM = 0x2A8278  # lea edi,[esi+CoreClient.dll+OFFSET_DIACHICOSOTHONGTINVATPHAM] # game.g_NpcSetting
 OFFSET_DIACHICOSOMOIVATPHAM = 0x73C
 
-def phan_loai_pham_chat(pc):
-    mapping = {0: "Trắng/Lam", 1: "Lục", 2: "Vàng", 3: "Cam"}
-    return mapping.get(pc, f"Unknown({pc})")
-
-def phan_loai_trang_bi(ltb):
-    mapping = {0: "Vũ khí", 2: "Áo", 4: "Pháp bảo", 5: "Giày", 6: "Đai", 7: "Nón", 9: "Phi phong", 10: "Thú cưỡi"}
-    return mapping.get(ltb, f"Khác({ltb})")
 
 class MoiTruong:
     def __init__(self, idcuaso):
         self._thoidiemtudongtimduonggannhat = 0.
+        self._thoidiembanvatphamgannhat = 0.
+        self._thoidiemmocuahanggannhat = 0.
+        self._thoidiemdongcuahanggannhat = 0.
+        self._thoidiemdoithoaigannhat = 0.
+        self._thoidiemluachondoithoaigannhat = 0.
+        self._thoidiemsudungvatphamgannhat = 0.
+        self._thoidiemdichuyengannhat = 0.
+        self._thoidiemsuavatphamgannhat = 0.
+        self._thoidiembattathieuungbotrogannhat_map = {}
         self.idcuaso = idcuaso
         idtientrinh = ctypes.c_ulong()
         ctypes.windll.user32.GetWindowThreadProcessId(self.idcuaso, ctypes.byref(idtientrinh))
@@ -73,6 +75,9 @@ class MoiTruong:
         self.diachihamsuavatpham = self.tientrinh.allocate(256)
         self.khoitaohamsuavatpham()
 
+        self.diachihambattathieuungbotro = self.tientrinh.allocate(256)
+        self.khoitaohambattathieuungbotro()
+
     def __del__(self):
         def safe_free(diachi):
             try:
@@ -90,6 +95,7 @@ class MoiTruong:
             "diachihamsudungvatpham",
             "diachihamtudongtimduong",
             "diachihamdichuyen",
+            "diachihambattathieuungbotro",
         ]
 
         for diachicangiaiphong in diachicangiaiphongs:
@@ -193,16 +199,6 @@ class MoiTruong:
             diachihieuungbotrotieptheo = read_int(self.tientrinh, diachihieuungbotrotieptheo + 0x4)
         return hieuungbotros
 
-    def get_hieuungbotros_display(self, idnhanvat = 1):
-        diachicosohieuungbotro = self.get_diachicosohieuungbotro(idnhanvat)
-        diachihieuungbotrotieptheo = diachicosohieuungbotro
-        hieuungbotros = []
-        while diachihieuungbotrotieptheo:
-            idhieuungbotroxemxet = read_int(self.tientrinh, diachihieuungbotrotieptheo + 0xC)
-            hieuungbotros.append("{}: {}".format(idhieuungbotroxemxet, self.get_is_hieuungbotrodangbat(idhieuungbotroxemxet)))
-            diachihieuungbotrotieptheo = read_int(self.tientrinh, diachihieuungbotrotieptheo + 0x4)
-        return hieuungbotros
-
     def get_donghothoigian(self):
         return read_int(self.tientrinh, self.diachigame + 0x28DA838)
 
@@ -250,10 +246,10 @@ class MoiTruong:
             return False
 
         vitrivatpham = (
-            read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOVITRIVATPHAM + sothutuvatpham * OFFSET_DIACHICOSOVITRIMOIVATPHAM), #ID vật phẩm
-            read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOVITRIVATPHAM + 0x4 + sothutuvatpham * OFFSET_DIACHICOSOVITRIMOIVATPHAM), #Vị trí rương
-            read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOVITRIVATPHAM + 0x8 + sothutuvatpham * OFFSET_DIACHICOSOVITRIMOIVATPHAM), #Vị trí X
-            read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOVITRIVATPHAM + 0xC + sothutuvatpham * OFFSET_DIACHICOSOVITRIMOIVATPHAM), #Vị trí Y
+            read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOVITRIVATPHAM + sothutuvatpham * OFFSET_DIACHICOSOVITRIMOIVATPHAM),  # ID vật phẩm
+            read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOVITRIVATPHAM + 0x4 + sothutuvatpham * OFFSET_DIACHICOSOVITRIMOIVATPHAM),  # Vị trí rương
+            read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOVITRIVATPHAM + 0x8 + sothutuvatpham * OFFSET_DIACHICOSOVITRIMOIVATPHAM),  # Vị trí X
+            read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOVITRIVATPHAM + 0xC + sothutuvatpham * OFFSET_DIACHICOSOVITRIMOIVATPHAM),  # Vị trí Y
         )
 
         if vitrivatpham == (0, 0, 0, 0):
@@ -324,7 +320,6 @@ class MoiTruong:
 
     def khoitaohambanvatpham(self):
         if not self.diachihambanvatpham:
-            print("Không xin được bộ nhớ")
             return
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
@@ -345,30 +340,28 @@ class MoiTruong:
     def get_is_dangmocuahang(self):
         return read_int(self.tientrinh, self.diachigame + 0x29F4FC) > 0
 
-    def action_banvatpham(self, sothutuvatpham):
+    def action_banvatpham(self, sothutuvatpham, delay = 0.25):
         if not self.diachihambanvatpham:
-            print("Không xin được bộ nhớ")
-            return
+            return False
+
+        if time.time() - self._thoidiembanvatphamgannhat < delay:
+            return False
+        self._thoidiembanvatphamgannhat = time.time()
+
         idvatpham = self.get_idvatpham(sothutuvatpham)
-
-        if idvatpham <= 0:
-            return
-
-        if not self.get_is_dangmocuahang():
-            return
+        if idvatpham <= 0 or not self.get_is_dangmocuahang():
+            return False
 
         dbidvatpham = self.get_dbidvatpham(idvatpham)
-
         diachidulieuhambanvatpham = self.diachihambanvatpham + 0x40
         write_int(self.tientrinh, diachidulieuhambanvatpham, idvatpham * 0x73C)
         write_int(self.tientrinh, diachidulieuhambanvatpham + 4, idvatpham)
         write_int(self.tientrinh, diachidulieuhambanvatpham + 8, dbidvatpham)
-
         self.tientrinh.start_thread(self.diachihambanvatpham)
+        return True
 
     def khoitaohammocuahang(self):
         if not self.diachihammocuahang:
-            print("Không xin được bộ nhớ")
             return
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
@@ -384,15 +377,19 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihammocuahang, bytes(encoding), len(encoding))
 
-    def action_mocuahang(self):
+    def action_mocuahang(self, delay = 0.5):
         if not self.diachihammocuahang:
-            print("Không xin được bộ nhớ")
-            return
+            return False
+
+        if time.time() - self._thoidiemmocuahanggannhat < delay:
+            return False
+        self._thoidiemmocuahanggannhat = time.time()
+
         self.tientrinh.start_thread(self.diachihammocuahang)
+        return True
 
     def khoitaohamdongcuahang(self):
         if not self.diachihamdongcuahang:
-            print("Không xin được bộ nhớ")
             return
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
@@ -405,15 +402,19 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamdongcuahang, bytes(encoding), len(encoding))
 
-    def action_dongcuahang(self):
+    def action_dongcuahang(self, delay = 0.5):
         if not self.diachihamdongcuahang:
-            print("Không xin được bộ nhớ")
-            return
+            return False
+
+        if time.time() - self._thoidiemdongcuahanggannhat < delay:
+            return False
+        self._thoidiemdongcuahanggannhat = time.time()
+
         self.tientrinh.start_thread(self.diachihamdongcuahang)
+        return True
 
     def khoitaohamdoithoai(self):
         if not self.diachihamdoithoai:
-            print("Không xin được bộ nhớ")
             return
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
@@ -429,24 +430,24 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamdoithoai, bytes(encoding), len(encoding))
 
-    def action_doithoai(self, idnhanvat):
-        if not self.diachihamdoithoai:
-            print("Không xin được bộ nhớ")
-            return
-        print("{}: action_doithoai: {}".format(self.get_tennhanvat(), idnhanvat))
-        if idnhanvat <= 0:
-            return
+    def action_doithoai(self, idnhanvat, delay = 0.5):
+        if not self.diachihamdoithoai or idnhanvat <= 0:
+            return False
+
+        if time.time() - self._thoidiemdoithoaigannhat < delay:
+            return False
+        self._thoidiemdoithoaigannhat = time.time()
 
         diachidulieu = self.diachihamdoithoai + 0x40
         write_int(self.tientrinh, diachidulieu, idnhanvat)
         self.tientrinh.start_thread(self.diachihamdoithoai)
+        return True
 
     def get_is_dangdoithoai(self):
         return read_int(self.tientrinh, self.diachigame + 0x29F0C0) > 0
 
     def khoitaohamluachondoithoai(self):
         if not self.diachihamluachondoithoai:
-            print("Không xin được bộ nhớ")
             return
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
@@ -474,17 +475,21 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamluachondoithoai, bytes(encoding), len(encoding))
 
-    def action_luachondoithoai(self, idluachon):
+    def action_luachondoithoai(self, idluachon, delay = 0.25):
         if not self.diachihamluachondoithoai:
-            print("Không xin được bộ nhớ")
-            return
+            return False
+
+        if time.time() - self._thoidiemluachondoithoaigannhat < delay:
+            return False
+        self._thoidiemluachondoithoaigannhat = time.time()
+
         diachidulieu = self.diachihamluachondoithoai + 0x40
         write_int(self.tientrinh, diachidulieu, idluachon)
         self.tientrinh.start_thread(self.diachihamluachondoithoai)
+        return True
 
     def khoitaohamsudungvatpham(self):
         if not self.diachihamsudungvatpham:
-            print("Không xin được bộ nhớ")
             return
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
@@ -512,15 +517,20 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         self.tientrinh.write_bytes(self.diachihamsudungvatpham, bytes(encoding), len(encoding))
 
-    def action_sudungvatphamhanhtrang(self, idvatpham, vitrix, vitriy):
+    def action_sudungvatphamhanhtrang(self, idvatpham, vitrix, vitriy, delay = 0.25):
         if not self.diachihamsudungvatpham:
-            print("Không xin được bộ nhớ")
-            return
+            return False
+
+        if time.time() - self._thoidiemsudungvatphamgannhat < delay:
+            return False
+        self._thoidiemsudungvatphamgannhat = time.time()
+
         diachidulieu = self.diachihamsudungvatpham + 0x40
         write_int(self.tientrinh, diachidulieu, idvatpham)
         write_int(self.tientrinh, diachidulieu + 0x4, vitrix)
         write_int(self.tientrinh, diachidulieu + 0x8, vitriy)
         self.tientrinh.start_thread(self.diachihamsudungvatpham)
+        return True
 
     def get_is_dangtudongtimduong(self):
         return read_int(self.tientrinh, self.diachigame + 0x3955B4) > 0
@@ -555,10 +565,10 @@ class MoiTruong:
 
     def action_tudongtimduong(self, toadox, toadoy, delay = 1.):
         if not self.diachihamtudongtimduong:
-            return
+            return False
 
         if time.time() - self._thoidiemtudongtimduonggannhat < delay:
-            return
+            return False
 
         self._thoidiemtudongtimduonggannhat = time.time()
 
@@ -572,9 +582,10 @@ class MoiTruong:
 
         self.tientrinh.start_thread(self.diachihamtudongtimduong)
 
+        return True
+
     def khoitaohamdichuyen(self):
         if not self.diachihamdichuyen:
-            print("Không xin được bộ nhớ")
             return
         diachidulieu = self.diachihamdichuyen + 0x40
 
@@ -598,17 +609,19 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamdichuyen, bytes(encoding), len(encoding))
 
-    def action_dichuyen(self, toadox, toadoy):
+    def action_dichuyen(self, toadox, toadoy, delay = 0.25):
         if not self.diachihamdichuyen:
-            print("Không xin được bộ nhớ")
-            return
-        print("{}: action_dichuyen: {} {}".format(self.get_tennhanvat(), toadox, toadoy))
-        diachidulieu = self.diachihamdichuyen + 0x40
+            return False
 
+        if time.time() - self._thoidiemdichuyengannhat < delay:
+            return False
+        self._thoidiemdichuyengannhat = time.time()
+
+        diachidulieu = self.diachihamdichuyen + 0x40
         write_int(self.tientrinh, diachidulieu, toadox)
         write_int(self.tientrinh, diachidulieu + 4, toadoy)
-
         self.tientrinh.start_thread(self.diachihamdichuyen)
+        return True
 
     def get_tenbandohientai(self):
         return read_string(self.tientrinh, self.diachigame + 0x28A1114)
@@ -631,7 +644,6 @@ class MoiTruong:
         return int(khoangcach)
 
     def action_dichuyengiukhoangcachtoithieu(self, idnhanvat2, khoangcachtoithieu):
-        print("{}: action_dichuyengiukhoangcachtoithieu: {}, {}".format(self.get_tennhanvat(), idnhanvat2, khoangcachtoithieu))
         if not self.get_is_nhanvattontai(idnhanvat2):
             return
 
@@ -652,7 +664,6 @@ class MoiTruong:
 
     def khoitaohamsuavatpham(self):
         if not self.diachihamsuavatpham:
-            print("Không xin được bộ nhớ sửa đồ")
             return
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
@@ -675,18 +686,22 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamsuavatpham, bytes(encoding), len(encoding))
 
-    def action_suavatpham(self, idvatpham):
+    def action_suavatpham(self, idvatpham, delay = 0.25):
         if not self.diachihamsuavatpham:
-            return
+            return False
+
+        if time.time() - self._thoidiemsuavatphamgannhat < delay:
+            return False
+        self._thoidiemsuavatphamgannhat = time.time()
 
         if read_int(self.tientrinh, self.diachigame + 0x2B99A2C) == 0:
-            return
+            return False
 
         dobenhientai = self.get_dobenhientaivatpham(idvatpham)
         dobentoida = self.get_dobentoidavatpham(idvatpham)
 
         if dobentoida == -1 or dobenhientai >= dobentoida or dobenhientai < 0:
-            return
+            return False
 
         diachicosothongtinvatpham = self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM
         val_param = read_int(self.tientrinh, diachicosothongtinvatpham + 0x10C)
@@ -711,3 +726,49 @@ class MoiTruong:
         write_int(self.tientrinh, diachidulieu + 0xC, dbid)
 
         self.tientrinh.start_thread(self.diachihamsuavatpham)
+        return True
+
+    def khoitaohambattathieuungbotro(self):
+        if not self.diachihambattathieuungbotro:
+            return
+        diachidulieu = self.diachihambattathieuungbotro + 0x40
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        asm_code = f"""
+            mov edx, dword ptr [{hex(diachidulieu)}]
+            mov ecx, 00000000
+
+            push ecx
+            push edx
+            mov eax, {hex(self.diachigame + 0x181190)}
+            call eax
+            add esp, 8
+            ret
+        """
+        encoding, _ = ks.asm(asm_code)
+        write_bytes(self.tientrinh, self.diachihambattathieuungbotro, bytes(encoding), len(encoding))
+
+    def action_bathieuungbotro(self, idhieuungbotro, delay = 0.5):
+        if not self.get_is_hieuungbotrodangbat(idhieuungbotro):
+            self.action_battathieuungbotro(idhieuungbotro, delay = delay)
+
+    def action_tathieuungbotro(self, idhieuungbotro, delay = 0.5):
+        if self.get_is_hieuungbotrodangbat(idhieuungbotro):
+            self.action_battathieuungbotro(idhieuungbotro, delay = delay)
+
+    def action_battathieuungbotro(self, idhieuungbotro, delay = 0.5):
+        if not self.diachihambattathieuungbotro:
+            return False
+
+        if time.time() - self._thoidiembattathieuungbotrogannhat_map.get(idhieuungbotro, 0.) < delay:
+            return False
+
+        self._thoidiembattathieuungbotrogannhat_map[idhieuungbotro] = time.time()
+
+        diachidulieu = self.diachihambattathieuungbotro + 0x40
+
+        write_int(self.tientrinh, diachidulieu, idhieuungbotro)
+
+        self.tientrinh.start_thread(self.diachihambattathieuungbotro)
+
+        return True

@@ -55,7 +55,7 @@ class TacTu:
             phatam("Tắt tự động sửa vật phẩm")
 
     def action_test(self):
-        print(self.moitruong.get_hieuungbotros_display())
+        print(self.moitruong.get_hieuungbotros())
 
     def action_vebanrac(self):
         if self.moitruong.get_is_khuvuccothetancong():
@@ -149,7 +149,7 @@ class TacTu:
             if danhmuctrangbi in DANHMUCTRANGBI_MAP and phamchat != IDPHAMCHATVATPHAM_TRANGLAM:
                 continue
 
-            self.moitruong.action_banvatpham(sothutuvatpham)
+            self.moitruong.action_banvatpham(sothutuvatpham, delay = 0.)
             time.sleep(0.25)
 
         self.moitruong.action_dongcuahang()
