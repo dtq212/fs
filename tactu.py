@@ -65,10 +65,10 @@ class TacTu:
                 self._tenbandotruockhivebanrac = tenbandohientai
 
             if tenbandohientai in (BANDO_CULOC, BANDO_DUHON):
-                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP[tenbandohientai, BANDO_XIVUUMO], delay = 2.)
+                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP[tenbandohientai, BANDO_XIVUUMO])
                 time.sleep(2.)
             elif tenbandohientai in (BANDO_CHANNUICONLON,):
-                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP[tenbandohientai, BANDO_NGOCHUCUNG], delay = 2.)
+                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP[tenbandohientai, BANDO_NGOCHUCUNG])
                 time.sleep(2.)
             else:
                 vitrivatpham = self.action_timkiemvatpham(HOITHANHPHUSIEUCAP)
@@ -109,7 +109,7 @@ class TacTu:
         if idnhanvat < 0:
             tenbandohientai = self.moitruong.get_tenbandohientai()
             if tenbandohientai in TOADODAIPHU_MAP:
-                self.moitruong.action_dichuyen(*TOADODAIPHU_MAP.get(tenbandohientai))
+                self.moitruong.action_tudongtimduong(*TOADODAIPHU_MAP.get(tenbandohientai))
             else:
                 phatam("Không tìm thấy Đại phu")
             return False
@@ -203,7 +203,7 @@ class TacTu:
         elif not self.moitruong.get_is_khuvuccothetancong() and not self.moitruong.get_is_dangtudongtimduong():
             tukhoadiemchuyentiep = (self.moitruong.get_tenbandohientai(), self._tenbandotruockhivebanrac or self.moitruong.get_tenbandohientai())
             if tukhoadiemchuyentiep in TOADODIEMCHUYENTIEP_MAP:
-                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP[tukhoadiemchuyentiep], delay = 2.)
+                self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP[tukhoadiemchuyentiep])
         elif self.moitruong.get_idtrangthainhanvat() == IDTRANGTHAINHANVAT_DUNGIM and self.moitruong.get_is_dangtudongtimduong():
             self.moitruong.set_is_dangtudongtimduong(False)
 
