@@ -175,7 +175,7 @@ class TacTu:
 
             tongsovatphamhanhtrang += 1
 
-        return tongsovatphamhanhtrang >= 30
+        return tongsovatphamhanhtrang >= 35
 
     def action_tudongvebanrac(self):
         if not self._is_tudongvebanrac:
