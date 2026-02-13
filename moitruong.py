@@ -8,19 +8,18 @@ from keystone import Ks, KS_ARCH_X86, KS_MODE_32
 from hangso import *
 from tienich import *
 
-OFFSET_DIACHICOSONHANVAT = 0x3B0CD0
+# Inspect từ Tên nhân vật - 0xBC5
+OFFSET_DIACHICOSONHANVAT = 0x3BA980
 OFFSET_DIACHICOSOMOINHANVAT = 0x8294
 
-# ĐỊA CHỈ CƠ SỞ THÔNG TIN VẬT PHẨM
-# Moi bằng id vị trí rương = 1 khi cầm vật phẩm lên và đặt xuống hành trang là 3
-OFFSET_DIACHICOSOVITRIVATPHAM = 0x3956A4
+# Inspect từ ID vị trí rương = 1 khi cầm vật phẩm lên và đặt xuống hành trang là 3
+# Lấy địa chỉ tìm được - 4 sẽ ra ID vật phẩm, Lấy địa chỉ - ID vật phẩm * 0x10 sẽ ra OFFSET_DIACHICOSOVITRIVATPHAM
+OFFSET_DIACHICOSOVITRIVATPHAM = 0x39F354
 OFFSET_DIACHICOSOVITRIMOIVATPHAM = 0x10
 
-# Moi từ địa chỉ số lượng hàng và cột tối đa trong hành trang (Tìm kiếm theo byte array 05 00 00 00 0E 00 00 00 rồi trừ cho 0x8)
-OFFSET_DIACHICOSOTHONGTINHANHTRANG = 0x395778
-# Moi ở hàm sửa đồ
-OFFSET_DIACHICOSOTHONGTINVATPHAM = 0x2A8278
-OFFSET_DIACHICOSOMOIVATPHAM = 0x73C
+# Inspect từ Hàm bán đồ
+OFFSET_DIACHICOSOTHONGTINVATPHAM = 0x2AA728
+OFFSET_DIACHICOSOMOIVATPHAM = 0x778
 
 class MoiTruong:
     def __init__(self, idcuaso):
@@ -51,7 +50,6 @@ class MoiTruong:
         self.diachigame = gamemodule.lpBaseOfDll
 
         self.diachihambanvatpham = 0
-        self.diachihammocuahang = 0
         self.diachihamdongcuahang = 0
         self.diachihamdoithoai = 0
         self.diachihamluachondoithoai = 0
@@ -72,7 +70,6 @@ class MoiTruong:
 
         diachicangiaiphongs = [
             self.diachihambanvatpham,
-            self.diachihammocuahang,
             self.diachihamdongcuahang,
             self.diachihamdoithoai,
             self.diachihamluachondoithoai,
@@ -85,6 +82,15 @@ class MoiTruong:
 
         for diachi in diachicangiaiphongs:
             safe_free(diachi)
+
+    def get_is_dangmatketnoi(self):
+        return not self.get_is_nhanvattontai()
+
+    def get_is_cuasogametontai(self):
+        return win32gui.IsWindow(self.idcuaso)
+
+    def get_is_cuasogamekichhoat(self):
+        return win32gui.GetForegroundWindow() == self.idcuaso
 
     def get_is_nhanvattontai(self, idnhanvat = 1):
         if read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x4 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT) != idnhanvat:
@@ -185,7 +191,7 @@ class MoiTruong:
         return hieuungbotros
 
     def get_donghothoigian(self):
-        return read_int(self.tientrinh, self.diachigame + 0x28DA838)
+        return read_int(self.tientrinh, self.diachigame + 0x28E44E8) # 0x28DA838
 
     def get_is_kynangsansang(self, idkynang):
         if not self.get_is_dahockynang(idkynang):
@@ -195,25 +201,26 @@ class MoiTruong:
         return not thoidiemhoiphuckynang or thoidiemhoiphuckynang < self.get_donghothoigian()
 
     def get_is_khuvuccothetancong(self):
-        return read_int(self.tientrinh, self.diachigame + 0x28E6934) > 0
+        return read_int(self.tientrinh, self.diachigame + 0x28F05E4) > 0
 
-    def get_is_dangmatketnoi(self):
-        return not self.get_is_nhanvattontai()
+    def get_is_dangmocuahang(self):
+        return read_int(self.tientrinh, self.diachigame + 0x2A19AC) > 0
 
-    def get_is_cuasogametontai(self):
-        return win32gui.IsWindow(self.idcuaso)
+    def get_is_dangdoithoailuachon(self):
+        return read_int(self.tientrinh, self.diachigame + 0x2A08A0) > 0
 
-    def get_is_cuasogamekichhoat(self):
-        return win32gui.GetForegroundWindow() == self.idcuaso
+    def get_is_dangdoithoaixacnhan(self):
+        return read_int(self.tientrinh, self.diachigame + 0x29FFF0) > 0
 
-    def get_soohanhtrangmoihang(self):
-        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINHANHTRANG + 0x8)
+    def get_is_dangtudongtimduong(self):
+        return read_int(self.tientrinh, self.diachigame + 0x39F264) > 0
 
-    def get_sohanghanhtrang(self):
-        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINHANHTRANG + 0xC)
+    def set_is_dangtudongtimduong(self, is_dangtudongtimduong):
+        if self.get_is_dangtudongtimduong() != is_dangtudongtimduong:
+            write_int(self.tientrinh, self.diachigame + 0x39F264, 1 if is_dangtudongtimduong else 0)
 
-    def get_soohanhtrangtoida(self):
-        return self.get_sohanghanhtrang() * self.get_soohanhtrangmoihang() * SOHANHTRANGTOIDA
+    def get_tenbandohientai(self):
+        return read_string(self.tientrinh, self.diachigame + 0x28AADC4)
 
     def get_idvatpham(self, sothutuvatpham):
         if sothutuvatpham <= 0 or sothutuvatpham > SOLUONGVITRIVATPHAMTOIDA:
@@ -249,7 +256,7 @@ class MoiTruong:
         return read_string(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x120 + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
 
     def get_dbidvatpham(self, idvatpham):
-        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x65C + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x698 + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
 
     def get_loaivatpham(self, idvatpham):
         if idvatpham <= 0 or idvatpham > SOLUONGVATPHAMTOIDA:
@@ -290,7 +297,7 @@ class MoiTruong:
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x4EC + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
 
     def get_dobenhientaivatpham(self, idvatpham):
-        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x660 + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x69C + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
 
     def get_dobentoidavatpham(self, idvatpham):
         if idvatpham <= 0 or idvatpham > SOLUONGVATPHAMTOIDA:
@@ -307,8 +314,22 @@ class MoiTruong:
 
         return -1
 
-    def get_is_dangmocuahang(self):
-        return read_int(self.tientrinh, self.diachigame + 0x29F4FC) > 0
+    def get_khoangcach(self, idnhanvat2, idnhanvat1 = 1):
+        x1 = self.get_toadox(idnhanvat1)
+        y1 = self.get_toadoy(idnhanvat1)
+
+        x2 = self.get_toadox(idnhanvat2)
+        y2 = self.get_toadoy(idnhanvat2)
+
+        khoangcach = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
+        return int(khoangcach)
+
+    def get_khoangcachdiem(self, idnhanvat2, toadox1, toadoy1):
+        x2 = self.get_toadox(idnhanvat2)
+        y2 = self.get_toadoy(idnhanvat2)
+
+        khoangcach = ((x2 - toadox1) ** 2 + (y2 - toadoy1) ** 2) ** 0.5
+        return int(khoangcach)
 
     def khoitaohambanvatpham(self):
         if self.diachihambanvatpham: return
@@ -320,7 +341,7 @@ class MoiTruong:
             mov ecx, dword ptr [{self.diachihambanvatpham + 0x40 + 0x4}]
             mov edx, dword ptr [{self.diachihambanvatpham + 0x40 + 0x8}]
             push edx
-            mov eax, {self.diachigame + 0x1811E0}
+            mov eax, {self.diachigame + 0x1829A0}
             call eax
             add esp, 4
             ret
@@ -342,39 +363,13 @@ class MoiTruong:
 
         dbidvatpham = self.get_dbidvatpham(idvatpham)
         diachidulieuhambanvatpham = self.diachihambanvatpham + 0x40
-        write_int(self.tientrinh, diachidulieuhambanvatpham, idvatpham * 0x73C)
+        write_int(self.tientrinh, diachidulieuhambanvatpham, idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
         write_int(self.tientrinh, diachidulieuhambanvatpham + 4, idvatpham)
         write_int(self.tientrinh, diachidulieuhambanvatpham + 8, dbidvatpham)
         self.tientrinh.start_thread(self.diachihambanvatpham)
         return True
 
-    def khoitaohammocuahang(self):
-        if self.diachihammocuahang: return
-        self.diachihammocuahang = self.tientrinh.allocate(256)
-
-        ks = Ks(KS_ARCH_X86, KS_MODE_32)
-        asm_code = f"""
-            push 03
-            push {0x6FF178}
-            mov ecx,{self.diachigame + 0x395560}
-            mov eax, {self.diachigame + 0x10F280}
-            call eax
-            ret
-        """
-        encoding, _ = ks.asm(asm_code)
-        write_bytes(self.tientrinh, self.diachihammocuahang, bytes(encoding), len(encoding))
-
-    def action_mocuahang(self, delay = 0.5):
-        if not self.diachihammocuahang:
-            self.khoitaohammocuahang()
-
-        if time.time() - self._thoidiemmocuahanggannhat < delay:
-            return False
-        self._thoidiemmocuahanggannhat = time.time()
-
-        self.tientrinh.start_thread(self.diachihammocuahang)
-        return True
-
+    #Inspect hàm nào sửa giá trị biến Đang mở cửa hàng về 0
     def khoitaohamdongcuahang(self):
         if self.diachihamdongcuahang: return
         self.diachihamdongcuahang = self.tientrinh.allocate(256)
@@ -399,6 +394,7 @@ class MoiTruong:
         self.tientrinh.start_thread(self.diachihamdongcuahang)
         return True
 
+    #Inspect click khương tử nha lúc trẻ Request thứ 2
     def khoitaohamdoithoai(self):
         if self.diachihamdoithoai: return
         self.diachihamdoithoai = self.tientrinh.allocate(256)
@@ -407,8 +403,8 @@ class MoiTruong:
         asm_code = f"""
             mov ebx, dword ptr [{self.diachihamdoithoai + 0x40}]
             push ebx
-            mov ecx, {self.diachigame + 0x395560}
-            mov eax, {self.diachigame + 0x1100B0}
+            mov ecx, {self.diachigame + 0x39F210}
+            mov eax, {self.diachigame + 0x111760}
             call eax
             ret
         """
@@ -431,9 +427,6 @@ class MoiTruong:
         self.tientrinh.start_thread(self.diachihamdoithoai)
         return True
 
-    def get_is_dangdoithoai(self):
-        return read_int(self.tientrinh, self.diachigame + 0x29F0C0) > 0
-
     def khoitaohamluachondoithoai(self):
         if self.diachihamluachondoithoai: return
         self.diachihamluachondoithoai = self.tientrinh.allocate(256)
@@ -441,7 +434,7 @@ class MoiTruong:
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
         asm_code = f"""
             push 01
-            mov eax, {self.diachigame + 0xC9450}
+            mov eax, {self.diachigame + 0xCA290}
             call eax
             add esp, 04
 
@@ -450,13 +443,12 @@ class MoiTruong:
             push 0x00
             push 0x09
 
-            mov ecx, dword ptr [{self.diachigame + 0x29F794}]
+            mov ecx, dword ptr [{self.diachigame + 0x2A1C44}]
             mov edx, dword ptr [ecx]
-            mov ecx, dword ptr [{self.diachigame + 0x29F794}]
+            mov ecx, dword ptr [{self.diachigame + 0x2A1C44}]
             mov eax, dword ptr [edx + 0x04]
-
-            mov ebx, {self.diachigame + 0x10AE00}
-            call ebx
+            
+            call eax
             ret
         """
         encoding, _ = ks.asm(asm_code)
@@ -482,20 +474,18 @@ class MoiTruong:
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
         asm_code = f"""
             push 01
-            mov ebx, {hex(self.diachigame + 0x80E40)}
+            mov ebx, {hex(self.diachigame + 0x80F30)}
             call ebx
             add esp, 04
 
             push 00
             push 00
             push 0x0A
-            mov edx, dword ptr [{hex(self.diachigame + 0x29F794)}]
+            mov edx, dword ptr [{hex(self.diachigame + 0x2A1C44)}]
             mov eax, dword ptr [edx]
-            mov ecx, dword ptr [{hex(self.diachigame + 0x29F794)}]
+            mov ecx, dword ptr [{hex(self.diachigame + 0x2A1C44)}]
             mov edx, dword ptr [eax + 0x04]
-
-            mov ebx, {hex(self.diachigame + 0x10AE00)}
-            call ebx
+            call edx
             ret
         """
         encoding, _ = ks.asm(asm_code)
@@ -529,10 +519,10 @@ class MoiTruong:
             push eax
             push esi
 
-            mov ecx, {hex(self.diachigame + 0x395560)}
+            mov ecx, {hex(self.diachigame + 0x39F210)}
             push ebx
 
-            mov ebp, {hex(self.diachigame + 0x110BE0)}
+            mov ebp, {hex(self.diachigame + 0x1122B0)}
             call ebp
 
             ret
@@ -554,14 +544,7 @@ class MoiTruong:
         write_int(self.tientrinh, diachidulieu + 0x8, vitriy)
         self.tientrinh.start_thread(self.diachihamsudungvatpham)
         return True
-
-    def get_is_dangtudongtimduong(self):
-        return read_int(self.tientrinh, self.diachigame + 0x3955B4) > 0
-
-    def set_is_dangtudongtimduong(self, is_dangtudongtimduong):
-        if self.get_is_dangtudongtimduong() != is_dangtudongtimduong:
-            write_int(self.tientrinh, self.diachigame + 0x3955B4, 1 if is_dangtudongtimduong else 0)
-
+    #Inspect hàm nào write biến Đang tự động tìm đường = 1
     def khoitaohamtudongtimduong(self):
         if self.diachihamtudongtimduong: return
         self.diachihamtudongtimduong = self.tientrinh.allocate(256)
@@ -577,9 +560,9 @@ class MoiTruong:
             push edi
             push esi
 
-            mov ecx, {hex(self.diachigame + 0x395560)}
+            mov ecx, {hex(self.diachigame + 0x39F210)}
 
-            mov eax, {hex(self.diachigame + 0x10E200)}
+            mov eax, {hex(self.diachigame + 0x10F8B0)}
             call eax
 
             ret
@@ -615,7 +598,7 @@ class MoiTruong:
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
         asm_code = f"""
-            mov esi, {hex(self.diachigame + 0x3B8F64)}
+            mov esi, {hex(self.diachigame + 0x3C2C14)}
             mov edi, dword ptr [{diachidulieu}]
             mov edx, dword ptr [{diachidulieu + 4}]
             mov ebx, 0
@@ -624,7 +607,7 @@ class MoiTruong:
             push edx
             push edi
             mov ecx, esi
-            mov eax, {hex(self.diachigame + 0x11ADD0)}
+            mov eax, {hex(self.diachigame + 0x11C4A0)}
             call eax
             ret
         """
@@ -644,26 +627,6 @@ class MoiTruong:
         write_int(self.tientrinh, diachidulieu + 4, toadoy)
         self.tientrinh.start_thread(self.diachihamdichuyen)
         return True
-
-    def get_tenbandohientai(self):
-        return read_string(self.tientrinh, self.diachigame + 0x28A1114)
-
-    def get_khoangcach(self, idnhanvat2, idnhanvat1 = 1):
-        x1 = self.get_toadox(idnhanvat1)
-        y1 = self.get_toadoy(idnhanvat1)
-
-        x2 = self.get_toadox(idnhanvat2)
-        y2 = self.get_toadoy(idnhanvat2)
-
-        khoangcach = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
-        return int(khoangcach)
-
-    def get_khoangcachdiem(self, idnhanvat2, toadox1, toadoy1):
-        x2 = self.get_toadox(idnhanvat2)
-        y2 = self.get_toadoy(idnhanvat2)
-
-        khoangcach = ((x2 - toadox1) ** 2 + (y2 - toadoy1) ** 2) ** 0.5
-        return int(khoangcach)
 
     def action_dichuyengiukhoangcachtoithieu(self, idnhanvat2, khoangcachtoithieu, delay = 0.25):
         if not self.get_is_nhanvattontai(idnhanvat2):

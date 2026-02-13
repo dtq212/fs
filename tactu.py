@@ -132,18 +132,15 @@ class TacTu:
         self.moitruong.action_doithoai(idnhanvat, delay = 0.)
         time.sleep(2.)
 
-        if not self.moitruong.get_is_dangdoithoai():
-            phatam("Đối thoại thất bại")
-            return False
-
-        if self.moitruong.get_idhephai() == IDHEPHAI_DAOSI and self.moitruong.get_tenbandohientai() == BANDO_NGOCHUCUNG\
-                or self.moitruong.get_idhephai() == IDHEPHAI_DINHAN and self.moitruong.get_tenbandohientai() == BANDO_XIVUUMO\
-                or self.moitruong.get_idhephai() == IDHEPHAI_GIAPSI and self.moitruong.get_tenbandohientai() == BANDO_SUNGTHANHDOANH:
+        if self.moitruong.get_is_dangdoithoailuachon():
             self.moitruong.action_luachondoithoai(1, delay = 0.)
             time.sleep(2.)
-        else:
+        elif self.moitruong.get_is_dangdoithoaixacnhan():
             self.moitruong.action_xacnhandoithoai(delay = 0.)
             time.sleep(2.)
+        else:
+            phatam("Đối thoại thất bại")
+            return False
 
         if not self.moitruong.get_is_dangmocuahang():
             phatam("Cửa hàng chưa mở")

@@ -197,7 +197,7 @@ class BackgroundInput:
         time.sleep(delay)
 
     @staticmethod
-    def type_text(hwnd, text, delay=0.1):
+    def type_text(hwnd, text, delay=0.05):
         """Gõ văn bản ngầm"""
         for char in text:
             BackgroundInput._safe_post_message(hwnd, win32con.WM_CHAR, ord(char), 0)
