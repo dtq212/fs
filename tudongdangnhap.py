@@ -109,7 +109,7 @@ def quy_trinh_dang_nhap(account):
         return
 
     print(f"   -> Đã bắt được cửa sổ (HWND: {hwnd}).")
-
+    win32gui.SetWindowPos(hwnd, win32con.HWND_NOTOPMOST, 0, 0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_SHOWWINDOW)
     print("   -> Chờ 10s để game tải tài nguyên...")
     time.sleep(6)
 
@@ -123,8 +123,8 @@ def quy_trinh_dang_nhap(account):
     BackgroundInput.type_text(hwnd, user)
     time.sleep(1)
 
-    print("   -> Ấn Tab (Chuyển sang ô mật khẩu)")
-    BackgroundInput.press_key(hwnd, win32con.VK_TAB)
+    print("   -> Click vào ô mật khẩu")
+    BackgroundInput.click(hwnd, 403, 289)
     time.sleep(1)
 
     print("   -> Nhập mật khẩu")

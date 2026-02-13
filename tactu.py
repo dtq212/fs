@@ -23,6 +23,10 @@ class TacTu:
         self._thoidiemkiemtrasuavatphamgannhat = 0.
 
         self._thoidiemnhanvatdungimgannhat = 0.
+        self._thoidiemnhanvattudongtimduongdungimgannhat = 0.
+
+        self._tenbandohientai = False
+        self._thoidiemthaydoibandogannhat = 0.
 
     def __del__(self):
         try:
@@ -271,9 +275,16 @@ class TacTu:
         return tongtrongluongvatpham
 
     def action_lammoitrangthaitactu(self):
+        if self.moitruong.get_idtrangthainhanvat() != IDTRANGTHAINHANVAT_DUNGIM or not self.moitruong.get_is_dangtudongtimduong():
+            self._thoidiemnhanvattudongtimduongdungimgannhat = time.time()
         if self.moitruong.get_idtrangthainhanvat() != IDTRANGTHAINHANVAT_DUNGIM:
             self._thoidiemnhanvatdungimgannhat = time.time()
 
+        tenbandohientai = self.moitruong.get_tenbandohientai()
+        if tenbandohientai != self._tenbandohientai:
+            self._thoidiemthaydoibandogannhat = time.time()
+        self._tenbandohientai = tenbandohientai
+
     def action_kiemtraxulyloitudongtimduong(self):
-        if self.moitruong.get_idtrangthainhanvat() == IDTRANGTHAINHANVAT_DUNGIM and time.time() - self._thoidiemnhanvatdungimgannhat > 2. and self.moitruong.get_is_dangtudongtimduong():
+        if self.moitruong.get_idtrangthainhanvat() == IDTRANGTHAINHANVAT_DUNGIM and time.time() - self._thoidiemnhanvattudongtimduongdungimgannhat > 2. and self.moitruong.get_is_dangtudongtimduong():
             self.moitruong.set_is_dangtudongtimduong(False)

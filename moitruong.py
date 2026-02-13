@@ -350,12 +350,12 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihambanvatpham, bytes(encoding), len(encoding))
 
     def action_banvatpham(self, sothutuvatpham, delay = 0.25):
-        print("{}: action_banvatpham".format(self.get_tennhanvat()))
         if not self.diachihambanvatpham:
             self.khoitaohambanvatpham()
 
         if time.time() - self._thoidiembanvatphamgannhat < delay:
             return False
+        print("{}: action_banvatpham".format(self.get_tennhanvat()))
         self._thoidiembanvatphamgannhat = time.time()
 
         idvatpham = self.get_idvatpham(sothutuvatpham)
@@ -377,7 +377,7 @@ class MoiTruong:
 
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
         asm_code = f"""
-            mov eax, {self.diachigame + 0xE3C30}
+            mov eax, {self.diachigame + 0xE51D0}
             call eax
             ret
         """
@@ -385,12 +385,12 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamdongcuahang, bytes(encoding), len(encoding))
 
     def action_dongcuahang(self, delay = 0.5):
-        print("{}: action_dongcuahang".format(self.get_tennhanvat()))
         if not self.diachihamdongcuahang:
             self.khoitaohamdongcuahang()
 
         if time.time() - self._thoidiemdongcuahanggannhat < delay:
             return False
+        print("{}: action_dongcuahang".format(self.get_tennhanvat()))
         self._thoidiemdongcuahanggannhat = time.time()
 
         self.tientrinh.start_thread(self.diachihamdongcuahang)
@@ -414,7 +414,6 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamdoithoai, bytes(encoding), len(encoding))
 
     def action_doithoai(self, idnhanvat, delay = 0.5):
-        print("{}: action_doithoai".format(self.get_tennhanvat()))
         if not self.diachihamdoithoai:
             self.khoitaohamdoithoai()
 
@@ -423,6 +422,7 @@ class MoiTruong:
 
         if time.time() - self._thoidiemdoithoaigannhat < delay:
             return False
+        print("{}: action_doithoai".format(self.get_tennhanvat()))
         self._thoidiemdoithoaigannhat = time.time()
 
         diachidulieu = self.diachihamdoithoai + 0x40
@@ -458,12 +458,12 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamluachondoithoai, bytes(encoding), len(encoding))
 
     def action_luachondoithoai(self, idluachon, delay = 0.25):
-        print("{}: action_luachondoithoai".format(self.get_tennhanvat()))
         if not self.diachihamluachondoithoai:
             self.khoitaohamluachondoithoai()
 
         if time.time() - self._thoidiemluachondoithoaigannhat < delay:
             return False
+        print("{}: action_luachondoithoai".format(self.get_tennhanvat()))
         self._thoidiemluachondoithoaigannhat = time.time()
 
         diachidulieu = self.diachihamluachondoithoai + 0x40
@@ -496,12 +496,12 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamxacnhandoithoai, bytes(encoding), len(encoding))
 
     def action_xacnhandoithoai(self, delay = 0.25):
-        print("{}: action_xacnhandoithoai".format(self.get_tennhanvat()))
         if not self.diachihamxacnhandoithoai:
             self.khoitaohamxacnhandoithoai()
 
         if time.time() - self._thoidiemxacnhandoithoaigannhat < delay:
             return False
+        print("{}: action_xacnhandoithoai".format(self.get_tennhanvat()))
 
         self._thoidiemxacnhandoithoaigannhat = time.time()
         self.tientrinh.start_thread(self.diachihamxacnhandoithoai)
@@ -536,12 +536,12 @@ class MoiTruong:
         self.tientrinh.write_bytes(self.diachihamsudungvatpham, bytes(encoding), len(encoding))
 
     def action_sudungvatphamhanhtrang(self, idvatpham, vitrix, vitriy, delay = 0.25):
-        print("{}: action_sudungvatphamhanhtrang".format(self.get_tennhanvat()))
         if not self.diachihamsudungvatpham:
             self.khoitaohamsudungvatpham()
 
         if time.time() - self._thoidiemsudungvatphamgannhat < delay:
             return False
+        print("{}: action_sudungvatphamhanhtrang".format(self.get_tennhanvat()))
         self._thoidiemsudungvatphamgannhat = time.time()
 
         diachidulieu = self.diachihamsudungvatpham + 0x40
@@ -577,13 +577,13 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamtudongtimduong, bytes(encoding), len(encoding))
 
     def action_tudongtimduong(self, toadox, toadoy, delay = 1.):
-        print("{}: action_tudongtimduong".format(self.get_tennhanvat()))
         if not self.diachihamtudongtimduong:
             self.khoitaohamtudongtimduong()
 
         if time.time() - self._thoidiemtudongtimduonggannhat < delay:
             return False
 
+        print("{}: action_tudongtimduong".format(self.get_tennhanvat()))
         self._thoidiemtudongtimduonggannhat = time.time()
 
         toadobandonhox = int(toadox / 256)
@@ -622,12 +622,12 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamdichuyen, bytes(encoding), len(encoding))
 
     def action_dichuyen(self, toadox, toadoy, delay = 0.25):
-        print("{}: action_dichuyen".format(self.get_tennhanvat()))
         if not self.diachihamdichuyen:
             self.khoitaohamdichuyen()
 
         if time.time() - self._thoidiemdichuyengannhat < delay:
             return False
+        print("{}: action_dichuyen".format(self.get_tennhanvat()))
         self._thoidiemdichuyengannhat = time.time()
 
         diachidulieu = self.diachihamdichuyen + 0x40
@@ -687,12 +687,12 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamsuavatpham, bytes(encoding), len(encoding))
 
     def action_suavatpham(self, idvatpham, delay = 0.25):
-        print("{}: action_suavatpham".format(self.get_tennhanvat()))
         if not self.diachihamsuavatpham:
             self.khoitaohamsuavatpham()
 
         if time.time() - self._thoidiemsuavatphamgannhat < delay:
             return False
+        print("{}: action_suavatpham".format(self.get_tennhanvat()))
         self._thoidiemsuavatphamgannhat = time.time()
 
         if read_int(self.tientrinh, self.diachigame + 0x2B99A2C) == 0:
@@ -759,12 +759,13 @@ class MoiTruong:
             self.action_battathieuungbotro(idhieuungbotro, delay = delay)
 
     def action_battathieuungbotro(self, idhieuungbotro, delay = 0.5):
-        print("{}: action_battathieuungbotro".format(self.get_tennhanvat()))
         if not self.diachihambattathieuungbotro:
             self.khoitaohambattathieuungbotro()
 
         if time.time() - self._thoidiembattathieuungbotrogannhat_map.get(idhieuungbotro, 0.) < delay:
             return False
+
+        print("{}: action_battathieuungbotro".format(self.get_tennhanvat()))
 
         self._thoidiembattathieuungbotrogannhat_map[idhieuungbotro] = time.time()
 

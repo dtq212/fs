@@ -59,6 +59,7 @@ class LoopLamMoiTrangThaiTacTu:
         if self.moitruong.get_is_dangmatketnoi():
             return
         self.tactu.action_lammoitrangthaitactu()
+        self.tactu.action_kiemtraxulyloitudongtimduong()
 
 class LoopChinh:
     def __init__(self, moitruong: MoiTruong, tactu: TacTu, stop: threading.Event):
@@ -117,7 +118,6 @@ class LoopPhu:
         if self.moitruong.get_is_dangmatketnoi():
             return
 
-        self.tactu.action_kiemtraxulyloitudongtimduong()
 
         self.tactu.action_tudongvebanrac()
         # self.tactu.action_tudongsuavatpham()
