@@ -107,10 +107,11 @@ class TacTu:
         idnhanvat = self.action_timkiemnhanvat(tennhanvat = "Đại phu", khoangcach = 800)
         if idnhanvat < 0:
             idnhanvat = self.action_timkiemnhanvat(tennhanvat = "Đại Phu", khoangcach = 800)
-            if idnhanvat < 0:
-                phatam("Không tìm thấy Đại phu")
-                time.sleep(2.)
-                return False
+
+        if idnhanvat < 0:
+            phatam("Không tìm thấy Đại phu")
+            time.sleep(2.)
+            return False
 
         if self.moitruong.get_khoangcach(idnhanvat) > 300:
             self.moitruong.action_dichuyengiukhoangcachtoithieu(idnhanvat, 0)
@@ -121,7 +122,10 @@ class TacTu:
         time.sleep(2.)
 
         if self.moitruong.get_is_dangdoithoailuachon():
-            self.moitruong.action_luachondoithoai(1, delay = 0.)
+            if self.moitruong.get_tenbandohientai() in (BANDO_XIVUUMO, BANDO_SUNGTHANHDOANH, BANDO_NGOCHUCUNG):
+                self.moitruong.action_luachondoithoai(1, delay = 0.)
+            else:
+                self.moitruong.action_luachondoithoai(0, delay = 0.)
             time.sleep(2.)
         elif self.moitruong.get_is_dangdoithoaixacnhan():
             self.moitruong.action_xacnhandoithoai(delay = 0.)
