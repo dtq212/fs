@@ -350,6 +350,7 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihambanvatpham, bytes(encoding), len(encoding))
 
     def action_banvatpham(self, sothutuvatpham, delay = 0.25):
+        print("{}: action_banvatpham".format(self.get_tennhanvat()))
         if not self.diachihambanvatpham:
             self.khoitaohambanvatpham()
 
@@ -384,6 +385,7 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamdongcuahang, bytes(encoding), len(encoding))
 
     def action_dongcuahang(self, delay = 0.5):
+        print("{}: action_dongcuahang".format(self.get_tennhanvat()))
         if not self.diachihamdongcuahang:
             self.khoitaohamdongcuahang()
 
@@ -412,6 +414,7 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamdoithoai, bytes(encoding), len(encoding))
 
     def action_doithoai(self, idnhanvat, delay = 0.5):
+        print("{}: action_doithoai".format(self.get_tennhanvat()))
         if not self.diachihamdoithoai:
             self.khoitaohamdoithoai()
 
@@ -455,6 +458,7 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamluachondoithoai, bytes(encoding), len(encoding))
 
     def action_luachondoithoai(self, idluachon, delay = 0.25):
+        print("{}: action_luachondoithoai".format(self.get_tennhanvat()))
         if not self.diachihamluachondoithoai:
             self.khoitaohamluachondoithoai()
 
@@ -492,6 +496,7 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamxacnhandoithoai, bytes(encoding), len(encoding))
 
     def action_xacnhandoithoai(self, delay = 0.25):
+        print("{}: action_xacnhandoithoai".format(self.get_tennhanvat()))
         if not self.diachihamxacnhandoithoai:
             self.khoitaohamxacnhandoithoai()
 
@@ -531,6 +536,7 @@ class MoiTruong:
         self.tientrinh.write_bytes(self.diachihamsudungvatpham, bytes(encoding), len(encoding))
 
     def action_sudungvatphamhanhtrang(self, idvatpham, vitrix, vitriy, delay = 0.25):
+        print("{}: action_sudungvatphamhanhtrang".format(self.get_tennhanvat()))
         if not self.diachihamsudungvatpham:
             self.khoitaohamsudungvatpham()
 
@@ -571,6 +577,7 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamtudongtimduong, bytes(encoding), len(encoding))
 
     def action_tudongtimduong(self, toadox, toadoy, delay = 1.):
+        print("{}: action_tudongtimduong".format(self.get_tennhanvat()))
         if not self.diachihamtudongtimduong:
             self.khoitaohamtudongtimduong()
 
@@ -615,6 +622,7 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamdichuyen, bytes(encoding), len(encoding))
 
     def action_dichuyen(self, toadox, toadoy, delay = 0.25):
+        print("{}: action_dichuyen".format(self.get_tennhanvat()))
         if not self.diachihamdichuyen:
             self.khoitaohamdichuyen()
 
@@ -679,6 +687,7 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamsuavatpham, bytes(encoding), len(encoding))
 
     def action_suavatpham(self, idvatpham, delay = 0.25):
+        print("{}: action_suavatpham".format(self.get_tennhanvat()))
         if not self.diachihamsuavatpham:
             self.khoitaohamsuavatpham()
 
@@ -733,7 +742,7 @@ class MoiTruong:
 
             push ecx
             push edx
-            mov eax, {hex(self.diachigame + 0x181190)}
+            mov eax, {hex(self.diachigame + 0x182950)}
             call eax
             add esp, 8
             ret
@@ -750,6 +759,7 @@ class MoiTruong:
             self.action_battathieuungbotro(idhieuungbotro, delay = delay)
 
     def action_battathieuungbotro(self, idhieuungbotro, delay = 0.5):
+        print("{}: action_battathieuungbotro".format(self.get_tennhanvat()))
         if not self.diachihambattathieuungbotro:
             self.khoitaohambattathieuungbotro()
 
