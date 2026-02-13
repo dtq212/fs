@@ -109,7 +109,7 @@ class TacTu:
             idnhanvat = self.action_timkiemnhanvat(tennhanvat = "Đại Phu", khoangcach = 800)
 
         if idnhanvat < 0:
-            phatam("{} Không tìm thấy Đại phu".format(self.moitruong.get_tennhanvat()))
+            print("{} Không tìm thấy Đại phu".format(self.moitruong.get_tennhanvat()))
             time.sleep(2.)
             return False
 
@@ -227,7 +227,6 @@ class TacTu:
                 tukhoadiemchuyentiep = (tenbandohientai, tenbandotruockhivebanrac)
 
                 if tukhoadiemchuyentiep in TOADODIEMCHUYENTIEP_MAP:
-                    phatam(f"Đang quay lại {tenbandotruockhivebanrac}")
                     self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP[tukhoadiemchuyentiep])
 
     def action_tudongsuavatpham(self):
