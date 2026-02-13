@@ -301,7 +301,7 @@ class MoiTruong:
         danhsach = []
 
         for i in range(16):
-            diachicosothongtinthuoctinhvatpham = diachicosothongtinvatpham + 0x1B4 + (i * 0x14)
+            diachicosothongtinthuoctinhvatpham = diachicosothongtinvatpham + 0x51C + (i * 0x14)
 
             idthuoctinh = read_int(self.tientrinh, diachicosothongtinthuoctinhvatpham)
 
@@ -311,7 +311,7 @@ class MoiTruong:
             value1 = read_int(self.tientrinh, diachicosothongtinthuoctinhvatpham + 0x4)
             value2 = read_int(self.tientrinh, diachicosothongtinthuoctinhvatpham + 0x8)
 
-            tenthuoctinh = TENTHUOCTINH_MAP.get(idthuoctinh, f"Thuộc tính ẩn ({idthuoctinh})")
+            tenthuoctinh = TENTHUOCTINH_MAP.get(idthuoctinh, f"Không xác định ({idthuoctinh})")
 
             hienthi = f"{tenthuoctinh}: +{value1}"
             if "%" in tenthuoctinh or idthuoctinh in [IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, IDTHUOCTINHVATPHAM_XUATCHIEUBUAPHAP]:
