@@ -64,13 +64,19 @@ class TacTu:
             phatam("Tắt tự động sửa vật phẩm")
 
     def action_test(self):
-        for i in range(SOLUONGVATPHAMTOIDA):
-            idvatpham = self.moitruong.get_idvatpham(i)
-            if idvatpham <= 0:
+        data = []
+        for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
+            vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
+            if not vitrivatpham:
                 continue
-            thongtin = self.moitruong.get_thongtinvatpham_display(idvatpham)
-            if thongtin:
-                print(thongtin)
+            idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
+            if vitriruong != IDVITRIRUONG_HANHTRANG:
+                continue
+            trongluongvatpham = self.moitruong.get_trongluongvatpham(idvatpham)
+
+            data.append((vitrix, vitriy, self.moitruong.get_tenvatpham(idvatpham), trongluongvatpham))
+
+        print(data.sort())
 
     def action_tudongtimduongtoidaiphu(self):
         tenbandohientai = self.moitruong.get_tenbandohientai()
@@ -166,7 +172,7 @@ class TacTu:
 
             if danhmuctrangbi == IDDANHMUCTRANGBI_VUKHI:
                 thuoctinh_map = self.moitruong.get_thuoctinhvatpham_map(idvatpham)
-                if thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 10 or thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUBUAPHAP, 0) >= 10:
+                if thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 20 or thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUBUAPHAP, 0) >= 20:
                     continue
 
             self.moitruong.action_banvatpham(sothutuvatpham, delay = 0.)
@@ -193,6 +199,7 @@ class TacTu:
                 continue
 
             tongsovatphamhanhtrang += 1
+
         return tongsovatphamhanhtrang
 
     def action_tudongvebanrac(self):
@@ -306,7 +313,9 @@ class TacTu:
             idvatpham, vitriruong, _, _ = vitrivatpham
             if vitriruong != IDVITRIRUONG_HANHTRANG:
                 continue
-            tongtrongluongvatpham += self.moitruong.get_trongluongvatpham(idvatpham)
+            trongluongvatpham = self.moitruong.get_trongluongvatpham(idvatpham)
+            tongtrongluongvatpham += trongluongvatpham
+
         return tongtrongluongvatpham
 
     def action_lammoitrangthaitactu(self):

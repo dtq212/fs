@@ -118,7 +118,6 @@ class LoopPhu:
         if self.moitruong.get_is_dangmatketnoi():
             return
 
-
         self.tactu.action_tudongvebanrac()
-        # self.tactu.action_tudongsuavatpham()
+        self.tactu.action_tudongsuavatpham()
         self.tactu.action_tudongbattathieuungbotro()
