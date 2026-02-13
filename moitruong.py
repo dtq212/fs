@@ -720,7 +720,7 @@ class MoiTruong:
             mov esi, 1
 
             push ecx
-            mov eax, {hex(self.diachigame + 0x181060)}
+            mov eax, {hex(self.diachigame + 0x182820)}
             call eax
             add esp, 4
             ret
@@ -738,7 +738,7 @@ class MoiTruong:
         print("{}: action_suavatpham".format(self.get_tennhanvat()))
         self._thoidiemsuavatphamgannhat = time.time()
 
-        if read_int(self.tientrinh, self.diachigame + 0x2B99A2C) == 0:
+        if read_int(self.tientrinh, self.diachigame + 0x2BA36DC) == 0:
             return False
 
         dobenhientai = self.get_dobenhientaivatpham(idvatpham)
@@ -749,7 +749,7 @@ class MoiTruong:
 
         diachicosothongtinvatpham = self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM
         val_param = read_int(self.tientrinh, diachicosothongtinvatpham + 0x10C)
-        global_factor = read_int(self.tientrinh, self.diachigame + 0x2B99A28)
+        global_factor = read_int(self.tientrinh, self.diachigame + 0x2BA36D8)
 
         product = (val_param * global_factor) * 0x51EB851F
         edx_val = (product >> 32) & 0xFFFFFFFF
@@ -758,7 +758,7 @@ class MoiTruong:
         scaled_unit = (edx_val >> 5) + ((edx_val >> 5 >> 31) & 1)
         final_price = (scaled_unit * (dobentoida - dobenhientai)) // dobentoida
 
-        factor_addr = self.diachigame + (0x2B99A38 if dobenhientai == 0 else 0x2B99A34)
+        factor_addr = self.diachigame + (0x2BA36E8 if dobenhientai == 0 else 0x2BA36E4)
         final_price *= read_int(self.tientrinh, factor_addr)
 
         dbid = self.get_dbidvatpham(idvatpham)
