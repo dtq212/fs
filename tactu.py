@@ -106,9 +106,11 @@ class TacTu:
     def action_bantoanbovatpham(self):
         idnhanvat = self.action_timkiemnhanvat(tennhanvat = "Đại phu", khoangcach = 800)
         if idnhanvat < 0:
-            phatam("Không tìm thấy Đại phu")
-            time.sleep(2.)
-            return False
+            idnhanvat = self.action_timkiemnhanvat(tennhanvat = "Đại Phu", khoangcach = 800)
+            if idnhanvat < 0:
+                phatam("Không tìm thấy Đại phu")
+                time.sleep(2.)
+                return False
 
         if self.moitruong.get_khoangcach(idnhanvat) > 300:
             self.moitruong.action_dichuyengiukhoangcachtoithieu(idnhanvat, 0)
@@ -197,8 +199,6 @@ class TacTu:
 
         if self.get_is_hanhtrangday() and not self._is_dangxulybanrac:
             self._is_dangxulybanrac = True
-            phatam("Hành trang đầy, bắt đầu quy trình bán rác")
-
             if is_khuvuccothetancong:
                 self._tenbandotruockhivebanrac = tenbandohientai
 
