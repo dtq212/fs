@@ -1,8 +1,6 @@
 import ctypes
-import time
 
 import pymem
-import win32gui
 from keystone import Ks, KS_ARCH_X86, KS_MODE_32
 
 from hangso import *
@@ -20,6 +18,7 @@ OFFSET_DIACHICOSOVITRIMOIVATPHAM = 0x10
 # Inspect từ Hàm bán đồ
 OFFSET_DIACHICOSOTHONGTINVATPHAM = 0x2AA728
 OFFSET_DIACHICOSOMOIVATPHAM = 0x778
+
 
 class MoiTruong:
     def __init__(self, idcuaso):
@@ -59,6 +58,7 @@ class MoiTruong:
         self.diachihamsuavatpham = 0
         self.diachihambattathieuungbotro = 0
         self.diachihamxacnhandoithoai = 0
+        self.diachihamboquamuctieumaucao = 0
 
     def __del__(self):
         def safe_free(diachi):
@@ -78,6 +78,7 @@ class MoiTruong:
             self.diachihamdichuyen,
             self.diachihambattathieuungbotro,
             self.diachihamxacnhandoithoai,
+            self.diachihamboquamuctieumaucao,
         ]
 
         for diachi in diachicangiaiphongs:
@@ -205,7 +206,7 @@ class MoiTruong:
         return hieuungbotros
 
     def get_donghothoigian(self):
-        return read_int(self.tientrinh, self.diachigame + 0x28E44E8) # 0x28DA838
+        return read_int(self.tientrinh, self.diachigame + 0x28E44E8)  # 0x28DA838
 
     def get_is_kynangsansang(self, idkynang):
         if not self.get_is_dahockynang(idkynang):
@@ -440,7 +441,7 @@ class MoiTruong:
         self.tientrinh.start_thread(self.diachihambanvatpham)
         return True
 
-    #Inspect hàm nào sửa giá trị biến Đang mở cửa hàng về 0
+    # Inspect hàm nào sửa giá trị biến Đang mở cửa hàng về 0
     def khoitaohamdongcuahang(self):
         if self.diachihamdongcuahang: return
         self.diachihamdongcuahang = self.tientrinh.allocate(256)
@@ -466,7 +467,7 @@ class MoiTruong:
         self.tientrinh.start_thread(self.diachihamdongcuahang)
         return True
 
-    #Inspect click khương tử nha lúc trẻ Request thứ 2
+    # Inspect click khương tử nha lúc trẻ Request thứ 2
     def khoitaohamdoithoai(self):
         if self.diachihamdoithoai: return
         self.diachihamdoithoai = self.tientrinh.allocate(256)
@@ -621,7 +622,7 @@ class MoiTruong:
         self.tientrinh.start_thread(self.diachihamsudungvatpham)
         return True
 
-    #Inspect hàm nào write biến Đang tự động tìm đường = 1
+    # Inspect hàm nào write biến Đang tự động tìm đường = 1
     def khoitaohamtudongtimduong(self):
         if self.diachihamtudongtimduong: return
         self.diachihamtudongtimduong = self.tientrinh.allocate(256)
@@ -848,36 +849,31 @@ class MoiTruong:
 
         return True
 
-    def khoitaohamboquamuctieumaucao(self, gioihansinhluctoida = 50000):
+    def khoitaohamboquamuctieumaucao(self):
         if hasattr(self, "diachihamboquamuctieumaucao") and self.diachihamboquamuctieumaucao:
             return
 
         self.diachihamboquamuctieumaucao = self.tientrinh.allocate(256)
-
+        write_int(self.tientrinh, self.diachihamboquamuctieumaucao, 999999999)
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
         asm_code = f"""
-            pushad
-            mov ecx, dword ptr [esp + 0x24]
-            imul ecx, ecx, 0x8294       ; Index * Stride
-            add ecx, {self.diachigame + OFFSET_DIACHICOSONHANVAT}
-            cmp dword ptr [ecx + 0x800], {gioihansinhluctoida}
-            jg LABEL_SKIP_TARGET
-
-            popad
-
-            mov eax, dword ptr [esp + 0x04]
-            sub esp, 0x14
-
-            jmp {self.diachigame + 0x19ADD0 + 7}
-
-            LABEL_SKIP_TARGET:
-            popad
-            mov eax, 1
-            ret 0x08
+            cmp [eax+{hex(self.diachigame + 0x3BB180)}],ebp
+            jng {hex(self.diachigame + 0x19B064)}
+            mov ecx,dword ptr [{hex(self.diachihamboquamuctieumaucao)}]
+            cmp [eax+{hex(self.diachigame + 0x3BB180)}],ecx
+            jnl {hex(self.diachigame + 0x19B064)}
+            jmp {hex(self.diachigame + 0x19AE5C)}
         """
 
-        encoding, _ = ks.asm(asm_code)
-        write_bytes(self.tientrinh, self.diachihamboquamuctieumaucao, bytes(encoding), len(encoding))
-        caulenhjump = b"\xE9" + (self.diachihamboquamuctieumaucao - self.diachigame + 0x19ADD0 - 5).to_bytes(4, byteorder = "little", signed = True) + b"\x90\x90"
-        write_bytes(self.tientrinh, self.diachigame + 0x19ADD0, caulenhjump, 7)
+        encoding, _ = ks.asm(asm_code, addr = self.diachihamboquamuctieumaucao + 4)
+        write_bytes(self.tientrinh, self.diachihamboquamuctieumaucao + 4, bytes(encoding), len(encoding))
+
+        print(hex(self.diachihamboquamuctieumaucao))
+
+    def action_boquamuctieumaucao(self, sinhluctoida = 50000):
+        if not hasattr(self, "diachihamboquamuctieumaucao") or not self.diachihamboquamuctieumaucao:
+            self.khoitaohamboquamuctieumaucao()
+
+        write_int(self.tientrinh, self.diachihamboquamuctieumaucao, sinhluctoida)
+        return True

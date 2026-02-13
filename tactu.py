@@ -338,4 +338,5 @@ class TacTu:
             self.moitruong.set_is_dangtudongtimduong(False)
 
     def action_kiemtraxulyloimuctieu(self):
-        self.moitruong.khoitaohamboquamuctieumaucao(50000)
+        if self.moitruong.get_sinhluctoida() == 393:
+            self.moitruong.action_boquamuctieumaucao(50000)
