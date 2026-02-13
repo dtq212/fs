@@ -226,6 +226,13 @@ class MoiTruong:
         if self.get_is_duoitheo() != is_duoitheo:
             write_int(self.tientrinh, self.diachigame + 0x3A46A0, 1 if is_duoitheo else 0)
 
+    def get_is_dichuyenhoatdongquanhphamvi(self):
+        return read_int(self.tientrinh, self.diachigame + 0x3A46A4) > 0
+
+    def set_is_dichuyenhoatdongquanhphamvi(self, is_dichuyenhoatdongquanhphamvi):
+        if self.get_is_dichuyenhoatdongquanhphamvi() != is_dichuyenhoatdongquanhphamvi:
+            write_int(self.tientrinh, self.diachigame + 0x3A46A4, 1 if is_dichuyenhoatdongquanhphamvi else 0)
+
     def get_is_phimcachtudanh(self):
         return read_int(self.tientrinh, self.diachigame + 0x3A390C) > 0
 

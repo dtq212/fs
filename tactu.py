@@ -77,31 +77,31 @@ class TacTu:
         if tenbandohientai in TOADODAIPHU_MAP:
             if not self.moitruong.get_is_dangtudongtimduong():
                 self.moitruong.action_tudongtimduong(*TOADODAIPHU_MAP.get(tenbandohientai))
-                time.sleep(2.)
+                time.sleep(1.)
         else:
             if tenbandohientai in (BANDO_CULOC, BANDO_DUHON):
                 if not self.moitruong.get_is_dangtudongtimduong():
                     self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP[tenbandohientai, BANDO_XIVUUMO])
-                time.sleep(2.)
+                time.sleep(1.)
             elif tenbandohientai in (BANDO_CHANNUICONLON,):
                 if not self.moitruong.get_is_dangtudongtimduong():
                     self.moitruong.action_tudongtimduong(*TOADODIEMCHUYENTIEP_MAP[tenbandohientai, BANDO_NGOCHUCUNG])
-                time.sleep(2.)
+                time.sleep(1.)
             elif self.moitruong.get_is_khuvuccothetancong():
                 vitrivatpham = self.action_timkiemvatpham(HOITHANHPHUSIEUCAP)
                 if not vitrivatpham:
                     phatam("Không tìm thấy {}".format(HOITHANHPHUSIEUCAP))
                     return
 
-                time.sleep(2.)
+                time.sleep(1.)
 
                 idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
                 self.moitruong.action_sudungvatphamhanhtrang(idvatpham, vitrix, vitriy, delay = 0.)
 
-                time.sleep(2.)
+                time.sleep(1.)
             else:
                 phatam("Chưa thiết lập tọa độ Đại phu cho bản đồ {}".format(tenbandohientai))
-                time.sleep(2.)
+                time.sleep(1.)
 
     def action_bantoanbovatpham(self):
         idnhanvat = self.action_timkiemnhanvat(tennhanvat = "Đại phu", khoangcach = 800)
@@ -110,26 +110,26 @@ class TacTu:
 
         if idnhanvat < 0:
             print("{} Không tìm thấy Đại phu".format(self.moitruong.get_tennhanvat()))
-            time.sleep(2.)
+            time.sleep(1.)
             return False
 
         if self.moitruong.get_khoangcach(idnhanvat) > 300:
             self.moitruong.action_dichuyengiukhoangcachtoithieu(idnhanvat, 0)
-            time.sleep(2.)
+            time.sleep(1.)
             return False
 
         self.moitruong.action_doithoai(idnhanvat, delay = 0.)
-        time.sleep(2.)
+        time.sleep(1.)
 
         if self.moitruong.get_is_dangdoithoailuachon():
             if self.moitruong.get_tenbandohientai() in (BANDO_XIVUUMO, BANDO_SUNGTHANHDOANH, BANDO_NGOCHUCUNG):
                 self.moitruong.action_luachondoithoai(1, delay = 0.)
             else:
                 self.moitruong.action_luachondoithoai(0, delay = 0.)
-            time.sleep(2.)
+            time.sleep(1.)
         elif self.moitruong.get_is_dangdoithoaixacnhan():
             self.moitruong.action_xacnhandoithoai(delay = 0.)
-            time.sleep(2.)
+            time.sleep(1.)
         else:
             phatam("Đối thoại thất bại")
             return False
@@ -203,8 +203,10 @@ class TacTu:
 
         if self._is_dangxulybanrac:
             self.moitruong.set_is_duoitheo(False)
+            self.moitruong.set_is_dichuyenhoatdongquanhphamvi(False)
         else:
             self.moitruong.set_is_duoitheo(True)
+            self.moitruong.set_is_dichuyenhoatdongquanhphamvi(True)
 
         if self.get_is_hanhtrangday() and not self._is_dangxulybanrac:
             self._is_dangxulybanrac = True
