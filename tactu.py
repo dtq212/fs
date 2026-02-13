@@ -17,6 +17,9 @@ class TacTu:
         self._is_tudongvebanrac = True
         self._is_tudongsuavatpham = True
         self._is_tudongbattathieuungbotro = True
+        self._is_tudongboquamuctieumaucao = True
+
+
         self._tenbandotruockhivebanrac = False
 
         self._thoidiemkiemtravebanracgannhat = 0.
@@ -337,6 +340,8 @@ class TacTu:
         if self.moitruong.get_idtrangthainhanvat() == IDTRANGTHAINHANVAT_DUNGIM and time.time() - self._thoidiemnhanvattudongtimduongdungimgannhat > 2. and self.moitruong.get_is_dangtudongtimduong():
             self.moitruong.set_is_dangtudongtimduong(False)
 
-    def action_kiemtraxulyloimuctieu(self):
-        if self.moitruong.get_sinhluctoida() == 393:
-            self.moitruong.action_boquamuctieumaucao(50000)
+    def action_tudongboquamuctieumaucao(self):
+        if not self._is_tudongboquamuctieumaucao:
+            return
+
+        self.moitruong.action_boquamuctieumaucao(50000)

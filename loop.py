@@ -33,7 +33,6 @@ class LoopLamMoiTrangThaiTacTu:
             return
         self.tactu.action_lammoitrangthaitactu()
         self.tactu.action_kiemtraxulyloitudongtimduong()
-        self.tactu.action_kiemtraxulyloimuctieu()
 
 class LoopPhu:
     def __init__(self, moitruong: MoiTruong, tactu: TacTu, stop: threading.Event):
@@ -68,3 +67,4 @@ class LoopPhu:
         self.tactu.action_tudongvebanrac()
         self.tactu.action_tudongsuavatpham()
         self.tactu.action_tudongbattathieuungbotro()
+        self.tactu.action_tudongboquamuctieumaucao()
