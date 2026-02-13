@@ -111,8 +111,6 @@ class TacTu:
 
     def action_bantoanbovatpham(self):
         idnhanvat = self.action_timkiemnhanvat(tennhanvat = "Đại phu", khoangcach = 800)
-        if idnhanvat < 0:
-            idnhanvat = self.action_timkiemnhanvat(tennhanvat = "Đại Phu", khoangcach = 800)
 
         if idnhanvat < 0:
             print("{} Không tìm thấy Đại phu".format(self.moitruong.get_tennhanvat()))
@@ -282,7 +280,7 @@ class TacTu:
             if not self.moitruong.get_is_nhanvattontai(idnhanvat):
                 continue
             tennhanvatxemxet = self.moitruong.get_tennhanvat(idnhanvat)
-            if tennhanvatxemxet and tennhanvatxemxet == tennhanvat and self.moitruong.get_khoangcach(idnhanvat) < khoangcach:
+            if tennhanvatxemxet and tennhanvatxemxet.strip().lower() == tennhanvat.strip().lower() and self.moitruong.get_khoangcach(idnhanvat) < khoangcach:
                 return idnhanvat
         return -1
 
@@ -296,7 +294,7 @@ class TacTu:
                 continue
             idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
             tenvatphamxemxet = self.moitruong.get_tenvatpham(idvatpham)
-            if tenvatphamxemxet and tenvatphamxemxet == tenvatpham:
+            if tenvatphamxemxet and tenvatphamxemxet.strip().lower() == tenvatpham.strip().lower():
                 return vitrivatpham
         return False
 
