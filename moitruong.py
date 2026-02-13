@@ -298,31 +298,17 @@ class MoiTruong:
 
         diachicosothongtinvatpham = self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM
 
-        thuoctinhvatpham_map = []
+        thuoctinhvatpham_map = {}
 
         for i in range(16):
             diachicosothongtinthuoctinhvatpham = diachicosothongtinvatpham + 0x51C + (i * 0x14)
 
             idthuoctinh = read_int(self.tientrinh, diachicosothongtinthuoctinhvatpham)
 
-            if idthuoctinh <= 0:
+            if idthuoctinh <= 0 or idthuoctinh:
                 continue
 
-            value1 = read_int(self.tientrinh, diachicosothongtinthuoctinhvatpham + 0x4)
-            value2 = read_int(self.tientrinh, diachicosothongtinthuoctinhvatpham + 0x8)
-
-            tenthuoctinh = TENTHUOCTINH_MAP.get(idthuoctinh, f"Không xác định ({idthuoctinh})")
-
-            hienthi = f"{tenthuoctinh}: +{value1}"
-            if "%" in tenthuoctinh or idthuoctinh in [IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, IDTHUOCTINHVATPHAM_XUATCHIEUBUAPHAP]:
-                hienthi += "%"
-
-            thuoctinhvatpham_map[idthuoctinh] = {
-                "Tên thuộc tính": tenthuoctinh,
-                "Giá trị 1": value1,
-                "Giá trị 2": value2,
-                "Tên hiển thị": hienthi
-            }
+            thuoctinhvatpham_map[idthuoctinh] = read_int(self.tientrinh, diachicosothongtinthuoctinhvatpham + 0x4)
 
         return thuoctinhvatpham_map
 
