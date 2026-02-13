@@ -219,6 +219,20 @@ class MoiTruong:
         if self.get_is_dangtudongtimduong() != is_dangtudongtimduong:
             write_int(self.tientrinh, self.diachigame + 0x39F264, 1 if is_dangtudongtimduong else 0)
 
+    def get_is_duoitheo(self):
+        return read_int(self.tientrinh, self.diachigame + 0x3A46A0) > 0
+
+    def set_is_duoitheo(self, is_duoitheo):
+        if self.get_is_duoitheo() != is_duoitheo:
+            write_int(self.tientrinh, self.diachigame + 0x3A46A0, 1 if is_duoitheo else 0)
+
+    def get_is_phimcachtudanh(self):
+        return read_int(self.tientrinh, self.diachigame + 0x3A390C) > 0
+
+    def set_is_phimcachtudanh(self, is_phimcachtudanh):
+        if self.get_is_phimcachtudanh() != is_phimcachtudanh:
+            write_int(self.tientrinh, self.diachigame + 0x3A390C, 1 if is_phimcachtudanh else 0)
+
     def get_tenbandohientai(self):
         return read_string(self.tientrinh, self.diachigame + 0x28AADC4)
 
@@ -550,6 +564,7 @@ class MoiTruong:
         write_int(self.tientrinh, diachidulieu + 0x8, vitriy)
         self.tientrinh.start_thread(self.diachihamsudungvatpham)
         return True
+
     #Inspect hàm nào write biến Đang tự động tìm đường = 1
     def khoitaohamtudongtimduong(self):
         if self.diachihamtudongtimduong: return
