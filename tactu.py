@@ -166,7 +166,7 @@ class TacTu:
 
             if danhmuctrangbi == IDDANHMUCTRANGBI_VUKHI:
                 thuoctinh_map = self.moitruong.get_thuoctinhvatpham_map(idvatpham)
-                if thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI) >= 10 or thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUBUAPHAP) >= 10:
+                if thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 10 or thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUBUAPHAP, 0) >= 10:
                     continue
 
             self.moitruong.action_banvatpham(sothutuvatpham, delay = 0.)
