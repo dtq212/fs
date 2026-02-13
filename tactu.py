@@ -75,8 +75,8 @@ class TacTu:
             trongluongvatpham = self.moitruong.get_trongluongvatpham(idvatpham)
 
             data.append((vitrix, vitriy, self.moitruong.get_tenvatpham(idvatpham), trongluongvatpham))
-
-        print(data.sort())
+        data.sort()
+        print(data)
 
     def action_tudongtimduongtoidaiphu(self):
         tenbandohientai = self.moitruong.get_tenbandohientai()

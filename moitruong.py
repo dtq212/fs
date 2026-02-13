@@ -332,11 +332,11 @@ class MoiTruong:
             "Danh mục vật tư tiêu hao": danhmucvattutieuhao,
             "Loại hình": loaihinh,
             "Trọng lượng": self.get_trongluongvatpham(idvatpham),
-            "Thuộc tính": self.get_thuoctinhvatphams(idvatpham),
+            "Thuộc tính": self.get_thuoctinhvatpham_map(idvatpham),
         }
 
     def get_trongluongvatpham(self, idvatpham):
-        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x4EC + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x4EC + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM) * self.get_soluongvatpham(idvatpham)
 
     def get_dobenhientaivatpham(self, idvatpham):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x69C + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
