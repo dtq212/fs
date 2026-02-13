@@ -103,6 +103,12 @@ class MoiTruong:
     def get_tennhanvat(self, idnhanvat = 1):
         return read_string(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xBC9 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
 
+    def get_sinhluchientai(self, idnhanvat = 1):
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x7FC + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+
+    def get_sinhluctoida(self, idnhanvat = 1):
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x800 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+
     def get_toadox(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x2520 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
 
@@ -202,6 +208,20 @@ class MoiTruong:
 
     def get_is_khuvuccothetancong(self):
         return read_int(self.tientrinh, self.diachigame + 0x28F05E4) > 0
+
+    def get_idmuctieudangchon(self):
+        return read_int(self.tientrinh, self.diachigame + 0x3A4A34)
+
+    def set_idmuctieudangchon(self, idmuctieudangchon):
+        if self.get_idmuctieudangchon() != idmuctieudangchon:
+            write_int(self.tientrinh, self.diachigame + 0x3A4A34, idmuctieudangchon)
+
+    def get_idmuctieutancong(self):
+        return read_int(self.tientrinh, self.diachigame + 0x3C3C1C)
+
+    def set_idmuctieutancong(self, idmuctieutancong):
+        if self.get_idmuctieutancong() != idmuctieutancong:
+            write_int(self.tientrinh, self.diachigame + 0x3C3C1C, idmuctieutancong)
 
     def get_is_dangmocuahang(self):
         return read_int(self.tientrinh, self.diachigame + 0x2A19AC) > 0
@@ -819,3 +839,20 @@ class MoiTruong:
         self.tientrinh.start_thread(self.diachihambattathieuungbotro)
 
         return True
+
+    def action_themmuctieuvaodanhsachden(self, idnhanvat):
+        if idnhanvat <= 0:
+            return False
+
+        diachibatdaudanhsachden = self.diachigame + 0x3A3900 + 0x174
+
+        for i in range(50):
+            diachinhanvatdanhsachden = diachibatdaudanhsachden + (i * 4)
+            idnhanvatdangxemxet = read_int(self.tientrinh, diachinhanvatdanhsachden)
+            if idnhanvatdangxemxet == idnhanvat:
+                return True
+            if idnhanvatdangxemxet == 0:
+                write_int(self.tientrinh, diachinhanvatdanhsachden, idnhanvat)
+                return True
+
+        return False

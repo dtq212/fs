@@ -336,3 +336,14 @@ class TacTu:
     def action_kiemtraxulyloitudongtimduong(self):
         if self.moitruong.get_idtrangthainhanvat() == IDTRANGTHAINHANVAT_DUNGIM and time.time() - self._thoidiemnhanvattudongtimduongdungimgannhat > 2. and self.moitruong.get_is_dangtudongtimduong():
             self.moitruong.set_is_dangtudongtimduong(False)
+
+    def action_kiemtraxulyloimuctieu(self):
+        idmuctieutancong = self.moitruong.get_idmuctieutancong()
+
+        sinhluctoida = self.moitruong.get_sinhluctoida(idmuctieutancong)
+
+        if sinhluctoida > 10000:
+            print("{} gặp {} sinh lực tối đa {}".format(self.moitruong.get_tennhanvat(), self.moitruong.get_tennhanvat(idmuctieutancong), sinhluctoida))
+            self.moitruong.action_themmuctieuvaodanhsachden(idmuctieutancong)
+            self.moitruong.set_idmuctieutancong(0)
+            self.moitruong.set_idmuctieudangchon(0)

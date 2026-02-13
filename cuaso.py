@@ -7,22 +7,14 @@ from infi.systray import SysTrayIcon
 
 from hangso import *
 from loop import (
-    LoopTimKiemMucTieu,
-    LoopChinh,
     LoopPhu,
     LoopLamMoiTrangThaiTacTu,
 )
 from moitruong import MoiTruong
 from tactu import TacTu
 
-def khoidong_looptimkiemmuctieu(moitruong, tactu, stop):
-    LoopTimKiemMucTieu(moitruong, tactu, stop).loop()
-
 def khoidong_looplammoitrangthaitactu(moitruong, tactu, stop):
     LoopLamMoiTrangThaiTacTu(moitruong, tactu, stop).loop()
-
-def khoidong_loopchinh(moitruong, tactu, stop):
-    LoopChinh(moitruong, tactu, stop).loop()
 
 def khoidong_loopphu(moitruong, tactu, stop):
     LoopPhu(moitruong, tactu, stop).loop()
@@ -36,9 +28,7 @@ class CuaSo:
         self.main_stop = threading.Event()
 
         self.luongs = (
-            threading.Thread(target = khoidong_looptimkiemmuctieu, args = [self.moitruong, self.tactu, self.main_stop], daemon = True),
             threading.Thread(target = khoidong_looplammoitrangthaitactu, args = [self.moitruong, self.tactu, self.main_stop], daemon = True),
-            threading.Thread(target = khoidong_loopchinh, args = [self.moitruong, self.tactu, self.main_stop], daemon = True),
             threading.Thread(target = khoidong_loopphu, args = [self.moitruong, self.tactu, self.main_stop], daemon = True),
         )
 
