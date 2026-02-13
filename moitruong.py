@@ -1,4 +1,5 @@
 import ctypes
+import sys
 
 import pymem
 from keystone import Ks, KS_ARCH_X86, KS_MODE_32
@@ -22,6 +23,7 @@ OFFSET_DIACHICOSOMOIVATPHAM = 0x778
 
 class MoiTruong:
     def __init__(self, idcuaso):
+        self._thoidiemboquamuctieumaucaogannhat = 0.
         self._thoidiemdichuyengiukhoangcachtoithieu = 0.
         self._thoidiemtudongtimduonggannhat = 0.
         self._thoidiembanvatphamgannhat = 0.
@@ -802,7 +804,8 @@ class MoiTruong:
         return True
 
     def khoitaohambattathieuungbotro(self):
-        if self.diachihambattathieuungbotro: return
+        if self.diachihambattathieuungbotro:
+            return
         self.diachihambattathieuungbotro = self.tientrinh.allocate(256)
 
         diachidulieu = self.diachihambattathieuungbotro + 0x40
@@ -850,30 +853,34 @@ class MoiTruong:
         return True
 
     def khoitaohamboquamuctieumaucao(self):
-        if hasattr(self, "diachihamboquamuctieumaucao") and self.diachihamboquamuctieumaucao:
+        if self.diachihamboquamuctieumaucao:
             return
-
         self.diachihamboquamuctieumaucao = self.tientrinh.allocate(256)
-        write_int(self.tientrinh, self.diachihamboquamuctieumaucao, 999999999)
+
+        diachidulieu = self.diachihamboquamuctieumaucao + 0x40
+        write_int(self.tientrinh, diachidulieu, 999999999)
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
         asm_code = f"""
             cmp [eax+{hex(self.diachigame + 0x3BB180)}],ebp
             jng {hex(self.diachigame + 0x19B064)}
-            mov ecx,dword ptr [{hex(self.diachihamboquamuctieumaucao)}]
+            mov ecx,dword ptr [{hex(diachidulieu)}]
             cmp [eax+{hex(self.diachigame + 0x3BB180)}],ecx
             jnl {hex(self.diachigame + 0x19B064)}
             jmp {hex(self.diachigame + 0x19AE5C)}
         """
 
-        encoding, _ = ks.asm(asm_code, addr = self.diachihamboquamuctieumaucao + 4)
-        write_bytes(self.tientrinh, self.diachihamboquamuctieumaucao + 4, bytes(encoding), len(encoding))
+        encoding, _ = ks.asm(asm_code, addr = self.diachihamboquamuctieumaucao)
+        write_bytes(self.tientrinh, self.diachihamboquamuctieumaucao, bytes(encoding), len(encoding))
+        write_bytes(self.tientrinh, self.diachigame + 0x19AE50, b"\xE9" + (self.diachihamboquamuctieumaucao - (self.diachigame + 0x19AE50) - 5).to_bytes(4, byteorder = sys.byteorder, signed = True)  + (b"\x90" * 7), 12)
 
-        print(hex(self.diachihamboquamuctieumaucao))
-
-    def action_boquamuctieumaucao(self, sinhluctoida = 50000):
-        if not hasattr(self, "diachihamboquamuctieumaucao") or not self.diachihamboquamuctieumaucao:
+    def action_boquamuctieumaucao(self, sinhluctoida = 50000, delay = 0.5):
+        if not self.diachihamboquamuctieumaucao:
             self.khoitaohamboquamuctieumaucao()
 
-        write_int(self.tientrinh, self.diachihamboquamuctieumaucao, sinhluctoida)
+        if time.time() - self._thoidiemboquamuctieumaucaogannhat < delay:
+            return False
+        self._thoidiemboquamuctieumaucaogannhat = time.time()
+        diachidulieu = self.diachihamboquamuctieumaucao + 0x40
+        write_int(self.tientrinh, diachidulieu, sinhluctoida)
         return True
