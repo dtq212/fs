@@ -338,12 +338,4 @@ class TacTu:
             self.moitruong.set_is_dangtudongtimduong(False)
 
     def action_kiemtraxulyloimuctieu(self):
-        idmuctieutancong = self.moitruong.get_idmuctieutancong()
-
-        sinhluctoida = self.moitruong.get_sinhluctoida(idmuctieutancong)
-
-        if sinhluctoida > 30000:
-            print("{} gặp {} sinh lực tối đa {}".format(self.moitruong.get_tennhanvat(), self.moitruong.get_tennhanvat(idmuctieutancong), sinhluctoida))
-            self.moitruong.action_themmuctieuvaodanhsachden(idmuctieutancong)
-            self.moitruong.set_idmuctieutancong(0)
-            self.moitruong.set_idmuctieudangchon(0)
+        self.moitruong.khoitaohamboquamuctieumaucao(50000)

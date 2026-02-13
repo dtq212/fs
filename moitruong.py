@@ -95,7 +95,11 @@ class MoiTruong:
     def get_is_nhanvattontai(self, idnhanvat = 1):
         if read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x4 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT) != idnhanvat:
             return False
-        return self.get_dbidnhanvat(idnhanvat) >= 0
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x7E8 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT) >= 0
+
+    def set_is_nhanvatkhongtontai(self, idnhanvat = 1):
+        if self.get_is_nhanvattontai(idnhanvat):
+            write_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x7E8 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT, -1)
 
     def get_dbidnhanvat(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
@@ -108,6 +112,10 @@ class MoiTruong:
 
     def get_sinhluctoida(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x800 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+
+    def set_sinhluctoida(self, sinhluctoida, idnhanvat = 1):
+        if self.get_sinhluctoida(idnhanvat) != sinhluctoida:
+            write_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x800 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT, sinhluctoida)
 
     def get_toadox(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x2520 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
@@ -840,19 +848,36 @@ class MoiTruong:
 
         return True
 
-    def action_themmuctieuvaodanhsachden(self, idnhanvat):
-        if idnhanvat <= 0:
-            return False
+    def khoitaohamboquamuctieumaucao(self, gioihansinhluctoida = 50000):
+        if hasattr(self, "diachihamboquamuctieumaucao") and self.diachihamboquamuctieumaucao:
+            return
 
-        diachibatdaudanhsachden = self.diachigame + 0x3A3900 + 0x174
+        self.diachihamboquamuctieumaucao = self.tientrinh.allocate(256)
 
-        for i in range(50):
-            diachinhanvatdanhsachden = diachibatdaudanhsachden + (i * 4)
-            idnhanvatdangxemxet = read_int(self.tientrinh, diachinhanvatdanhsachden)
-            if idnhanvatdangxemxet == idnhanvat:
-                return True
-            if idnhanvatdangxemxet == 0:
-                write_int(self.tientrinh, diachinhanvatdanhsachden, idnhanvat)
-                return True
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
-        return False
+        asm_code = f"""
+            pushad
+            mov ecx, dword ptr [esp + 0x24]
+            imul ecx, ecx, 0x8294       ; Index * Stride
+            add ecx, {self.diachigame + OFFSET_DIACHICOSONHANVAT}
+            cmp dword ptr [ecx + 0x800], {gioihansinhluctoida}
+            jg LABEL_SKIP_TARGET
+
+            popad
+
+            mov eax, dword ptr [esp + 0x04]
+            sub esp, 0x14
+
+            jmp {self.diachigame + 0x19ADD0 + 7}
+
+            LABEL_SKIP_TARGET:
+            popad
+            mov eax, 1
+            ret 0x08
+        """
+
+        encoding, _ = ks.asm(asm_code)
+        write_bytes(self.tientrinh, self.diachihamboquamuctieumaucao, bytes(encoding), len(encoding))
+        caulenhjump = b"\xE9" + (self.diachihamboquamuctieumaucao - self.diachigame + 0x19ADD0 - 5).to_bytes(4, byteorder = "little", signed = True) + b"\x90\x90"
+        write_bytes(self.tientrinh, self.diachigame + 0x19ADD0, caulenhjump, 7)
