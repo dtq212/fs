@@ -109,7 +109,7 @@ class TacTu:
             idnhanvat = self.action_timkiemnhanvat(tennhanvat = "Đại Phu", khoangcach = 800)
 
         if idnhanvat < 0:
-            phatam("Không tìm thấy Đại phu")
+            phatam("{} Không tìm thấy Đại phu".format(self.moitruong.get_tennhanvat()))
             time.sleep(2.)
             return False
 
