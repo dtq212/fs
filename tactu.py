@@ -113,7 +113,7 @@ class TacTu:
         idnhanvat = self.action_timkiemnhanvat(tennhanvat = "Đại phu", khoangcach = 800)
 
         if idnhanvat < 0:
-            if self.moitruong.get_tenbandohientai() in TOADODAIPHU_MAP and self.moitruong.get_khoangcachdiem(*TOADODAIPHU_MAP[self.moitruong.get_tenbandohientai()]) < 600:
+            if self.moitruong.get_tenbandohientai() in TOADODAIPHU_MAP and self.moitruong.get_khoangcachdiem(1, *TOADODAIPHU_MAP[self.moitruong.get_tenbandohientai()]) < 600:
                 print("{} Không tìm thấy Đại phu".format(self.moitruong.get_tennhanvat()))
             time.sleep(1.)
             return False

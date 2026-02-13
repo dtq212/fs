@@ -395,11 +395,11 @@ class MoiTruong:
         khoangcach = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
         return int(khoangcach)
 
-    def get_khoangcachdiem(self, idnhanvat2, toadox1, toadoy1):
-        x2 = self.get_toadox(idnhanvat2)
-        y2 = self.get_toadoy(idnhanvat2)
+    def get_khoangcachdiem(self, idnhanvat, toadox, toadoy):
+        x2 = self.get_toadox(idnhanvat)
+        y2 = self.get_toadoy(idnhanvat)
 
-        khoangcach = ((x2 - toadox1) ** 2 + (y2 - toadoy1) ** 2) ** 0.5
+        khoangcach = ((x2 - toadox) ** 2 + (y2 - toadoy) ** 2) ** 0.5
         return int(khoangcach)
 
     def khoitaohambanvatpham(self):
