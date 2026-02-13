@@ -201,6 +201,11 @@ class TacTu:
         tenbandohientai = self.moitruong.get_tenbandohientai()
         is_khuvuccothetancong = self.moitruong.get_is_khuvuccothetancong()
 
+        if self._is_dangxulybanrac:
+            self.moitruong.set_is_duoitheo(False)
+        else:
+            self.moitruong.set_is_duoitheo(True)
+
         if self.get_is_hanhtrangday() and not self._is_dangxulybanrac:
             self._is_dangxulybanrac = True
             if is_khuvuccothetancong:
@@ -293,7 +298,7 @@ class TacTu:
             if not vitrivatpham:
                 continue
             idvatpham, vitriruong, _, _ = vitrivatpham
-            if vitriruong not in (IDVITRIRUONG_HANHTRANG, IDVITRIRUONG_TRANGBI):
+            if vitriruong != IDVITRIRUONG_HANHTRANG:
                 continue
             tongtrongluongvatpham += self.moitruong.get_trongluongvatpham(idvatpham)
         return tongtrongluongvatpham
