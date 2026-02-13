@@ -172,7 +172,7 @@ class TacTu:
         return True
 
     def get_is_hanhtrangday(self):
-        return self.get_tongsovatphamhanhtrang() >= 35 or self.get_tongtrongluongvatpham() >= 185
+        return self.get_tongsovatphamhanhtrang() >= 35 or self.get_tongtrongluongvatpham() >= 175
 
     def get_tongsovatphamhanhtrang(self):
         tongsovatphamhanhtrang = 0

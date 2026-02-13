@@ -292,6 +292,41 @@ class MoiTruong:
 
         return phamchat, danhmucvattutieuhao, danhmuctrangbi, loaihinh
 
+    def get_thuoctinhvatphams(self, idvatpham):
+        if idvatpham <= 0 or idvatpham > SOLUONGVATPHAMTOIDA:
+            return []
+
+        diachicosothongtinvatpham = self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM
+
+        danhsach = []
+
+        for i in range(16):
+            diachicosothongtinthuoctinhvatpham = diachicosothongtinvatpham + 0x1B4 + (i * 0x14)
+
+            idthuoctinh = read_int(self.tientrinh, diachicosothongtinthuoctinhvatpham)
+
+            if idthuoctinh <= 0:
+                continue
+
+            value1 = read_int(self.tientrinh, diachicosothongtinthuoctinhvatpham + 0x4)
+            value2 = read_int(self.tientrinh, diachicosothongtinthuoctinhvatpham + 0x8)
+
+            tenthuoctinh = TENTHUOCTINH_MAP.get(idthuoctinh, f"Thuộc tính ẩn ({idthuoctinh})")
+
+            hienthi = f"{tenthuoctinh}: +{value1}"
+            if "%" in tenthuoctinh or idthuoctinh in [IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, IDTHUOCTINHVATPHAM_XUATCHIEUBUAPHAP]:
+                hienthi += "%"
+
+            danhsach.append({
+                "id": idthuoctinh,
+                "ten": tenthuoctinh,
+                "giatri1": value1,
+                "giatri2": value2,
+                "hienthi": hienthi
+            })
+
+        return danhsach
+
     def get_thongtinvatpham_display(self, idvatpham):
         loaivatpham = self.get_loaivatpham(idvatpham)
         if not loaivatpham:
@@ -312,6 +347,7 @@ class MoiTruong:
             "Danh mục vật tư tiêu hao": danhmucvattutieuhao,
             "Loại hình": loaihinh,
             "Trọng lượng": self.get_trongluongvatpham(idvatpham),
+            "Thuộc tính": self.get_thuoctinhvatphams(idvatpham),
         }
 
     def get_trongluongvatpham(self, idvatpham):
