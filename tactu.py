@@ -509,7 +509,7 @@ class TacTu:
             self.moitruong.action_tatvohieuhoathietlapmuctieutancong()
             self.moitruong.action_tatvohieuhoathietlapmuctieudangchon()
             return
-
+        current_time = time.time()
         self.moitruong.action_vohieuhoathietlapmuctieutancong()
         self.moitruong.action_vohieuhoathietlapmuctieudangchon()
 
@@ -532,11 +532,11 @@ class TacTu:
 
         self.moitruong.set_idmuctieu(idmuctieudangchon)
 
-        sothutunhanvat = -1
-        while True:
-            sothutunhanvat += 1
-            idnhanvatxemxet = self.moitruong.get_idnhanvat(sothutunhanvat)
-            if idnhanvatxemxet <= 0:
+        idnhanvatxemxet = 0
+
+        for _ in range(SOLUONGNHANVATTOIDA):
+            idnhanvatxemxet = self.moitruong.get_idnhanvattieptheo(idnhanvatxemxet)
+            if not idnhanvatxemxet:
                 break
 
             idmuctieudangchon = self.moitruong.get_idmuctieudangchon()
@@ -612,6 +612,8 @@ class TacTu:
                 if khoangcachmuctieuxemxet < self.moitruong.get_khoangcach(idmuctieudangchon) - 30:
                     self.moitruong.set_idmuctieu(idnhanvatxemxet)
                     continue
+
+        print("Tìm kiếm mục tiêu trong vòng: {}".format(current_time))
 
     def action_batpk(self):
         pass

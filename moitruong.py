@@ -261,9 +261,13 @@ class MoiTruong:
         if idmuctieudangkhoa and idmuctieudangkhoa != idnhanvat:
             self.set_idmuctieudangkhoa(0)
 
-    def get_idnhanvat(self, sothutunhanvat):
-        return read_int(self.tientrinh, self.diachigame + 0x3A3900 + 0x110 + 0x4 * sothutunhanvat)
-    
+    def get_idnhanvattieptheo(self, idnhanvat = 1):
+        diachicosonhanvattieptheo = read_int(self.tientrinh, self.diachigame + 0x2908FC8)
+        idnhanvattieptheo = read_int(self.tientrinh, diachicosonhanvattieptheo + 0x4 + 0x8 * idnhanvat)
+        if idnhanvattieptheo > SOLUONGNHANVATTOIDA or idnhanvattieptheo < 0:
+            return 0
+        return idnhanvattieptheo
+
     def get_idchunhan(self, idnhanvat = 1):
         tenchunhan = self.get_tenchunhan(idnhanvat)
         if not tenchunhan:
@@ -272,12 +276,11 @@ class MoiTruong:
         if idchunhan and self.get_tennhanvat(idchunhan) == tenchunhan and self.get_is_nhanvattontai(idchunhan):
             return idchunhan
         else:
-            sothutunhanvat = -1
-            while True:
-                sothutunhanvat += 1
+            idnhanvatxemxet = 0
 
-                idnhanvatxemxet = self.get_idnhanvat(sothutunhanvat)
-                if idnhanvatxemxet <= 0:
+            for _ in range(SOLUONGNHANVATTOIDA):
+                idnhanvatxemxet = self.get_idnhanvattieptheo(idnhanvatxemxet)
+                if not idnhanvatxemxet:
                     break
                 if self.get_idloainhanvat(idnhanvatxemxet) == IDLOAINHANVAT_NGUOICHOI:
                     if self.get_tennhanvat(idnhanvatxemxet) == tenchunhan and self.get_is_nhanvattontai(idnhanvatxemxet):
