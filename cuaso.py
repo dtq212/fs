@@ -23,8 +23,7 @@ class CuaSo:
     def __init__(self, idcuaso):
         self.moitruong = MoiTruong(idcuaso)
         self.tactu = TacTu(self.moitruong)
-        self.tennhanvat = False
-        self.dbidnhanvat = 0
+        self.tennhanvat = False # Dùng biến này thay cho dbidnhanvat
         self.main_stop = threading.Event()
 
         self.luongs = (
@@ -74,32 +73,36 @@ class CuaSo:
                 thoigianmatketnoi = 0
 
                 tennhanvat = self.moitruong.get_tennhanvat()
-                dbidnhanvat = self.moitruong.get_dbidnhanvat()
 
-                if dbidnhanvat != self.dbidnhanvat:
-                    if dbidnhanvat:
-                        if self.dbidnhanvat:
-                            self.tactu.luuthietlap(self.dbidnhanvat)
-                        self.tactu.taithietlap(dbidnhanvat)
-                        if tennhanvat and tennhanvat != title:
-                            self.systray.update(hover_text = tennhanvat)
-                            title = tennhanvat
-                    elif self.dbidnhanvat:
-                        self.tactu.luuthietlap(self.dbidnhanvat)
-                        if CHUACHONHANVAT != title:
-                            self.systray.update(hover_text = CHUACHONHANVAT)
-                            title = CHUACHONHANVAT
-
-                    self.dbidnhanvat = dbidnhanvat
+                if tennhanvat and tennhanvat != self.tennhanvat:
+                    if self.tennhanvat:
+                        self.tactu.luuthietlap(self.tennhanvat)
+                    
+                    self.tactu.taithietlap(tennhanvat)
+                    
+                    if tennhanvat != title:
+                        self.systray.update(hover_text = tennhanvat)
+                        title = tennhanvat
+                    
                     self.tennhanvat = tennhanvat
 
-                elif dbidnhanvat and time.time() - self.thoidiemluuthietlapgannhat > 1.:
+                elif tennhanvat and time.time() - self.thoidiemluuthietlapgannhat > 1.:
                     self.thoidiemluuthietlapgannhat = time.time()
-                    self.tactu.luuthietlap(dbidnhanvat)
+                    self.tactu.luuthietlap(tennhanvat)
+
+                elif not tennhanvat:
+                     if self.tennhanvat:
+                         # Vừa thoát ra màn hình chọn nhân vật, lưu cái cũ lại
+                         self.tactu.luuthietlap(self.tennhanvat)
+                     
+                     self.tennhanvat = False
+                     if CHUACHONHANVAT != title:
+                        self.systray.update(hover_text = CHUACHONHANVAT)
+                        title = CHUACHONHANVAT
+
             else:
                 self.tennhanvat = False
-                self.dbidnhanvat = 0
-
+                
                 if CHUACHONHANVAT != title:
                     self.systray.update(hover_text = CHUACHONHANVAT)
                     title = CHUACHONHANVAT
@@ -116,17 +119,44 @@ class CuaSo:
     def loop_xulyphimtat(self):
         while not self.main_stop.is_set():
             if self.moitruong.get_is_cuasogamekichhoat():
-
                 if keyboard.is_pressed("ctrl+alt+shift+h"):
-                    self.tactu.battat_tudongvebanrac()
+                    self.tactu.battat_tudongfarmvabanrac()
                     time.sleep(0.3)
-
-                if keyboard.is_pressed("ctrl+alt+shift+r"):
+                elif keyboard.is_pressed("ctrl+alt+shift+r"):
                     self.tactu.battat_tudongsuavatpham()
                     time.sleep(0.3)
-
-                if keyboard.is_pressed("ctrl+alt+shift+t"):
+                elif keyboard.is_pressed("ctrl+alt+shift+t"):
                     self.tactu.action_test()
+                    time.sleep(0.3)
+                elif keyboard.is_pressed("ctrl+alt+shift+f"):
+                    self.tactu.battat_tudongtimkiemmuctieu()
+                    time.sleep(0.3)
+                elif keyboard.is_pressed("ctrl+alt+shift+b"):
+                    self.tactu.battat_is_khongdanhcungbang()
+                    time.sleep(0.3)
+                elif keyboard.is_pressed("ctrl+c"):
+                    self.tactu.them_tennhanvattancong()
+                    time.sleep(0.3)
+                elif keyboard.is_pressed("ctrl+x"):
+                    self.tactu.them_tennhanvatkhongtancong()
+                    time.sleep(0.3)
+                elif keyboard.is_pressed("ctrl+alt+c"):
+                    self.tactu.botoanbo_tennhanvattancong()
+                    time.sleep(0.3)
+                elif keyboard.is_pressed("ctrl+alt+x"):
+                    self.tactu.botoanbo_tennhanvatkhongtancong()
+                    time.sleep(0.3)
+                elif keyboard.is_pressed("ctrl+d"):
+                    self.tactu.bat_is_chidanhnguoichoivatrieuhoithu()
+                    time.sleep(0.3)
+                elif keyboard.is_pressed("ctrl+a"):
+                    self.tactu.tat_is_chidanhnguoichoivatrieuhoithu()
+                    time.sleep(0.3)
+                elif keyboard.is_pressed("ctrl+e"):
+                    self.tactu.action_batpk()
+                    time.sleep(0.3)
+                elif keyboard.is_pressed("ctrl+q"):
+                    self.tactu.action_tatpk()
                     time.sleep(0.3)
 
             time.sleep(0.05)

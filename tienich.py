@@ -154,6 +154,35 @@ replaces_dict = dict(zip(TCVN3TAB, UNICODETAB))
 def TCVN3_to_unicode(tcvn3str):
     return r.sub(lambda m: replaces_dict[m.group(0)], tcvn3str)
 
+UNICODE_TO_TCVN3_MAP = dict(zip(UNICODETAB, TCVN3TAB))
+if ' ' in UNICODE_TO_TCVN3_MAP:
+    del UNICODE_TO_TCVN3_MAP[' ']
+
+def Unicode_to_TCVN3(unicode_str):
+    if not unicode_str:
+        return b""
+    
+    result = bytearray()
+    for char in unicode_str:
+        if ord(char) < 128:
+            result.append(ord(char))
+            continue
+            
+        tcvn_char = UNICODE_TO_TCVN3_MAP.get(char)
+        
+        if tcvn_char:
+            try:
+                result.extend(tcvn_char.encode('latin-1'))
+            except UnicodeEncodeError:
+                result.extend(b'?')
+        else:
+            try:
+                result.extend(char.encode('mbcs'))
+            except:
+                result.extend(b'?')
+            
+    return bytes(result)
+
 def make_lparam(x, y):
     return (y << 16) | (x & 0xFFFF)
 

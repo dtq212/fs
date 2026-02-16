@@ -145,7 +145,6 @@ class TroChoiManager:
                 return False
             return True
         except Exception as err:
-            raise
             return False
 
     def _kichhoatauto(self, hwnd):

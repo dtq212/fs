@@ -9,7 +9,7 @@ from moitruong import MoiTruong
 
 DUONGDAN_GAME = r"D:\TamGioiPhanTranhPC\game.exe"
 DANH_SACH_TAI_KHOAN = [
-    {"user": "kngaivacham", "pass": "hateva12", "char_name": "KNgạiVaChạm"},
+    #{"user": "kngaivacham", "pass": "hateva12", "char_name": "KNgạiVaChạm"},
     {"user": "thichvacham2", "pass": "hateva12", "char_name": "ThíchVaChạm"},
     {"user": "laotsezu1", "pass": "hateva12", "char_name": "LaotsezuI"},
     {"user": "laotsezu2", "pass": "hateva12", "char_name": "LaotsezuII"},
@@ -23,7 +23,7 @@ DANH_SACH_TAI_KHOAN = [
     {"user": "laotsezu10", "pass": "hateva12", "char_name": "LaotsezuX"},
     {"user": "laotsezu11", "pass": "hateva12", "char_name": "LaotsezuXI"},
     {"user": "laotsezu12", "pass": "hateva12", "char_name": "LaotsezuXII"},
-    {"user": "laotsezu13", "pass": "hateva12", "char_name": "LaotsezuXIII"},
+    #{"user": "laotsezu13", "pass": "hateva12", "char_name": "LaotsezuXIII"},
 ]
 
 THOI_GIAN_QUET_LAI = 5
