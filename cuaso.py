@@ -145,10 +145,10 @@ class CuaSo:
                 elif keyboard.is_pressed("ctrl+x"):
                     self.tactu.them_tennhanvatkhongtancong()
                     time.sleep(0.3)
-                elif keyboard.is_pressed("ctrl+alt+c"):
+                elif keyboard.is_pressed("ctrl+alt+shift+c"):
                     self.tactu.botoanbo_tennhanvattancong()
                     time.sleep(0.3)
-                elif keyboard.is_pressed("ctrl+alt+x"):
+                elif keyboard.is_pressed("ctrl+alt+shift+x"):
                     self.tactu.botoanbo_tennhanvatkhongtancong()
                     time.sleep(0.3)
                 elif keyboard.is_pressed("ctrl+d"):

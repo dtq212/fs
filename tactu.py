@@ -47,7 +47,8 @@ class TacTu:
 
     def __del__(self):
         try:
-            pass
+            self.moitruong.action_tatvohieuhoathietlapmuctieutancong()
+            self.moitruong.action_tatvohieuhoathietlapmuctieudangchon()
         except (pymem.exception.PymemError, pymem.exception.WinAPIError):
             pass
 
@@ -179,6 +180,7 @@ class TacTu:
             phatam("Tắt không đánh cùng bang")
 
     def them_tennhanvattancong(self):
+        print("them_tennhanvattancong")
         idmuctieudangchichuot = self.moitruong.get_idmuctieudangchichuot()
         tennhanvattancong = self.moitruong.get_tennhanvat(idmuctieudangchichuot)
         if tennhanvattancong and tennhanvattancong not in self._tennhanvattancongs:
@@ -504,7 +506,12 @@ class TacTu:
 
     def action_tudongtimkiemmuctieu(self):
         if not self._is_tudongtimkiemmuctieu:
+            self.moitruong.action_tatvohieuhoathietlapmuctieutancong()
+            self.moitruong.action_tatvohieuhoathietlapmuctieudangchon()
             return
+
+        self.moitruong.action_vohieuhoathietlapmuctieutancong()
+        self.moitruong.action_vohieuhoathietlapmuctieudangchon()
 
         self.moitruong.set_iddoituongtudanh(IDDOITUONGTUDANH_MUCTIEUDANGCHON)
 
