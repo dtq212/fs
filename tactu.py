@@ -155,12 +155,12 @@ class TacTu:
 
     def bat_is_chidanhnguoichoivatrieuhoithu(self):
         if not self._is_chidanhnguoichoivatrieuhoithu:
-            self.is_chidanhnguoichoivatrieuhoithu = True
+            self._is_chidanhnguoichoivatrieuhoithu = True
             phatam("Bật chỉ đánh người chơi và triệu hồi thú")
 
     def tat_is_chidanhnguoichoivatrieuhoithu(self):
         if self._is_chidanhnguoichoivatrieuhoithu:
-            self.is_chidanhnguoichoivatrieuhoithu = False
+            self._is_chidanhnguoichoivatrieuhoithu = False
             phatam("Tắt chỉ đánh người chơi và triệu hồi thú")
 
     def battat_tudongtimkiemmuctieu(self):
@@ -536,7 +536,7 @@ class TacTu:
         while True:
             sothutunhanvat += 1
             idnhanvatxemxet = self.moitruong.get_idnhanvat(sothutunhanvat)
-            if not idnhanvatxemxet:
+            if idnhanvatxemxet <= 0:
                 break
 
             idmuctieudangchon = self.moitruong.get_idmuctieudangchon()

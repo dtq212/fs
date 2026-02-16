@@ -277,7 +277,7 @@ class MoiTruong:
                 sothutunhanvat += 1
 
                 idnhanvatxemxet = self.get_idnhanvat(sothutunhanvat)
-                if not idnhanvatxemxet:
+                if idnhanvatxemxet <= 0:
                     break
                 if self.get_idloainhanvat(idnhanvatxemxet) == IDLOAINHANVAT_NGUOICHOI:
                     if self.get_tennhanvat(idnhanvatxemxet) == tenchunhan and self.get_is_nhanvattontai(idnhanvatxemxet):

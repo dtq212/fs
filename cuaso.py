@@ -127,40 +127,40 @@ class CuaSo:
                 if keyboard.is_pressed("ctrl+alt+shift+h"):
                     self.tactu.battat_tudongfarmvabanrac()
                     time.sleep(0.3)
-                elif keyboard.is_pressed("ctrl+alt+shift+r"):
+                if keyboard.is_pressed("ctrl+alt+shift+r"):
                     self.tactu.battat_tudongsuavatpham()
                     time.sleep(0.3)
-                elif keyboard.is_pressed("ctrl+alt+shift+t"):
+                if keyboard.is_pressed("ctrl+alt+shift+t"):
                     self.tactu.action_test()
                     time.sleep(0.3)
-                elif keyboard.is_pressed("ctrl+alt+shift+f"):
+                if keyboard.is_pressed("ctrl+alt+shift+f"):
                     self.tactu.battat_tudongtimkiemmuctieu()
                     time.sleep(0.3)
-                elif keyboard.is_pressed("ctrl+alt+shift+b"):
+                if keyboard.is_pressed("ctrl+alt+shift+b"):
                     self.tactu.battat_is_khongdanhcungbang()
                     time.sleep(0.3)
-                elif keyboard.is_pressed("ctrl+c"):
-                    self.tactu.them_tennhanvattancong()
-                    time.sleep(0.3)
-                elif keyboard.is_pressed("ctrl+x"):
-                    self.tactu.them_tennhanvatkhongtancong()
-                    time.sleep(0.3)
-                elif keyboard.is_pressed("ctrl+alt+shift+c"):
+                if keyboard.is_pressed("ctrl+alt+c"):
                     self.tactu.botoanbo_tennhanvattancong()
                     time.sleep(0.3)
-                elif keyboard.is_pressed("ctrl+alt+shift+x"):
+                if keyboard.is_pressed("ctrl+alt+x"):
                     self.tactu.botoanbo_tennhanvatkhongtancong()
                     time.sleep(0.3)
-                elif keyboard.is_pressed("ctrl+d"):
+                if keyboard.is_pressed("ctrl+c"):
+                    self.tactu.them_tennhanvattancong()
+                    time.sleep(0.3)
+                if keyboard.is_pressed("ctrl+x"):
+                    self.tactu.them_tennhanvatkhongtancong()
+                    time.sleep(0.3)
+                if keyboard.is_pressed("ctrl+d"):
                     self.tactu.bat_is_chidanhnguoichoivatrieuhoithu()
                     time.sleep(0.3)
-                elif keyboard.is_pressed("ctrl+a"):
+                if keyboard.is_pressed("ctrl+a"):
                     self.tactu.tat_is_chidanhnguoichoivatrieuhoithu()
                     time.sleep(0.3)
-                elif keyboard.is_pressed("ctrl+e"):
+                if keyboard.is_pressed("ctrl+e"):
                     self.tactu.action_batpk()
                     time.sleep(0.3)
-                elif keyboard.is_pressed("ctrl+q"):
+                if keyboard.is_pressed("ctrl+q"):
                     self.tactu.action_tatpk()
                     time.sleep(0.3)
 
