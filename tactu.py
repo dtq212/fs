@@ -13,6 +13,7 @@ from tienich import taithietlap as util_taithietlap, phatam
 
 class TacTu:
     def __init__(self, moitruong: MoiTruong):
+        self._is_tudongnhatvatpham = True
         self._is_uutienmuctieusinhluc = False
         self._is_uutientrieuhoithu = False
         self._is_uutienboss = False
@@ -45,6 +46,8 @@ class TacTu:
 
         self._is_dangxulybanrac = False
 
+        self._thoidiemtudongnhatdogannhat = 0.
+
     def __del__(self):
         try:
             self.moitruong.action_tatvohieuhoathietlapmuctieutancong()
@@ -57,6 +60,7 @@ class TacTu:
             return
             
         thietlap = {
+            "is_tudongnhatvatpham": self._is_tudongnhatvatpham,
             "is_tudongfarmvabanrac": self._is_tudongfarmvabanrac,
             "is_tudongsuavatpham": self._is_tudongsuavatpham,
             "is_tudongbattathieuungbotro": self._is_tudongbattathieuungbotro,
@@ -65,15 +69,15 @@ class TacTu:
             "toadoxtudongfarm": self._toadoxtudongfarm,
             "toadoytudongfarm": self._toadoytudongfarm,
 
-            "_is_uutienmuctieusinhluc": self._is_uutienmuctieusinhluc,
-            "_is_uutientrieuhoithu": self._is_uutientrieuhoithu,
-            "_is_uutienboss": self._is_uutienboss,
-            "_is_uutiennguoichoi": self._is_uutiennguoichoi,
-            "_is_tudongtimkiemmuctieu": self._is_tudongtimkiemmuctieu,
-            "_is_khongdanhcungbang": self._is_khongdanhcungbang,
-            "_is_chidanhnguoichoivatrieuhoithu": self._is_chidanhnguoichoivatrieuhoithu,
-            "_tennhanvattancongs": self._tennhanvattancongs,
-            "_tennhanvatkhongtancongs": self._tennhanvatkhongtancongs,
+            "is_uutienmuctieusinhluc": self._is_uutienmuctieusinhluc,
+            "is_uutientrieuhoithu": self._is_uutientrieuhoithu,
+            "is_uutienboss": self._is_uutienboss,
+            "is_uutiennguoichoi": self._is_uutiennguoichoi,
+            "is_tudongtimkiemmuctieu": self._is_tudongtimkiemmuctieu,
+            "is_khongdanhcungbang": self._is_khongdanhcungbang,
+            "is_chidanhnguoichoivatrieuhoithu": self._is_chidanhnguoichoivatrieuhoithu,
+            "tennhanvattancongs": self._tennhanvattancongs,
+            "tennhanvatkhongtancongs": self._tennhanvatkhongtancongs,
         }
 
         util_luuthietlap(str(tennhanvat), thietlap)
@@ -84,6 +88,9 @@ class TacTu:
 
         thietlap = util_taithietlap(str(tennhanvat))
         if thietlap:
+            if "is_tudongnhatvatpham" in thietlap:
+                self._is_tudongnhatvatpham = thietlap["is_tudongfarmvabanrac"]
+
             if "is_tudongfarmvabanrac" in thietlap:
                 self._is_tudongfarmvabanrac = thietlap["is_tudongfarmvabanrac"]
 
@@ -105,32 +112,32 @@ class TacTu:
             if "toadoytudongfarm" in thietlap:
                 self._toadoytudongfarm = thietlap["toadoytudongfarm"]
 
-            if "_is_uutienmuctieusinhluc" in thietlap:
-                self._is_uutienmuctieusinhluc = thietlap["_is_uutienmuctieusinhluc"]
+            if "is_uutienmuctieusinhluc" in thietlap:
+                self._is_uutienmuctieusinhluc = thietlap["is_uutienmuctieusinhluc"]
 
-            if "_is_uutientrieuhoithu" in thietlap:
-                self._is_uutientrieuhoithu = thietlap["_is_uutientrieuhoithu"]
+            if "is_uutientrieuhoithu" in thietlap:
+                self._is_uutientrieuhoithu = thietlap["is_uutientrieuhoithu"]
 
-            if "_is_uutienboss" in thietlap:
-                self._is_uutienboss = thietlap["_is_uutienboss"]
+            if "is_uutienboss" in thietlap:
+                self._is_uutienboss = thietlap["is_uutienboss"]
 
-            if "_is_uutiennguoichoi" in thietlap:
-                self._is_uutiennguoichoi = thietlap["_is_uutiennguoichoi"]
+            if "is_uutiennguoichoi" in thietlap:
+                self._is_uutiennguoichoi = thietlap["is_uutiennguoichoi"]
 
-            if "_is_tudongtimkiemmuctieu" in thietlap:
-                self._is_tudongtimkiemmuctieu = thietlap["_is_tudongtimkiemmuctieu"]
+            if "is_tudongtimkiemmuctieu" in thietlap:
+                self._is_tudongtimkiemmuctieu = thietlap["is_tudongtimkiemmuctieu"]
 
-            if "_is_khongdanhcungbang" in thietlap:
-                self._is_khongdanhcungbang = thietlap["_is_khongdanhcungbang"]
+            if "is_khongdanhcungbang" in thietlap:
+                self._is_khongdanhcungbang = thietlap["is_khongdanhcungbang"]
 
-            if "_is_chidanhnguoichoivatrieuhoithu" in thietlap:
-                self._is_chidanhnguoichoivatrieuhoithu = thietlap["_is_chidanhnguoichoivatrieuhoithu"]
+            if "is_chidanhnguoichoivatrieuhoithu" in thietlap:
+                self._is_chidanhnguoichoivatrieuhoithu = thietlap["is_chidanhnguoichoivatrieuhoithu"]
 
-            if "_tennhanvattancongs" in thietlap:
-                self._tennhanvattancongs = thietlap["_tennhanvattancongs"]
+            if "tennhanvattancongs" in thietlap:
+                self._tennhanvattancongs = thietlap["tennhanvattancongs"]
 
-            if "_tennhanvatkhongtancongs" in thietlap:
-                self._tennhanvatkhongtancongs = thietlap["_tennhanvatkhongtancongs"]
+            if "tennhanvatkhongtancongs" in thietlap:
+                self._tennhanvatkhongtancongs = thietlap["tennhanvatkhongtancongs"]
 
     def battat_tudongfarmvabanrac(self):
         self._is_tudongfarmvabanrac = not self._is_tudongfarmvabanrac
@@ -509,7 +516,6 @@ class TacTu:
             self.moitruong.action_tatvohieuhoathietlapmuctieutancong()
             self.moitruong.action_tatvohieuhoathietlapmuctieudangchon()
             return
-        current_time = time.time()
         self.moitruong.action_vohieuhoathietlapmuctieutancong()
         self.moitruong.action_vohieuhoathietlapmuctieudangchon()
 
@@ -613,10 +619,28 @@ class TacTu:
                     self.moitruong.set_idmuctieu(idnhanvatxemxet)
                     continue
 
-        print("Tìm kiếm mục tiêu trong vòng: {}".format(current_time))
-
     def action_batpk(self):
         pass
 
     def action_tatpk(self):
         pass
+
+    def action_tudongnhatvatpham(self, delay = 0.1):
+        if not self._is_tudongnhatvatpham:
+            return
+        if time.time() - self._thoidiemtudongnhatdogannhat < delay:
+            return
+        self._thoidiemtudongnhatdogannhat = time.time()
+        for idvatphamduoidat in range(SOLUONGVATPHAMTOIDADUOIDAT):
+            if self.moitruong.get_is_vatphamduoidattontai(idvatphamduoidat):
+                is_nhatvatpham = False
+                if self.moitruong.get_tuchatvatphamduoidat(idvatphamduoidat) >= IDTUCHATVATPHAMDUOIDAT_LUC:
+                    is_nhatvatpham = True
+                if self.moitruong.get_is_thucuoiduoidat(idvatphamduoidat):
+                    is_nhatvatpham = True
+                if not is_nhatvatpham:
+                    if self.moitruong.get_tenvatphamduoidat(idvatphamduoidat) in (TENVATPHAM_LAMBAOTHACH, TENVATPHAM_MANHHONGTHUYTINH, TENVATPHAM_HONGTHUYTINH, TENVATPHAM_HONGBAOTHACH):
+                        is_nhatvatpham = True
+                if is_nhatvatpham and self.moitruong.get_khoangcachvatphamduoidat(idvatphamduoidat) < 400:
+                    self.moitruong.action_nhatvatpham(idvatphamduoidat)
+                    time.sleep(0.02)

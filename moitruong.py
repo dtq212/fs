@@ -20,6 +20,10 @@ OFFSET_DIACHICOSOVITRIMOIVATPHAM = 0x10
 OFFSET_DIACHICOSOTHONGTINVATPHAM = 0x2AA728
 OFFSET_DIACHICOSOMOIVATPHAM = 0x778
 
+#
+OFFSET_DIACHICOSOTHONGTINVATPHAMDUOIDAT = 0x2BA52C0
+OFFSET_DIACHICOSOMOIVATPHAMDUOIDAT = 0x3F4
+
 
 class MoiTruong:
     def __init__(self, idcuaso):
@@ -37,6 +41,7 @@ class MoiTruong:
         self._thoidiemxacnhandoithoaigannhat = 0.
         self._thoidiembattathieuungbotrogannhat_map = {}
         self._thoidiemtudongtimduongxuyenbandogannhat = 0.
+        self._thoidiemnhatvatphamgannhat = 0.
 
         self.idcuaso = idcuaso
         idtientrinh = ctypes.c_ulong()
@@ -63,6 +68,7 @@ class MoiTruong:
         self.diachihamxacnhandoithoai = 0
         self.diachihamboquamuctieumaucao = 0
         self.diachihamtudongtimduongxuyenbando = 0
+        self.diachihamnhatvatpham = 0
 
         self._idchunhan_map = {}
 
@@ -74,22 +80,25 @@ class MoiTruong:
             except:
                 pass
 
-        diachicangiaiphongs = [
-            self.diachihambanvatpham,
-            self.diachihamdongcuahang,
-            self.diachihamdoithoai,
-            self.diachihamluachondoithoai,
-            self.diachihamsudungvatpham,
-            self.diachihamtudongtimduong,
-            self.diachihamdichuyen,
-            self.diachihambattathieuungbotro,
-            self.diachihamxacnhandoithoai,
-            self.diachihamboquamuctieumaucao,
-            self.diachihamtudongtimduongxuyenbando,
+        cac_ten_thuoc_tinh = [
+            "diachihambanvatpham",
+            "diachihamdongcuahang",
+            "diachihamdoithoai",
+            "diachihamluachondoithoai",
+            "diachihamsudungvatpham",
+            "diachihamtudongtimduong",
+            "diachihamdichuyen",
+            "diachihambattathieuungbotro",
+            "diachihamxacnhandoithoai",
+            "diachihamboquamuctieumaucao",
+            "diachihamtudongtimduongxuyenbando",
+            "diachihamnhatvatpham",
         ]
 
-        for diachi in diachicangiaiphongs:
-            safe_free(diachi)
+        for ten_thuoc_tinh in cac_ten_thuoc_tinh:
+            if hasattr(self, ten_thuoc_tinh):
+                diachi = getattr(self, ten_thuoc_tinh)
+                safe_free(diachi)
 
     def get_is_dangmatketnoi(self):
         return not self.get_is_nhanvattontai()
@@ -514,7 +523,42 @@ class MoiTruong:
                 return dobentoida if dobentoida > 0 else -1
 
         return -1
+    
+    def get_is_tudongnhatvatpham(self):
+        return read_int(self.tientrinh, self.diachigame + 0x2344EA8)
 
+    def get_is_vatphamduoidattontai(self, idvatphamduoidat):
+        if idvatphamduoidat <= 0 or idvatphamduoidat > SOLUONGVATPHAMTOIDADUOIDAT:
+            return False
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAMDUOIDAT + 0xC + idvatphamduoidat * OFFSET_DIACHICOSOMOIVATPHAMDUOIDAT) == idvatphamduoidat
+
+    def get_tenvatphamduoidat(self, idvatphamduoidat):
+        if idvatphamduoidat <= 0 or idvatphamduoidat > SOLUONGVATPHAMTOIDADUOIDAT:
+            return False
+        return read_string(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAMDUOIDAT + 0x44 + idvatphamduoidat * OFFSET_DIACHICOSOMOIVATPHAMDUOIDAT)
+
+    def get_tuchatvatphamduoidat(self, idvatphamduoidat):
+        if idvatphamduoidat <= 0 or idvatphamduoidat > SOLUONGVATPHAMTOIDADUOIDAT:
+            return False
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAMDUOIDAT + 0x98 + idvatphamduoidat * OFFSET_DIACHICOSOMOIVATPHAMDUOIDAT)
+
+    def get_is_thucuoiduoidat(self, idvatphamduoidat):
+        if idvatphamduoidat <= 0 or idvatphamduoidat > SOLUONGVATPHAMTOIDADUOIDAT:
+            return False
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAMDUOIDAT + 0x170 + idvatphamduoidat * OFFSET_DIACHICOSOMOIVATPHAMDUOIDAT) == 38
+
+    def get_khoangcachvatphamduoidat(self, idvatphamduoidat, default = 2000):
+        if idvatphamduoidat <= 0 or idvatphamduoidat > SOLUONGVATPHAMTOIDADUOIDAT:
+            return default
+
+        x = read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAMDUOIDAT + 0x2AC + idvatphamduoidat * OFFSET_DIACHICOSOMOIVATPHAMDUOIDAT)
+        y = read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAMDUOIDAT + 0x2B0 + idvatphamduoidat * OFFSET_DIACHICOSOMOIVATPHAMDUOIDAT)
+
+        return round(math.dist(
+            (self.get_toadox(1), self.get_toadoy(1)),
+            (x, y),
+        ))
+    
     def get_khoangcach(self, idnhanvat2, idnhanvat1 = 1):
         x1 = self.get_toadox(idnhanvat1)
         y1 = self.get_toadoy(idnhanvat1)
@@ -1059,6 +1103,42 @@ class MoiTruong:
             write_bytes(self.tientrinh, diachidulieu + 16, b"\x00", 1)
 
         self.tientrinh.start_thread(self.diachihamtudongtimduongxuyenbando)
+        return True
+
+    def khoitaohamnhatvatpham(self):
+        if self.diachihamnhatvatpham:
+            return
+
+        self.diachihamnhatvatpham = self.tientrinh.allocate(256)
+
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        asm_code = f"""
+            mov ecx, dword ptr [{self.diachihamnhatvatpham + 0x40}]
+            push ecx
+            mov esi, {self.diachigame + 0x39F210}
+            mov ecx,esi
+            mov eax, {self.diachigame + 0x112410}
+            call eax
+            ret
+        """
+
+        encoding, _ = ks.asm(asm_code)
+        write_bytes(self.tientrinh, self.diachihamnhatvatpham, bytes(encoding), len(encoding))
+
+    def action_nhatvatpham(self, idvatphamduoidat, delay = 0.02):
+        if self.diachihamnhatvatpham:
+            self.khoitaohamnhatvatpham()
+
+        if time.time() - self._thoidiemnhatvatphamgannhat < delay:
+            return False
+
+        self._thoidiemnhatvatphamgannhat = time.time()
+
+        diachidulieu = self.diachihamnhatvatpham + 0x40
+        write_int(self.tientrinh, diachidulieu, idvatphamduoidat)
+
+        self.tientrinh.start_thread(self.diachihamnhatvatpham)
         return True
 
     def action_vohieuhoathietlapmuctieutancong(self):
