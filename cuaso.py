@@ -7,15 +7,15 @@ from infi.systray import SysTrayIcon
 
 from hangso import *
 from loop import (
-    LoopTimKiemMucTieu,
+    LoopChinh,
     LoopPhu,
     LoopLamMoiTrangThaiTacTu,
 )
 from moitruong import MoiTruong
 from tactu import TacTu
 
-def khoidong_looptimkiemmuctieu(moitruong, tactu, stop):
-    LoopTimKiemMucTieu(moitruong, tactu, stop).loop()
+def khoidong_loopchinh(moitruong, tactu, stop):
+    LoopChinh(moitruong, tactu, stop).loop()
 
 def khoidong_looplammoitrangthaitactu(moitruong, tactu, stop):
     LoopLamMoiTrangThaiTacTu(moitruong, tactu, stop).loop()
@@ -27,12 +27,12 @@ class CuaSo:
     def __init__(self, idcuaso):
         self.moitruong = MoiTruong(idcuaso)
         self.tactu = TacTu(self.moitruong)
-        self.tennhanvat = False # Dùng biến này thay cho dbidnhanvat
+        self.tennhanvat = False
         self.main_stop = threading.Event()
 
         self.luongs = (
             threading.Thread(target = khoidong_looplammoitrangthaitactu, args = [self.moitruong, self.tactu, self.main_stop], daemon = True),
-            threading.Thread(target = khoidong_looptimkiemmuctieu, args = [self.moitruong, self.tactu, self.main_stop], daemon = True),
+            threading.Thread(target = khoidong_loopchinh, args = [self.moitruong, self.tactu, self.main_stop], daemon = True),
             threading.Thread(target = khoidong_loopphu, args = [self.moitruong, self.tactu, self.main_stop], daemon = True),
         )
 
@@ -130,8 +130,11 @@ class CuaSo:
                 if keyboard.is_pressed("ctrl+alt+shift+r"):
                     self.tactu.battat_tudongsuavatpham()
                     time.sleep(0.3)
-                if keyboard.is_pressed("ctrl+alt+shift+t"):
+                if keyboard.is_pressed("ctrl+alt+shift+y"):
                     self.tactu.action_test()
+                    time.sleep(0.3)
+                if keyboard.is_pressed("ctrl+alt+shift+t"):
+                    self.tactu.battat_tudongdanhtheosautruongnhom()
                     time.sleep(0.3)
                 if keyboard.is_pressed("ctrl+alt+shift+f"):
                     self.tactu.battat_tudongtimkiemmuctieu()

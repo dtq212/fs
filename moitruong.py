@@ -24,6 +24,10 @@ OFFSET_DIACHICOSOMOIVATPHAM = 0x778
 OFFSET_DIACHICOSOTHONGTINVATPHAMDUOIDAT = 0x2BA52C0
 OFFSET_DIACHICOSOMOIVATPHAMDUOIDAT = 0x3F4
 
+# Inspect từ Tọa độ X, Y của thành viên thay đổi
+OFFSET_DIACHICOSOTHONGTINTHANHVIENDOINHOM = 0x2BA5044
+OFFSET_DIACHICOSOMOITHANHVIENDOINHOM = 0x30
+
 
 class MoiTruong:
     def __init__(self, idcuaso):
@@ -164,18 +168,18 @@ class MoiTruong:
     def get_iddiachikynang(self, idkynang):
         iddiachikynang_map = IDDIACHIKYNANG_MAP.get(self.get_idhephai(), 0)
         if not iddiachikynang_map:
-            return 0
+            return -1
         iddiachikynang = iddiachikynang_map.get(idkynang, 0)
         if not iddiachikynang:
-            return 0
+            return -1
         return iddiachikynang
 
     def get_capdokynang(self, idkynang):
         if idkynang > SOLUONGKYNANGTOIDA or idkynang < 0:
-            return 0
+            return -1
         iddiachikynang = self.get_iddiachikynang(idkynang)
-        if not iddiachikynang:
-            return 0
+        if iddiachikynang <= 0:
+            return -1
         return read_short_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xC4 + 0x24 * iddiachikynang + 1 * OFFSET_DIACHICOSOMOINHANVAT)
 
     def get_is_dahockynang(self, idkynang):
@@ -277,13 +281,26 @@ class MoiTruong:
         diachicosonhanvattieptheo = read_int(self.tientrinh, self.diachigame + 0x2908FC8)
         idnhanvattieptheo = read_int(self.tientrinh, diachicosonhanvattieptheo + 0x4 + 0x8 * idnhanvat)
         if idnhanvattieptheo > SOLUONGNHANVATTOIDA or idnhanvattieptheo < 0:
-            return 0
+            return -1
         return idnhanvattieptheo
+
+    def get_tennguoidanhtheosau(self):
+        return read_string(self.tientrinh, self.diachigame + 0x3A4030)
+
+    def get_khoangcachtheosau(self):
+        return read_int(self.tientrinh, self.diachigame + 0x3A4050)
+
+    def get_is_theosau(self):
+        return read_int(self.tientrinh, self.diachigame + 0x3A402C)
+
+    def set_is_theosau(self, is_theosau):
+        if self.get_is_theosau() != is_theosau:
+            write_int(self.tientrinh, self.diachigame + 0x3A402C, 1 if is_theosau else 0)
 
     def get_idchunhan(self, idnhanvat = 1):
         tenchunhan = self.get_tenchunhan(idnhanvat)
         if not tenchunhan:
-            return 0
+            return -1
         idchunhan = self._idchunhan_map.get(tenchunhan, False)
         if idchunhan and self.get_tennhanvat(idchunhan) == tenchunhan and self.get_is_nhanvattontai(idchunhan):
             return idchunhan
@@ -292,14 +309,16 @@ class MoiTruong:
 
             for _ in range(SOLUONGNHANVATTOIDA):
                 idnhanvatxemxet = self.get_idnhanvattieptheo(idnhanvatxemxet)
-                if not idnhanvatxemxet:
+                if idnhanvatxemxet <= 0:
                     break
-                if self.get_idloainhanvat(idnhanvatxemxet) == IDLOAINHANVAT_NGUOICHOI:
-                    if self.get_tennhanvat(idnhanvatxemxet) == tenchunhan and self.get_is_nhanvattontai(idnhanvatxemxet):
-                        self._idchunhan_map[tenchunhan] = idnhanvatxemxet
-                        return idnhanvatxemxet
-
-        return 0
+                if not self.get_is_nhanvattontai(idnhanvatxemxet):
+                    continue
+                if self.get_idloainhanvat(idnhanvatxemxet) != IDLOAINHANVAT_NGUOICHOI:
+                    continue
+                if self.get_tennhanvat(idnhanvatxemxet) == tenchunhan:
+                    self._idchunhan_map[tenchunhan] = idnhanvatxemxet
+                    return idnhanvatxemxet
+        return -1
 
     def get_tenchunhan(self, idnhanvat = 1):
         return read_string(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xBE9 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
@@ -319,6 +338,16 @@ class MoiTruong:
                 return -1
             return self.get_idtodoi(idchunhan)
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xB2C + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+
+    def get_toadoxtruongnhom(self):
+        if self.get_idtodoi() > 0:
+            return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINTHANHVIENDOINHOM + 0x28)
+        return -1
+
+    def get_toadoytruongnhom(self):
+        if self.get_idtodoi() > 0:
+            return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINTHANHVIENDOINHOM + 0x2C)
+        return -1
 
     def get_is_chungtodoi(self, idnhanvat = 1):
         idtodoi1 = self.get_idtodoi()
@@ -364,6 +393,9 @@ class MoiTruong:
 
     def get_phamvitimkiemmuctieu(self):
         return read_int(self.tientrinh, self.diachigame + 0x3A3970)
+
+    def get_idtrangthaiclickchuot(self):
+        return read_short_int(self.tientrinh, self.diachigame + 0x2A215C)
 
     def get_is_dangmocuahang(self):
         return read_int(self.tientrinh, self.diachigame + 0x2A19AC) > 0
@@ -882,6 +914,29 @@ class MoiTruong:
         y1 = self.get_toadoy(1)
         x2 = self.get_toadox(idnhanvat2)
         y2 = self.get_toadoy(idnhanvat2)
+
+        D = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
+
+        if D > khoangcachtoithieu:
+            tile = khoangcachtoithieu / D
+
+            xmoi = int(x2 - tile * (x2 - x1))
+            ymoi = int(y2 - tile * (y2 - y1))
+
+            return self.action_dichuyen(xmoi, ymoi, delay = delay)
+
+        return False
+
+    def action_dichuyengiukhoangcachtoithieudiem(self, toadox, toadoy, khoangcachtoithieu, delay = 0.25):
+        if time.time() - self._thoidiemdichuyengiukhoangcachtoithieu < delay:
+            return False
+
+        self._thoidiemdichuyengiukhoangcachtoithieu = time.time()
+
+        x1 = self.get_toadox(1)
+        y1 = self.get_toadoy(1)
+        x2 = toadox
+        y2 = toadoy
 
         D = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
 

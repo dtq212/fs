@@ -7,7 +7,7 @@ import pymem.exception
 from moitruong import MoiTruong
 from tactu import TacTu
 
-class LoopTimKiemMucTieu:
+class LoopChinh:
     def __init__(self, moitruong: MoiTruong, tactu: TacTu, stop: threading.Event):
         self.moitruong = moitruong
         self.tactu = tactu
@@ -32,6 +32,7 @@ class LoopTimKiemMucTieu:
         if self.moitruong.get_is_dangmatketnoi():
             return
         self.tactu.action_tudongtimkiemmuctieu()
+        self.tactu.action_xulydichuyenuutien()
 
 class LoopLamMoiTrangThaiTacTu:
     def __init__(self, moitruong: MoiTruong, tactu: TacTu, stop: threading.Event):
@@ -91,6 +92,7 @@ class LoopPhu:
             return
 
         self.tactu.action_tudongfarmvabanrac()
+        self.tactu.action_tudongdanhtheosautruongnhom()
         self.tactu.action_tudongsuavatpham()
         self.tactu.action_tudongbattathieuungbotro()
         self.tactu.action_tudongboquamuctieumaucao()
