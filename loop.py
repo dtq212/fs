@@ -94,4 +94,4 @@ class LoopPhu:
         self.tactu.action_tudongsuavatpham()
         self.tactu.action_tudongbattathieuungbotro()
         self.tactu.action_tudongboquamuctieumaucao()
-        #self.tactu.action_tudongnhatvatpham()
+        self.tactu.action_tudongnhatvatpham()
