@@ -13,7 +13,6 @@ from tienich import taithietlap as util_taithietlap, phatam
 
 class TacTu:
     def __init__(self, moitruong: MoiTruong):
-        self._is_tudongnhatvatpham = True
         self._is_uutienmuctieusinhluc = False
         self._is_uutientrieuhoithu = False
         self._is_uutienboss = False
@@ -60,7 +59,6 @@ class TacTu:
             return
             
         thietlap = {
-            "is_tudongnhatvatpham": self._is_tudongnhatvatpham,
             "is_tudongfarmvabanrac": self._is_tudongfarmvabanrac,
             "is_tudongsuavatpham": self._is_tudongsuavatpham,
             "is_tudongbattathieuungbotro": self._is_tudongbattathieuungbotro,
@@ -88,9 +86,6 @@ class TacTu:
 
         thietlap = util_taithietlap(str(tennhanvat))
         if thietlap:
-            if "is_tudongnhatvatpham" in thietlap:
-                self._is_tudongnhatvatpham = thietlap["is_tudongnhatvatpham"]
-
             if "is_tudongfarmvabanrac" in thietlap:
                 self._is_tudongfarmvabanrac = thietlap["is_tudongfarmvabanrac"]
 
@@ -627,7 +622,7 @@ class TacTu:
         pass
 
     def action_tudongnhatvatpham(self, delay = 0.1):
-        if not self._is_tudongnhatvatpham:
+        if not self.moitruong.get_is_tudongnhatvatpham():
             return
         if time.time() - self._thoidiemtudongnhatdogannhat < delay:
             return

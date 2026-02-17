@@ -523,34 +523,23 @@ class MoiTruong:
                 return dobentoida if dobentoida > 0 else -1
 
         return -1
-    
+
     def get_is_tudongnhatvatpham(self):
-        return read_int(self.tientrinh, self.diachigame + 0x2344EA8)
+        return read_int(self.tientrinh, self.diachigame + 0x3A4018)
 
     def get_is_vatphamduoidattontai(self, idvatphamduoidat):
-        if idvatphamduoidat <= 0 or idvatphamduoidat > SOLUONGVATPHAMTOIDADUOIDAT:
-            return False
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAMDUOIDAT + 0xC + idvatphamduoidat * OFFSET_DIACHICOSOMOIVATPHAMDUOIDAT) == idvatphamduoidat
 
     def get_tenvatphamduoidat(self, idvatphamduoidat):
-        if idvatphamduoidat <= 0 or idvatphamduoidat > SOLUONGVATPHAMTOIDADUOIDAT:
-            return False
         return read_string(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAMDUOIDAT + 0x44 + idvatphamduoidat * OFFSET_DIACHICOSOMOIVATPHAMDUOIDAT)
 
     def get_tuchatvatphamduoidat(self, idvatphamduoidat):
-        if idvatphamduoidat <= 0 or idvatphamduoidat > SOLUONGVATPHAMTOIDADUOIDAT:
-            return False
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAMDUOIDAT + 0x98 + idvatphamduoidat * OFFSET_DIACHICOSOMOIVATPHAMDUOIDAT)
 
     def get_is_thucuoiduoidat(self, idvatphamduoidat):
-        if idvatphamduoidat <= 0 or idvatphamduoidat > SOLUONGVATPHAMTOIDADUOIDAT:
-            return False
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAMDUOIDAT + 0x170 + idvatphamduoidat * OFFSET_DIACHICOSOMOIVATPHAMDUOIDAT) == 38
 
     def get_khoangcachvatphamduoidat(self, idvatphamduoidat, default = 2000):
-        if idvatphamduoidat <= 0 or idvatphamduoidat > SOLUONGVATPHAMTOIDADUOIDAT:
-            return default
-
         x = read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAMDUOIDAT + 0x2AC + idvatphamduoidat * OFFSET_DIACHICOSOMOIVATPHAMDUOIDAT)
         y = read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAMDUOIDAT + 0x2B0 + idvatphamduoidat * OFFSET_DIACHICOSOMOIVATPHAMDUOIDAT)
 
@@ -1127,7 +1116,7 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamnhatvatpham, bytes(encoding), len(encoding))
 
     def action_nhatvatpham(self, idvatphamduoidat, delay = 0.02):
-        if self.diachihamnhatvatpham:
+        if not self.diachihamnhatvatpham:
             self.khoitaohamnhatvatpham()
 
         if time.time() - self._thoidiemnhatvatphamgannhat < delay:
