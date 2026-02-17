@@ -89,7 +89,7 @@ class TacTu:
         thietlap = util_taithietlap(str(tennhanvat))
         if thietlap:
             if "is_tudongnhatvatpham" in thietlap:
-                self._is_tudongnhatvatpham = thietlap["is_tudongfarmvabanrac"]
+                self._is_tudongnhatvatpham = thietlap["is_tudongnhatvatpham"]
 
             if "is_tudongfarmvabanrac" in thietlap:
                 self._is_tudongfarmvabanrac = thietlap["is_tudongfarmvabanrac"]
@@ -218,16 +218,17 @@ class TacTu:
     
     def action_test(self):
         # self.moitruong.action_tudongtimduongxuyenbando(21, 54929, 94496, "Hoàng Thiên Hóa")
+        self.action_tudongnhatvatpham()
 
-        for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
-            vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
-            if not vitrivatpham:
-                continue
-
-            idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
-            if vitriruong != IDVITRIRUONG_HANHTRANG:
-                continue
-            print("Tên vật phẩm: {}, Thuộc tính: {}".format(self.moitruong.get_tenvatpham(idvatpham), self.moitruong.get_thongtinvatpham_display(idvatpham)))
+        # for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
+        #     vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
+        #     if not vitrivatpham:
+        #         continue
+        #
+        #     idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
+        #     if vitriruong != IDVITRIRUONG_HANHTRANG:
+        #         continue
+        #     print("Tên vật phẩm: {}, Thuộc tính: {}".format(self.moitruong.get_tenvatpham(idvatpham), self.moitruong.get_thongtinvatpham_display(idvatpham)))
 
 
         print("ID bản đồ hiện tại: {}".format(self.moitruong.get_idbandohientai()))
@@ -632,6 +633,7 @@ class TacTu:
             return
         self._thoidiemtudongnhatdogannhat = time.time()
         for idvatphamduoidat in range(SOLUONGVATPHAMTOIDADUOIDAT):
+            print("get_tenvatphamduoidat: {}".format(self.moitruong.get_tenvatphamduoidat(idvatphamduoidat)))
             if self.moitruong.get_is_vatphamduoidattontai(idvatphamduoidat):
                 is_nhatvatpham = False
                 if self.moitruong.get_tuchatvatphamduoidat(idvatphamduoidat) >= IDTUCHATVATPHAMDUOIDAT_LUC:
