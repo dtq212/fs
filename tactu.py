@@ -628,7 +628,6 @@ class TacTu:
             return
         self._thoidiemtudongnhatdogannhat = time.time()
         for idvatphamduoidat in range(SOLUONGVATPHAMTOIDADUOIDAT):
-            print("get_tenvatphamduoidat: {}".format(self.moitruong.get_tenvatphamduoidat(idvatphamduoidat)))
             if self.moitruong.get_is_vatphamduoidattontai(idvatphamduoidat):
                 is_nhatvatpham = False
                 if self.moitruong.get_tuchatvatphamduoidat(idvatphamduoidat) >= IDTUCHATVATPHAMDUOIDAT_LUC:
