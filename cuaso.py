@@ -97,7 +97,6 @@ class CuaSo:
 
                 elif not tennhanvat:
                      if self.tennhanvat:
-                         # Vừa thoát ra màn hình chọn nhân vật, lưu cái cũ lại
                          self.tactu.luuthietlap(self.tennhanvat)
                      
                      self.tennhanvat = False
