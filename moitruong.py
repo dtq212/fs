@@ -1199,6 +1199,14 @@ class MoiTruong:
         if read_bytes(self.tientrinh, self.diachigame + 0x19BCFA, 1) != bytes.fromhex("90"):
             write_bytes(self.tientrinh, self.diachigame + 0x19BCFA, bytes.fromhex("90 90 90909090"), 6)
 
+        #Lúc ngoài phạm vi điểm di chuyển xunh quanh
+        if read_bytes(self.tientrinh, self.diachigame + 0x19B03A, 1) != bytes.fromhex("90"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19B03A, bytes.fromhex("90 90 90909090"), 6)
+        if read_bytes(self.tientrinh, self.diachigame + 0x19B064, 1) != bytes.fromhex("90"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19B064, bytes.fromhex("90 90 90909090"), 6)
+        if read_bytes(self.tientrinh, self.diachigame + 0x19BF53, 1) != bytes.fromhex("90"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19BF53, bytes.fromhex("90 90 90909090"), 6)
+
     def action_tatvohieuhoathietlapmuctieutancong(self):
         if read_bytes(self.tientrinh, self.diachigame + 0x19B9FA, 1) != bytes.fromhex("89"):
             write_bytes(self.tientrinh, self.diachigame + 0x19B9FA, bytes.fromhex("89 AE 9C000000"), 6)
@@ -1209,6 +1217,14 @@ class MoiTruong:
         #Lúc theo sau
         if read_bytes(self.tientrinh, self.diachigame + 0x19BCFA, 1) != bytes.fromhex("89"):
             write_bytes(self.tientrinh, self.diachigame + 0x19BCFA, bytes.fromhex("89 86 9C000000"), 6)
+
+        #Lúc ngoài phạm vi điểm di chuyển xunh quanh
+        if read_bytes(self.tientrinh, self.diachigame + 0x19B03A, 1) != bytes.fromhex("89"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19B03A, bytes.fromhex("89 AE 9C000000"), 6)
+        if read_bytes(self.tientrinh, self.diachigame + 0x19B064, 1) != bytes.fromhex("89"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19B064, bytes.fromhex("89 AE 9C000000"), 6)
+        if read_bytes(self.tientrinh, self.diachigame + 0x19BF53, 1) != bytes.fromhex("89"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19BF53, bytes.fromhex("89 AE 9C000000"), 6)
 
     def action_vohieuhoathietlapmuctieudangchon(self):
         if read_bytes(self.tientrinh, self.diachigame + 0x19B367, 1) != bytes.fromhex("90"):

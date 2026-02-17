@@ -349,6 +349,8 @@ class TacTu:
                     thuoctinh_map = self.moitruong.get_thuoctinhvatpham_map(idvatpham)
                     if thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 20 or thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUBUAPHAP, 0) >= 20:
                         continue
+                    if thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 10 or thuoctinh_map.get(IDTHUOCTINHVATPHAM_DANHTAPTRUNG, 0) >= 10:
+                        continue
 
                     if danhmuctrangbi == IDDANHMUCTRANGBI_PHIPHONG:
                         if ("Báo Thần" in tenvatpham or "Hổ Đầu" in tenvatpham) and thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 10 and thuoctinh_map.get(IDTHUOCTINHVATPHAM_HOINOILUC, 0) >= 8:
@@ -669,6 +671,10 @@ class TacTu:
             return
         
         self._thoidiemtudongnhatdogannhat = time.time()
+
+        if self.get_is_hanhtrangday():
+            return
+
         for idvatphamduoidat in range(SOLUONGVATPHAMTOIDADUOIDAT):
             if self.moitruong.get_is_vatphamduoidattontai(idvatphamduoidat):
                 is_nhatvatpham = False
