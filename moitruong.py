@@ -231,6 +231,9 @@ class MoiTruong:
     def get_is_khuvuccothetancong(self):
         return read_int(self.tientrinh, self.diachigame + 0x28F05E4) > 0
 
+    def get_idmauvatphamnhat(self):
+        return read_int(self.tientrinh, self.diachigame + 0x3A4020)
+
     def get_iddoituongtudanh(self):
         return read_int(self.tientrinh, self.diachigame + 0x3A469C)
 
