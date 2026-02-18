@@ -146,13 +146,13 @@ class GiaoDienHienThi:
                 active_hwnds = [item[0] for item in sorted_list]
                 active_focus_hwnd = None
 
-                self.root.title(f"Auto Phong Thần Pro - {len(active_hwnds)} Accs Online")
+                self.root.title(f"Phong Thần - {len(active_hwnds)} tài khoản đang online")
 
                 items = self.tree.get_children()
                 existing = {int(i): i for i in items}
 
                 for index, (hwnd, data) in enumerate(sorted_list):
-                    ten = data.get("tennhanvat", "Loading...")
+                    ten = data.get("tennhanvat", "Đang tải...")
                     hp = f"{data.get('phantramsinhluc', 0)}%"
                     mp = f"{data.get('phantramnoiluc', 0)}%"
                     bando = data.get("tenbando", "-")
