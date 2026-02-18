@@ -349,6 +349,11 @@ class MoiTruong:
             return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINTHANHVIENDOINHOM + 0x2C)
         return -1
 
+    def get_is_truongnhomcungbando(self):
+        if self.get_idtodoi() <= 0:
+            return False
+        return self.get_toadoxtruongnhom() > 0 and self.get_toadoytruongnhom() > 0
+
     def get_is_chungtodoi(self, idnhanvat = 1):
         idtodoi1 = self.get_idtodoi()
         if idtodoi1 == -1:
@@ -405,6 +410,9 @@ class MoiTruong:
 
     def get_is_dangdoithoaixacnhan(self):
         return read_int(self.tientrinh, self.diachigame + 0x29FFF0) > 0
+
+    def get_trongluongtoida(self):
+        return read_int(self.tientrinh, self.diachigame + 0x3C3620)
 
     def get_is_dangtudongtimduong(self):
         return read_int(self.tientrinh, self.diachigame + 0x39F264) > 0
@@ -478,6 +486,9 @@ class MoiTruong:
 
     def get_tenvatpham(self, idvatpham):
         return read_string(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x120 + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
+    
+    def get_capdovatpham(self, idvatpham):
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x68 + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
 
     def get_dbidvatpham(self, idvatpham):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x698 + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
@@ -557,6 +568,16 @@ class MoiTruong:
                 dobentoida = read_int(self.tientrinh, x + 4)
                 return dobentoida if dobentoida > 0 else -1
 
+        return -1
+    
+    def get_idhephaivatpham(self, idvatpham):
+        if idvatpham < 0 or idvatpham >= SOLUONGVATPHAMTOIDA:
+            return -1
+
+        for offset in range(5 * 0x14, 0xFE, 0x14):
+            x = self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM + offset
+            if read_int(self.tientrinh, x) == 0x25:
+                return read_int(self.tientrinh, x + 4)
         return -1
 
     def get_is_tudongnhatvatpham(self):

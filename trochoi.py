@@ -1,127 +1,30 @@
-import os
-import subprocess
-import sys
-import threading
 import time
-import signal
-
-import keyboard
-import win32api
-import win32event
+import os
 import win32gui
-import winerror
-
+import tkinter as tk
+from multiprocessing import Process, Manager, freeze_support
 from cuaso import CuaSo
-from moitruong import MoiTruong
-from tienich import phatam
+from giaodienhienthi import GiaoDienHienThi
 
-CREATE_NO_WINDOW = 0x08000000
-VK_F11 = 0x7A
-VK_CONTROL = 0x11
 
-def loop_cuaso(cuaso: CuaSo):
+def run_bot_process(hwnd, shared_data):
     try:
-        cuaso.loop()
-    except:
-        pass
-
-
-class TroChoiWorker:
-    def __init__(self, target_hwnd):
-        self.cuaso = None
-        self.target_hwnd = target_hwnd
-        self.is_dangchay = threading.Event()
-
-    def khoidong(self):
-        if not win32gui.IsWindow(self.target_hwnd):
-            return
-
-        self.cuaso = CuaSo(self.target_hwnd)
-
-        if not self._kiemtranhanvathople():
-            return
-
-        threading.Thread(target = loop_cuaso, args = [self.cuaso], daemon = True).start()
-        self.loop_quanly()
-
-    def _kiemtranhanvathople(self):
-        try:
-            if not self.cuaso.moitruong.get_is_nhanvattontai():
-                return False
-            tennhanvat = self.cuaso.moitruong.get_tennhanvat()
-            if not tennhanvat or len(tennhanvat) == 0:
-                return False
-            return True
-        except:
-            return False
-
-    def loop_quanly(self):
-        thoigianmatnhanvat = 0
-
-        while not self.is_dangchay.is_set():
-            try:
-                if not win32gui.IsWindow(self.target_hwnd):
-                    os.kill(os.getpid(), signal.SIGTERM)
-                    break
-
-                if self.cuaso.main_stop.is_set():
-                    self.is_dangchay.set()
-                    break
-
-                if win32api.GetAsyncKeyState(VK_CONTROL) & 0x8000 and win32api.GetAsyncKeyState(VK_F11) & 0x8000:
-                    self.is_dangchay.set()
-                    break
-
-                if not self._kiemtranhanvathople():
-                    if thoigianmatnhanvat == 0:
-                        thoigianmatnhanvat = time.time()
-                    elif time.time() - thoigianmatnhanvat > 2:
-                        os.kill(os.getpid(), signal.SIGTERM)
-                        break
-                else:
-                    thoigianmatnhanvat = 0
-
-            except Exception:
-                os.kill(os.getpid(), signal.SIGTERM)
+        print(f"--> [DEBUG] Đang khởi tạo Bot cho HWND: {hwnd}")
+        bot = CuaSo(hwnd, shared_data)
+        while not bot.main_stop.is_set():
+            if not win32gui.IsWindow(hwnd):
                 break
-
-            time.sleep(0.5)
-
-        if self.cuaso:
-            try:
-                self.cuaso.main_stop.set()
-                if hasattr(self.cuaso, "systray"):
-                    self.cuaso.systray.shutdown()
-            except:
-                pass
-
-        os._exit(0)
+            time.sleep(1)
+        bot.tatauto()
+    except Exception as e:
+        print(f"--> [ERROR] Bot Crash (HWND {hwnd}): {e}")
 
 
 class TroChoiManager:
     def __init__(self):
-        self.tientrinhautos = {}
-        self.lock = threading.Lock()
-        self.is_running = True
-        self.current_metric = None
-
-        print("=" * 50)
-        print("TOOL PHONG THẦN")
-        print("-" * 50)
-        print("Nhấn phím Ctrl + F11 để dừng toàn bộ!")
-        print("=" * 50)
-
-    def stop_all(self):
-        print("\nĐang dừng toàn bộ hệ thống...")
-        self.is_running = False
-        with self.lock:
-            for hwnd, proc in self.tientrinhautos.items():
-                try:
-                    proc.kill()
-                except:
-                    pass
-        time.sleep(1)
-        os._exit(0)
+        self.manager = Manager()
+        self.shared_data = self.manager.dict()
+        self.bot_processes = {}
 
     def _timcuasogame(self):
         ds_hwnd = []
@@ -135,79 +38,47 @@ class TroChoiManager:
         win32gui.EnumWindows(callback, None)
         return ds_hwnd
 
-    def _kiemtradudieukienkichhoatauto(self, hwnd):
-        try:
-            moitruong = MoiTruong(hwnd)
-            if not moitruong.get_is_nhanvattontai():
-                return False
-            tennhanvat = moitruong.get_tennhanvat()
-            if not tennhanvat or len(tennhanvat) == 0:
-                return False
-            return True
-        except Exception as err:
-            return False
-
-    def _kichhoatauto(self, hwnd):
-        with self.lock:
-            if hwnd in self.tientrinhautos:
-                return
-
-            print(f"-> Phát hiện cửa sổ {hwnd} đã vào game -> Kích hoạt Auto!")
-
-            script_path = os.path.abspath(__file__)
-            cmd = [sys.executable, "-u", script_path, "--child", str(hwnd)]
-
-            try:
-                proc = subprocess.Popen(cmd, stdout = sys.stdout, stderr = sys.stderr)
-                self.tientrinhautos[hwnd] = proc
-            except Exception:
-                pass
-
     def run(self):
-        time.sleep(1)
-        while self.is_running:
-            if win32api.GetAsyncKeyState(VK_CONTROL) & 0x8000 and win32api.GetAsyncKeyState(VK_F11) & 0x8000:
-                self.stop_all()
-                break
+        root = tk.Tk()
+        gui = GiaoDienHienThi(root, self.shared_data)
 
-            with self.lock:
-                dead_hwnds = []
-                for h, p in self.tientrinhautos.items():
-                    if p.poll() is not None:
-                        dead_hwnds.append(h)
+        import threading
+        t_scan = threading.Thread(target = self.loop_scan, daemon = True)
+        t_scan.start()
 
-                for h in dead_hwnds:
-                    del self.tientrinhautos[h]
+        print("--- ĐANG CHẠY MANAGER ---")
+        print("Lưu ý: Phải chạy bằng quyền Administrator để đọc được tên nhân vật!")
 
+        try:
+            root.mainloop()
+        except KeyboardInterrupt:
+            pass
+        self.stop_all()
+
+    def loop_scan(self):
+        while True:
             game_hwnds = self._timcuasogame()
-            for hwnd in game_hwnds:
-                if hwnd not in self.tientrinhautos:
-                    if self._kiemtradudieukienkichhoatauto(hwnd):
-                        self._kichhoatauto(hwnd)
 
-            time.sleep(0.5)
+            for hwnd in game_hwnds:
+                if hwnd not in self.bot_processes:
+                    print(f"Phát hiện cửa sổ mới: {hwnd} -> Đang thử kết nối...")
+                    p = Process(target = run_bot_process, args = (hwnd, self.shared_data))
+                    p.start()
+                    self.bot_processes[hwnd] = p
+
+            dead = [h for h, p in self.bot_processes.items() if not p.is_alive()]
+            for h in dead:
+                print(f"Bot {h} đã dừng.")
+                del self.bot_processes[h]
+                if h in self.shared_data: del self.shared_data[h]
+
+            time.sleep(2)
+
+    def stop_all(self):
+        for p in self.bot_processes.values(): p.terminate()
+        os._exit(0)
 
 
 if __name__ == "__main__":
-    if "--child" in sys.argv:
-        try:
-            idx = sys.argv.index("--child")
-            target_hwnd = int(sys.argv[idx + 1])
-            worker = TroChoiWorker(target_hwnd)
-            worker.khoidong()
-        except Exception:
-            os.kill(os.getpid(), signal.SIGTERM)
-    else:
-        mutex_name = "Global_Tool_PhongThan_Manager_Mutex"
-        mutex = win32event.CreateMutex(None, True, mutex_name)
-
-        if win32api.GetLastError() == winerror.ERROR_ALREADY_EXISTS:
-            phatam("Tool quản lý đang chạy rồi")
-            time.sleep(2)
-            sys.exit(0)
-
-        manager = TroChoiManager()
-        try:
-            manager.run()
-        except KeyboardInterrupt:
-            pass
+    freeze_support()
+    TroChoiManager().run()

@@ -1,9 +1,6 @@
-import os
 import threading
 import time
-
 import keyboard
-from infi.systray import SysTrayIcon
 
 from hangso import *
 from loop import (
@@ -14,21 +11,30 @@ from loop import (
 from moitruong import MoiTruong
 from tactu import TacTu
 
+
 def khoidong_loopchinh(moitruong, tactu, stop):
     LoopChinh(moitruong, tactu, stop).loop()
+
 
 def khoidong_looplammoitrangthaitactu(moitruong, tactu, stop):
     LoopLamMoiTrangThaiTacTu(moitruong, tactu, stop).loop()
 
+
 def khoidong_loopphu(moitruong, tactu, stop):
     LoopPhu(moitruong, tactu, stop).loop()
 
+
 class CuaSo:
-    def __init__(self, idcuaso):
+    def __init__(self, idcuaso, shared_data):
+        self.idcuaso = idcuaso
+        self.shared_data = shared_data
+
         self.moitruong = MoiTruong(idcuaso)
         self.tactu = TacTu(self.moitruong)
-        self.tennhanvat = False
         self.main_stop = threading.Event()
+
+        self.tennhanvat = None
+        self.thoidiemluuthietlap = time.time()
 
         self.luongs = (
             threading.Thread(target = khoidong_looplammoitrangthaitactu, args = [self.moitruong, self.tactu, self.main_stop], daemon = True),
@@ -40,16 +46,7 @@ class CuaSo:
             luong.start()
 
         threading.Thread(target = self.loop_xulyphimtat, daemon = True).start()
-
-        icon_path = os.path.join("_internal", "icon", "icon.ico")
-        if not os.path.exists(icon_path):
-            icon_path = None
-
-        titlebandau = f"{CHUACHONHANVAT} ({idcuaso})"
-        self.systray = SysTrayIcon(icon_path, titlebandau, on_quit = self.tatauto)
-        self.systray.start()
-
-        self.thoidiemluuthietlapgannhat = time.time()
+        threading.Thread(target = self.loop_hienthigiaodien, daemon = True).start()
 
     def __del__(self):
         self.tatauto()
@@ -60,65 +57,86 @@ class CuaSo:
                 luong.join(timeout = 0.2)
 
     def tatauto(self, *args, **kwargs):
-        self.main_stop.set()
+        if self.tennhanvat:
+            self.tactu.luuthietlap(self.tennhanvat)
 
+        self.main_stop.set()
         self._chotoanbocacluongdunghan()
 
-        try:
-            self.systray.shutdown()
-        except:
-            pass
+        if self.idcuaso in self.shared_data:
+            del self.shared_data[self.idcuaso]
 
-    def loop(self):
-        title = None
-        thoigianmatketnoi = 0
-
-        while not self.main_stop.is_set() and self.moitruong.get_is_cuasogametontai():
-            if not self.moitruong.get_is_dangmatketnoi():
-                thoigianmatketnoi = 0
+    def loop_hienthigiaodien(self):
+        while not self.main_stop.is_set():
+            try:
+                if not self.moitruong.get_is_cuasogametontai():
+                    break
 
                 tennhanvat = self.moitruong.get_tennhanvat()
 
                 if tennhanvat and tennhanvat != self.tennhanvat:
                     if self.tennhanvat:
                         self.tactu.luuthietlap(self.tennhanvat)
-                    
+
                     self.tactu.taithietlap(tennhanvat)
-                    
-                    if tennhanvat != title:
-                        self.systray.update(hover_text = tennhanvat)
-                        title = tennhanvat
-                    
+                    print(f"-> Đã tải cấu hình cho: {tennhanvat}")
+
                     self.tennhanvat = tennhanvat
+                    self.thoidiemluuthietlap = time.time()
 
-                elif tennhanvat and time.time() - self.thoidiemluuthietlapgannhat > 1.:
-                    self.thoidiemluuthietlapgannhat = time.time()
+                elif tennhanvat and (time.time() - self.thoidiemluuthietlap > 1.0):
                     self.tactu.luuthietlap(tennhanvat)
+                    self.thoidiemluuthietlap = time.time()
 
-                elif not tennhanvat:
-                     if self.tennhanvat:
-                         self.tactu.luuthietlap(self.tennhanvat)
-                     
-                     self.tennhanvat = False
-                     if CHUACHONHANVAT != title:
-                        self.systray.update(hover_text = CHUACHONHANVAT)
-                        title = CHUACHONHANVAT
+                if not tennhanvat:
+                    time.sleep(1.)
+                    continue
 
-            else:
-                self.tennhanvat = False
-                
-                if CHUACHONHANVAT != title:
-                    self.systray.update(hover_text = CHUACHONHANVAT)
-                    title = CHUACHONHANVAT
+                phantramsinhluc = 0
+                phantramnoiluc = 0
+                try:
+                    sinhluchientai = self.moitruong.get_sinhluchientai()
+                    sinhluctoida = self.moitruong.get_sinhluctoida()
+                    if sinhluctoida > 0:
+                        phantramsinhluc = int((sinhluchientai / sinhluctoida) * 100)
+                except:
+                    pass
 
-                if thoigianmatketnoi == 0:
-                    thoigianmatketnoi = time.time()
-                elif time.time() - thoigianmatketnoi > 1.:
-                    break
+                idtrangthainhanvat = self.moitruong.get_idtrangthainhanvat()
+                tentrangthainhanvat = "Đứng im"
+                if idtrangthainhanvat == IDTRANGTHAINHANVAT_DICHUYEN:
+                    tentrangthainhanvat = "Di chuyển"
+                elif idtrangthainhanvat == IDTRANGTHAINHANVAT_TANCONG:
+                    tentrangthainhanvat = "Tấn công"
+                elif idtrangthainhanvat == IDTRANGTHAINHANVAT_DACHET:
+                    tentrangthainhanvat = "Đã chết"
 
-            time.sleep(1)
+                info = {
+                    "tennhanvat": tennhanvat,
+                    "tenbando": self.moitruong.get_tenbandohientai(),
+                    "x": self.moitruong.get_toadox(),
+                    "y": self.moitruong.get_toadoy(),
+                    "status": tentrangthainhanvat,
+                    "phantramsinhluc": phantramsinhluc,
+                    "phantramnoiluc": phantramnoiluc,
+                    "is_window_active": self.moitruong.get_is_cuasogamekichhoat(),
 
-        self.tatauto()
+                    "_is_tudongfarmvabanrac": self.tactu._is_tudongfarmvabanrac,
+                    "_is_tudongdanhtheosautruongnhom": self.tactu._is_tudongdanhtheosautruongnhom,
+                    "_is_tudongsuavatpham": self.tactu._is_tudongsuavatpham,
+                    "_is_tudongbattathieuungbotro": self.tactu._is_tudongbattathieuungbotro,
+                    "_is_tudongtimkiemmuctieu": self.tactu._is_tudongtimkiemmuctieu,
+                    "_is_tudongboquamuctieumaucao": self.tactu._is_tudongboquamuctieumaucao,
+                    "_is_khongdanhcungbang": self.tactu._is_khongdanhcungbang,
+                    "_is_uutiennguoichoi": self.tactu._is_uutiennguoichoi,
+                    "_is_chidanhnguoichoivatrieuhoithu": self.tactu._is_chidanhnguoichoivatrieuhoithu,
+                    "_is_uutienmuctieusinhluc": self.tactu._is_uutienmuctieusinhluc
+                }
+                self.shared_data[self.idcuaso] = info
+
+            except Exception:
+                pass
+            time.sleep(0.5)
 
     def loop_xulyphimtat(self):
         while not self.main_stop.is_set():
