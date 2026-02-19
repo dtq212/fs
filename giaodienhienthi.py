@@ -10,7 +10,7 @@ class GiaoDienHienThi:
         self.shared_data = shared_data
 
         self.root.title("Phong Thần")
-        self.root.geometry("420x750")
+        self.root.geometry("420x800")
         self.root.resizable(False, True)
 
         style = ttk.Style()
@@ -96,6 +96,31 @@ class GiaoDienHienThi:
         self.lbl_info_2.grid(row = r, column = 0, sticky = "w", padx = 10)
         r += 1
 
+        self.lbl_info_farm = ttk.Label(self.grp_config, text = "Điểm Farm: ---")
+        self.lbl_info_farm.grid(row = r, column = 0, sticky = "w", padx = 10)
+        r += 1
+
+        ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 5)
+        r += 1
+        ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 5)
+        r += 1
+
+        lbl_guide_tc = ttk.Label(self.grp_config, text="[Ctrl+C] Thêm  |  [Ctrl+Alt+C] Xóa danh sách Tấn công", font=("Arial", 9, "bold"))
+        lbl_guide_tc.grid(row=r, column=0, sticky="w", padx=10)
+        r += 1
+        
+        self.lbl_tennhanvattancongs = ttk.Label(self.grp_config, text="→ Trống", foreground="red", wraplength=380)
+        self.lbl_tennhanvattancongs.grid(row=r, column=0, sticky="w", padx=10, pady=(0, 5))
+        r += 1
+
+        lbl_guide_ktc = ttk.Label(self.grp_config, text="[Ctrl+X] Thêm  |  [Ctrl+Alt+X] Xóa danh sách Bỏ qua", font=("Arial", 9, "bold"))
+        lbl_guide_ktc.grid(row=r, column=0, sticky="w", padx=10)
+        r += 1
+
+        self.lbl_tennhanvatkhongtancongs = ttk.Label(self.grp_config, text="→ Trống", foreground="green", wraplength=380)
+        self.lbl_tennhanvatkhongtancongs.grid(row=r, column=0, sticky="w", padx=10, pady=(0, 5))
+        r += 1
+
         self.current_hwnd = None
         self.is_running = True
         self.thread = threading.Thread(target = self.loop_update_ui, daemon = True)
@@ -123,6 +148,9 @@ class GiaoDienHienThi:
     def refresh_detail(self):
         if not self.current_hwnd or self.current_hwnd not in self.shared_data:
             self.lbl_info_1.config(text = "Trạng thái: Mất kết nối / Chưa chọn")
+            
+            self.lbl_tennhanvattancongs.config(text = "→ Trống") 
+            self.lbl_tennhanvatkhongtancongs.config(text = "→ Trống")
             return
 
         data = self.shared_data[self.current_hwnd]
@@ -133,6 +161,20 @@ class GiaoDienHienThi:
         status_str = data.get("status", "-")
         self.lbl_info_1.config(text = f"Trạng thái: {status_str}")
         self.lbl_info_2.config(text = f"Tọa độ: {data.get('x', 0)}, {data.get('y', 0)} | Map: {data.get('tenbando', '-')}")
+
+        farm_map = data.get("idbandotudongfarm", 0)
+        farm_x = data.get("toadoxtudongfarm", 0)
+        farm_y = data.get("toadoytudongfarm", 0)
+        self.lbl_info_farm.config(text = f"Điểm Farm: ({farm_x}, {farm_y}) | ID Map: {farm_map}")
+
+        str_tancong = data.get("_tennhanvattancongs", "")
+        str_khongtancong = data.get("_tennhanvatkhongtancongs", "")
+
+        if not str_tancong: str_tancong = "Trống"
+        if not str_khongtancong: str_khongtancong = "Trống"
+
+        self.lbl_tennhanvattancongs.config(text = f"→ {str_tancong}")
+        self.lbl_tennhanvatkhongtancongs.config(text = f"→ {str_khongtancong}")
 
     def loop_update_ui(self):
         while self.is_running:
@@ -186,4 +228,4 @@ class GiaoDienHienThi:
 
             except Exception:
                 pass
-            time.sleep(0.5)
+            time.sleep(0.1)

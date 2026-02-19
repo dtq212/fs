@@ -402,6 +402,9 @@ class MoiTruong:
     def get_idtrangthaiclickchuot(self):
         return read_short_int(self.tientrinh, self.diachigame + 0x2A215C)
 
+    def get_is_datrieuhoithu(self):
+        return read_int(self.tientrinh, self.diachigame + 0x3A4910)
+
     def get_is_dangmocuahang(self):
         return read_int(self.tientrinh, self.diachigame + 0x2A19AC) > 0
 

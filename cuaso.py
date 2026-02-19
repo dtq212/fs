@@ -49,6 +49,7 @@ class CuaSo:
         threading.Thread(target = self.loop_hienthigiaodien, daemon = True).start()
 
     def __del__(self):
+
         self.tatauto()
 
     def _chotoanbocacluongdunghan(self):
@@ -130,7 +131,14 @@ class CuaSo:
                     "_is_khongdanhcungbang": self.tactu._is_khongdanhcungbang,
                     "_is_uutiennguoichoi": self.tactu._is_uutiennguoichoi,
                     "_is_chidanhnguoichoivatrieuhoithu": self.tactu._is_chidanhnguoichoivatrieuhoithu,
-                    "_is_uutienmuctieusinhluc": self.tactu._is_uutienmuctieusinhluc
+                    "_is_uutienmuctieusinhluc": self.tactu._is_uutienmuctieusinhluc,
+
+                    "_tennhanvattancongs": ", ".join(self.tactu._tennhanvattancongs),
+                    "_tennhanvatkhongtancongs": ", ".join(self.tactu._tennhanvatkhongtancongs),
+
+                    "idbandotudongfarm": self.tactu._idbandotudongfarm,
+                    "toadoxtudongfarm": self.tactu._toadoxtudongfarm,
+                    "toadoytudongfarm": self.tactu._toadoytudongfarm,
                 }
                 self.shared_data[self.idcuaso] = info
 

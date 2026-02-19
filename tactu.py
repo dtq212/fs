@@ -147,13 +147,15 @@ class TacTu:
     def battat_tudongfarmvabanrac(self):
         self._is_tudongfarmvabanrac = not self._is_tudongfarmvabanrac
 
-        if self._is_tudongfarmvabanrac and self.moitruong.get_is_khuvuccothetancong():
-            self._idbandotudongfarm = self.moitruong.get_idbandohientai()
-            self._toadoxtudongfarm = self.moitruong.get_toadox()
-            self._toadoytudongfarm = self.moitruong.get_toadoy()
+        if self._is_tudongfarmvabanrac:
+            if self.moitruong.get_is_khuvuccothetancong():
+                self._idbandotudongfarm = self.moitruong.get_idbandohientai()
+                self._toadoxtudongfarm = self.moitruong.get_toadox()
+                self._toadoytudongfarm = self.moitruong.get_toadoy()
+                print(f"Đã lưu tọa độ Farm: Map {self._idbandotudongfarm} - {self._toadoxtudongfarm}:{self._toadoytudongfarm}")
             
             phatam("Bật tự động Farm và Bán rác")
-            print(f"Đã lưu tọa độ Farm: Map {self._idbandotudongfarm} - {self._toadoxtudongfarm}:{self._toadoytudongfarm}")
+
         else:
             phatam("Tắt tự động Farm và Bán rác")
 
@@ -230,38 +232,9 @@ class TacTu:
         phatam("Bỏ toàn bộ thiết lập tên nhân vật không tấn công")
     
     def action_test(self):
-        print("Đang kiểm tra hàm get_idhephaivatpham (Final Logic)...")
-        print(f"{'Tên vật phẩm':<35} | {'ID Hệ Trả Về':<15} | {'Kết Luận'}")
-        print("-" * 80)
-        
-        # Mapping để in ra tên hệ cho dễ nhìn
-        HE_PHAI_MAP = {
-            0: "Giáp Sĩ",
-            1: "Đạo Sĩ (1)",
-            4: "Đạo Sĩ (4)", 
-            2: "Dị Nhân",
-            3: "Xạ Thủ",
-            -1: "Đồ Chung/Rác"
-        }
-
-        for i in range(SOLUONGVATPHAMTOIDA):
-            vt = self.moitruong.get_vitrivatpham(i)
-            if not vt: continue
-            
-            idvp, vitriruong, _, _ = vt
-
-
-            tt = self.moitruong.get_loaivatpham(idvp)
-            if not tt or tt[2] not in DANHMUCTRANGBI_MAP: 
-                continue
-            
-
-            id_he = self.moitruong.get_idhephaivatpham(idvp)
-            ten_he = HE_PHAI_MAP.get(id_he, f"Unknown({id_he})")
-            
-            ten_vp = self.moitruong.get_tenvatpham(idvp)
-            print(f"{ten_vp:<35} | {id_he:<15} | {ten_he}")
-
+        hieuungbotros = self.moitruong.get_hieuungbotros()
+        for hieuungbotro in hieuungbotros:
+            print("Hiệu ứng bổ trợ: {} {}".format(hieuungbotro, self.moitruong.get_is_hieuungbotrodangbat(hieuungbotro)))
         print("ID bản đồ hiện tại: {}".format(self.moitruong.get_idbandohientai()))
         print("Tọa độ hiện tại: {}, {}".format(self.moitruong.get_toadox(), self.moitruong.get_toadoy()))
 
@@ -405,15 +378,16 @@ class TacTu:
             if tenbandohientai in TOADODAIPHU_MAP:
                 toadodaiphu = TOADODAIPHU_MAP.get(tenbandohientai)
                 if self.moitruong.get_khoangcachdiem(1, *toadodaiphu) > 300:
-                    self._is_dadichuyentoivitrifarm = False
                     self._yeucaudichuyenfarmvabanrac = {
                         "loaidichuyen": "tudongtimduong",
                         "toadodich": toadodaiphu
                     }
                 else:
                     is_ok = self.action_bantoanbovatpham()
-                    if is_ok and not self.get_is_hanhtrangday():
+                    if is_ok:
                         self._is_dangxulybanrac = False
+                    if not self.get_is_hanhtrangday():
+                        self._is_dadichuyentoivitrifarm = False
             else:
                 pass
 
@@ -490,8 +464,15 @@ class TacTu:
 
         if self.moitruong.get_is_khuvuccothetancong():
             self.moitruong.action_bathieuungbotro(IDHIEUUNGBOTRO_DAOTRAMTAN)
+            if self.moitruong.get_idhephai() == IDHEPHAI_DINHAN:
+                if not self.moitruong.get_is_datrieuhoithu():
+                    self.moitruong.action_bathieuungbotro(IDHIEUUNGBOTRO_THANTIENTAN)
+                else:
+                    self.moitruong.action_tathieuungbotro(IDHIEUUNGBOTRO_THANTIENTAN)
         else:
             self.moitruong.action_tathieuungbotro(IDHIEUUNGBOTRO_DAOTRAMTAN)
+            self.moitruong.action_tathieuungbotro(IDHIEUUNGBOTRO_THANTIENTAN)
+
 
     def get_tongtrongluongvatpham(self):
         tongtrongluongvatpham = 0
