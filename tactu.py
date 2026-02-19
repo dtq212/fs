@@ -463,14 +463,12 @@ class TacTu:
             return
 
         if self.moitruong.get_is_khuvuccothetancong():
-            self.moitruong.action_bathieuungbotro(IDHIEUUNGBOTRO_DAOTRAMTAN)
             if self.moitruong.get_idhephai() == IDHEPHAI_DINHAN:
                 if not self.moitruong.get_is_datrieuhoithu():
                     self.moitruong.action_bathieuungbotro(IDHIEUUNGBOTRO_THANTIENTAN)
                 else:
                     self.moitruong.action_tathieuungbotro(IDHIEUUNGBOTRO_THANTIENTAN)
         else:
-            self.moitruong.action_tathieuungbotro(IDHIEUUNGBOTRO_DAOTRAMTAN)
             self.moitruong.action_tathieuungbotro(IDHIEUUNGBOTRO_THANTIENTAN)
 
 
