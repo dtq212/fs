@@ -78,7 +78,7 @@ class GiaoDienHienThi:
         ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 5)
         r += 1
 
-        self.add_check(self.grp_config, "Chỉ đánh Người/Pet", "_is_chidanhnguoichoivatrieuhoithu", r, "Ctrl+D / Ctrl+A")
+        self.add_check(self.grp_config, "Chỉ đánh Người / Triệu hồi thú", "_is_chidanhnguoichoivatrieuhoithu", r, "Ctrl+D / Ctrl+A")
         r += 1
         self.add_check(self.grp_config, "Ưu tiên Triệu hồi thú", "_is_uutientrieuhoithu", r, "Ctrl + S")
         r += 1
