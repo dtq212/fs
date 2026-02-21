@@ -19,7 +19,6 @@ class TacTu:
         self._is_uutienmuctieusinhluc = False
         self._is_uutientrieuhoithu = False
         self._is_uutienboss = False
-        self._is_uutiennguoichoi = True
         self._is_tudongtimkiemmuctieu = False
         self._is_khongdanhcungbang = False
         self._is_chidanhnguoichoivatrieuhoithu = False
@@ -85,7 +84,6 @@ class TacTu:
             "is_uutienmuctieusinhluc": self._is_uutienmuctieusinhluc,
             "is_uutientrieuhoithu": self._is_uutientrieuhoithu,
             "is_uutienboss": self._is_uutienboss,
-            "is_uutiennguoichoi": False,
             "is_tudongtimkiemmuctieu": self._is_tudongtimkiemmuctieu,
             "is_khongdanhcungbang": self._is_khongdanhcungbang,
             "is_chidanhnguoichoivatrieuhoithu": self._is_chidanhnguoichoivatrieuhoithu,
@@ -135,9 +133,6 @@ class TacTu:
             if "is_uutienboss" in thietlap:
                 self._is_uutienboss = thietlap["is_uutienboss"]
 
-            if "is_uutiennguoichoi" in thietlap:
-                self._is_uutiennguoichoi = False
-
             if "is_tudongtimkiemmuctieu" in thietlap:
                 self._is_tudongtimkiemmuctieu = thietlap["is_tudongtimkiemmuctieu"]
 
@@ -178,6 +173,14 @@ class TacTu:
             phatam("Bật tự động đánh theo sau trưởng nhóm")
         else:
             phatam("Tắt tự động đánh theo sau trưởng nhóm")
+
+    def battat_is_uutientrieuhoithu(self):
+        self._is_uutientrieuhoithu = not self._is_uutientrieuhoithu
+
+        if self._is_uutientrieuhoithu:
+            phatam("Bật ưu tiên triệu hồi thú")
+        else:
+            phatam("Tắt ưu tiên triệu hồi thú")
 
     def battat_tudongmokhoa(self):
         self._is_tudongmokhoa = not self._is_tudongmokhoa
@@ -596,14 +599,6 @@ class TacTu:
                 if idloainhanvatb == IDLOAINHANVAT_TRIEUHOITHU and idloainhanvata != IDLOAINHANVAT_TRIEUHOITHU:
                     return False
 
-        if self._is_uutiennguoichoi:
-            idloainhanvata = self.moitruong.get_idloainhanvat(idnhanvata)
-            idloainhanvatb = self.moitruong.get_idloainhanvat(idnhanvatb)
-            if idloainhanvata == IDLOAINHANVAT_NGUOICHOI and idloainhanvatb != IDLOAINHANVAT_NGUOICHOI:
-                return True
-            if idloainhanvatb == IDLOAINHANVAT_NGUOICHOI and idloainhanvata != IDLOAINHANVAT_NGUOICHOI:
-                return False
-
         if self._is_uutienboss:
              is_bossa = self.moitruong.get_is_boss(idnhanvata)
              is_bossb = self.moitruong.get_is_boss(idnhanvatb)
@@ -854,12 +849,16 @@ class TacTu:
             idmuctieu = self.moitruong.get_idmuctieudangchon()
             if idmuctieu <= 0:
                 return
+            self._yeucautatduoitheo = True
+
             khoangcachmuctieu = self.moitruong.get_khoangcach(idmuctieu)
-            if khoangcachmuctieu >= 650:
+            if khoangcachmuctieu >= 600:
+                self.moitruong.action_dichuyengiukhoangcachtoithieu(idmuctieu, 600)
                 self.moitruong.set_idkynang1(IDKYNANG_TAMMUOICHANHOA)
                 return
+
             self._yeucautatduoitheo = True if is_cothesudungkynang else False
-            if 500 <= khoangcachmuctieu < 650 and is_cothesudungkynang:
+            if 500 <= khoangcachmuctieu < 600 and is_cothesudungkynang:
                 if self.moitruong.get_is_kynangsansang(IDKYNANG_TAMMUOICHANHOA):
                     self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_TAMMUOICHANHOA, random.randint(450, 475))
                     return

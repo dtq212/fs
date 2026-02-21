@@ -80,7 +80,7 @@ class GiaoDienHienThi:
 
         self.add_check(self.grp_config, "Chỉ đánh Người/Pet", "_is_chidanhnguoichoivatrieuhoithu", r, "Ctrl+D / Ctrl+A")
         r += 1
-        self.add_check(self.grp_config, "Ưu tiên Người chơi", "_is_uutiennguoichoi", r, "")
+        self.add_check(self.grp_config, "Ưu tiên Triệu hồi thú", "_is_uutientrieuhoithu", r, "")
         r += 1
         self.add_check(self.grp_config, "Ưu tiên Máu thấp", "_is_uutienmuctieusinhluc", r, "")
         r += 1

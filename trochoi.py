@@ -90,6 +90,7 @@ class TroChoiManager:
                 elif keyboard.is_pressed("ctrl+c"): cmd = "them_tennhanvattancong"
                 elif keyboard.is_pressed("ctrl+x"): cmd = "them_tennhanvatkhongtancong"
                 elif keyboard.is_pressed("ctrl+d"): cmd = "bat_is_chidanhnguoichoivatrieuhoithu"
+                elif keyboard.is_pressed("ctrl+s"): cmd = "battat_is_uutientrieuhoithu"
                 elif keyboard.is_pressed("ctrl+a"): cmd = "tat_is_chidanhnguoichoivatrieuhoithu"
                 elif keyboard.is_pressed("ctrl+e"): cmd = "action_batpk"
                 elif keyboard.is_pressed("ctrl+q"): cmd = "action_tatpk"

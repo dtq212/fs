@@ -133,7 +133,7 @@ class CuaSo:
                     "_is_tudongtimkiemmuctieu": self.tactu._is_tudongtimkiemmuctieu,
                     "_is_tudongboquamuctieumaucao": self.tactu._is_tudongboquamuctieumaucao,
                     "_is_khongdanhcungbang": self.tactu._is_khongdanhcungbang,
-                    "_is_uutiennguoichoi": self.tactu._is_uutiennguoichoi,
+                    "_is_uutientrieuhoithu": self.tactu._is_uutientrieuhoithu,
                     "_is_chidanhnguoichoivatrieuhoithu": self.tactu._is_chidanhnguoichoivatrieuhoithu,
                     "_is_uutienmuctieusinhluc": self.tactu._is_uutienmuctieusinhluc,
 
@@ -162,6 +162,7 @@ class CuaSo:
                 elif cmd == "battat_tudongtimkiemmuctieu": self.tactu.battat_tudongtimkiemmuctieu()
                 elif cmd == "battat_is_khongdanhcungbang": self.tactu.battat_is_khongdanhcungbang()
                 elif cmd == "battat_is_tudongbattathieuungbotro": self.tactu.battat_tudongbattathieuungbotro()
+                elif cmd == "battat_is_uutientrieuhoithu": self.tactu.battat_is_uutientrieuhoithu()
                 elif cmd == "battat_is_tudongmokhoa": self.tactu.battat_tudongmokhoa()
                 elif cmd == "botoanbo_tennhanvattancong": self.tactu.botoanbo_tennhanvattancong()
                 elif cmd == "botoanbo_tennhanvatkhongtancong": self.tactu.botoanbo_tennhanvatkhongtancong()
