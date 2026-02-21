@@ -24,7 +24,7 @@ class LoopChinh:
             except (pymem.exception.PymemError, pymem.exception.WinAPIError) as err:
                 print("Luồng tìm kiếm mục tiêu: {}".format(err))
                 time.sleep(1)
-            time.sleep(0.15)
+            time.sleep(0.2)
 
     def step(self):
         if not self.moitruong.get_is_nhanvattontai():
@@ -33,6 +33,7 @@ class LoopChinh:
             return
         self.tactu.action_tudongtimkiemmuctieu()
         self.tactu.action_xulydichuyenuutien()
+        self.tactu.action_xulytancong()
 
 class LoopLamMoiTrangThaiTacTu:
     def __init__(self, moitruong: MoiTruong, tactu: TacTu, stop: threading.Event):
@@ -51,7 +52,7 @@ class LoopLamMoiTrangThaiTacTu:
             except (pymem.exception.PymemError, pymem.exception.WinAPIError) as err:
                 print("Luồng làm mới trạng thái tác tử: {}".format(err))
                 time.sleep(1)
-            time.sleep(0.15)
+            time.sleep(0.2)
 
     def step(self):
         if not self.moitruong.get_is_nhanvattontai():
@@ -83,7 +84,7 @@ class LoopPhu:
             except (pymem.exception.PymemError, pymem.exception.WinAPIError) as err:
                 print("Luồng phụ: {}: {}".format(err, traceback.format_exc()))
                 time.sleep(1)
-            time.sleep(0.5)
+            time.sleep(0.2)
 
     def step(self):
         if not self.moitruong.get_is_nhanvattontai():
@@ -97,3 +98,6 @@ class LoopPhu:
         self.tactu.action_tudongbattathieuungbotro()
         self.tactu.action_tudongboquamuctieumaucao()
         self.tactu.action_tudongnhatvatpham()
+        self.moitruong.action_vohieuhoagiamxuatchieukhithaydo()
+        self.tactu.action_tudongmokhoa()
+        self.tactu.action_tudongtaypk()

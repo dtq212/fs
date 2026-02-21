@@ -1,6 +1,5 @@
 import threading
 import time
-import keyboard
 
 from hangso import *
 from loop import (
@@ -25,9 +24,10 @@ def khoidong_loopphu(moitruong, tactu, stop):
 
 
 class CuaSo:
-    def __init__(self, idcuaso, shared_data):
+    def __init__(self, idcuaso, shared_data, command_dict):
         self.idcuaso = idcuaso
         self.shared_data = shared_data
+        self.command_dict = command_dict
 
         self.moitruong = MoiTruong(idcuaso)
         self.tactu = TacTu(self.moitruong)
@@ -49,7 +49,8 @@ class CuaSo:
         threading.Thread(target = self.loop_hienthigiaodien, daemon = True).start()
 
     def __del__(self):
-
+        if not hasattr(self, "tennhanvat"):
+            return
         self.tatauto()
 
     def _chotoanbocacluongdunghan(self):
@@ -66,6 +67,9 @@ class CuaSo:
 
         if self.idcuaso in self.shared_data:
             del self.shared_data[self.idcuaso]
+            
+        if self.idcuaso in self.command_dict:
+            del self.command_dict[self.idcuaso]
 
     def loop_hienthigiaodien(self):
         while not self.main_stop.is_set():
@@ -144,52 +148,30 @@ class CuaSo:
 
             except Exception:
                 pass
-            time.sleep(0.5)
+            time.sleep(1.0) 
 
     def loop_xulyphimtat(self):
         while not self.main_stop.is_set():
-            if self.moitruong.get_is_cuasogamekichhoat():
-                if keyboard.is_pressed("ctrl+alt+shift+h"):
-                    self.tactu.battat_tudongfarmvabanrac()
-                    time.sleep(0.3)
-                if keyboard.is_pressed("ctrl+alt+shift+r"):
-                    self.tactu.battat_tudongsuavatpham()
-                    time.sleep(0.3)
-                if keyboard.is_pressed("ctrl+alt+shift+y"):
-                    self.tactu.action_test()
-                    time.sleep(0.3)
-                if keyboard.is_pressed("ctrl+alt+shift+t"):
-                    self.tactu.battat_tudongdanhtheosautruongnhom()
-                    time.sleep(0.3)
-                if keyboard.is_pressed("ctrl+alt+shift+f"):
-                    self.tactu.battat_tudongtimkiemmuctieu()
-                    time.sleep(0.3)
-                if keyboard.is_pressed("ctrl+alt+shift+b"):
-                    self.tactu.battat_is_khongdanhcungbang()
-                    time.sleep(0.3)
-                if keyboard.is_pressed("ctrl+alt+c"):
-                    self.tactu.botoanbo_tennhanvattancong()
-                    time.sleep(0.3)
-                if keyboard.is_pressed("ctrl+alt+x"):
-                    self.tactu.botoanbo_tennhanvatkhongtancong()
-                    time.sleep(0.3)
-                if keyboard.is_pressed("ctrl+c"):
-                    self.tactu.them_tennhanvattancong()
-                    time.sleep(0.3)
-                if keyboard.is_pressed("ctrl+x"):
-                    self.tactu.them_tennhanvatkhongtancong()
-                    time.sleep(0.3)
-                if keyboard.is_pressed("ctrl+d"):
-                    self.tactu.bat_is_chidanhnguoichoivatrieuhoithu()
-                    time.sleep(0.3)
-                if keyboard.is_pressed("ctrl+a"):
-                    self.tactu.tat_is_chidanhnguoichoivatrieuhoithu()
-                    time.sleep(0.3)
-                if keyboard.is_pressed("ctrl+e"):
-                    self.tactu.action_batpk()
-                    time.sleep(0.3)
-                if keyboard.is_pressed("ctrl+q"):
-                    self.tactu.action_tatpk()
-                    time.sleep(0.3)
+            cmd = self.command_dict.get(self.idcuaso)
+            
+            if cmd:
+                if cmd == "battat_tudongfarmvabanrac": self.tactu.battat_tudongfarmvabanrac()
+                elif cmd == "battat_tudongsuavatpham": self.tactu.battat_tudongsuavatpham()
+                elif cmd == "action_test": self.tactu.action_test()
+                elif cmd == "battat_tudongdanhtheosautruongnhom": self.tactu.battat_tudongdanhtheosautruongnhom()
+                elif cmd == "battat_tudongtimkiemmuctieu": self.tactu.battat_tudongtimkiemmuctieu()
+                elif cmd == "battat_is_khongdanhcungbang": self.tactu.battat_is_khongdanhcungbang()
+                elif cmd == "battat_is_tudongbattathieuungbotro": self.tactu.battat_tudongbattathieuungbotro()
+                elif cmd == "battat_is_tudongmokhoa": self.tactu.battat_tudongmokhoa()
+                elif cmd == "botoanbo_tennhanvattancong": self.tactu.botoanbo_tennhanvattancong()
+                elif cmd == "botoanbo_tennhanvatkhongtancong": self.tactu.botoanbo_tennhanvatkhongtancong()
+                elif cmd == "them_tennhanvattancong": self.tactu.them_tennhanvattancong()
+                elif cmd == "them_tennhanvatkhongtancong": self.tactu.them_tennhanvatkhongtancong()
+                elif cmd == "bat_is_chidanhnguoichoivatrieuhoithu": self.tactu.bat_is_chidanhnguoichoivatrieuhoithu()
+                elif cmd == "tat_is_chidanhnguoichoivatrieuhoithu": self.tactu.tat_is_chidanhnguoichoivatrieuhoithu()
+                elif cmd == "action_batpk": self.tactu.action_batpk()
+                elif cmd == "action_tatpk": self.tactu.action_tatpk()
+                
+                self.command_dict[self.idcuaso] = None
 
-            time.sleep(0.05)
+            time.sleep(0.15)

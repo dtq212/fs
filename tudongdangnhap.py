@@ -20,13 +20,13 @@ DANH_SACH_TAI_KHOAN = [
     {"user": "laotsezu7", "pass": "hateva12", "char_name": "LaotsezuVII"},
     {"user": "laotsezu8", "pass": "hateva12", "char_name": "LaotsezuVVIII"},
     {"user": "laotsezu9", "pass": "hateva12", "char_name": "LaotsezuIX"},
-    {"user": "laotsezu10", "pass": "hateva12", "char_name": "LaotsezuX"},
-    {"user": "laotsezu11", "pass": "hateva12", "char_name": "LaotsezuXI"},
-    {"user": "laotsezu12", "pass": "hateva12", "char_name": "LaotsezuXII"},
+    #{"user": "laotsezu10", "pass": "hateva12", "char_name": "LaotsezuX"},
+    #{"user": "laotsezu11", "pass": "hateva12", "char_name": "LaotsezuXI"},
+    #{"user": "laotsezu12", "pass": "hateva12", "char_name": "LaotsezuXII"},
     #{"user": "laotsezu13", "pass": "hateva12", "char_name": "LaotsezuXIII"},
 ]
 
-THOI_GIAN_QUET_LAI = 5
+THOI_GIAN_QUET_LAI = 10
 
 def lay_hwnd_tu_pid(pid):
     hwnd_found = 0

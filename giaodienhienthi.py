@@ -228,4 +228,4 @@ class GiaoDienHienThi:
 
             except Exception:
                 pass
-            time.sleep(0.1)
+            time.sleep(1.)
