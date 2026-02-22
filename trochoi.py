@@ -94,6 +94,7 @@ class TroChoiManager:
                 elif keyboard.is_pressed("ctrl+a"): cmd = "tat_is_chidanhnguoichoivatrieuhoithu"
                 elif keyboard.is_pressed("ctrl+e"): cmd = "action_batpk"
                 elif keyboard.is_pressed("ctrl+q"): cmd = "action_tatpk"
+                elif keyboard.is_pressed("ctrl+g"): cmd = "battat_is_sudungkynangtoadochichuot"
 
                 if cmd:
                     self.command_dict[hwnd] = cmd

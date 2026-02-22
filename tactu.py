@@ -865,7 +865,8 @@ class TacTu:
 
 
         elif self.moitruong.get_idhephai() == IDHEPHAI_DAOSI:
-            is_cothesudungkynang = self.moitruong.get_is_dangbatauto() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong()
+            is_cothesudungkynang = self.moitruong.get_is_dangbatauto() and self.moitruong.get_is_khuvuccothetancong() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong()
+            is_cothesudungkynangbotro = self.moitruong.get_is_dangbatauto() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong()
 
             if is_cothesudungkynang:
                 idmuctieu = self.moitruong.get_idmuctieudangchon()
