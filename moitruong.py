@@ -60,6 +60,12 @@ class MoiTruong:
             raise Exception("Tìm không thấy module Game.exe. Có vẻ cửa sổ Game không phải cửa sổ Game Phong thần. Vui lòng thử lại")
         self.diachigame = gamemodule.lpBaseOfDll
 
+        kichthuoccuaso = win32gui.GetWindowRect(self.idcuaso)
+        if not kichthuoccuaso:
+            raise Exception("Lấy kích thước cửa sổ game không thành công")
+
+        self.kichthuoccuasogame = kichthuoccuaso[2] - kichthuoccuaso[0], kichthuoccuaso[3] - kichthuoccuaso[1]
+
         self.diachihambanvatpham = 0
         self.diachihamdongcuahang = 0
         self.diachihamdoithoai = 0
@@ -80,7 +86,7 @@ class MoiTruong:
         self._thoidiemmokhoagannhat = 0.
         self.diachihammokhoa = 0
 
-        self._thoidiemsudungkynangtoadogannhat = 0.
+        self._thoidiemsudungkynanggannhat_map = {}
         self.diachihamsudungkynangtoado = 0
 
     def __del__(self):
@@ -164,6 +170,12 @@ class MoiTruong:
 
     def get_toadoysaptoi(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x102C + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+
+    def get_toadoxclick(self):
+        return self.get_toadox() + read_int(self.tientrinh, self.diachigame + 0xB2878) - int(self.kichthuoccuasogame[0] / 2)
+
+    def get_toadoyclick(self):
+        return self.get_toadoy() + int(read_int(self.tientrinh, self.diachigame + 0xB287C) - int(self.kichthuoccuasogame[1] / 2)) * 2
 
     def get_tocdodichuyen(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x934 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
@@ -1424,10 +1436,10 @@ class MoiTruong:
         if not self.diachihamsudungkynangtoado:
             self.khoitaohamsudungkynangtoado()
 
-        if time.time() - self._thoidiemsudungkynangtoadogannhat < delay:
+        if time.time() - self._thoidiemsudungkynanggannhat_map.get(idkynang, 0.) < delay:
             return False
 
-        self._thoidiemsudungkynangtoadogannhat = time.time()
+        self._thoidiemsudungkynanggannhat_map[idkynang] = time.time()
 
         diachidulieu = self.diachihamsudungkynangtoado + 0x40
         write_int(self.tientrinh, diachidulieu, idkynang)
@@ -1437,7 +1449,10 @@ class MoiTruong:
         self.tientrinh.start_thread(self.diachihamsudungkynangtoado)
         return True
 
-    def action_sudungkynangphudau(self, idnhanvat, idkynang, khoangcachtoida, delay = 0.25):
+    def action_sudungkynangphudau(self, idnhanvat, idkynang, khoangcachtoida, delay = 0.05):
+        if time.time() - self._thoidiemsudungkynanggannhat_map.get(idkynang, 0.) < delay:
+            return False
+
         x1, y1 = self.get_toadox(), self.get_toadoy()
         x2, y2 = self.get_toadox(idnhanvat), self.get_toadoy(idnhanvat)
 
@@ -1471,4 +1486,25 @@ class MoiTruong:
             target_x = x1 + deltax_final * ratio
             target_y = y1 + deltay_final * ratio
 
-        return self.action_sudungkynangtoado(idkynang, int(target_x), int(target_y), delay = delay)
+        return self.action_sudungkynangtoado(idkynang, int(round(target_x)), int(round(target_y)), delay = delay)
+
+    def action_sudungkynangtoadochichuot(self, idkynang, khoangcachtoida, delay = 0.05):
+        if time.time() - self._thoidiemsudungkynanggannhat_map.get(idkynang, 0.) < delay:
+            return False
+
+        x1 = self.get_toadox()
+        y1 = self.get_toadoy()
+
+        x2 = self.get_toadoxclick()
+        y2 = self.get_toadoyclick()
+
+        deltax = x2 - x1
+        deltay = y2 - y1
+
+        khoangcach = max(round(math.sqrt(deltax ** 2 + deltay ** 2)), 1)
+
+        if khoangcach > khoangcachtoida:
+            deltax = deltax * khoangcachtoida / khoangcach
+            deltay = deltay * khoangcachtoida / khoangcach
+
+        return self.action_sudungkynangtoado(idkynang, int(round(x1 + deltax)), int(round(y1 + deltay)), delay = delay)

@@ -163,6 +163,7 @@ class CuaSo:
                 elif cmd == "battat_is_khongdanhcungbang": self.tactu.battat_is_khongdanhcungbang()
                 elif cmd == "battat_is_tudongbattathieuungbotro": self.tactu.battat_tudongbattathieuungbotro()
                 elif cmd == "battat_is_uutientrieuhoithu": self.tactu.battat_is_uutientrieuhoithu()
+                elif cmd == "battat_is_sudungkynangtoadochichuot": self.tactu.battat_is_sudungkynangtoadochichuot()
                 elif cmd == "battat_is_tudongmokhoa": self.tactu.battat_tudongmokhoa()
                 elif cmd == "botoanbo_tennhanvattancong": self.tactu.botoanbo_tennhanvattancong()
                 elif cmd == "botoanbo_tennhanvatkhongtancong": self.tactu.botoanbo_tennhanvatkhongtancong()
