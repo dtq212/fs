@@ -474,14 +474,20 @@ class TacTu:
                 self.moitruong.action_suavatpham(idvatpham, delay = 0.)
                 time.sleep(0.25)
 
-    def action_timkiemnhanvat(self, tennhanvat = None, tenchunhan = None, khoangcach = 2000):
+    def action_timkiemnhanvat(self, tennhanvat = None, tenchunhan = None, khoangcach = KHOANGCACHTOIDATIMKIEMMUCTIEU):
         if not tennhanvat and not tenchunhan:
             return -1
 
-        for idnhanvat in range(SOLUONGNHANVATTOIDA):
+        idnhanvat = 0
+
+        while True:
+        # for idnhanvat in range(SOLUONGNHANVATTOIDA):
+            idnhanvat = self.moitruong.get_idnhanvattieptheo(idnhanvat)
+            if idnhanvat < 0:
+                break
             if not self.moitruong.get_is_nhanvattontai(idnhanvat):
                 continue
-            if self.moitruong.get_khoangcach(idnhanvat) > khoangcach:
+            if self.moitruong.get_khoangcach(idnhanvat) >= khoangcach:
                 continue
             if tennhanvat:
                 tennhanvatxemxet = self.moitruong.get_tennhanvat(idnhanvat)
@@ -515,18 +521,19 @@ class TacTu:
         if self.moitruong.get_is_khuvuccothetancong():
             if self.moitruong.get_idhephai() == IDHEPHAI_DINHAN:
                 if not self.moitruong.get_is_datrieuhoithu() and not self.moitruong.get_is_dangtudongtimduong():
-                    for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOTINHTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
+                    for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
                         self.moitruong.action_bathieuungbotro(idhieuungbotro)
                 else:
-                    for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOTINHTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
+                    for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
                         self.moitruong.action_tathieuungbotro(idhieuungbotro)
+                return
             idmuctieu = self.moitruong.get_idmuctieudangchon()
             if self.moitruong.get_idloainhanvat(idmuctieu) in (IDLOAINHANVAT_NGUOICHOI, IDLOAINHANVAT_TRIEUHOITHU) or self.moitruong.get_is_boss(idmuctieu):
                 self._thoidiembathieuungbotrogannhat = time.time()
-                for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOTINHTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
+                for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
                     self.moitruong.action_bathieuungbotro(idhieuungbotro)
             elif time.time() - self._thoidiembathieuungbotrogannhat > 15.:
-                for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOTINHTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
+                for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
                     self.moitruong.action_tathieuungbotro(idhieuungbotro)
         else:
             for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOTINHTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
@@ -603,7 +610,7 @@ class TacTu:
         khoangcachb = self.moitruong.get_khoangcachdiem(idnhanvatb, toadocosox, toadocosoy)
         
         if self._is_uutienmuctieusinhluc:
-            if khoangcacha <= 800:
+            if khoangcacha <= KHOANGCACHDANHPHUDAU:
                 sinhluchientaia = self.moitruong.get_sinhluchientai(idnhanvata)
                 sinhluchientaib = self.moitruong.get_sinhluchientai(idnhanvatb)
                 if sinhluchientaia < sinhluchientaib - 30:
@@ -612,7 +619,7 @@ class TacTu:
                     return False
         
         if self._is_uutientrieuhoithu:
-            if khoangcacha <= 800:
+            if khoangcacha <= KHOANGCACHDANHPHUDAU:
                 idloainhanvata = self.moitruong.get_idloainhanvat(idnhanvata)
                 idloainhanvatb = self.moitruong.get_idloainhanvat(idnhanvatb)
                 if idloainhanvata == IDLOAINHANVAT_TRIEUHOITHU and idloainhanvatb != IDLOAINHANVAT_TRIEUHOITHU:
@@ -643,7 +650,7 @@ class TacTu:
         self.moitruong.action_vohieuhoathietlapmuctieudangchon()
         self.moitruong.set_iddoituongtudanh(IDDOITUONGTUDANH_MUCTIEUDANGCHON)
 
-        khoangcachtoida = self.moitruong.get_phamvitimkiemmuctieu()
+        khoangcachtoida = min(KHOANGCACHTOIDATIMKIEMMUCTIEU,  self.moitruong.get_phamvitimkiemmuctieu())
 
         toadocosox = self.moitruong.get_toadoxtruongnhom()
         if toadocosox <= 0:
@@ -670,7 +677,8 @@ class TacTu:
             idungvienso1, idungvienso2 = idungvienso2, idungvienso1
 
         idnhanvatxemxet = 0
-        for _ in range(SOLUONGNHANVATTOIDA):
+        while True:
+        # for _ in range(SOLUONGNHANVATTOIDA):
             idnhanvatxemxet = self.moitruong.get_idnhanvattieptheo(idnhanvatxemxet)
             if idnhanvatxemxet <= 0:
                 break
@@ -873,7 +881,7 @@ class TacTu:
                 if idmuctieu > 0:
                     khoangcachmuctieu = self.moitruong.get_khoangcach(idmuctieu)
 
-                    if khoangcachmuctieu >= 600:
+                    if khoangcachmuctieu >= KHOANGCACHDANHPHUDAU:
                         self._yeucaudichuyentancong = {
                             "loaidichuyen": "dichuyengiukhoangcachtoithieu",
                             "idmuctieu": idmuctieu,
@@ -884,7 +892,7 @@ class TacTu:
 
                     self._yeucaudichuyentancong = {"loaidichuyen": "dungim"}
 
-                    if 500 <= khoangcachmuctieu < 600:
+                    if 500 <= khoangcachmuctieu < KHOANGCACHDANHPHUDAU:
                         if self.moitruong.get_is_kynangsansang(IDKYNANG_TAMMUOICHANHOA):
                             self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_TAMMUOICHANHOA, random.randint(450, 475))
                             return
