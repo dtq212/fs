@@ -916,7 +916,7 @@ class TacTu:
             return
 
         if self.moitruong.get_idhephai() == IDHEPHAI_DAOSI:
-            if self.moitruong.get_is_dangbatauto() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong():
+            if self.moitruong.get_is_khuvuccothetancong() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong():
                 self.moitruong.action_sudungphimtat(2)
             else:
                 self.moitruong.action_sudungphimtat(3)

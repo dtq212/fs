@@ -10,7 +10,7 @@ class GiaoDienHienThi:
         self.shared_data = shared_data
 
         self.root.title("Phong Thần")
-        self.root.geometry("420x800")
+        self.root.geometry("450x800")
         self.root.resizable(False, True)
 
         style = ttk.Style()

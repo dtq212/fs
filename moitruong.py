@@ -1581,8 +1581,8 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamsudungphimtat, bytes(encoding), len(encoding))
 
-    def action_sudungphimtat(self, vitriphimtat, delay = 1.0):
-        if self.diachihamsudungphimtat:
+    def action_sudungphimtat(self, vitriphimtat, delay = 0.5):
+        if not self.diachihamsudungphimtat:
             self.khoitaohamsudungphimtat()
 
         if time.time() - self._thoidiemsudungphimtatgannhat < delay:
