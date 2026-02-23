@@ -64,6 +64,8 @@ class GiaoDienHienThi:
         r += 1
         self.add_check(self.grp_config, "Tự bật / tắt lắc", "_is_tudongbattathieuungbotro", r, "")
         r += 1
+        self.add_check(self.grp_config, "Tự đổi thú cưỡi (Phím 2: Đánh, Phím 3: Chạy)", "_is_tudongdoithucuoi", r, "Ctrl+Alt+Shift+W")
+        r += 1
 
         ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 5)
         r += 1
@@ -81,8 +83,6 @@ class GiaoDienHienThi:
         self.add_check(self.grp_config, "Chỉ đánh Người / Triệu hồi thú", "_is_chidanhnguoichoivatrieuhoithu", r, "Ctrl+D / Ctrl+A")
         r += 1
         self.add_check(self.grp_config, "Ưu tiên Triệu hồi thú", "_is_uutientrieuhoithu", r, "Ctrl + S")
-        r += 1
-        self.add_check(self.grp_config, "Ưu tiên Máu thấp", "_is_uutienmuctieusinhluc", r, "")
         r += 1
 
         ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 10)

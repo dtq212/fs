@@ -1,5 +1,6 @@
 import threading
 import time
+import traceback
 
 from hangso import *
 from loop import (
@@ -115,12 +116,12 @@ class CuaSo:
                     tentrangthainhanvat = "Tấn công"
                 elif idtrangthainhanvat == IDTRANGTHAINHANVAT_DACHET:
                     tentrangthainhanvat = "Đã chết"
-
+                x, y = self.moitruong.get_toado()
                 info = {
                     "tennhanvat": tennhanvat,
                     "tenbando": self.moitruong.get_tenbandohientai(),
-                    "x": self.moitruong.get_toadox(),
-                    "y": self.moitruong.get_toadoy(),
+                    "x": x,
+                    "y": y,
                     "status": tentrangthainhanvat,
                     "phantramsinhluc": phantramsinhluc,
                     "phantramnoiluc": phantramnoiluc,
@@ -135,7 +136,8 @@ class CuaSo:
                     "_is_khongdanhcungbang": self.tactu._is_khongdanhcungbang,
                     "_is_uutientrieuhoithu": self.tactu._is_uutientrieuhoithu,
                     "_is_chidanhnguoichoivatrieuhoithu": self.tactu._is_chidanhnguoichoivatrieuhoithu,
-                    "_is_uutienmuctieusinhluc": self.tactu._is_uutienmuctieusinhluc,
+
+                    "_is_tudongdoithucuoi": self.tactu._is_tudongdoithucuoi,
 
                     "_tennhanvattancongs": ", ".join(self.tactu._tennhanvattancongs),
                     "_tennhanvatkhongtancongs": ", ".join(self.tactu._tennhanvatkhongtancongs),
@@ -146,8 +148,9 @@ class CuaSo:
                 }
                 self.shared_data[self.idcuaso] = info
 
-            except Exception:
-                pass
+            except Exception as err:
+                print(f"Lỗi ở loop_hienthigiaodien: {err}")
+                traceback.print_exc()
             time.sleep(1.0) 
 
     def loop_xulyphimtat(self):
@@ -165,6 +168,7 @@ class CuaSo:
                 elif cmd == "battat_is_uutientrieuhoithu": self.tactu.battat_is_uutientrieuhoithu()
                 elif cmd == "battat_is_sudungkynangtoadochichuot": self.tactu.battat_is_sudungkynangtoadochichuot()
                 elif cmd == "battat_is_tudongmokhoa": self.tactu.battat_tudongmokhoa()
+                elif cmd == "battat_is_tudongdoithucuoi": self.tactu.battat_is_tudongdoithucuoi()
                 elif cmd == "botoanbo_tennhanvattancong": self.tactu.botoanbo_tennhanvattancong()
                 elif cmd == "botoanbo_tennhanvatkhongtancong": self.tactu.botoanbo_tennhanvatkhongtancong()
                 elif cmd == "them_tennhanvattancong": self.tactu.them_tennhanvattancong()

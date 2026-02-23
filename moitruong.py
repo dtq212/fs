@@ -46,6 +46,7 @@ class MoiTruong:
         self._thoidiembattathieuungbotrogannhat_map = {}
         self._thoidiemtudongtimduongxuyenbandogannhat = 0.
         self._thoidiemnhatvatphamgannhat = 0.
+        self._thoidiemsudungphimtatgannhat = 0.
 
         self.idcuaso = idcuaso
         idtientrinh = ctypes.c_ulong()
@@ -79,6 +80,7 @@ class MoiTruong:
         self.diachihamboquamuctieumaucao = 0
         self.diachihamtudongtimduongxuyenbando = 0
         self.diachihamnhatvatpham = 0
+        self.diachihamsudungphimtat = 0
 
         self._idchunhan_map = {}
 
@@ -112,6 +114,7 @@ class MoiTruong:
             "diachihamnhatvatpham",
             "diachihamdoimaupk",
             "diachihammokhoa",
+            "diachihamsudungphimtat",
         ]
 
         for ten_thuoc_tinh in cac_ten_thuoc_tinh:
@@ -129,6 +132,7 @@ class MoiTruong:
         return win32gui.GetForegroundWindow() == self.idcuaso
 
     def get_is_nhanvattontai(self, idnhanvat = 1):
+        # 0x18 dò bằng cách cho mục tiêu ra đủ xa đến mức tọa độ của nó không thay đổi nữa
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x4 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT) == idnhanvat and read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x18 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT) > 0 and read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x7E8 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT) >= 0
 
     def set_is_nhanvatkhongtontai(self, idnhanvat = 1):
@@ -144,6 +148,12 @@ class MoiTruong:
     def get_sinhluctoida(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x800 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
 
+    def get_phantramkhanghoa(self, idnhanvat = 1):
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x904 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+
+    def get_phantramkhanghoatoida(self, idnhanvat = 1):
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x918 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+
     def get_diempk(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xD5C + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
 
@@ -157,23 +167,49 @@ class MoiTruong:
         if self.get_sinhluctoida(idnhanvat) != sinhluctoida:
             write_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x800 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT, sinhluctoida)
 
-    def get_toadox(self, idnhanvat = 1):
-        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x2520 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+    def get_toado(self, idnhanvat = 1):
+        diachinhanvat = self.diachigame + OFFSET_DIACHICOSONHANVAT + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT
 
-    def get_toadoy(self, idnhanvat = 1):
-        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x2524 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+        toadoluoix = read_int(self.tientrinh, diachinhanvat + 0x0ACC)
+        toadoluoiy = read_int(self.tientrinh, diachinhanvat + 0x0AD0)
+        offsetx = read_int(self.tientrinh, diachinhanvat + 0x0AD8)
+        offsety = read_int(self.tientrinh, diachinhanvat + 0x0ADC)
 
-    def get_toadoxsaptoi(self, idnhanvat = 1):
-        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x1028 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+        idbando = read_int(self.tientrinh, diachinhanvat + 0x07E4)
+        idkhuvuc = read_int(self.tientrinh, diachinhanvat + 0x07E8)
 
-    def get_toadoysaptoi(self, idnhanvat = 1):
-        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x102C + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+        diachibando = self.diachigame + 0x2BA3B20 + (idbando * 172)
+        soluongkhuvuctoida = read_int(self.tientrinh, diachibando + 0x58)
 
-    def get_toadoxclick(self):
-        return self.get_toadox() + read_int(self.tientrinh, self.diachigame + 0x29C1C4) - int(self.kichthuoccuasogame[0] / 2)
+        if idkhuvuc < 0 or idkhuvuc >= soluongkhuvuctoida:
+            return -1, -1
 
-    def get_toadoyclick(self):
-        return self.get_toadoy() + int(read_int(self.tientrinh, self.diachigame + 0x29C1C8) - int(self.kichthuoccuasogame[1] / 2)) * 2
+        chieurongoluoi = read_int(self.tientrinh, diachibando + 0x64)
+        chieucaooluoi = read_int(self.tientrinh, diachibando + 0x68)
+
+        diachicosomangkhuvuc = read_int(self.tientrinh, diachibando + 0x28)
+        diachikhuvuc = diachicosomangkhuvuc + (idkhuvuc * 204)
+
+        toadogocx = read_int(self.tientrinh, diachikhuvuc + 0xA8)
+        toadogocy = read_int(self.tientrinh, diachikhuvuc + 0xAC)
+
+        toadox = (toadoluoix * chieurongoluoi) + toadogocx + (offsetx >> 10)
+        toadoy = (toadoluoiy * chieucaooluoi) + toadogocy + (offsety >> 10)
+
+        return toadox, toadoy
+
+    def get_toadosaptoi(self, idnhanvat = 1):
+        return (
+            read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x1028 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT),
+            read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x102C + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+        )
+
+    def get_toadoclick(self):
+        toadox, toadoy = self.get_toado()
+        return (
+            toadox + read_int(self.tientrinh, self.diachigame + 0x29C1C4) - int(self.kichthuoccuasogame[0] / 2),
+            toadoy + int(read_int(self.tientrinh, self.diachigame + 0x29C1C8) - int(self.kichthuoccuasogame[1] / 2)) * 2
+        )
 
     def get_tocdodichuyen(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x934 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
@@ -201,6 +237,9 @@ class MoiTruong:
 
     def get_idmaupk(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xAC + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+
+    def get_capdonhanvat(self, idnhanvat = 1):
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x1C + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
 
     def get_idkynang(self, iddiachikynang):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xC0 + 0x24 * iddiachikynang + 1 * OFFSET_DIACHICOSOMOINHANVAT)
@@ -387,20 +426,19 @@ class MoiTruong:
             return read_string(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINTHANHVIENDOINHOM) == self.get_tennhanvat()
         return False
 
-    def get_toadoxtruongnhom(self):
+    def get_toadotruongnhom(self):
         if self.get_idtodoi() > 0:
-            return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINTHANHVIENDOINHOM + 0x28)
-        return -1
-
-    def get_toadoytruongnhom(self):
-        if self.get_idtodoi() > 0:
-            return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINTHANHVIENDOINHOM + 0x2C)
-        return -1
+            return (
+                read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINTHANHVIENDOINHOM + 0x28),
+                read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINTHANHVIENDOINHOM + 0x2C)
+            )
+        return -1, -1
 
     def get_is_truongnhomcungbando(self):
         if self.get_idtodoi() <= 0:
             return False
-        return self.get_toadoxtruongnhom() > 0 and self.get_toadoytruongnhom() > 0
+        xtruongnhom, ytruongnhom = self.get_toadotruongnhom()
+        return xtruongnhom > 0 and ytruongnhom > 0
 
     def get_is_chungtodoi(self, idnhanvat = 1):
         idtodoi1 = self.get_idtodoi()
@@ -482,7 +520,7 @@ class MoiTruong:
         return read_int(self.tientrinh, self.diachigame + 0x3A3988) > 0
 
     def get_is_boss(self, idnhanvat = 1):
-        return self.get_idloainhanvat(idnhanvat) == IDLOAINHANVAT_QUAIVAT and self.get_sinhluctoida(idnhanvat) >= 20000
+        return self.get_idloainhanvat(idnhanvat) == IDLOAINHANVAT_QUAIVAT and self.get_sinhluctoida(idnhanvat) >= 2000 * self.get_capdonhanvat(idnhanvat)
 
     def set_is_duoitheo(self, is_duoitheo):
         if self.get_is_duoitheo() != is_duoitheo:
@@ -671,37 +709,27 @@ class MoiTruong:
         y = read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAMDUOIDAT + 0x2B0 + idvatphamduoidat * OFFSET_DIACHICOSOMOIVATPHAMDUOIDAT)
 
         return round(math.dist(
-            (self.get_toadox(), self.get_toadoy()),
+            self.get_toado(),
             (x, y),
         ))
     
     def get_khoangcach(self, idnhanvat2, idnhanvat1 = 1):
-        x1 = self.get_toadox(idnhanvat1)
-        y1 = self.get_toadoy(idnhanvat1)
-
-        x2 = self.get_toadox(idnhanvat2)
-        y2 = self.get_toadoy(idnhanvat2)
-
-        return int(math.dist((x1, y1), (x2, y2)))
+        return int(math.dist(self.get_toado(idnhanvat1), self.get_toado(idnhanvat2)))
 
     def get_khoangcachsaptoi(self, idnhanvat2, idnhanvat1 = 1, default = KHOANGCACHTOIDATIMKIEMMUCTIEU):
         if not idnhanvat2:
             return default
 
-        x2 = self.get_toadoxsaptoi(idnhanvat2)
+        x2, y2 = self.get_toadosaptoi(idnhanvat2)
         if x2 <= 0:
             return default
 
-        x1 = self.get_toadox(idnhanvat1)
-        y1 = self.get_toadoy(idnhanvat1)
-        y2 = self.get_toadoysaptoi(idnhanvat2)
+        x1, y1 = self.get_toado(idnhanvat1)
 
         return int(math.dist((x1, y1), (x2, y2)))
 
     def get_khoangcachdiem(self, idnhanvat, toadox, toadoy):
-        x2 = self.get_toadox(idnhanvat)
-        y2 = self.get_toadoy(idnhanvat)
-
+        x2, y2 = self.get_toado(idnhanvat)
         return int(math.dist((toadox, toadoy), (x2, y2)))
 
     def khoitaohambanvatpham(self):
@@ -1014,10 +1042,8 @@ class MoiTruong:
 
         self._thoidiemdichuyengiukhoangcachtoithieu = time.time()
 
-        x1 = self.get_toadox()
-        y1 = self.get_toadoy()
-        x2 = self.get_toadox(idnhanvat2)
-        y2 = self.get_toadoy(idnhanvat2)
+        x1, y1 = self.get_toado()
+        x2, y2 = self.get_toado(idnhanvat2)
 
         D = math.dist((x1, y1), (x2, y2))
 
@@ -1037,8 +1063,7 @@ class MoiTruong:
 
         self._thoidiemdichuyengiukhoangcachtoithieu = time.time()
 
-        x1 = self.get_toadox()
-        y1 = self.get_toadoy()
+        x1, y1 = self.get_toado()
         x2 = toadox
         y2 = toadoy
 
@@ -1174,15 +1199,24 @@ class MoiTruong:
         self.diachihamboquamuctieumaucao = self.tientrinh.allocate(256)
 
         diachidulieu = self.diachihamboquamuctieumaucao + 0x40
-        write_int(self.tientrinh, diachidulieu, 999999999)
+        write_int(self.tientrinh, diachidulieu, 0)
+
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
+        offset_capdo = self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x1C
 
         asm_code = f"""
-            cmp [eax+{hex(self.diachigame + 0x3BB180)}],ebp
+            cmp [eax+{hex(self.diachigame + 0x3BB180)}], ebp
             jng {hex(self.diachigame + 0x19B064)}
-            mov ecx,dword ptr [{hex(diachidulieu)}]
-            cmp [eax+{hex(self.diachigame + 0x3BB180)}],ecx
+            
+            cmp dword ptr [{hex(diachidulieu)}], 1
+            jne boqualogicboquamuctieumaucao
+            
+            mov ecx, dword ptr [eax+{hex(offset_capdo)}]
+            imul ecx, ecx, 2000
+            cmp [eax+{hex(self.diachigame + 0x3BB180)}], ecx
             jnl {hex(self.diachigame + 0x19B064)}
+
+            boqualogicboquamuctieumaucao:
             jmp {hex(self.diachigame + 0x19AE5C)}
         """
 
@@ -1190,16 +1224,22 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamboquamuctieumaucao, bytes(encoding), len(encoding))
         write_bytes(self.tientrinh, self.diachigame + 0x19AE50, b"\xE9" + (self.diachihamboquamuctieumaucao - (self.diachigame + 0x19AE50) - 5).to_bytes(4, byteorder = sys.byteorder, signed = True)  + (b"\x90" * 7), 12)
 
-    def action_boquamuctieumaucao(self, sinhluctoida, delay = 0.5):
+    def action_thietlapboquamuctieumaucao(self, is_boquamuctieumaucao: bool, delay = 0.5):
         if not self.diachihamboquamuctieumaucao:
             self.khoitaohamboquamuctieumaucao()
 
         if time.time() - self._thoidiemboquamuctieumaucaogannhat < delay:
             return False
+            
         self._thoidiemboquamuctieumaucaogannhat = time.time()
+        
         diachidulieu = self.diachihamboquamuctieumaucao + 0x40
-        if read_int(self.tientrinh, diachidulieu) != sinhluctoida:
-            write_int(self.tientrinh, diachidulieu, sinhluctoida)
+        trangthaihientai = read_int(self.tientrinh, diachidulieu)
+        trangthaimoi = 1 if is_boquamuctieumaucao else 0
+        
+        if trangthaihientai != trangthaimoi:
+            write_int(self.tientrinh, diachidulieu, trangthaimoi)
+            
         return True
 
     def khoitaohamtudongtimduongxuyenbando(self):
@@ -1459,27 +1499,26 @@ class MoiTruong:
         if time.time() - self._thoidiemsudungkynanggannhat_map.get(idkynang, 0.) < delay:
             return False
 
-        x1, y1 = self.get_toadox(), self.get_toadoy()
-        x2, y2 = self.get_toadox(idnhanvat), self.get_toadoy(idnhanvat)
+        x1, y1 = self.get_toado()
+        x2, y2 = self.get_toado(idnhanvat)
 
-        x2_saptoi = self.get_toadoxsaptoi(idnhanvat)
-        y2_saptoi = self.get_toadoysaptoi(idnhanvat)
+        x2_saptoi, y2_saptoi = self.get_toadosaptoi(idnhanvat)
         idtrangthai = self.get_idtrangthainhanvat(idnhanvat)
 
-        # if idtrangthai == IDTRANGTHAINHANVAT_DICHUYEN and x2_saptoi > 0:
-        #     deltax_vector = x2_saptoi - x2
-        #     deltay_vector = y2_saptoi - y2
-        #
-        #     khoangcachdukien = math.dist((x2, y2), (x2_saptoi, y2_saptoi))
-        #
-        #     if khoangcachdukien > 0:
-        #         is_bidongbang = self.get_is_bidongbang(idnhanvat)
-        #         tocdo = self.get_tocdodichuyen(idnhanvat)
-        #         offset_phudau = tocdo * 4 if is_bidongbang else tocdo * 9
-        #         offset_phudau = min(offset_phudau, khoangcachdukien)
-        #
-        #         x2 = x2 + (deltax_vector * offset_phudau / khoangcachdukien)
-        #         y2 = y2 + (deltay_vector * offset_phudau / khoangcachdukien)
+        if idtrangthai == IDTRANGTHAINHANVAT_DICHUYEN and x2_saptoi > 0:
+            deltax_vector = x2_saptoi - x2
+            deltay_vector = y2_saptoi - y2
+
+            khoangcachdukien = math.dist((x2, y2), (x2_saptoi, y2_saptoi))
+
+            if khoangcachdukien > 0:
+                is_bidongbang = self.get_is_bidongbang(idnhanvat)
+                tocdo = self.get_tocdodichuyen(idnhanvat)
+                offset_phudau = tocdo * 4 if is_bidongbang else tocdo * 9
+                offset_phudau = min(offset_phudau, khoangcachdukien)
+
+                x2 = x2 + (deltax_vector * offset_phudau / khoangcachdukien)
+                y2 = y2 + (deltay_vector * offset_phudau / khoangcachdukien)
 
         deltax_final = x2 - x1
         deltay_final = y2 - y1
@@ -1498,11 +1537,8 @@ class MoiTruong:
         if time.time() - self._thoidiemsudungkynanggannhat_map.get(idkynang, 0.) < delay:
             return False
 
-        x1 = self.get_toadox()
-        y1 = self.get_toadoy()
-
-        x2 = self.get_toadoxclick()
-        y2 = self.get_toadoyclick()
+        x1, y1 = self.get_toado()
+        x2, y2 = self.get_toadoclick()
 
         deltax = x2 - x1
         deltay = y2 - y1
@@ -1517,3 +1553,47 @@ class MoiTruong:
         target_y = int(y1 + deltay)
 
         return self.action_sudungkynangtoado(idkynang, target_x, target_y, delay = delay)
+
+    def khoitaohamsudungphimtat(self):
+        if self.diachihamsudungphimtat:
+            return
+
+        self.diachihamsudungphimtat = self.tientrinh.allocate(256)
+        diachidulieu = self.diachihamsudungphimtat + 0x40
+
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        asm_code = f"""
+            mov eax, dword ptr [{hex(diachidulieu)}]
+            mov ebx, 0x32
+            mov edx, eax
+            push edx
+            push 0x01
+            push edx
+
+            mov ecx, {hex(self.diachigame + 0xB6BB0)}
+            call ecx
+
+            add esp, 0x0C
+            ret
+        """
+
+        encoding, _ = ks.asm(asm_code)
+        write_bytes(self.tientrinh, self.diachihamsudungphimtat, bytes(encoding), len(encoding))
+
+    def action_sudungphimtat(self, vitriphimtat, delay = 1.0):
+        if self.diachihamsudungphimtat:
+            self.khoitaohamsudungphimtat()
+
+        if time.time() - self._thoidiemsudungphimtatgannhat < delay:
+            return False
+
+        self._thoidiemsudungphimtatgannhat = time.time()
+
+        diachidulieu = self.diachihamsudungphimtat + 0x40
+
+        write_int(self.tientrinh, diachidulieu, vitriphimtat - 1)
+
+        self.tientrinh.start_thread(self.diachihamsudungphimtat)
+
+        return True
