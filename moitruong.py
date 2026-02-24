@@ -489,7 +489,10 @@ class MoiTruong:
         return read_int(self.tientrinh, self.diachigame + 0x3A3970)
 
     def get_idtrangthaiclickchuot(self):
-        return read_short_int(self.tientrinh, self.diachigame + 0x2A215C)
+        return read_int(self.tientrinh, self.diachigame + 0x2A215C)
+
+    def get_is_tamngungtancong(self):
+        return read_int(self.tientrinh, self.diachigame + 0x3A3908)
 
     def get_is_datrieuhoithu(self):
         return read_int(self.tientrinh, self.diachigame + 0x3A4910)

@@ -62,7 +62,7 @@ class GiaoDienHienThi:
         r += 1
         self.add_check(self.grp_config, "Tự sửa trang bị", "_is_tudongsuavatpham", r, "Ctrl+Alt+Shift+R")
         r += 1
-        self.add_check(self.grp_config, "Tự bật / tắt lắc", "_is_tudongbattathieuungbotro", r, "")
+        self.add_check(self.grp_config, "Tự bật / tắt lắc", "_is_tudongbattathieuungbotro", r, "Ctrl+Alt+Shift+J")
         r += 1
         self.add_check(self.grp_config, "Tự đổi thú cưỡi (Phím 2: Đánh, Phím 3: Chạy)", "_is_tudongdoithucuoi", r, "Ctrl+Alt+Shift+W")
         r += 1
