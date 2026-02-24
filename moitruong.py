@@ -463,7 +463,7 @@ class MoiTruong:
         if idloainhanvat == IDLOAINHANVAT_TRIEUHOITHU:
             if self.get_tenchunhan(idnhanvat) == self.get_tennhanvat():
                 return False
-            elif self.get_khoangcach(idnhanvat) > KHOANGCACHDANHPHUDAU and not self.get_idchunhan(idnhanvat):
+            elif self.get_khoangcach(idnhanvat) > 750 and not self.get_idchunhan(idnhanvat):
                 return False
 
         maupk = self.get_idmaupk(idnhanvat)
