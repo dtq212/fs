@@ -56,8 +56,6 @@ class GiaoDienHienThi:
 
         r = 0
 
-        self.add_check(self.grp_config, "Tự động Farm & Bán rác", "_is_tudongfarmvabanrac", r, "Ctrl+Alt+Shift+H")
-        r += 1
         self.add_check(self.grp_config, "Đánh theo sau trưởng nhóm", "_is_tudongdanhtheosautruongnhom", r, "Ctrl+Alt+Shift+T")
         r += 1
         self.add_check(self.grp_config, "Tự sửa trang bị", "_is_tudongsuavatpham", r, "Ctrl+Alt+Shift+R")
@@ -94,10 +92,6 @@ class GiaoDienHienThi:
 
         self.lbl_info_2 = ttk.Label(self.grp_config, text = "Tọa độ: (0, 0)")
         self.lbl_info_2.grid(row = r, column = 0, sticky = "w", padx = 10)
-        r += 1
-
-        self.lbl_info_farm = ttk.Label(self.grp_config, text = "Điểm Farm: ---")
-        self.lbl_info_farm.grid(row = r, column = 0, sticky = "w", padx = 10)
         r += 1
 
         ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 5)
@@ -161,11 +155,6 @@ class GiaoDienHienThi:
         status_str = data.get("status", "-")
         self.lbl_info_1.config(text = f"Trạng thái: {status_str}")
         self.lbl_info_2.config(text = f"Tọa độ: {data.get('x', 0)}, {data.get('y', 0)} | Map: {data.get('tenbando', '-')}")
-
-        farm_map = data.get("idbandotudongfarm", 0)
-        farm_x = data.get("toadoxtudongfarm", 0)
-        farm_y = data.get("toadoytudongfarm", 0)
-        self.lbl_info_farm.config(text = f"Điểm Farm: ({farm_x}, {farm_y}) | ID Map: {farm_map}")
 
         str_tancong = data.get("_tennhanvattancongs", "")
         str_khongtancong = data.get("_tennhanvatkhongtancongs", "")

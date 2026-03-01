@@ -127,7 +127,6 @@ class CuaSo:
                     "phantramnoiluc": phantramnoiluc,
                     "is_window_active": self.moitruong.get_is_cuasogamekichhoat(),
 
-                    "_is_tudongfarmvabanrac": self.tactu._is_tudongfarmvabanrac,
                     "_is_tudongdanhtheosautruongnhom": self.tactu._is_tudongdanhtheosautruongnhom,
                     "_is_tudongsuavatpham": self.tactu._is_tudongsuavatpham,
                     "_is_tudongbattathieuungbotro": self.tactu._is_tudongbattathieuungbotro,
@@ -141,10 +140,6 @@ class CuaSo:
 
                     "_tennhanvattancongs": ", ".join(self.tactu._tennhanvattancongs),
                     "_tennhanvatkhongtancongs": ", ".join(self.tactu._tennhanvatkhongtancongs),
-
-                    "idbandotudongfarm": self.tactu._idbandotudongfarm,
-                    "toadoxtudongfarm": self.tactu._toadoxtudongfarm,
-                    "toadoytudongfarm": self.tactu._toadoytudongfarm,
                 }
                 self.shared_data[self.idcuaso] = info
 
@@ -158,8 +153,7 @@ class CuaSo:
             cmd = self.command_dict.get(self.idcuaso)
             
             if cmd:
-                if cmd == "battat_tudongfarmvabanrac": self.tactu.battat_tudongfarmvabanrac()
-                elif cmd == "battat_tudongsuavatpham": self.tactu.battat_tudongsuavatpham()
+                if cmd == "battat_tudongsuavatpham": self.tactu.battat_tudongsuavatpham()
                 elif cmd == "action_test": self.tactu.action_test()
                 elif cmd == "battat_tudongdanhtheosautruongnhom": self.tactu.battat_tudongdanhtheosautruongnhom()
                 elif cmd == "battat_tudongtimkiemmuctieu": self.tactu.battat_tudongtimkiemmuctieu()
