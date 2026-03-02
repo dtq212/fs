@@ -7,9 +7,9 @@ from multiprocessing import Process, Manager, freeze_support
 from cuaso import CuaSo
 from giaodienhienthi import GiaoDienHienThi
 
-def run_bot_process(hwnd, shared_data, command_dict): # Thêm tham số command_dict
+def run_bot_process(hwnd, shared_data, command_dict):
     try:
-        bot = CuaSo(hwnd, shared_data, command_dict) # Truyền xuống CuaSo
+        bot = CuaSo(hwnd, shared_data, command_dict)
         while not bot.main_stop.is_set():
             if not win32gui.IsWindow(hwnd):
                 break
@@ -22,7 +22,7 @@ class TroChoiManager:
     def __init__(self):
         self.manager = Manager()
         self.shared_data = self.manager.dict()
-        self.command_dict = self.manager.dict() # Kênh truyền lệnh phím tắt
+        self.command_dict = self.manager.dict()
         self.bot_processes = {}
 
     def _timcuasogame(self):
@@ -43,7 +43,6 @@ class TroChoiManager:
         t_scan = threading.Thread(target = self.loop_scan, daemon = True)
         t_scan.start()
 
-        # Khởi chạy luồng bắt phím tập trung
         t_hotkey = threading.Thread(target = self.loop_hotkey, daemon = True)
         t_hotkey.start()
 
@@ -59,7 +58,6 @@ class TroChoiManager:
             game_hwnds = self._timcuasogame()
             for hwnd in game_hwnds:
                 if hwnd not in self.bot_processes:
-                    # Truyền thêm self.command_dict vào Process
                     p = Process(target = run_bot_process, args = (hwnd, self.shared_data, self.command_dict))
                     p.start()
                     self.bot_processes[hwnd] = p

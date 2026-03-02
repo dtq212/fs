@@ -1066,7 +1066,7 @@ class MoiTruong:
 
         asm_code = f"""
             cmp [eax+{hex(self.diachigame + 0x3BD1C0)}], ebp
-            jng {hex(self.diachigame + 0x19D3A3)}
+            jng {hex(self.diachigame + 0x19C4B4)}
 
             cmp dword ptr [{hex(diachidulieu)}], 1
             jne boqualogicboquamuctieumaucao
@@ -1074,7 +1074,7 @@ class MoiTruong:
             mov ecx, dword ptr [eax+{hex(offset_capdo)}]
             imul ecx, ecx, 2000
             cmp [eax+{hex(self.diachigame + 0x3BD1C0)}], ecx
-            jnl {hex(self.diachigame + 0x19D3A3)}
+            jnl {hex(self.diachigame + 0x19C4B4)}
 
             boqualogicboquamuctieumaucao:
             jmp {hex(self.diachigame + 0x19C2AC)}
@@ -1364,8 +1364,8 @@ class MoiTruong:
         if read_int(self.tientrinh, self.diachigame + 0x119025 + 0x2) != diachixuatchieuvukhi:
             write_int(self.tientrinh, self.diachigame + 0x119025 + 0x2, diachixuatchieuvukhi)
 
-        if read_int(self.tientrinh, self.diachigame + 0x119025 + 0x2) != diachixuatchieubuaphap:
-            write_int(self.tientrinh, self.diachigame + 0x119025 + 0x2, diachixuatchieubuaphap)
+        if read_int(self.tientrinh, self.diachigame + 0x119031 + 0x2) != diachixuatchieubuaphap:
+            write_int(self.tientrinh, self.diachigame + 0x119031 + 0x2, diachixuatchieubuaphap)
 
     def action_vohieuhoathietlapmuctieutancong(self):
         if read_bytes(self.tientrinh, self.diachigame + 0x19CE4A, 1) != bytes.fromhex("90"):
