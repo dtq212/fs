@@ -77,7 +77,8 @@ class TroChoiManager:
             hwnd = win32gui.GetForegroundWindow() # Chỉ bắt phím cho tab đang active
             if hwnd in self.bot_processes:
                 cmd = None
-                if keyboard.is_pressed("ctrl+alt+shift+r"): cmd = "battat_tudongsuavatpham"
+                if keyboard.is_pressed("ctrl+alt+shift+h"): cmd = "battat_tudongfarm"
+                elif keyboard.is_pressed("ctrl+alt+shift+r"): cmd = "battat_tudongsuavatpham"
                 elif keyboard.is_pressed("ctrl+alt+shift+y"): cmd = "action_test"
                 elif keyboard.is_pressed("ctrl+alt+shift+t"): cmd = "battat_tudongdanhtheosautruongnhom"
                 elif keyboard.is_pressed("ctrl+alt+shift+f"): cmd = "battat_tudongtimkiemmuctieu"

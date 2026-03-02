@@ -36,6 +36,7 @@ class MoiTruong:
         self._thoidiemboquamuctieumaucaogannhat = 0.
         self._thoidiemdichuyengiukhoangcachtoithieu = 0.
         self._thoidiemtudongtimduonggannhat = 0.
+        self._thoidiemtudongtimduongxuyenbandogannhat = 0.
         self._thoidiembanvatphamgannhat = 0.
         self._thoidiemsudungvatphamgannhat = 0.
         self._thoidiemdichuyengannhat = 0.
@@ -66,6 +67,7 @@ class MoiTruong:
         self.diachihambanvatpham = 0
         self.diachihamsudungvatpham = 0
         self.diachihamtudongtimduong = 0
+        self.diachihamtudongtimduongxuyenbando = 0
         self.diachihamdichuyen = 0
         self.diachihamsuavatpham = 0
         self.diachihambattathieuungbotro = 0
@@ -94,6 +96,7 @@ class MoiTruong:
             "diachihambanvatpham",
             "diachihamsudungvatpham",
             "diachihamtudongtimduong",
+            "diachihamtudongtimduongxuyenbando",
             "diachihamdichuyen",
             "diachihambattathieuungbotro",
             "diachihamboquamuctieumaucao",
@@ -193,8 +196,8 @@ class MoiTruong:
     def get_toadoclick(self):
         toadox, toadoy = self.get_toado()
         return (
-            toadox + read_int(self.tientrinh, self.diachigame + 0x29C1C4) - int(self.kichthuoccuasogame[0] / 2),
-            toadoy + int(read_int(self.tientrinh, self.diachigame + 0x29C1C8) - int(self.kichthuoccuasogame[1] / 2)) * 2
+            toadox + read_int(self.tientrinh, self.diachigame + 0x29E1F4) - int(self.kichthuoccuasogame[0] / 2),
+            toadoy + int(read_int(self.tientrinh, self.diachigame + 0x29E1F8) - int(self.kichthuoccuasogame[1] / 2)) * 2
         )
 
     def get_tocdodichuyen(self, idnhanvat = 1):
@@ -795,6 +798,60 @@ class MoiTruong:
         write_int(self.tientrinh, diachidulieu + 4, int(round(toadoy / 32)))
 
         self.tientrinh.start_thread(self.diachihamtudongtimduong)
+        return True
+
+    def khoitaohamtudongtimduongxuyenbando(self):
+        if self.diachihamtudongtimduongxuyenbando:
+            return
+
+        self.diachihamtudongtimduongxuyenbando = self.tientrinh.allocate(256)
+
+        diachidulieu = self.diachihamtudongtimduongxuyenbando + 0x40
+        write_bytes(self.tientrinh, diachidulieu + 16, b"\x00" * 4, 4)
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        asm_code = f"""
+            mov ecx, {self.diachigame + 0x2A2A20}
+
+            push dword ptr [{diachidulieu}]
+            push {diachidulieu + 16}
+            push dword ptr [{diachidulieu + 8}]
+            push dword ptr [{diachidulieu + 4}]
+            push dword ptr [{diachidulieu + 12}]
+
+            mov eax, {self.diachigame + 0x1014FD}
+            call eax
+            ret
+        """
+
+        encoding, _ = ks.asm(asm_code)
+
+        write_bytes(self.tientrinh, self.diachihamtudongtimduongxuyenbando, bytes(encoding), len(encoding))
+
+    def action_tudongtimduongxuyenbando(self, idbando, toadox, toadoy, tennpc = "", mode = IDCHEDOTIMDUONG_CHUYENTIEP_HOITHANH, delay = 1.0):
+        if not self.diachihamtudongtimduongxuyenbando:
+            self.khoitaohamtudongtimduongxuyenbando()
+
+        if time.time() - self._thoidiemtudongtimduongxuyenbandogannhat < delay:
+            return False
+
+        self._thoidiemtudongtimduongxuyenbandogannhat = time.time()
+
+        diachidulieu = self.diachihamtudongtimduongxuyenbando + 0x40
+
+        write_int(self.tientrinh, diachidulieu, mode)
+        write_int(self.tientrinh, diachidulieu + 4, int(round(toadox / 32)))
+        write_int(self.tientrinh, diachidulieu + 8, int(round(toadoy / 32)))
+        write_int(self.tientrinh, diachidulieu + 12, idbando)
+
+        if tennpc:
+            npc_bytes = Unicode_to_TCVN3(tennpc)
+            npc_bytes = npc_bytes[:63] + b"\x00"
+            write_bytes(self.tientrinh, diachidulieu + 16, npc_bytes, len(npc_bytes))
+        else:
+            write_bytes(self.tientrinh, diachidulieu + 16, b"\x00", 1)
+
+        self.tientrinh.start_thread(self.diachihamtudongtimduongxuyenbando)
         return True
 
     def khoitaohamdichuyen(self):

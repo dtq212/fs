@@ -140,6 +140,11 @@ class CuaSo:
 
                     "_tennhanvattancongs": ", ".join(self.tactu._tennhanvattancongs),
                     "_tennhanvatkhongtancongs": ", ".join(self.tactu._tennhanvatkhongtancongs),
+
+                    "_is_tudongfarm": self.tactu._is_tudongfarm,
+                    "idbandotudongfarm": self.tactu._idbandotudongfarm,
+                    "toadoxtudongfarm": self.tactu._toadoxtudongfarm,
+                    "toadoytudongfarm": self.tactu._toadoytudongfarm,
                 }
                 self.shared_data[self.idcuaso] = info
 
@@ -153,7 +158,8 @@ class CuaSo:
             cmd = self.command_dict.get(self.idcuaso)
             
             if cmd:
-                if cmd == "battat_tudongsuavatpham": self.tactu.battat_tudongsuavatpham()
+                if cmd == "battat_tudongfarm": self.tactu.battat_tudongfarm()
+                elif cmd == "battat_tudongsuavatpham": self.tactu.battat_tudongsuavatpham()
                 elif cmd == "action_test": self.tactu.action_test()
                 elif cmd == "battat_tudongdanhtheosautruongnhom": self.tactu.battat_tudongdanhtheosautruongnhom()
                 elif cmd == "battat_tudongtimkiemmuctieu": self.tactu.battat_tudongtimkiemmuctieu()
