@@ -811,7 +811,7 @@ class MoiTruong:
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
         asm_code = f"""
-            mov ecx, {self.diachigame + 0x2A2A20}
+            mov ecx, {self.diachigame + 0x2A3C84}
 
             push dword ptr [{diachidulieu}]
             push {diachidulieu + 16}
@@ -819,7 +819,7 @@ class MoiTruong:
             push dword ptr [{diachidulieu + 4}]
             push dword ptr [{diachidulieu + 12}]
 
-            mov eax, {self.diachigame + 0x1014FD}
+            mov eax, {self.diachigame + 0x10AFD0}
             call eax
             ret
         """
