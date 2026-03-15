@@ -1375,7 +1375,7 @@ class MoiTruong:
             mov ebx, 0x32
             mov edx, eax
             push edx
-            push 0x01
+            push {hex(1)}
             push edx
 
             mov ecx, {hex(self.diachigame + 0xB6B70)}
