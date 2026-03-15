@@ -714,6 +714,72 @@ class MoiTruong:
     def get_is_tudongnhatvatpham(self):
         return read_int(self.tientrinh, self.diachigame + 0x3A6058 + 0x3F18)
 
+
+    def action_vohieuhoagiamxuatchieukhithaydo(self):
+        diachixuatchieuvukhi = self.diachigame + OFFSET_DIACHICOSONHANVAT + OFFSET_DIACHICOSOMOINHANVAT + 0x948
+        diachixuatchieubuaphap = self.diachigame + OFFSET_DIACHICOSONHANVAT + OFFSET_DIACHICOSOMOINHANVAT + 0x94C
+
+        if read_int(self.tientrinh, self.diachigame + 0x119025 + 0x3C80 + 0x2) != diachixuatchieuvukhi:
+            write_int(self.tientrinh, self.diachigame + 0x119025 + 0x3C80 + 0x2, diachixuatchieuvukhi)
+
+        if read_int(self.tientrinh, self.diachigame + 0x119031 + 0x3C80 + 0x2) != diachixuatchieubuaphap:
+            write_int(self.tientrinh, self.diachigame + 0x119031 + 0x3C80 + 0x2, diachixuatchieubuaphap)
+
+    def action_vohieuhoathietlapmuctieutancong(self):
+        if read_bytes(self.tientrinh, self.diachigame + 0x19CE4A + 0x3C30, 1) != bytes.fromhex("90"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19CE4A + 0x3C30, bytes.fromhex("90 90 90909090"), 6)
+
+        if read_bytes(self.tientrinh, self.diachigame + 0x19D379 + 0x3C30, 1) != bytes.fromhex("90"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19D379 + 0x3C30, bytes.fromhex("90 90 90909090"), 6)
+
+        # Lúc theo sau
+        if read_bytes(self.tientrinh, self.diachigame + 0x19D14A + 0x3C30, 1) != bytes.fromhex("90"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19D14A + 0x3C30, bytes.fromhex("90 90 90909090"), 6)
+
+        # Lúc ngoài phạm vi điểm di chuyển xunh quanh
+        if read_bytes(self.tientrinh, self.diachigame + 0x19C48A + 0x3C20, 1) != bytes.fromhex("90"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19C48A + 0x3C20, bytes.fromhex("90 90 90909090"), 6)
+        if read_bytes(self.tientrinh, self.diachigame + 0x19C4B4 + 0x3C20, 1) != bytes.fromhex("90"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19C4B4 + 0x3C20, bytes.fromhex("90 90 90909090"), 6)
+        if read_bytes(self.tientrinh, self.diachigame + 0x19D3A3 + 0x3C30, 1) != bytes.fromhex("90"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19D3A3 + 0x3C30, bytes.fromhex("90 90 90909090"), 6)
+
+    def action_tatvohieuhoathietlapmuctieutancong(self):
+        if read_bytes(self.tientrinh, self.diachigame + 0x19CE4A + 0x3C30, 1) != bytes.fromhex("89"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19CE4A + 0x3C30, bytes.fromhex("89 AE 9C000000"), 6)
+
+        if read_bytes(self.tientrinh, self.diachigame + 0x19D379 + 0x3C30, 1) != bytes.fromhex("89"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19D379 + 0x3C30, bytes.fromhex("89 BE 9C000000"), 6)
+
+        # Lúc theo sau
+        if read_bytes(self.tientrinh, self.diachigame + 0x19D14A + 0x3C30, 1) != bytes.fromhex("89"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19D14A + 0x3C30, bytes.fromhex("89 86 9C000000"), 6)
+
+        # Lúc ngoài phạm vi điểm di chuyển xunh quanh
+        if read_bytes(self.tientrinh, self.diachigame + 0x19C48A + 0x3C20, 1) != bytes.fromhex("89"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19C48A + 0x3C20, bytes.fromhex("89 AE 9C000000"), 6)
+        if read_bytes(self.tientrinh, self.diachigame + 0x19C4B4 + 0x3C20, 1) != bytes.fromhex("89"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19C4B4 + 0x3C20, bytes.fromhex("89 AE 9C000000"), 6)
+        if read_bytes(self.tientrinh, self.diachigame + 0x19D3A3 + 0x3C30, 1) != bytes.fromhex("89"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19D3A3 + 0x3C30, bytes.fromhex("89 AE 9C000000"), 6)
+
+    def action_vohieuhoathietlapmuctieudangchon(self):
+        if read_bytes(self.tientrinh, self.diachigame + 0x19C7B7 + 0x3C20, 1) != bytes.fromhex("90"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19C7B7 + 0x3C20, bytes.fromhex("90 90 90909090"), 6)
+
+        if read_bytes(self.tientrinh, self.diachigame + 0x10A12F + 0x3D00, 1) != bytes.fromhex("90"):
+            write_bytes(self.tientrinh, self.diachigame + 0x10A12F + 0x3D00, bytes.fromhex("90 90 90909090 90909090"), 10)
+
+    def action_tatvohieuhoathietlapmuctieudangchon(self):
+        if read_bytes(self.tientrinh, self.diachigame + 0x19C7B7 + 0x3C20, 1) != bytes.fromhex("89"):
+            write_bytes(self.tientrinh, self.diachigame + 0x19C7B7 + 0x3C20, bytes.fromhex("89 0D"), 2)
+            write_int(self.tientrinh, self.diachigame + 0x19C7B7 + 0x3C20 + 0x2, self.diachigame + 0x3A6A74 + 0x3F18)
+
+        if read_bytes(self.tientrinh, self.diachigame + 0x10A12F + 0x3D00, 1) != bytes.fromhex("C7"):
+            write_bytes(self.tientrinh, self.diachigame + 0x10A12F + 0x3D00, bytes.fromhex("C7 05"), 10)
+            write_int(self.tientrinh, self.diachigame + 0x10A12F + 0x3D00 + 0x2, self.diachigame + 0x3A6A74 + 0x3F18)
+            write_int(self.tientrinh, self.diachigame + 0x10A12F + 0x3D00 + 0x6, 0)
+
     def khoitaohamsudungvatpham(self):
         if self.diachihamsudungvatpham: return
         self.diachihamsudungvatpham = self.tientrinh.allocate(256)
@@ -819,7 +885,7 @@ class MoiTruong:
             push dword ptr [{diachidulieu + 4}]
             push dword ptr [{diachidulieu + 12}]
 
-            mov eax, {self.diachigame + 0x10AFD0 + 0x3FE0}
+            mov eax, {self.diachigame + 0x10AFD0 + 0x3D00}
             call eax
             ret
         """
@@ -853,14 +919,13 @@ class MoiTruong:
 
         self.tientrinh.start_thread(self.diachihamtudongtimduongxuyenbando)
         return True
-
+    #TODO: Chưa tìm ra
     def khoitaohamdichuyen(self):
         if self.diachihamdichuyen: return
         self.diachihamdichuyen = self.tientrinh.allocate(256)
 
         diachidulieu = self.diachihamdichuyen + 0x40
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
-#game.exe+
 
         asm_code = f"""
             mov esi, {hex(self.diachigame + 0x3C4C54 + 0x3F18)}
@@ -955,7 +1020,7 @@ class MoiTruong:
             mov esi, 1
 
             push ecx
-            mov eax, {hex(self.diachigame + 0x183C50 + 0x3F50)}
+            mov eax, {hex(self.diachigame + 0x183C50 + 0x3C60)}
             call eax
             add esp, 4
             ret
@@ -1021,7 +1086,7 @@ class MoiTruong:
 
             push ecx
             push edx
-            mov eax, {hex(self.diachigame + 0x183D80 + 0x3F50)}
+            mov eax, {hex(self.diachigame + 0x183D80 + 0x3C60)}
             call eax
             add esp, 8
             ret
@@ -1067,7 +1132,7 @@ class MoiTruong:
 
         asm_code = f"""
             cmp [eax+{hex(self.diachigame + 0x3BD1C0 + 0x3F18)}], ebp
-            jng {hex(self.diachigame + 0x19C4B4 + 0x3F10)}
+            jng {hex(self.diachigame + 0x19C4B4 + 0x3C20)}
 
             cmp dword ptr [{hex(diachidulieu)}], 1
             jne boqualogicboquamuctieumaucao
@@ -1075,15 +1140,15 @@ class MoiTruong:
             mov ecx, dword ptr [eax+{hex(offset_capdo)}]
             imul ecx, ecx, 2000
             cmp [eax+{hex(self.diachigame + 0x3BD1C0 + 0x3F18)}], ecx
-            jnl {hex(self.diachigame + 0x19C4B4 + 0x3F10)}
+            jnl {hex(self.diachigame + 0x19C4B4 + 0x3C20)}
 
             boqualogicboquamuctieumaucao:
-            jmp {hex(self.diachigame + 0x19C2AC + 0x3F10)}
+            jmp {hex(self.diachigame + 0x19C2AC + 0x3C20)}
         """
 
         encoding, _ = ks.asm(asm_code, addr = self.diachihamboquamuctieumaucao)
         write_bytes(self.tientrinh, self.diachihamboquamuctieumaucao, bytes(encoding), len(encoding))
-        write_bytes(self.tientrinh, self.diachigame + 0x19C2A0 + 0x3F10, b"\xE9" + (self.diachihamboquamuctieumaucao - (self.diachigame + 0x19C2A0 + 0x3F10) - 5).to_bytes(4, byteorder = sys.byteorder, signed = True) + (b"\x90" * 7), 12)
+        write_bytes(self.tientrinh, self.diachigame + 0x19C2A0 + 0x3C20, b"\xE9" + (self.diachihamboquamuctieumaucao - (self.diachigame + 0x19C2A0 + 0x3C20) - 5).to_bytes(4, byteorder = sys.byteorder, signed = True) + (b"\x90" * 7), 12)
 
     def action_thietlapboquamuctieumaucao(self, is_boquamuctieumaucao: bool, delay = 0.5):
         if not self.diachihamboquamuctieumaucao:
@@ -1149,7 +1214,7 @@ class MoiTruong:
             mov eax, dword ptr [{self.diachihamdoimaupk + 0x40}]
             push eax
             mov ecx, {hex(self.diachigame + 0x3A58E8)}
-            mov edx, {hex(self.diachigame + 0x1ABAD0 + 0x3F20)}
+            mov edx, {hex(self.diachigame + 0x1ABAD0 + 0x3C40)}
             call edx
             ret
         """
@@ -1213,7 +1278,7 @@ class MoiTruong:
             push dword ptr [{hex(diachidulieu + 4)}]
             push dword ptr [{hex(diachidulieu)}]
             mov ecx, {hex(self.diachigame + 0x3C4C54 + 0x3F18)}
-            mov eax, {hex(self.diachigame + 0x11DAE0 + 0x3C80)}
+            mov eax, {hex(self.diachigame + 0x11DAE0 + 0x3CA0)}
             call eax
             ret
         """
@@ -1295,7 +1360,7 @@ class MoiTruong:
         target_y = int(y1 + deltay)
 
         return self.action_sudungkynangtoado(idkynang, target_x, target_y, delay = delay)
-
+    #TODO: Chưa tìm ra
     def khoitaohamsudungphimtat(self):
         if self.diachihamsudungphimtat:
             return
@@ -1350,75 +1415,10 @@ class MoiTruong:
             mov ecx, dword ptr [{self.diachihambanvatpham + 0x40 + 0x4}]
             mov edx, dword ptr [{self.diachihambanvatpham + 0x40 + 0x8}]
             push edx
-            mov eax, {self.diachigame + 0x183DD0 + 0x3F50}
+            mov eax, {self.diachigame + 0x183DD0 + 0x3C60}
             call eax
             add esp, 4
             ret
         """
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihambanvatpham, bytes(encoding), len(encoding))
-
-    def action_vohieuhoagiamxuatchieukhithaydo(self):
-        diachixuatchieuvukhi = self.diachigame + OFFSET_DIACHICOSONHANVAT + OFFSET_DIACHICOSOMOINHANVAT + 0x948
-        diachixuatchieubuaphap = self.diachigame + OFFSET_DIACHICOSONHANVAT + OFFSET_DIACHICOSOMOINHANVAT + 0x94C
-
-        if read_int(self.tientrinh, self.diachigame + 0x119025 + 0x3C80 + 0x2) != diachixuatchieuvukhi:
-            write_int(self.tientrinh, self.diachigame + 0x119025 + 0x3C80 + 0x2, diachixuatchieuvukhi)
-
-        if read_int(self.tientrinh, self.diachigame + 0x119031 + 0x3C80 + 0x2) != diachixuatchieubuaphap:
-            write_int(self.tientrinh, self.diachigame + 0x119031 + 0x3C80 + 0x2, diachixuatchieubuaphap)
-
-    def action_vohieuhoathietlapmuctieutancong(self):
-        if read_bytes(self.tientrinh, self.diachigame + 0x19CE4A + 0x3F10, 1) != bytes.fromhex("90"):
-            write_bytes(self.tientrinh, self.diachigame + 0x19CE4A + 0x3F10, bytes.fromhex("90 90 90909090"), 6)
-
-        if read_bytes(self.tientrinh, self.diachigame + 0x19D379 + 0x3F10, 1) != bytes.fromhex("90"):
-            write_bytes(self.tientrinh, self.diachigame + 0x19D379 + 0x3F10, bytes.fromhex("90 90 90909090"), 6)
-
-        # Lúc theo sau
-        if read_bytes(self.tientrinh, self.diachigame + 0x19D14A + 0x3F10, 1) != bytes.fromhex("90"):
-            write_bytes(self.tientrinh, self.diachigame + 0x19D14A + 0x3F10, bytes.fromhex("90 90 90909090"), 6)
-
-        # Lúc ngoài phạm vi điểm di chuyển xunh quanh
-        if read_bytes(self.tientrinh, self.diachigame + 0x19C48A + 0x3F10, 1) != bytes.fromhex("90"):
-            write_bytes(self.tientrinh, self.diachigame + 0x19C48A + 0x3F10, bytes.fromhex("90 90 90909090"), 6)
-        if read_bytes(self.tientrinh, self.diachigame + 0x19D3A3 + 0x3F10, 1) != bytes.fromhex("90"):
-            write_bytes(self.tientrinh, self.diachigame + 0x19D3A3 + 0x3F10, bytes.fromhex("90 90 90909090"), 6)
-        if read_bytes(self.tientrinh, self.diachigame + 0x19C4B4 + 0x3F10, 1) != bytes.fromhex("90"):
-            write_bytes(self.tientrinh, self.diachigame + 0x19C4B4 + 0x3F10, bytes.fromhex("90 90 90909090"), 6)
-
-    def action_tatvohieuhoathietlapmuctieutancong(self):
-        if read_bytes(self.tientrinh, self.diachigame + 0x19CE4A + 0x3F10, 1) != bytes.fromhex("89"):
-            write_bytes(self.tientrinh, self.diachigame + 0x19CE4A + 0x3F10, bytes.fromhex("89 AE 9C000000"), 6)
-
-        if read_bytes(self.tientrinh, self.diachigame + 0x19D379 + 0x3F10, 1) != bytes.fromhex("89"):
-            write_bytes(self.tientrinh, self.diachigame + 0x19D379 + 0x3F10, bytes.fromhex("89 BE 9C000000"), 6)
-
-        # Lúc theo sau
-        if read_bytes(self.tientrinh, self.diachigame + 0x19D14A + 0x3F10, 1) != bytes.fromhex("89"):
-            write_bytes(self.tientrinh, self.diachigame + 0x19D14A + 0x3F10, bytes.fromhex("89 86 9C000000"), 6)
-
-        # Lúc ngoài phạm vi điểm di chuyển xunh quanh
-        if read_bytes(self.tientrinh, self.diachigame + 0x19C48A + 0x3F10, 1) != bytes.fromhex("89"):
-            write_bytes(self.tientrinh, self.diachigame + 0x19C48A + 0x3F10, bytes.fromhex("89 AE 9C000000"), 6)
-        if read_bytes(self.tientrinh, self.diachigame + 0x19D3A3 + 0x3F10, 1) != bytes.fromhex("89"):
-            write_bytes(self.tientrinh, self.diachigame + 0x19D3A3 + 0x3F10, bytes.fromhex("89 AE 9C000000"), 6)
-        if read_bytes(self.tientrinh, self.diachigame + 0x19C4B4 + 0x3F10, 1) != bytes.fromhex("89"):
-            write_bytes(self.tientrinh, self.diachigame + 0x19C4B4 + 0x3F10, bytes.fromhex("89 AE 9C000000"), 6)
-
-    def action_vohieuhoathietlapmuctieudangchon(self):
-        if read_bytes(self.tientrinh, self.diachigame + 0x19C7B7 + 0x3F10, 1) != bytes.fromhex("90"):
-            write_bytes(self.tientrinh, self.diachigame + 0x19C7B7 + 0x3F10, bytes.fromhex("90 90 90909090"), 6)
-
-        if read_bytes(self.tientrinh, self.diachigame + 0x10A12F + 0x3FE0, 1) != bytes.fromhex("90"):
-            write_bytes(self.tientrinh, self.diachigame + 0x10A12F + 0x3FE0, bytes.fromhex("90 90 90909090 90909090"), 10)
-
-    def action_tatvohieuhoathietlapmuctieudangchon(self):
-        if read_bytes(self.tientrinh, self.diachigame + 0x19C7B7 + 0x3F10, 1) != bytes.fromhex("89"):
-            write_bytes(self.tientrinh, self.diachigame + 0x19C7B7 + 0x3F10, bytes.fromhex("89 0D"), 2)
-            write_int(self.tientrinh, self.diachigame + 0x19C7B7 + 0x3F10 + 0x2, self.diachigame + 0x3A6A74 + 0x3F18)
-
-        if read_bytes(self.tientrinh, self.diachigame + 0x10A12F + 0x3FE0, 1) != bytes.fromhex("C7"):
-            write_bytes(self.tientrinh, self.diachigame + 0x10A12F + 0x3FE0, bytes.fromhex("C7 05"), 10)
-            write_int(self.tientrinh, self.diachigame + 0x10A12F + 0x3FE0 + 0x2, self.diachigame + 0x3A6A74 + 0x3F18)
-            write_int(self.tientrinh, self.diachigame + 0x10A12F + 0x3FE0 + 0x6, 0)
