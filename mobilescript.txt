@@ -1,0 +1,22 @@
+cd 'D:\Program Files\Nox\bin'
+.\adb.exe forward tcp:27042 tcp:27042
+.\adb.exe push frida-server /data/local/tmp/
+.\adb.exe push .\ceserver /data/local/tmp/ceserver
+.\adb.exe shell
+
+
+cd core_native
+.\build_x64.bat
+cd ..
+
+adb push core_native\build\libautofarm_core.so /data/local/tmp/autofarm_v1.so
+echo "chmod 777 /data/local/tmp/autofarm_v1.so" | adb shell su
+
+# adb shell am force-stop com.tepaylink.tamgioiphantranhmobile
+
+echo "/data/local/tmp/inject64 --package com.tepaylink.tamgioiphantranhmobile --libs /data/local/tmp/autofarm_v1.so" | adb shell su
+
+adb forward tcp:5000 tcp:5000
+
+# Chạy ở 1 tab Terminal để xem log
+adb logcat -s AutoFarm_Native

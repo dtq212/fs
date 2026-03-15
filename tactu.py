@@ -414,7 +414,7 @@ class TacTu:
                     for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
                         self.moitruong.action_tathieuungbotro(idhieuungbotro)
                 return
-            idmuctieu = self.moitruong.get_idmuctieudangchon()
+            idmuctieu = self.moitruong.get_idmuctieutancong()
             if idmuctieu > 0 and (self.moitruong.get_idloainhanvat(idmuctieu) in (IDLOAINHANVAT_NGUOICHOI, IDLOAINHANVAT_TRIEUHOITHU) or self.moitruong.get_is_boss(idmuctieu)):
                 self._thoidiembathieuungbotrogannhat = time.time()
                 for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
@@ -535,7 +535,7 @@ class TacTu:
         else:
             toadocosox, toadocosoy = self.moitruong.get_toado()
 
-        idungvienso1 = self.moitruong.get_idmuctieudangchon()
+        idungvienso1 = self.moitruong.get_idmuctieutancong()
 
         if idungvienso1 > 0:
             khoangcach = self.moitruong.get_khoangcachdiem(idungvienso1, toadocosox, toadocosoy)
@@ -727,6 +727,11 @@ class TacTu:
                 else:
                     self.moitruong.set_idkynangbotro3(0)
 
+            elif self.moitruong.get_idhephai() == IDHEPHAI_GIAPSI:
+                is_cothesudungkynang = self.moitruong.get_is_dangbatauto() and self.moitruong.get_is_khuvuccothetancong() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong()
+                if is_cothesudungkynang:
+                    if self._is_sudungkynangtoadochichuot:
+                        self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_KHUYNHTHANHNHATKICH, 0)
             elif self.moitruong.get_idhephai() == IDHEPHAI_DAOSI:
                 if self.moitruong.get_phantramkhanghoa() < self.moitruong.get_phantramkhanghoatoida():
                     self.moitruong.set_idkynangbotro3(IDKYNANG_LOIPHONGGIAP)
@@ -737,7 +742,7 @@ class TacTu:
                 is_cothesudungkynangbotro = self.moitruong.get_is_dangbatauto() and not self.moitruong.get_is_khuvuccothetancong() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong()
 
                 if is_cothesudungkynang:
-                    idmuctieu = self.moitruong.get_idmuctieudangchon()
+                    idmuctieu = self.moitruong.get_idmuctieutancong()
                     if idmuctieu > 0:
                         khoangcachmuctieu = self.moitruong.get_khoangcach(idmuctieu)
                         khoangcachmuctieusaptoi = self.moitruong.get_khoangcachsaptoi(idmuctieu)
