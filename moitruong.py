@@ -919,7 +919,7 @@ class MoiTruong:
 
         self.tientrinh.start_thread(self.diachihamtudongtimduongxuyenbando)
         return True
-    #TODO: Chưa tìm ra
+
     def khoitaohamdichuyen(self):
         if self.diachihamdichuyen: return
         self.diachihamdichuyen = self.tientrinh.allocate(256)
@@ -937,7 +937,7 @@ class MoiTruong:
             push edx
             push edi
             mov ecx, esi
-            mov eax, {hex(self.diachigame + 0x11D8A0 + 0x3C80)}
+            mov eax, {hex(self.diachigame + 0x11D8A0 + 0x3CA0)}
             call eax
             ret
         """
@@ -1360,7 +1360,7 @@ class MoiTruong:
         target_y = int(y1 + deltay)
 
         return self.action_sudungkynangtoado(idkynang, target_x, target_y, delay = delay)
-    #TODO: Chưa tìm ra
+
     def khoitaohamsudungphimtat(self):
         if self.diachihamsudungphimtat:
             return
@@ -1378,7 +1378,7 @@ class MoiTruong:
             push 0x01
             push edx
 
-            mov ecx, {hex(self.diachigame + 0xB6C70)}
+            mov ecx, {hex(self.diachigame + 0xB6B70)}
             call ecx
 
             add esp, 0x0C
