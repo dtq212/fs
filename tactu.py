@@ -723,9 +723,9 @@ class TacTu:
         try:
             if self.moitruong.get_idhephai() == IDHEPHAI_DINHAN:
                 if self._idtrieuhoithu > 0 and self.moitruong.get_khoangcach(self._idtrieuhoithu) and (self.moitruong.get_sinhluctoida(self._idtrieuhoithu) - self.moitruong.get_sinhluchientai(self._idtrieuhoithu) >= 200):
-                    self.moitruong.set_idkynangbotro3(IDKYNANG_BOTAMCHU)
+                    self.moitruong.set_idkynangbotro4(IDKYNANG_BOTAMCHU)
                 else:
-                    self.moitruong.set_idkynangbotro3(0)
+                    self.moitruong.set_idkynangbotro4(0)
 
             elif self.moitruong.get_idhephai() == IDHEPHAI_GIAPSI:
                 is_cothesudungkynang = self.moitruong.get_is_dangbatauto() and self.moitruong.get_is_khuvuccothetancong() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong()
@@ -734,9 +734,9 @@ class TacTu:
                         self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_KHUYNHTHANHNHATKICH, 0)
             elif self.moitruong.get_idhephai() == IDHEPHAI_DAOSI:
                 if self.moitruong.get_phantramkhanghoa() < self.moitruong.get_phantramkhanghoatoida():
-                    self.moitruong.set_idkynangbotro3(IDKYNANG_LOIPHONGGIAP)
+                    self.moitruong.set_idkynangbotro4(IDKYNANG_LOIPHONGGIAP)
                 else:
-                    self.moitruong.set_idkynangbotro3(0)
+                    self.moitruong.set_idkynangbotro4(0)
 
                 is_cothesudungkynang = self.moitruong.get_is_dangbatauto() and self.moitruong.get_is_khuvuccothetancong() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong()
                 is_cothesudungkynangbotro = self.moitruong.get_is_dangbatauto() and not self.moitruong.get_is_khuvuccothetancong() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong()
