@@ -641,11 +641,11 @@ class MoiTruong:
             write_int(self.tientrinh, self.diachigame + 0x3A59C0 + 0x2EE8, idkynangbotro)
 
     def get_is_dichuyenhoatdongquanhphamvi(self):
-        return read_int(self.tientrinh, self.diachigame + 0x3A694C + 0x2EE8) > 0
+        return read_int(self.tientrinh, self.diachigame + 0x3A66E8 + 0x2EE8) > 0
 
     def set_is_dichuyenhoatdongquanhphamvi(self, is_dichuyenhoatdongquanhphamvi):
         if self.get_is_dichuyenhoatdongquanhphamvi() != is_dichuyenhoatdongquanhphamvi:
-            write_int(self.tientrinh, self.diachigame + 0x3A694C + 0x2EE8, 1 if is_dichuyenhoatdongquanhphamvi else 0)
+            write_int(self.tientrinh, self.diachigame + 0x3A66E8 + 0x2EE8, 1 if is_dichuyenhoatdongquanhphamvi else 0)
 
     def get_is_dangkhoa(self):
         return read_int(self.tientrinh, self.diachigame + 0x3A6A64 + 0x2EE8) > 0
@@ -699,7 +699,6 @@ class MoiTruong:
         return idnhanvattieptheo
 
     def action_vohieuhoagiamxuatchieukhithaydo(self):
-        return
         diachixuatchieuvukhi = self.diachigame + OFFSET_DIACHICOSONHANVAT + OFFSET_DIACHICOSOMOINHANVAT + 0x948
         diachixuatchieubuaphap = self.diachigame + OFFSET_DIACHICOSONHANVAT + OFFSET_DIACHICOSOMOINHANVAT + 0x94C
 
@@ -710,7 +709,6 @@ class MoiTruong:
             write_int(self.tientrinh, self.diachigame + 0x119031 + 0x3510 + 0x2, diachixuatchieubuaphap)
 
     def action_vohieuhoathietlapmuctieudangchon(self):
-        return
         if read_bytes(self.tientrinh, self.diachigame + 0x19C7B7 + 0x3750, 1) != bytes.fromhex("90"):
             write_bytes(self.tientrinh, self.diachigame + 0x19C7B7 + 0x3750, bytes.fromhex("90 90 90909090"), 6)
 
@@ -718,7 +716,6 @@ class MoiTruong:
             write_bytes(self.tientrinh, self.diachigame + 0x10A12F + 0x3590, bytes.fromhex("90 90 90909090 90909090"), 10)
 
     def action_tatvohieuhoathietlapmuctieudangchon(self):
-        return
         if read_bytes(self.tientrinh, self.diachigame + 0x19C7B7 + 0x3750, 1) != bytes.fromhex("89"):
             write_bytes(self.tientrinh, self.diachigame + 0x19C7B7 + 0x3750, bytes.fromhex("89 0D"), 2)
             write_int(self.tientrinh, self.diachigame + 0x19C7B7 + 0x3750 + 0x2, self.diachigame + 0x3A6A78 + 0x2EE8)
@@ -729,7 +726,6 @@ class MoiTruong:
             write_int(self.tientrinh, self.diachigame + 0x10A12F + 0x3590 + 0x6, 0)
 
     def action_vohieuhoathietlapmuctieutancong(self):
-        return
         if read_bytes(self.tientrinh, self.diachigame + 0x19CE53 + 0x373A, 1) != bytes.fromhex("90"):
             write_bytes(self.tientrinh, self.diachigame + 0x19CE53 + 0x373A, bytes.fromhex("90 90 90909090"), 6)
 
@@ -749,7 +745,6 @@ class MoiTruong:
             write_bytes(self.tientrinh, self.diachigame + 0x19D379 + 0x373A, bytes.fromhex("90 90 90909090"), 6)
 
     def action_tatvohieuhoathietlapmuctieutancong(self):
-        return
         if read_bytes(self.tientrinh, self.diachigame + 0x19CE53 + 0x373A, 1) != bytes.fromhex("89"):
             write_bytes(self.tientrinh, self.diachigame + 0x19CE53 + 0x373A, bytes.fromhex("89 AE A8000000"), 6)
 
@@ -1109,7 +1104,6 @@ class MoiTruong:
         return True
 
     def khoitaohamboquamuctieumaucao(self):
-        return
         if self.diachihamboquamuctieumaucao:
             return
         self.diachihamboquamuctieumaucao = self.tientrinh.allocate(256)
