@@ -16,11 +16,11 @@ OFFSET_DIACHICOSOMOINHANVAT = 0x8294
 
 # Inspect từ ID vị trí rương = 1 khi cầm vật phẩm lên và đặt xuống hành trang là 3
 # Lấy địa chỉ tìm được - 4 sẽ ra ID vật phẩm, Lấy địa chỉ - ID vật phẩm * 0x10 sẽ ra OFFSET_DIACHICOSOVITRIVATPHAM
-OFFSET_DIACHICOSOVITRIVATPHAM = 0x3A1394 + 0x2EE8
+OFFSET_DIACHICOSOVITRIVATPHAM = 0x3A138C + 0x2EE8
 OFFSET_DIACHICOSOVITRIMOIVATPHAM = 0x10
 
 # Inspect từ Hàm bán đồ
-OFFSET_DIACHICOSOTHONGTINVATPHAM = 0x2AC768 + 0x2EE8
+OFFSET_DIACHICOSOTHONGTINVATPHAM = 0x2AC758 + 0x2EE8
 OFFSET_DIACHICOSOMOIVATPHAM = 0x778
 #
 OFFSET_DIACHICOSOTHONGTINVATPHAMDUOIDAT = 0x2BA7300 + 0x2EE8
@@ -911,7 +911,7 @@ class MoiTruong:
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
         asm_code = f"""
-            mov esi, {hex(self.diachigame + OFFSET_DIACHICOSONHANVAT)}
+            mov esi, {hex(self.diachigame + OFFSET_DIACHICOSONHANVAT + OFFSET_DIACHICOSOMOINHANVAT)}
             mov edi, dword ptr [{diachidulieu}]
             mov edx, dword ptr [{diachidulieu + 4}]
             mov ebx, 0
@@ -1104,6 +1104,7 @@ class MoiTruong:
         return True
 
     def khoitaohamboquamuctieumaucao(self):
+        return
         if self.diachihamboquamuctieumaucao:
             return
         self.diachihamboquamuctieumaucao = self.tientrinh.allocate(256)
@@ -1261,7 +1262,7 @@ class MoiTruong:
             push dword ptr [{hex(diachidulieu + 8)}]
             push dword ptr [{hex(diachidulieu + 4)}]
             push dword ptr [{hex(diachidulieu)}]
-            mov ecx, {hex(self.diachigame + OFFSET_DIACHICOSONHANVAT)}
+            mov ecx, {hex(self.diachigame + OFFSET_DIACHICOSONHANVAT + OFFSET_DIACHICOSOMOINHANVAT)}
             mov eax, {hex(self.diachigame + 0x11DAE0 + 0x3510)}
             call eax
             ret
