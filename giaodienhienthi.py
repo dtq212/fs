@@ -70,7 +70,7 @@ class GiaoDienHienThi:
         ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 5)
         r += 1
 
-        self.add_check(self.grp_config, "Tự tìm quái (Phạm vi)", "_is_tudongtimkiemmuctieu", r, "Ctrl+Alt+Shift+F")
+        self.add_check(self.grp_config, "Tự tìm mục tiêu", "_is_tudongtimkiemmuctieu", r, "Ctrl+Alt+Shift+F")
         r += 1
         self.add_check(self.grp_config, "Không đánh cùng Bang", "_is_khongdanhcungbang", r, "Ctrl+Alt+Shift+B")
         r += 1
@@ -80,9 +80,9 @@ class GiaoDienHienThi:
         ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 5)
         r += 1
 
-        self.add_check(self.grp_config, "Chỉ đánh Người / Triệu hồi thú", "_is_chidanhnguoichoivatrieuhoithu", r, "Ctrl+D / Ctrl+A")
+        self.add_check(self.grp_config, "Chỉ đánh Người / Phong quyển", "_is_chidanhnguoichoivatrieuhoithu", r, "Ctrl+D / Ctrl+A")
         r += 1
-        self.add_check(self.grp_config, "Ưu tiên Triệu hồi thú", "_is_uutientrieuhoithu", r, "Ctrl + S")
+        self.add_check(self.grp_config, "Ưu tiên đánh Phong quyển", "_is_uutientrieuhoithu", r, "Ctrl + S")
         r += 1
 
         ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 10)

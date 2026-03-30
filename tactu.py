@@ -194,6 +194,7 @@ class TacTu:
         self._is_uutientrieuhoithu = not self._is_uutientrieuhoithu
 
         if self._is_uutientrieuhoithu:
+            self._is_tudongtimkiemmuctieu = True
             phatam("Bật ưu tiên triệu hồi thú")
         else:
             phatam("Tắt ưu tiên triệu hồi thú")
@@ -225,6 +226,7 @@ class TacTu:
     def bat_is_chidanhnguoichoivatrieuhoithu(self):
         if not self._is_chidanhnguoichoivatrieuhoithu:
             self._is_chidanhnguoichoivatrieuhoithu = True
+            self._is_tudongtimkiemmuctieu = True
             phatam("Bật chỉ đánh người chơi và triệu hồi thú")
 
     def tat_is_chidanhnguoichoivatrieuhoithu(self):
@@ -245,6 +247,7 @@ class TacTu:
 
         if self._is_khongdanhcungbang:
             phatam("Bật không đánh cùng bang")
+            self._is_tudongtimkiemmuctieu = True
         else:
             phatam("Tắt không đánh cùng bang")
 
@@ -428,6 +431,8 @@ class TacTu:
                             continue
                         if thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 10 and thuoctinh_map.get(IDTHUOCTINHVATPHAM_DANHTAPTRUNG, 0) >= 10:
                             continue
+
+                    if danhmuctrangbi == IDDANHMUCTRANGBI_AO:
                         if thuoctinh_map.get(IDTHUOCTINHVATPHAM_GIAMTRUNGTHUONG, 0) >= 15:
                             continue
 
@@ -862,7 +867,7 @@ class TacTu:
                         is_muctieudangdichuyen = self.moitruong.get_idtrangthainhanvat(idmuctieu) == IDTRANGTHAINHANVAT_DICHUYEN
                         is_muctieuchaydi = is_muctieudangdichuyen and khoangcachmuctieusaptoi > khoangcachmuctieu and khoangcachmuctieu > 150
 
-                        if not is_muctieuchaydi:
+                        if not is_muctieudangdichuyen or self.moitruong.get_idloainhanvat(idmuctieu) != IDLOAINHANVAT_NGUOICHOI:
                             idkynang1 = 0
                     elif self._is_sudungkynangtoadochichuot:
                         self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_KHUYNHTHANHNHATKICH, 0)
