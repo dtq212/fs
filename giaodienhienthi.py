@@ -74,8 +74,6 @@ class GiaoDienHienThi:
         r += 1
         self.add_check(self.grp_config, "Không đánh cùng Bang", "_is_khongdanhcungbang", r, "Ctrl+Alt+Shift+B")
         r += 1
-        self.add_check(self.grp_config, "Né Boss / Quái lỗi", "_is_tudongboquamuctieumaucao", r, "")
-        r += 1
 
         ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 5)
         r += 1

@@ -490,7 +490,7 @@ class MoiTruong:
         }
 
     def get_trongluongvatpham(self, idvatpham):
-        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x4EC + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM) * self.get_soluongvatpham(idvatpham)
+        return read_short_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x4EC + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM) * self.get_soluongvatpham(idvatpham)
 
     def get_dobenhientaivatpham(self, idvatpham):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + 0x69C + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
@@ -1274,7 +1274,7 @@ class MoiTruong:
             push dword ptr [{hex(diachidulieu + 4)}]
             push dword ptr [{hex(diachidulieu)}]
             mov ecx, {hex(self.diachigame + OFFSET_DIACHICOSONHANVAT + OFFSET_DIACHICOSOMOINHANVAT)}
-            mov eax, {hex(self.diachigame + 0xBB30)}
+            mov eax, {hex(self.diachigame + 0x12CB20)}
             call eax
             ret
         """

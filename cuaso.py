@@ -131,7 +131,6 @@ class CuaSo:
                     "_is_tudongsuavatpham": self.tactu._is_tudongsuavatpham,
                     "_is_tudongbattathieuungbotro": self.tactu._is_tudongbattathieuungbotro,
                     "_is_tudongtimkiemmuctieu": self.tactu._is_tudongtimkiemmuctieu,
-                    "_is_tudongboquamuctieumaucao": self.tactu._is_tudongboquamuctieumaucao,
                     "_is_khongdanhcungbang": self.tactu._is_khongdanhcungbang,
                     "_is_uutientrieuhoithu": self.tactu._is_uutientrieuhoithu,
                     "_is_chidanhnguoichoivatrieuhoithu": self.tactu._is_chidanhnguoichoivatrieuhoithu,
