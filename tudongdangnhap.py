@@ -47,13 +47,13 @@ def lay_hwnd_tu_pid(pid):
 
 def lay_danh_sach_nhan_vat_online():
     ds_online = []
-    print(f"[{time.strftime('%H:%M:%S')}] 🔍 Đang quét các cửa sổ game (Fs1:)...")
+    print(f"[{time.strftime('%H:%M:%S')}] 🔍 Đang quét các cửa sổ game (TGPC:)...")
 
     def callback(hwnd, _):
         if win32gui.IsWindowVisible(hwnd):
             title = win32gui.GetWindowText(hwnd)
 
-            if "Fs1:" in title:
+            if "TGPC:" in title:
                 try:
                     moitruong = MoiTruong(hwnd)
 
@@ -161,7 +161,7 @@ def quy_trinh_dang_nhap(account):
 
 
 def main():
-    print("=== AUTO LOGIN PHONG THẦN (WINDOW TITLE: Fs1:) ===")
+    print("=== AUTO LOGIN PHONG THẦN (WINDOW TITLE: TGPC:) ===")
     print(f"Chế độ: Chạy liên tục (Quét mỗi {THOI_GIAN_QUET_LAI}s)")
     print("Nhấn Ctrl + C tại cửa sổ này để dừng tool.\n")
 

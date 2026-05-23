@@ -696,7 +696,7 @@ class TacTu:
                 self._thoidiemthongbaohetquanamthuygannhat = time.time()
             return
         idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
-        self.moitruong.action_sudungvatphamhanhtrang(idvatpham, vitrix, vitriy, delay = 0.)
+        self.moitruong.action_sudungvatpham(idvatpham, vitrix, vitriy, delay = 0.)
 
     def action_tudongtaypk(self):
         if not self._is_tudongtaypk:
