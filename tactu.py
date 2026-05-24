@@ -276,8 +276,14 @@ class TacTu:
         phatam("Bỏ toàn bộ thiết lập tên nhân vật không tấn công")
     
     def action_test(self):
-        for idvatpham in range(0, SOLUONGVATPHAMTOIDA):
-            print("{}".format(self.moitruong.get_thongtinvatpham_display(idvatpham)))
+        for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
+            vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
+            if not vitrivatpham:
+                continue
+            idvatpham, idruong, vitrix, vitriy = vitrivatpham
+            print("#{}: {}: {}".format(sothutuvatpham, (idvatpham, idruong, vitrix, vitriy), self.moitruong.get_thongtinvatpham_display(idvatpham)))
+
+        print("toado: {}".format(self.moitruong.get_toado()))
 
     def get_is_hanhtrangday(self):
         return self.get_tongsovatphamhanhtrang() >= 35 or self.moitruong.get_trongluongtoida() - self.get_tongtrongluongvatpham() <= 25
@@ -327,6 +333,9 @@ class TacTu:
                             "toadodich": toadodaiphu
                         }
                     else:
+                        yeucaudichuyenmoi = {
+                            "loaidichuyen": "dungim"
+                        }
                         is_ok = self.action_bantoanbovatpham()
                         if is_ok:
                             self._is_dangxulybanrac = False
@@ -390,11 +399,11 @@ class TacTu:
             if vitriruong != IDVITRIRUONG_HANHTRANG:
                 continue
 
-            if vitriy < 1:
-                continue
+            # if vitriy < 1:
+            #     continue
 
             tenvatpham = self.moitruong.get_tenvatpham(idvatpham)
-            if tenvatpham in VATPHAMKHONGBANs:
+            if not tenvatpham or tenvatpham in VATPHAMKHONGBANs:
                 continue
 
             loaivatpham = self.moitruong.get_loaivatpham(idvatpham)
@@ -854,7 +863,32 @@ class TacTu:
         yeucaudichuyenmoi = None
         try:
             if self.moitruong.get_idhephai() == IDHEPHAI_DINHAN:
-                if self._idtrieuhoithu > 0 and self.moitruong.get_khoangcach(self._idtrieuhoithu) and (self.moitruong.get_sinhluctoida(self._idtrieuhoithu) - self.moitruong.get_sinhluchientai(self._idtrieuhoithu) >= 200):
+                is_datrieuhoithu = self.moitruong.get_is_datrieuhoithu()
+                is_vohieuhoa_o3 = True
+
+                if not is_datrieuhoithu:
+                    danhsachhieuungbotros = (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN)
+
+                    is_cohieuungnhungchuabat = False
+                    is_dabatitnhat1hieuungbotro = False
+
+                    for idhieuung in danhsachhieuungbotros:
+                        if self.moitruong.get_is_cohieuungbotro(idhieuung):
+                            if self.moitruong.get_is_hieuungbotrodangbat(idhieuung):
+                                is_dabatitnhat1hieuungbotro = True
+                                break
+                            else:
+                                is_cohieuungnhungchuabat = True
+
+                    if is_dabatitnhat1hieuungbotro or not is_cohieuungnhungchuabat:
+                        is_vohieuhoa_o3 = False
+
+                self.moitruong.set_is_vohieuhoakynangbotro3(is_vohieuhoa_o3)
+
+                if is_datrieuhoithu and self._idtrieuhoithu > 0 and self.moitruong.get_khoangcach(
+                        self._idtrieuhoithu) < 800 and (
+                        self.moitruong.get_sinhluctoida(self._idtrieuhoithu) - self.moitruong.get_sinhluchientai(
+                    self._idtrieuhoithu) >= 200):
                     self.moitruong.set_idkynangbotro4(IDKYNANG_BOTAMCHU)
                 else:
                     self.moitruong.set_idkynangbotro4(0)
