@@ -815,16 +815,16 @@ class TacTu:
             elif loaidichuyen == "tudongtimduong":
                 toadodich = yeucauduocchon.get("toadodich")
                 toadox, toadoy = toadodich
-                is_dang_tim_duong = self.moitruong.get_is_dangtudongtimduong()
+                is_dangtudongtimduong = self.moitruong.get_is_dangtudongtimduong()
 
                 is_cancapnhatduongdi = False
 
-                if not is_dang_tim_duong:
+                if not is_dangtudongtimduong:
                     is_cancapnhatduongdi = True
                 elif self._toadodichtudongtimduonggannhat:
-                    toadox_cu, toadoy_cu = self._toadodichtudongtimduonggannhat
-                    khoangcachchenhlech = math.hypot(toadox - toadox_cu, toadoy - toadoy_cu)
-                    if khoangcachchenhlech > 400:
+                    toadocux, toadocuy = self._toadodichtudongtimduonggannhat
+                    khoangcachchenhlech = math.hypot(toadox - toadocux, toadoy - toadocuy)
+                    if khoangcachchenhlech > 300:
                         is_cancapnhatduongdi = True
                 else:
                     is_cancapnhatduongdi = True
