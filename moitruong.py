@@ -698,7 +698,13 @@ class MoiTruong:
         return read_int(self.tientrinh, self.diachigame + 0x4A3810 + 0x000) > 0
 
     def get_is_boss(self, idnhanvat = 1):
-        return self.get_idloainhanvat(idnhanvat) == IDLOAINHANVAT_QUAIVAT and self.get_sinhluctoida(idnhanvat) >= 2000 * self.get_capdonhanvat(idnhanvat)
+        if not self.get_idloainhanvat(idnhanvat) == IDLOAINHANVAT_QUAIVAT:
+            return
+        capdonhanvat = self.get_capdonhanvat(idnhanvat)
+        sinhluctoida = self.get_sinhluctoida(idnhanvat)
+        if capdonhanvat <= 55:
+            return sinhluctoida >= 2000 * capdonhanvat
+        return sinhluctoida > 50_000
 
     def get_is_quaixanh(self, idnhanvat = 1):
         return self.get_idloainhanvat(idnhanvat) == IDLOAINHANVAT_QUAIVAT and self.get_tocdodichuyen(idnhanvat) > TOCDODICHUYENQUAITHUONG
