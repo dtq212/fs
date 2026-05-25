@@ -1214,7 +1214,7 @@ class MoiTruong:
             return
         self.diachihamboquaboss = self.tientrinh.allocate(256)
 
-        diachidulieu = self.diachihamboquaboss + 0x40
+        diachidulieu = self.diachihamboquaboss + 0x80
         write_int(self.tientrinh, diachidulieu, 0)
 
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
@@ -1260,7 +1260,7 @@ class MoiTruong:
 
         self._thoidiemboquabossgannhat = time.time()
 
-        diachidulieu = self.diachihamboquaboss + 0x40
+        diachidulieu = self.diachihamboquaboss + 0x80
         trangthaihientai = read_int(self.tientrinh, diachidulieu)
         trangthaimoi = 1 if is_boquaboss else 0
 
