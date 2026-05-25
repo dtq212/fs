@@ -576,8 +576,8 @@ class TacTu:
             self.moitruong.set_is_dangtudongtimduong(False)
             self._toadodichtudongtimduonggannhat = None
 
-    def action_tudongboquamuctieumaucao(self):
-        self.moitruong.action_thietlapboquamuctieumaucao(True if self.moitruong.get_is_tranhboss() else False)
+    def action_tudongboquaboss(self):
+        self.moitruong.action_thietlapboquaboss(True if self.moitruong.get_is_tranhboss() else False)
 
     def _kiemtrathoamandieukientancong(self, idnhanvat):
         if not self.moitruong.get_is_nhanvattontai(idnhanvat):
