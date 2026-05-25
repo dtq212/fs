@@ -517,7 +517,7 @@ class TacTu:
 
         if self.moitruong.get_is_khuvuccothetancong():
             if self.moitruong.get_idhephai() == IDHEPHAI_DINHAN:
-                if not self.moitruong.get_is_datrieuhoithu() and not self.moitruong.get_is_dangtudongtimduong():
+                if not self.moitruong.get_is_datrieuhoithu():
                     for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
                         self.moitruong.action_bathieuungbotro(idhieuungbotro)
                 else:
