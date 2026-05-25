@@ -10,20 +10,20 @@ from moitruong import MoiTruong
 DUONGDAN_GAME = r"D:\TamGioiPhanTranhPC\game.exe"
 DANH_SACH_TAI_KHOAN = [
     #{"user": "kngaivacham", "pass": "hateva12", "char_name": "KNgạiVaChạm"},
-    {"user": "thichvacham2", "pass": "hateva12", "char_name": "ThíchVaChạm"},
-    {"user": "laotsezu1", "pass": "hateva12", "char_name": "LaotsezuI"},
-    {"user": "laotsezu2", "pass": "hateva12", "char_name": "LaotsezuII"},
-    {"user": "laotsezu3", "pass": "hateva12", "char_name": "LaotsezuIII"},
-    #{"user": "laotsezu4", "pass": "hateva12", "char_name": "LaotsezuIV"},
-    #{"user": "laotsezu5", "pass": "hateva12", "char_name": "LaotsezuV"},
-    {"user": "laotsezu6", "pass": "hateva12", "char_name": "LaotsezuVI"},
-    {"user": "laotsezu7", "pass": "hateva12", "char_name": "LaotsezuVII"},
-    {"user": "laotsezu8", "pass": "hateva12", "char_name": "LaotsezuVVIII"},
-    {"user": "laotsezu9", "pass": "hateva12", "char_name": "LaotsezuIX"},
-    #{"user": "laotsezu10", "pass": "hateva12", "char_name": "LaotsezuX"},
-    #{"user": "laotsezu11", "pass": "hateva12", "char_name": "LaotsezuXI"},
-    #{"user": "laotsezu12", "pass": "hateva12", "char_name": "LaotsezuXII"},
-    #{"user": "laotsezu13", "pass": "hateva12", "char_name": "LaotsezuXIII"},
+    # {"user": "thichvacham2", "pass": "hateva12", "char_name": "ThíchVaChạm"},
+    {"user": "laotsezu1", "pass": "hateva12", "char_name": "Ldfgkjdfg1"},
+    {"user": "laotsezu2", "pass": "hateva12", "char_name": "Lsdkjhsd2"},
+    {"user": "laotsezu3", "pass": "hateva12", "char_name": "Lsdjkfhsjd3"},
+    {"user": "laotsezu4", "pass": "hateva12", "char_name": "Ldsfkjhsdf4"},
+    {"user": "laotsezu5", "pass": "hateva12", "char_name": "Lsdkfjhsdf5"},
+    {"user": "laotsezu6", "pass": "hateva12", "char_name": "Lsdfkjhsdf6"},
+    {"user": "laotsezu7", "pass": "hateva12", "char_name": "Lsdkjfsdf7"},
+    {"user": "laotsezu8", "pass": "hateva12", "char_name": "Ládfkjhsdf8"},
+    {"user": "laotsezu9", "pass": "hateva12", "char_name": "Lsadfjhsdf9"},
+    {"user": "laotsezu10", "pass": "hateva12", "char_name": "Lsdjfhsdf10"},
+    #{"user": "laotsezu11", "pass": "hateva12", "char_name": ""},
+    #{"user": "laotsezu12", "pass": "hateva12", "char_name": ""},
+    #{"user": "laotsezu13", "pass": "hateva12", "char_name": ""},
 ]
 
 THOI_GIAN_QUET_LAI = 10
@@ -47,13 +47,13 @@ def lay_hwnd_tu_pid(pid):
 
 def lay_danh_sach_nhan_vat_online():
     ds_online = []
-    print(f"[{time.strftime('%H:%M:%S')}] 🔍 Đang quét các cửa sổ game (Fs1:)...")
+    print(f"[{time.strftime('%H:%M:%S')}] 🔍 Đang quét các cửa sổ game (TGPC:)...")
 
     def callback(hwnd, _):
         if win32gui.IsWindowVisible(hwnd):
             title = win32gui.GetWindowText(hwnd)
 
-            if "Fs1:" in title:
+            if "TGPC:" in title:
                 try:
                     moitruong = MoiTruong(hwnd)
 
@@ -161,7 +161,7 @@ def quy_trinh_dang_nhap(account):
 
 
 def main():
-    print("=== AUTO LOGIN PHONG THẦN (WINDOW TITLE: Fs1:) ===")
+    print("=== AUTO LOGIN PHONG THẦN (WINDOW TITLE: TGPC:) ===")
     print(f"Chế độ: Chạy liên tục (Quét mỗi {THOI_GIAN_QUET_LAI}s)")
     print("Nhấn Ctrl + C tại cửa sổ này để dừng tool.\n")
 

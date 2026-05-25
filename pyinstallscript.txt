@@ -1,1 +1,1 @@
-pyinstaller --noconfirm --onedir --windowed --uac-admin --hidden-import "pkg_resources" --collect-all "keystone" "C:\Users\ACER\PycharmProjects\fs\trochoi.py"
+pyinstaller --noconfirm --onedir --windowed --uac-admin --hidden-import "pkg_resources" --collect-all "keystone" "C:\Users\Admin\PycharmProjects\fs\trochoi.py"
