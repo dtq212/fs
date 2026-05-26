@@ -1079,7 +1079,7 @@ class TacTu:
                 self.moitruong.action_sudungphimtat(3)
 
     def action_tudongvutvatpham(self):
-        if not self._is_tudongvutvatpham:
+        if not self._is_tudongvutrac:
             return False
 
         if time.time() - self._thoidiemvutvatphamgannhat < 0.25:
@@ -1105,52 +1105,42 @@ class TacTu:
 
             phamchat, danhmucvattutieuhao, danhmuctrangbi, _ = loaivatpham
 
-            is_danduoc = (danhmucvattutieuhao == IDDANHMUCVATTUTIEUHAO_DANDUOC)
-            is_trangbi = (danhmuctrangbi in DANHMUCTRANGBI_MAP)
-
-            if not is_danduoc and not is_trangbi:
+            if danhmuctrangbi not in DANHMUCTRANGBI_MAP:
                 continue
 
-            if is_trangbi:
-                if phamchat != IDPHAMCHATVATPHAM_TRANGLAM:
+            if phamchat != IDPHAMCHATVATPHAM_TRANGLAM:
+                continue
+
+            thuoctinh_map = self.moitruong.get_thuoctinhvatpham_map(idvatpham)
+            idhephaivatpham = self.moitruong.get_idhephaivatpham(idvatpham)
+
+            if danhmuctrangbi in (IDDANHMUCTRANGBI_VUKHI, IDDANHMUCTRANGBI_PHIPHONG):
+                if thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 20 or thuoctinh_map.get(
+                        IDTHUOCTINHVATPHAM_XUATCHIEUBUAPHAP, 0) >= 20:
+                    continue
+                if thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 10 and thuoctinh_map.get(
+                        IDTHUOCTINHVATPHAM_DANHTAPTRUNG, 0) >= 10:
                     continue
 
-                if danhmuctrangbi in DANHMUCTRANGBI_MAP:
-                    thuoctinh_map = self.moitruong.get_thuoctinhvatpham_map(idvatpham)
-                    idhephaivatpham = self.moitruong.get_idhephaivatpham(idvatpham)
+            if danhmuctrangbi == IDDANHMUCTRANGBI_AO:
+                if thuoctinh_map.get(IDTHUOCTINHVATPHAM_GIAMTRUNGTHUONG, 0) >= 15:
+                    continue
 
-                    if danhmuctrangbi in (IDDANHMUCTRANGBI_VUKHI, IDDANHMUCTRANGBI_PHIPHONG):
-                        if thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 20 or thuoctinh_map.get(
-                                IDTHUOCTINHVATPHAM_XUATCHIEUBUAPHAP, 0) >= 20:
-                            continue
-                        if thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 10 and thuoctinh_map.get(
-                                IDTHUOCTINHVATPHAM_DANHTAPTRUNG, 0) >= 10:
-                            continue
-
-                    if danhmuctrangbi == IDDANHMUCTRANGBI_AO:
-                        if thuoctinh_map.get(IDTHUOCTINHVATPHAM_GIAMTRUNGTHUONG, 0) >= 15:
-                            continue
-
-                    if danhmuctrangbi == IDDANHMUCTRANGBI_VUKHI:
-                        if idhephaivatpham == IDHEPHAI_DINHAN and thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI,
-                                                                                    0) >= 10:
-                            continue
-                    elif danhmuctrangbi == IDDANHMUCTRANGBI_PHIPHONG:
-                        if idhephaivatpham == IDHEPHAI_DINHAN and ((thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI,
-                                                                                      0) >= 10 or thuoctinh_map.get(
-                                IDTHUOCTINHVATPHAM_HOINOILUC, 0) >= 5) or thuoctinh_map.get(
-                                IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 20):
-                            continue
-                    elif danhmuctrangbi == IDDANHMUCTRANGBI_AO:
-                        if idhephaivatpham == IDHEPHAI_DINHAN and thuoctinh_map.get(IDTHUOCTINHVATPHAM_HOISINHLUC,
-                                                                                    0) >= 5:
-                            continue
-                    elif danhmuctrangbi == IDDANHMUCTRANGBI_DAI:
-                        if idhephaivatpham == -1 and thuoctinh_map.get(IDTHUOCTINHVATPHAM_HOINOILUC, 0) >= 5:
-                            continue
+            if danhmuctrangbi == IDDANHMUCTRANGBI_VUKHI:
+                if idhephaivatpham == IDHEPHAI_DINHAN and thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 10:
+                    continue
+            elif danhmuctrangbi == IDDANHMUCTRANGBI_PHIPHONG:
+                if idhephaivatpham == IDHEPHAI_DINHAN and ((thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 10 or thuoctinh_map.get(
+                        IDTHUOCTINHVATPHAM_HOINOILUC, 0) >= 5) or thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 20):
+                    continue
+            elif danhmuctrangbi == IDDANHMUCTRANGBI_AO:
+                if idhephaivatpham == IDHEPHAI_DINHAN and thuoctinh_map.get(IDTHUOCTINHVATPHAM_HOISINHLUC, 0) >= 5:
+                    continue
+            elif danhmuctrangbi == IDDANHMUCTRANGBI_DAI:
+                if idhephaivatpham == -1 and thuoctinh_map.get(IDTHUOCTINHVATPHAM_HOINOILUC, 0) >= 5:
+                    continue
 
             is_thanhcong = self.moitruong.action_vutvatpham(sothutuvatpham)
-
             if is_thanhcong:
                 self._thoidiemvutvatphamgannhat = time.time()
                 return True
