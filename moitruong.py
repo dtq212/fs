@@ -74,6 +74,7 @@ class MoiTruong:
         self.diachihamnhatvatpham = 0
         self.diachihamsudungphimtat = 0
         self.diachihamvohieuhoakynangbotro3 = 0
+        self.diachihamvutvatpham = 0
         self._idchunhan_map = {}
 
         self.diachihamdoimaupk = 0
@@ -116,6 +117,7 @@ class MoiTruong:
             "diachihamdoithoai",
             "diachihamxacnhandoithoai",
             "diachihamvohieuhoakynangbotro3",
+            "diachihamvutvatpham",
         ]
 
         for tenthuoctinh in tenthuoctinhs:
@@ -1616,7 +1618,6 @@ class MoiTruong:
         return True
 
     def khoitaohamdongcuahang(self):
-        # Dò bằng cách xem hàm nào sửa cái Is đang mở cửa hàng về 0
         if self.diachihamdongcuahang:
             return
         self.diachihamdongcuahang = self.tientrinh.allocate(256)
@@ -1640,4 +1641,71 @@ class MoiTruong:
         self._thoidiemdongcuahanggannhat = time.time()
 
         self.tientrinh.start_thread(self.diachihamdongcuahang)
+        return True
+
+    def khoitaohamvutvatpham(self):
+        if hasattr(self, 'diachihamvutvatpham') and self.diachihamvutvatpham:
+            return
+
+        self.diachihamvutvatpham = self.tientrinh.allocate(256)
+
+        diachidulieu = self.diachihamvutvatpham + 0x40
+        packet_buffer = diachidulieu + 0x10
+        size_buffer = diachidulieu + 0x18  # Vùng nhớ mới để chứa con số 5
+
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        asm_code = f"""
+            mov eax, dword ptr [{hex(diachidulieu)}]
+
+            mov byte ptr [{hex(packet_buffer)}], 0x5C
+            mov dword ptr [{hex(packet_buffer + 1)}], eax
+
+            mov dword ptr [{hex(size_buffer)}], 5
+
+            mov eax, dword ptr [{hex(self.diachigame + 0x2B3788)}]
+            test eax, eax
+            je ketthuc
+
+            push {hex(size_buffer)}
+            push {hex(packet_buffer)}
+            push eax
+
+            mov ecx, dword ptr [eax]
+            mov edx, dword ptr [ecx + 0x1C]
+            call edx
+
+            add esp, 0x0C               
+
+            ketthuc:
+            ret
+        """
+
+        encoding, _ = ks.asm(asm_code)
+        write_bytes(self.tientrinh, self.diachihamvutvatpham, bytes(encoding), len(encoding))
+
+    def action_vutvatpham(self, sothutuvatpham, delay=0.25):
+        if not hasattr(self, 'diachihamvutvatpham') or not self.diachihamvutvatpham:
+            self.khoitaohamvutvatpham()
+
+        if not hasattr(self, '_thoidiemvutvatphamgannhat'):
+            self._thoidiemvutvatphamgannhat = 0.
+
+        if time.time() - self._thoidiemvutvatphamgannhat < delay:
+            return False
+
+        self._thoidiemvutvatphamgannhat = time.time()
+
+        idvatpham = self.get_idvatpham(sothutuvatpham)
+        if idvatpham <= 0:
+            return False
+
+        dbid = self.get_dbidvatpham(idvatpham)
+        if dbid <= 0:
+            return False
+
+        diachidulieu = self.diachihamvutvatpham + 0x40
+        write_int(self.tientrinh, diachidulieu, dbid)
+
+        self.tientrinh.start_thread(self.diachihamvutvatpham)
         return True

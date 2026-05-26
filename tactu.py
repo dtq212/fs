@@ -279,14 +279,45 @@ class TacTu:
         phatam("Bỏ toàn bộ thiết lập tên nhân vật không tấn công")
     
     def action_test(self):
+        # for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
+        #     vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
+        #     if not vitrivatpham:
+        #         continue
+        #     idvatpham, idruong, vitrix, vitriy = vitrivatpham
+        #     print("#{}: {}: {}".format(sothutuvatpham, (idvatpham, idruong, vitrix, vitriy), self.moitruong.get_thongtinvatpham_display(idvatpham)))
+
+        print("toado: {}".format(self.moitruong.get_toado()))
+
+        tenvatpham_canvut = "Mảnh Hồng thủy tinh"
+        print(f"--- BẮT ĐẦU TEST VỨT VẬT PHẨM: {tenvatpham_canvut} ---")
+
         for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
             vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
             if not vitrivatpham:
                 continue
-            idvatpham, idruong, vitrix, vitriy = vitrivatpham
-            print("#{}: {}: {}".format(sothutuvatpham, (idvatpham, idruong, vitrix, vitriy), self.moitruong.get_thongtinvatpham_display(idvatpham)))
 
-        print("toado: {}".format(self.moitruong.get_toado()))
+            idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
+
+            if vitriruong != IDVITRIRUONG_HANHTRANG:
+                continue
+
+            tenvatphamxemxet = self.moitruong.get_tenvatpham(idvatpham)
+
+            if tenvatphamxemxet and tenvatphamxemxet.strip().lower() == tenvatpham_canvut.lower():
+                print(f"[+] Đã tìm thấy '{tenvatphamxemxet}' tại ô index số {sothutuvatpham} (ID: {idvatpham}).")
+                print(f"[+] Tiến hành gửi lệnh vứt...")
+
+                ketqua = self.moitruong.action_vutvatpham(sothutuvatpham)
+
+                if ketqua:
+                    print("[OK] Lệnh vứt đã được gửi thẳng vào memory (Bypass UI thành công)!")
+                    return True
+                else:
+                    print("[FAIL] Lệnh vứt thất bại (Có thể do delay hoặc packet buffer chưa sẵn sàng).")
+                    return False
+
+        print(f"[-] Không tìm thấy '{tenvatpham_canvut}' trong hành trang để test.")
+        return False
 
     def get_is_hanhtrangday(self):
         return self.get_tongsovatphamhanhtrang() >= 35 or self.moitruong.get_trongluongtoida() - self.get_tongtrongluongvatpham() <= 25
