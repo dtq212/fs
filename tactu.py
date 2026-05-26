@@ -967,7 +967,7 @@ class TacTu:
                             self.moitruong.set_idkynang1(IDKYNANG_TAMMUOICHANHOA)
                             return
 
-                        if 500 <= khoangcachmuctieu < khoangcachphudau:
+                        if 500 < khoangcachmuctieu < khoangcachphudau:
                             if self.moitruong.get_is_kynangsansang(IDKYNANG_TAMMUOICHANHOA):
                                 self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_TAMMUOICHANHOA, random.randint(450, 475))
                                 return
