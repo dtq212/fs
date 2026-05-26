@@ -937,37 +937,37 @@ class TacTu:
                         khoangcachmuctieu = self.moitruong.get_khoangcach(idmuctieu)
                         khoangcachmuctieusaptoi = self.moitruong.get_khoangcachsaptoi(idmuctieu)
 
-                        # yeucaudichuyenmoi = {"loaidichuyen": "dungim"}
+                        yeucaudichuyenmoi = {"loaidichuyen": "dungim"}
 
-                        # is_muctieudangdichuyen = self.moitruong.get_idtrangthainhanvat(idmuctieu) == IDTRANGTHAINHANVAT_DICHUYEN
-                        # is_muctieutiepcan = is_muctieudangdichuyen and khoangcachmuctieusaptoi < khoangcachmuctieu
+                        is_muctieudangdichuyen = self.moitruong.get_idtrangthainhanvat(idmuctieu) == IDTRANGTHAINHANVAT_DICHUYEN
+                        is_muctieutiepcan = is_muctieudangdichuyen and khoangcachmuctieusaptoi < khoangcachmuctieu
 
-                        # khoangcachphudau = 850 if is_muctieutiepcan else 650
-                        #
-                        # if khoangcachmuctieu > khoangcachphudau:
-                        #     yeucaudichuyenmoi = {
-                        #         "loaidichuyen": "dichuyengiukhoangcachtoithieu",
-                        #         "idmuctieu": idmuctieu,
-                        #         "khoangcach": khoangcachphudau - 5
-                        #     }
-                        #     self.moitruong.set_idkynang1(IDKYNANG_TAMMUOICHANHOA)
-                        #     return
+                        khoangcachphudau = 850 if is_muctieutiepcan else 650
 
-                        # if 500 <= khoangcachmuctieu < khoangcachphudau:
-                        #     if self.moitruong.get_is_kynangsansang(IDKYNANG_TAMMUOICHANHOA):
-                        #         self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_TAMMUOICHANHOA, random.randint(450, 475))
-                        #         return
-                        #     elif self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGBAO):
-                        #         self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_BANGPHONGBAO, random.randint(350, 375))
-                        #         return
+                        if khoangcachmuctieu > khoangcachphudau:
+                            yeucaudichuyenmoi = {
+                                "loaidichuyen": "dichuyengiukhoangcachtoithieu",
+                                "idmuctieu": idmuctieu,
+                                "khoangcach": khoangcachphudau - 5
+                            }
+                            self.moitruong.set_idkynang1(IDKYNANG_TAMMUOICHANHOA)
+                            return
 
-                        # if khoangcachmuctieu > 500:
-                        #     yeucaudichuyenmoi = {
-                        #         "loaidichuyen": "dichuyengiukhoangcachtoithieu",
-                        #         "idmuctieu": idmuctieu,
-                        #         "khoangcach": 495
-                        #     }
-                        #     return
+                        if 500 <= khoangcachmuctieu < khoangcachphudau:
+                            if self.moitruong.get_is_kynangsansang(IDKYNANG_TAMMUOICHANHOA):
+                                self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_TAMMUOICHANHOA, random.randint(450, 475))
+                                return
+                            elif self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGBAO):
+                                self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_BANGPHONGBAO, random.randint(350, 375))
+                                return
+
+                        if khoangcachmuctieu > 500:
+                            yeucaudichuyenmoi = {
+                                "loaidichuyen": "dichuyengiukhoangcachtoithieu",
+                                "idmuctieu": idmuctieu,
+                                "khoangcach": 495
+                            }
+                            return
 
                         if self.moitruong.get_is_kynangsansang(IDKYNANG_TAMMUOICHANHOA):
                             self.moitruong.set_idkynang1(IDKYNANG_TAMMUOICHANHOA)
