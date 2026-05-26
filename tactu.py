@@ -155,7 +155,7 @@ class TacTu:
             if "toadoytudongfarm" in thietlap:
                 self._toadoytudongfarm = thietlap["toadoytudongfarm"]
 
-    def battat_tudongvutrac(self):
+    def battat_is_tudongvutvatpham(self):
         self._is_tudongvutvatpham = not self._is_tudongvutvatpham
 
         if self._is_tudongvutvatpham:
