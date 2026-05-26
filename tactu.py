@@ -293,12 +293,12 @@ class TacTu:
         phatam("Bỏ toàn bộ thiết lập tên nhân vật không tấn công")
     
     def action_test(self):
-        # for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
-        #     vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
-        #     if not vitrivatpham:
-        #         continue
-        #     idvatpham, idruong, vitrix, vitriy = vitrivatpham
-        #     print("#{}: {}: {}".format(sothutuvatpham, (idvatpham, idruong, vitrix, vitriy), self.moitruong.get_thongtinvatpham_display(idvatpham)))
+        for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
+            vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
+            if not vitrivatpham:
+                continue
+            idvatpham, idruong, vitrix, vitriy = vitrivatpham
+            print("#{}: {}: {}".format(sothutuvatpham, (idvatpham, idruong, vitrix, vitriy), self.moitruong.get_thongtinvatpham_display(idvatpham)))
 
         print("toado: {}".format(self.moitruong.get_toado()))
 
@@ -1082,6 +1082,9 @@ class TacTu:
         if not self._is_tudongvutvatpham:
             return False
 
+        if not self.moitruong.get_is_khuvuccothetancong():
+            return False
+
         if time.time() - self._thoidiemvutvatphamgannhat < 0.25:
             return False
 
@@ -1109,6 +1112,10 @@ class TacTu:
                 continue
 
             if phamchat != IDPHAMCHATVATPHAM_TRANGLAM:
+                continue
+
+            dobentoida = self.moitruong.get_dobentoidavatpham(idvatpham)
+            if dobentoida <= 0:
                 continue
 
             thuoctinh_map = self.moitruong.get_thuoctinhvatpham_map(idvatpham)
