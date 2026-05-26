@@ -516,28 +516,24 @@ class TacTu:
             return
 
         if self.moitruong.get_is_khuvuccothetancong():
-            if self.moitruong.get_is_khuvuccothetancong():
-                if self.moitruong.get_idhephai() == IDHEPHAI_DINHAN:
-                    if not self.moitruong.get_is_datrieuhoithu():
-                        self._thoidiembathieuungbotrogannhat = time.time()
-                        for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
-                            self.moitruong.action_bathieuungbotro(idhieuungbotro)
-                    else:
-                        if time.time() - self._thoidiembathieuungbotrogannhat > 1.5:
-                            for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN): self.moitruong.action_tathieuungbotro(idhieuungbotro)
-                    return
-
-                idmuctieu = self.moitruong.get_idmuctieutancong()
-                if idmuctieu > 0 and (self.moitruong.get_idloainhanvat(idmuctieu) in (IDLOAINHANVAT_NGUOICHOI, IDLOAINHANVAT_TRIEUHOITHU) or self.moitruong.get_is_boss(
-                        idmuctieu) or self.moitruong.get_is_quaixanh(idmuctieu)):
+            if self.moitruong.get_idhephai() == IDHEPHAI_DINHAN:
+                if not self.moitruong.get_is_datrieuhoithu() and not self.moitruong.get_is_dangtudongtimduong():
                     self._thoidiembathieuungbotrogannhat = time.time()
                     for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
                         self.moitruong.action_bathieuungbotro(idhieuungbotro)
-                elif time.time() - self._thoidiembathieuungbotrogannhat > 30.:
-                    for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
-                        self.moitruong.action_tathieuungbotro(idhieuungbotro)
-            else:
-                for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOTINHTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
+                else:
+                    if time.time() - self._thoidiembathieuungbotrogannhat > 1.5:
+                        for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN): self.moitruong.action_tathieuungbotro(idhieuungbotro)
+                return
+
+            idmuctieu = self.moitruong.get_idmuctieutancong()
+            if idmuctieu > 0 and (self.moitruong.get_idloainhanvat(idmuctieu) in (IDLOAINHANVAT_NGUOICHOI, IDLOAINHANVAT_TRIEUHOITHU) or self.moitruong.get_is_boss(
+                    idmuctieu) or self.moitruong.get_is_quaixanh(idmuctieu)):
+                self._thoidiembathieuungbotrogannhat = time.time()
+                for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
+                    self.moitruong.action_bathieuungbotro(idhieuungbotro)
+            elif time.time() - self._thoidiembathieuungbotrogannhat > 30.:
+                for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
                     self.moitruong.action_tathieuungbotro(idhieuungbotro)
         else:
             for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOTINHTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
