@@ -1079,7 +1079,7 @@ class TacTu:
                 self.moitruong.action_sudungphimtat(3)
 
     def action_tudongvutvatpham(self):
-        if not self._is_tudongvutrac:
+        if not self._is_tudongvutvatpham:
             return False
 
         if time.time() - self._thoidiemvutvatphamgannhat < 0.25:
