@@ -956,7 +956,8 @@ class TacTu:
                         is_muctieudangdichuyen = self.moitruong.get_idtrangthainhanvat(idmuctieu) == IDTRANGTHAINHANVAT_DICHUYEN
                         is_muctieutiepcan = is_muctieudangdichuyen and khoangcachmuctieusaptoi < khoangcachmuctieu
 
-                        khoangcachphudau = 850 if is_muctieutiepcan else 650
+                        # khoangcachphudau = 850 if is_muctieutiepcan else 650
+                        khoangcachphudau = 500
 
                         if khoangcachmuctieu > khoangcachphudau:
                             yeucaudichuyenmoi = {

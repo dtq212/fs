@@ -981,7 +981,7 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamdichuyen, bytes(encoding), len(encoding))
 
-    def action_dichuyen(self, toadox, toadoy, delay = 0.25):
+    def action_dichuyen(self, toadox, toadoy, delay = 0.01):
         if not self.diachihamdichuyen:
             self.khoitaohamdichuyen()
 
@@ -996,7 +996,7 @@ class MoiTruong:
         self.tientrinh.start_thread(self.diachihamdichuyen)
         return True
 
-    def action_dichuyengiukhoangcachtoithieu(self, idnhanvat2, khoangcachtoithieu, delay = 0.25):
+    def action_dichuyengiukhoangcachtoithieu(self, idnhanvat2, khoangcachtoithieu, delay = 0.01):
         if not self.get_is_nhanvattontai(idnhanvat2):
             return False
 
@@ -1020,7 +1020,7 @@ class MoiTruong:
 
         return False
 
-    def action_dichuyengiukhoangcachtoithieudiem(self, toadox, toadoy, khoangcachtoithieu, delay = 0.25):
+    def action_dichuyengiukhoangcachtoithieudiem(self, toadox, toadoy, khoangcachtoithieu, delay = 0.01):
         if time.time() - self._thoidiemdichuyengiukhoangcachtoithieu < delay:
             return False
 
@@ -1386,7 +1386,7 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamsudungkynangtoado, bytes(encoding), len(encoding))
 
-    def action_sudungkynangtoado(self, idkynang, toadox, toadoy, delay = 0.05):
+    def action_sudungkynangtoado(self, idkynang, toadox, toadoy, delay = 0.01):
         if not self.diachihamsudungkynangtoado:
             self.khoitaohamsudungkynangtoado()
 
@@ -1403,7 +1403,7 @@ class MoiTruong:
         self.tientrinh.start_thread(self.diachihamsudungkynangtoado)
         return True
 
-    def action_sudungkynangphudau(self, idnhanvat, idkynang, khoangcachtoida, delay = 0.05):
+    def action_sudungkynangphudau(self, idnhanvat, idkynang, khoangcachtoida, delay = 0.01):
         if time.time() - self._thoidiemsudungkynanggannhat_map.get(idkynang, 0.) < delay:
             return False
 
@@ -1441,7 +1441,7 @@ class MoiTruong:
 
         return self.action_sudungkynangtoado(idkynang, int(target_x), int(target_y), delay = delay)
 
-    def action_sudungkynangtoadochichuot(self, idkynang, khoangcachtoida, delay = 0.05):
+    def action_sudungkynangtoadochichuot(self, idkynang, khoangcachtoida, delay = 0.01):
         if time.time() - self._thoidiemsudungkynanggannhat_map.get(idkynang, 0.) < delay:
             return False
 
