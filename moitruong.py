@@ -1582,17 +1582,17 @@ class MoiTruong:
             sub esp, 32                     
 
             mov eax, dword ptr [{hex(diachidulieu)}]
-            mov ebx, dword ptr [{hex(diachidulieu + 4)}]
-            mov ecx, dword ptr [{hex(diachidulieu + 8)}]
-            mov edx, dword ptr [{hex(diachidulieu + 12)}]
-            mov esi, dword ptr [{hex(diachidulieu + 16)}]
+            mov ecx, dword ptr [{hex(diachidulieu + 4)}]
+            mov edx, dword ptr [{hex(diachidulieu + 8)}]
+            mov edi, dword ptr [{hex(diachidulieu + 12)}]
+            mov ebp, dword ptr [{hex(diachidulieu + 16)}]
 
             mov byte ptr [ebp - 28], 0x4D
             mov dword ptr [ebp - 27], eax
-            mov dword ptr [ebp - 23], ebx
-            mov dword ptr [ebp - 19], ecx
-            mov dword ptr [ebp - 15], edx
-            mov dword ptr [ebp - 11], esi
+            mov dword ptr [ebp - 23], ecx
+            mov dword ptr [ebp - 19], edx
+            mov dword ptr [ebp - 15], edi
+            mov dword ptr [ebp - 11], ebp
 
             mov dword ptr [ebp - 4], 21        
 
@@ -1638,6 +1638,8 @@ class MoiTruong:
         write_int(self.tientrinh, diachidulieu + 8, toadoy_hientai)
         write_int(self.tientrinh, diachidulieu + 12, toadoy)
         write_int(self.tientrinh, diachidulieu + 16, idkynang)
+
+        print(hex(self.diachihamsudungkynangtoado2))
 
         self.tientrinh.start_thread(self.diachihamsudungkynangtoado2)
         return True
