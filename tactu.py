@@ -776,13 +776,13 @@ class TacTu:
                 if self.action_sudungvatpham(QUANAMTHUY, delay = 0.):
                     return
 
-        if self.moitruong.get_phantramsinhluchientai() <= self.moitruong.get_phantramsinhluchoiphuc():
-            for tenvatpham in ["Bảo Tá Thanh lộ", "Thanh Lộ"]:
+        if self.moitruong.get_phantramsinhluchientai() <= self.moitruong.get_phantramsinhluchoiphuc() - 15:
+            for tenvatpham in [BAOTATHANHLO, THANHLO]:
                 if self.action_sudungvatpham(tenvatpham, delay = 0.25):
                     return
 
-        if self.moitruong.get_phantramnoiluchientai() <= self.moitruong.get_phantramnoiluchoiphuc():
-            for tenvatpham in ["Sơn Thủy chân khí", "Chân Khí"]:
+        if self.moitruong.get_phantramnoiluchientai() <= self.moitruong.get_phantramnoiluchoiphuc() - 15:
+            for tenvatpham in [SONTHUYCHANKHI, CHANKHI]:
                 if self.action_sudungvatpham(tenvatpham, delay = 0.25):
                     return
 
