@@ -75,6 +75,8 @@ class MoiTruong:
         self.diachihamsudungphimtat = 0
         self.diachihamvohieuhoakynangbotro3 = 0
         self.diachihamvutvatpham = 0
+        self.diachihammuavatphamktc = 0
+        self.diachihammotabktc = 0
         self._idchunhan_map = {}
 
         self.diachihamdoimaupk = 0
@@ -93,6 +95,8 @@ class MoiTruong:
         self.diachihamxacnhandoithoai = 0
 
         self._thoidiemvutvatphamgannhat = 0.
+        self._thoidiemmuaktcgannhat = 0.
+        self._thoidiemmotabktcgannhat = 0.
 
     def __del__(self):
         def safe_free(diachi):
@@ -300,20 +304,17 @@ class MoiTruong:
         iddiachikynang = self.get_iddiachikynang(idkynang)
         if iddiachikynang <= 0:
             return -1
-        return read_short_int(self.tientrinh,
-                              self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xC4 + 0x24 * iddiachikynang + 1 * OFFSET_DIACHICOSOMOINHANVAT)
+        return read_short_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xC4 + 0x24 * iddiachikynang + 1 * OFFSET_DIACHICOSOMOINHANVAT)
 
     def get_is_dahockynang(self, idkynang):
         capdokynang = self.get_capdokynang(idkynang)
         return capdokynang > 0
 
     def get_thoidiemhoiphuckynang(self, idkynang, idnhanvat=1):
-        return read_int(self.tientrinh,
-                        self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xB4 + 0x24 * idkynang + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xB4 + 0x24 * idkynang + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
 
     def get_diachicosohieuungbotro(self, idnhanvat=1):
-        return read_int(self.tientrinh,
-                        self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x98 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x98 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
 
     def get_diachihieuungbotro(self, idhieuungbotro, idnhanvat=1):
         diachicosohieuungbotro = self.get_diachicosohieuungbotro(idnhanvat)
@@ -662,6 +663,9 @@ class MoiTruong:
 
     def get_khoangcachtheosau(self):
         return read_int(self.tientrinh, self.diachigame + 0x4A3EE4 + 0x000)
+
+    def get_idtabkytrancac(self):
+        return read_int(self.tientrinh, self.diachigame + 0x4A2448 + 0x000)
 
     def get_is_theosau(self):
         return read_int(self.tientrinh, self.diachigame + 0x4A3EC0 + 0x000)
@@ -1755,4 +1759,141 @@ class MoiTruong:
         write_int(self.tientrinh, diachidulieu, dbid)
 
         self.tientrinh.start_thread(self.diachihamvutvatpham)
+        return True
+
+    def khoitaohammotabkytrancac(self):
+        if self.diachihammotabktc:
+            return
+
+        self.diachihammotabktc = self.tientrinh.allocate(256)
+        diachidulieu = self.diachihammotabktc + 0x80
+
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        asm_code = f"""
+            push ebp
+            mov ebp, esp
+            sub esp, 16                     
+
+            mov eax, dword ptr [{hex(diachidulieu)}]
+
+            mov byte ptr [ebp - 12], 0x73
+            mov byte ptr [ebp - 11], al
+            mov dword ptr [ebp - 10], eax
+
+            mov dword ptr [ebp - 4], 6        
+
+            mov eax, dword ptr [{hex(self.diachigame + 0x2B3788)}]
+            test eax, eax
+            je ketthuc
+
+            lea edx, [ebp - 4]
+            push edx
+
+            lea edx, [ebp - 12]
+            push edx
+
+            push eax
+
+            mov ecx, dword ptr [eax]
+            mov edx, dword ptr [ecx + 0x1C]
+            call edx                        
+
+            add esp, 0x0C                   
+
+            ketthuc:
+            mov esp, ebp
+            pop ebp
+            ret 4                           
+        """
+
+        encoding, _ = ks.asm(asm_code)
+        write_bytes(self.tientrinh, self.diachihammotabktc, bytes(encoding), len(encoding))
+
+    def action_motabkytrancac(self, idtab, delay=0.5):
+        if not self.diachihammotabktc:
+            self.khoitaohammotabkytrancac()
+
+        if time.time() - self._thoidiemmotabktcgannhat < delay:
+            return False
+
+        self._thoidiemmotabktcgannhat = time.time()
+
+        diachidulieu = self.diachihammotabktc + 0x80
+        write_int(self.tientrinh, diachidulieu, idtab)
+
+        self.tientrinh.start_thread(self.diachihammotabktc)
+        return True
+
+    def khoitaohammuavatphamkytrancac(self):
+        if self.diachihammuavatphamktc:
+            return
+
+        self.diachihammuavatphamktc = self.tientrinh.allocate(256)
+        diachidulieu = self.diachihammuavatphamktc + 0x80
+
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        asm_code = f"""
+            push ebp
+            mov ebp, esp
+            sub esp, 24                     
+
+            mov eax, dword ptr [{hex(diachidulieu)}]
+            mov ecx, dword ptr [{hex(diachidulieu + 4)}]
+            mov edx, dword ptr [{hex(diachidulieu + 8)}]
+
+            mov byte ptr [ebp - 20], 0x5B
+            mov dword ptr [ebp - 19], eax
+            mov dword ptr [ebp - 15], ecx
+            mov dword ptr [ebp - 11], edx
+
+            mov dword ptr [ebp - 4], 13        
+
+            mov eax, dword ptr [{hex(self.diachigame + 0x2B3788)}]
+            test eax, eax
+            je ketthuc
+
+            lea edx, [ebp - 4]
+            push edx
+
+            lea edx, [ebp - 20]
+            push edx
+
+            push eax
+
+            mov ecx, dword ptr [eax]
+            mov edx, dword ptr [ecx + 0x1C]
+            call edx                        
+
+            add esp, 0x0C                   
+
+            ketthuc:
+            mov esp, ebp
+            pop ebp
+            ret 4                           
+        """
+
+        encoding, _ = ks.asm(asm_code)
+        write_bytes(self.tientrinh, self.diachihammuavatphamktc, bytes(encoding), len(encoding))
+
+    def action_muavatphamkytrancac(self, idtab, vitrivatpham, soluong, delay=0.5):
+        if not self.diachihammuavatphamktc:
+            self.khoitaohammuavatphamkytrancac()
+
+        if time.time() - self._thoidiemmuaktcgannhat < delay:
+            return False
+
+        if self.get_idtabkytrancac() != idtab:
+            self.action_motabkytrancac(idtab)
+            return False
+
+        self._thoidiemmuaktcgannhat = time.time()
+
+        diachidulieu = self.diachihammuavatphamktc + 0x80
+        write_int(self.tientrinh, diachidulieu, idtab)
+        write_int(self.tientrinh, diachidulieu + 4, vitrivatpham)
+        write_int(self.tientrinh, diachidulieu + 8, soluong)
+
+        self.tientrinh.start_thread(self.diachihammuavatphamktc)
         return True

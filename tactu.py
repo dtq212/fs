@@ -67,6 +67,7 @@ class TacTu:
 
         self._is_tudongvutvatpham = False
         self._thoidiemvutvatphamgannhat = 0.
+
     def __del__(self):
         try:
             self.moitruong.action_tatvohieuhoathietlapmuctieutancong()
@@ -302,36 +303,7 @@ class TacTu:
 
         print("toado: {}".format(self.moitruong.get_toado()))
 
-        tenvatpham_canvut = "Mảnh Hồng thủy tinh"
-        print(f"--- BẮT ĐẦU TEST VỨT VẬT PHẨM: {tenvatpham_canvut} ---")
-
-        for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
-            vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
-            if not vitrivatpham:
-                continue
-
-            idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
-
-            if vitriruong != IDVITRIRUONG_HANHTRANG:
-                continue
-
-            tenvatphamxemxet = self.moitruong.get_tenvatpham(idvatpham)
-
-            if tenvatphamxemxet and tenvatphamxemxet.strip().lower() == tenvatpham_canvut.lower():
-                print(f"[+] Đã tìm thấy '{tenvatphamxemxet}' tại ô index số {sothutuvatpham} (ID: {idvatpham}).")
-                print(f"[+] Tiến hành gửi lệnh vứt...")
-
-                ketqua = self.moitruong.action_vutvatpham(sothutuvatpham)
-
-                if ketqua:
-                    print("[OK] Lệnh vứt đã được gửi thẳng vào memory (Bypass UI thành công)!")
-                    return True
-                else:
-                    print("[FAIL] Lệnh vứt thất bại (Có thể do delay hoặc packet buffer chưa sẵn sàng).")
-                    return False
-
-        print(f"[-] Không tìm thấy '{tenvatpham_canvut}' trong hành trang để test.")
-        return False
+        self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 10, 1)
 
     def get_is_hanhtrangday(self):
         return self.get_tongsovatphamhanhtrang() >= 35 or self.moitruong.get_trongluongtoida() - self.get_tongtrongluongvatpham() <= 25
@@ -1002,7 +974,7 @@ class TacTu:
                         is_muctieutiepcan = is_muctieudangdichuyen and khoangcachmuctieusaptoi < khoangcachmuctieu
 
                         # khoangcachphudau = 850 if is_muctieutiepcan else 650
-                        khoangcachphudau = 500
+                        khoangcachphudau = 550
 
                         if khoangcachmuctieu > khoangcachphudau:
                             yeucaudichuyenmoi = {
