@@ -1164,9 +1164,9 @@ class MoiTruong:
             buocdi = math.dist((x1, y1), (xmoi, ymoi))
 
             if 0 < buocdi < buocditoithieu:
-                tile_buocdi = buocditoithieu / buocdi
-                xmoi = x1 + tile_buocdi * (xmoi - x1)
-                ymoi = y1 + tile_buocdi * (ymoi - y1)
+                tilebuocdi = buocditoithieu / buocdi
+                xmoi = x1 + tilebuocdi * (xmoi - x1)
+                ymoi = y1 + tilebuocdi * (ymoi - y1)
 
             self._thoidiemdichuyengiukhoangcachtoithieu = time.time()
             return self.action_dichuyen(int(xmoi), int(ymoi), delay = delay)
@@ -1192,9 +1192,9 @@ class MoiTruong:
             buocdi = math.dist((x1, y1), (xmoi, ymoi))
 
             if 0 < buocdi < buocditoithieu:
-                tile_buocdi = buocditoithieu / buocdi
-                xmoi = x1 + tile_buocdi * (xmoi - x1)
-                ymoi = y1 + tile_buocdi * (ymoi - y1)
+                tilebuocdi = buocditoithieu / buocdi
+                xmoi = x1 + tilebuocdi * (xmoi - x1)
+                ymoi = y1 + tilebuocdi * (ymoi - y1)
 
             self._thoidiemdichuyengiukhoangcachtoithieu = time.time()
             return self.action_dichuyen(int(xmoi), int(ymoi), delay = delay)
