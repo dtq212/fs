@@ -1143,7 +1143,7 @@ class MoiTruong:
         self.tientrinh.start_thread(self.diachihamdichuyen2)
         return True
 
-    def action_dichuyengiukhoangcachtoithieu(self, idnhanvat2, khoangcachtoithieu, buocditoithieu=30, delay=0.01):
+    def action_dichuyengiukhoangcachtoithieu(self, idnhanvat2, khoangcachtoithieu, buocditoithieu = 30, delay = 0.01):
         if not self.get_is_nhanvattontai(idnhanvat2):
             return False
 
@@ -1158,19 +1158,22 @@ class MoiTruong:
         if D > khoangcachtoithieu:
             tile = khoangcachtoithieu / D
 
-            xmoi = int(x2 - tile * (x2 - x1))
-            ymoi = int(y2 - tile * (y2 - y1))
+            xmoi = x2 - tile * (x2 - x1)
+            ymoi = y2 - tile * (y2 - y1)
 
             buocdi = math.dist((x1, y1), (xmoi, ymoi))
-            if buocdi < buocditoithieu:
-                return False
+
+            if 0 < buocdi < buocditoithieu:
+                tile_buocdi = buocditoithieu / buocdi
+                xmoi = x1 + tile_buocdi * (xmoi - x1)
+                ymoi = y1 + tile_buocdi * (ymoi - y1)
 
             self._thoidiemdichuyengiukhoangcachtoithieu = time.time()
-            return self.action_dichuyen(xmoi, ymoi, delay=delay)
+            return self.action_dichuyen(int(xmoi), int(ymoi), delay = delay)
 
         return False
 
-    def action_dichuyengiukhoangcachtoithieudiem(self, toadox, toadoy, khoangcachtoithieu, buocditoithieu=30, delay=0.01):
+    def action_dichuyengiukhoangcachtoithieudiem(self, toadox, toadoy, khoangcachtoithieu, buocditoithieu = 30, delay = 0.01):
         if time.time() - self._thoidiemdichuyengiukhoangcachtoithieu < delay:
             return False
 
@@ -1183,15 +1186,18 @@ class MoiTruong:
         if D > khoangcachtoithieu:
             tile = khoangcachtoithieu / D
 
-            xmoi = int(x2 - tile * (x2 - x1))
-            ymoi = int(y2 - tile * (y2 - y1))
+            xmoi = x2 - tile * (x2 - x1)
+            ymoi = y2 - tile * (y2 - y1)
 
             buocdi = math.dist((x1, y1), (xmoi, ymoi))
-            if buocdi < buocditoithieu:
-                return False
+
+            if 0 < buocdi < buocditoithieu:
+                tile_buocdi = buocditoithieu / buocdi
+                xmoi = x1 + tile_buocdi * (xmoi - x1)
+                ymoi = y1 + tile_buocdi * (ymoi - y1)
 
             self._thoidiemdichuyengiukhoangcachtoithieu = time.time()
-            return self.action_dichuyen(xmoi, ymoi, delay=delay)
+            return self.action_dichuyen(int(xmoi), int(ymoi), delay = delay)
 
         return False
 
