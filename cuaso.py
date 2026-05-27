@@ -141,7 +141,7 @@ class CuaSo:
                     "_tennhanvatkhongtancongs": ", ".join(self.tactu._tennhanvatkhongtancongs),
 
                     "_is_tudongfarm": self.tactu._is_tudongfarm,
-                    "is_tudongvutvatpham": self.tactu._is_tudongvutvatpham,
+                    "_is_tudongvutvatpham": self.tactu._is_tudongvutvatpham,
                     "idbandotudongfarm": self.tactu._idbandotudongfarm,
                     "toadoxtudongfarm": self.tactu._toadoxtudongfarm,
                     "toadoytudongfarm": self.tactu._toadoytudongfarm,
