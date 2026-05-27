@@ -1810,7 +1810,7 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihammotabktc, bytes(encoding), len(encoding))
 
-    def action_motabkytrancac(self, idtab, delay=0.5):
+    def action_motabkytrancac(self, vitritab, delay= 0.5):
         if not self.diachihammotabktc:
             self.khoitaohammotabkytrancac()
 
@@ -1820,7 +1820,7 @@ class MoiTruong:
         self._thoidiemmotabktcgannhat = time.time()
 
         diachidulieu = self.diachihammotabktc + 0x80
-        write_int(self.tientrinh, diachidulieu, idtab)
+        write_int(self.tientrinh, diachidulieu, vitritab)
 
         self.tientrinh.start_thread(self.diachihammotabktc)
         return True
@@ -1885,7 +1885,9 @@ class MoiTruong:
             return False
 
         if self.get_idtabkytrancac() != idtab:
-            self.action_motabkytrancac(idtab)
+            vitritab = VITRITAB_MAP.get(idtab)
+            if vitritab is not None:
+                self.action_motabkytrancac(vitritab)
             return False
 
         self._thoidiemmuaktcgannhat = time.time()
