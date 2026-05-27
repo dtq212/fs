@@ -1570,58 +1570,46 @@ class MoiTruong:
     def khoitaohamsudungkynangtoado2(self):
         if self.diachihamsudungkynangtoado2:
             return
-
         self.diachihamsudungkynangtoado2 = self.tientrinh.allocate(256)
-        diachidulieu = self.diachihamsudungkynangtoado2 + 0x80
+
+        diachidulieu = self.diachihamsudungkynangtoado2 + 0x40
 
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
-
         asm_code = f"""
             push ebp
             mov ebp, esp
-            sub esp, 32                     
+            sub esp, 32
 
             mov eax, dword ptr [{hex(diachidulieu)}]
-            mov ecx, dword ptr [{hex(diachidulieu + 4)}]
-            mov edx, dword ptr [{hex(diachidulieu + 8)}]
-            mov edi, dword ptr [{hex(diachidulieu + 12)}]
-            mov ebp, dword ptr [{hex(diachidulieu + 16)}]
+            mov ebx, dword ptr [{hex(diachidulieu + 4)}]
+            mov ecx, dword ptr [{hex(diachidulieu + 8)}]
+            mov edx, dword ptr [{hex(diachidulieu + 12)}]
+            mov esi, dword ptr [{hex(diachidulieu + 16)}]
 
-            mov byte ptr [ebp - 28], 0x4D
-            mov dword ptr [ebp - 27], eax
-            mov dword ptr [ebp - 23], ecx
-            mov dword ptr [ebp - 19], edx
-            mov dword ptr [ebp - 15], edi
-            mov dword ptr [ebp - 11], ebp
-
-            mov dword ptr [ebp - 4], 21        
+            mov byte ptr [ebp-0x1C], 0x4D
+            mov dword ptr [ebp-0x1B], edx
+            mov dword ptr [ebp-0x17], ebx
+            mov dword ptr [ebp-0x13], eax
+            mov dword ptr [ebp-0x0F], ecx
+            mov dword ptr [ebp-0x0B], esi
+            mov dword ptr [ebp-0x04], 21
 
             mov eax, dword ptr [{hex(self.diachigame + 0x2B3788)}]
-            test eax, eax
-            je ketthuc
-
-            lea edx, [ebp - 4]
-            push edx
-
-            lea edx, [ebp - 28]
-            push edx
-
+            lea ecx, [ebp - 0x1C]
+            push ecx
             push eax
+            mov edx, dword ptr [eax]
+            mov edx, dword ptr [edx + 0x1C]
+            call edx
 
-            mov ecx, dword ptr [eax]
-            mov edx, dword ptr [ecx + 0x1C]
-            call edx                        
-
-            ketthuc:
             mov esp, ebp
             pop ebp
-            ret 4                           
+            ret 4
         """
-
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamsudungkynangtoado2, bytes(encoding), len(encoding))
 
-    def action_sudungkynangtoado2(self, idkynang, toadox, toadoy, delay = 0.01):
+    def action_sudungkynangtoado2(self, idkynang, toadox, toadoy, delay=0.01):
         if not self.diachihamsudungkynangtoado2:
             self.khoitaohamsudungkynangtoado2()
 
@@ -1632,14 +1620,12 @@ class MoiTruong:
 
         self._thoidiemsudungkynanggannhat_map[idkynang] = time.time()
 
-        diachidulieu = self.diachihamsudungkynangtoado2 + 0x80
+        diachidulieu = self.diachihamsudungkynangtoado2 + 0x40
         write_int(self.tientrinh, diachidulieu, toadox)
         write_int(self.tientrinh, diachidulieu + 4, toadox_hientai)
         write_int(self.tientrinh, diachidulieu + 8, toadoy_hientai)
         write_int(self.tientrinh, diachidulieu + 12, toadoy)
         write_int(self.tientrinh, diachidulieu + 16, idkynang)
-
-        print(hex(self.diachihamsudungkynangtoado2))
 
         self.tientrinh.start_thread(self.diachihamsudungkynangtoado2)
         return True
@@ -1680,7 +1666,7 @@ class MoiTruong:
             target_x = x1 + deltax_final * ratio
             target_y = y1 + deltay_final * ratio
 
-        return self.action_sudungkynangtoado2(idkynang, int(target_x), int(target_y), delay = delay)
+        return self.action_sudungkynangtoado(idkynang, int(target_x), int(target_y), delay = delay)
 
     def action_sudungkynangtoadochichuot(self, idkynang, khoangcachtoida, delay = 0.01):
         if time.time() - self._thoidiemsudungkynanggannhat_map.get(idkynang, 0.) < delay:
@@ -1701,7 +1687,7 @@ class MoiTruong:
         target_x = int(x1 + deltax)
         target_y = int(y1 + deltay)
 
-        return self.action_sudungkynangtoado2(idkynang, target_x, target_y, delay = delay)
+        return self.action_sudungkynangtoado(idkynang, target_x, target_y, delay = delay)
 
     def khoitaohamsudungphimtat(self):
         if self.diachihamsudungphimtat:
