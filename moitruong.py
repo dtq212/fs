@@ -1588,11 +1588,11 @@ class MoiTruong:
             mov esi, dword ptr [{hex(diachidulieu + 16)}]
 
             mov byte ptr [ebp - 28], 0x4D
-            mov dword ptr [ebp - 27], edx
+            mov dword ptr [ebp - 27], esi
             mov dword ptr [ebp - 23], ebx
             mov dword ptr [ebp - 19], ecx
             mov dword ptr [ebp - 15], eax
-            mov dword ptr [ebp - 11], esi
+            mov dword ptr [ebp - 11], edx
 
             mov dword ptr [ebp - 4], 21        
 
@@ -1608,11 +1608,8 @@ class MoiTruong:
 
             push eax
 
-            lea ecx, [ebp - 28]
-
             mov edx, dword ptr [eax]
             mov edx, dword ptr [edx + 0x1C]
-
             call edx                        
 
             ketthuc:
@@ -1642,8 +1639,7 @@ class MoiTruong:
         write_int(self.tientrinh, diachidulieu + 12, toadoy)  # Target Y
         write_int(self.tientrinh, diachidulieu + 16, idkynang)  # Skill ID
 
-        print(hex(self.diachihamsudungkynangtoado2))
-        # self.tientrinh.start_thread(self.diachihamsudungkynangtoado2)
+        self.tientrinh.start_thread(self.diachihamsudungkynangtoado2)
         return True
 
     def action_sudungkynangphudau(self, idnhanvat, idkynang, khoangcachtoida, delay = 0.01):
@@ -1703,7 +1699,7 @@ class MoiTruong:
         target_x = int(x1 + deltax)
         target_y = int(y1 + deltay)
 
-        return self.action_sudungkynangtoado(idkynang, target_x, target_y, delay = delay)
+        return self.action_sudungkynangtoado2(idkynang, target_x, target_y, delay = delay)
 
     def khoitaohamsudungphimtat(self):
         if self.diachihamsudungphimtat:
