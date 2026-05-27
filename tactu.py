@@ -543,17 +543,23 @@ class TacTu:
 
     def action_timkiemvatpham(self, tenvatpham):
         if not tenvatpham:
-            return False
+            return -1
 
         for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
             vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
             if not vitrivatpham:
                 continue
+
             idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
+
+            if vitriruong != IDVITRIRUONG_HANHTRANG:
+                continue
+
             tenvatphamxemxet = self.moitruong.get_tenvatpham(idvatpham)
             if tenvatphamxemxet and tenvatphamxemxet.strip().lower() == tenvatpham.strip().lower():
-                return vitrivatpham
-        return False
+                return sothutuvatpham
+
+        return -1
 
     def action_tudongbattathieuungbotro(self):
         if not self._is_tudongbattathieuungbotro:
@@ -728,8 +734,8 @@ class TacTu:
     def action_batpk(self):
         if self.moitruong.get_idmaupk() != IDMAUPK_DO:
             self.moitruong.action_doimaupk(IDMAUPK_DO)
-            vitrivatpham = self.action_timkiemvatpham(QUANAMTHUY)
-            if not vitrivatpham:
+            sothutuvatpham = self.action_timkiemvatpham(QUANAMTHUY)
+            if sothutuvatpham == -1:
                 if time.time() - self._thoidiemthongbaohetquanamthuygannhat > 5.:
                     phatam("Không tìm thấy {}".format(QUANAMTHUY))
                     self._thoidiemthongbaohetquanamthuygannhat = time.time()
@@ -742,14 +748,14 @@ class TacTu:
             self.action_sudungquanamthuy()
 
     def action_sudungquanamthuy(self):
-        vitrivatpham = self.action_timkiemvatpham(QUANAMTHUY)
-        if not vitrivatpham:
+        sothutuvatpham = self.action_timkiemvatpham(QUANAMTHUY)
+        if sothutuvatpham == -1:
             if time.time() - self._thoidiemthongbaohetquanamthuygannhat > 5.:
                 phatam("Không tìm thấy {}".format(QUANAMTHUY))
                 self._thoidiemthongbaohetquanamthuygannhat = time.time()
             return
-        idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
-        self.moitruong.action_sudungvatpham(idvatpham, vitrix, vitriy, delay = 0.)
+
+        self.moitruong.action_sudungvatpham(sothutuvatpham, delay = 0.)
 
     def action_tudongtaypk(self):
         if not self._is_tudongtaypk:
@@ -1186,3 +1192,4 @@ class TacTu:
                 return False
 
         return False
+
