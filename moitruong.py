@@ -304,17 +304,20 @@ class MoiTruong:
         iddiachikynang = self.get_iddiachikynang(idkynang)
         if iddiachikynang <= 0:
             return -1
-        return read_short_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xC4 + 0x24 * iddiachikynang + 1 * OFFSET_DIACHICOSOMOINHANVAT)
+        return read_short_int(self.tientrinh,
+                              self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xC4 + 0x24 * iddiachikynang + 1 * OFFSET_DIACHICOSOMOINHANVAT)
 
     def get_is_dahockynang(self, idkynang):
         capdokynang = self.get_capdokynang(idkynang)
         return capdokynang > 0
 
     def get_thoidiemhoiphuckynang(self, idkynang, idnhanvat=1):
-        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xB4 + 0x24 * idkynang + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+        return read_int(self.tientrinh,
+                        self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xB4 + 0x24 * idkynang + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
 
     def get_diachicosohieuungbotro(self, idnhanvat=1):
-        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x98 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+        return read_int(self.tientrinh,
+                        self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x98 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
 
     def get_diachihieuungbotro(self, idhieuungbotro, idnhanvat=1):
         diachicosohieuungbotro = self.get_diachicosohieuungbotro(idnhanvat)
@@ -1298,7 +1301,7 @@ class MoiTruong:
                     b"\xE9" + (self.diachihamboquaboss - (self.diachigame + 0x1AB52C) - 5).to_bytes(4,
                                                                                                     byteorder=sys.byteorder,
                                                                                                     signed=True) + (
-                                b"\x90" * 7), 12)
+                            b"\x90" * 7), 12)
 
     def action_thietlapboquaboss(self, is_boquaboss: bool, delay=0.5):
         if not self.diachihamboquaboss:
@@ -1611,7 +1614,6 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamdoithoai, bytes(encoding), len(encoding))
 
     def action_doithoai(self, idnhanvat, delay=0.5):
-        print("action_doithoai")
         if not self.diachihamdoithoai:
             self.khoitaohamdoithoai()
 
@@ -1653,7 +1655,6 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamxacnhandoithoai, bytes(encoding), len(encoding))
 
     def action_xacnhandoithoai(self, delay=0.25):
-        print("action_xacnhandoithoai")
         if not self.diachihamxacnhandoithoai:
             self.khoitaohamxacnhandoithoai()
 
@@ -1910,6 +1911,8 @@ class MoiTruong:
         write_int(self.tientrinh, diachidulieu, idtab)
         write_int(self.tientrinh, diachidulieu + 4, vitrivatpham)
         write_int(self.tientrinh, diachidulieu + 8, soluong)
+
+        print("action_muavatphamkytrancac: {}, {}, {}".format(idtab, vitrivatpham, soluong))
 
         self.tientrinh.start_thread(self.diachihammuavatphamkytrancac)
         return True
