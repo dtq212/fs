@@ -69,6 +69,8 @@ class TacTu:
         self._thoidiemvutvatphamgannhat = 0.
         self._is_tudongmuavatphamkytrancac = False
 
+        self._thoidiemdongbotoadohientaigannhat = 0.0
+
     def __del__(self):
         try:
             self.moitruong.action_tatvohieuhoathietlapmuctieutancong()
@@ -1036,13 +1038,13 @@ class TacTu:
                     elif self._is_sudungkynangtoadochichuot:
                         if self.moitruong.get_is_kynangsansang(IDKYNANG_TAMMUOICHANHOA):
                             self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_TAMMUOICHANHOA, random.randint(450, 475))
-                        elif self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGVANLY):
+                        if self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGVANLY):
                             self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_BANGPHONGVANLY, random.randint(450, 475))
-                        elif self.moitruong.get_is_kynangsansang(IDKYNANG_THAPPHUONGLIETHOA):
+                        if self.moitruong.get_is_kynangsansang(IDKYNANG_THAPPHUONGLIETHOA):
                             self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_THAPPHUONGLIETHOA, random.randint(450, 475))
-                        elif self.moitruong.get_is_kynangsansang(IDKYNANG_LOIDONGCUUTHIEN):
+                        if self.moitruong.get_is_kynangsansang(IDKYNANG_LOIDONGCUUTHIEN):
                             self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_LOIDONGCUUTHIEN, random.randint(450, 475))
-                        elif self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGBAO):
+                        if self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGBAO):
                             self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_BANGPHONGBAO, random.randint(350, 375))
                 elif is_cothesudungkynangbotro:
                     if self.moitruong.get_is_kynangsansang(IDKYNANG_CHUCDUNGCHANKHI) and not self.moitruong.get_is_cohieuungbotro(IDHIEUUNGBOTRO_CHUCDUNGCHANKHI):
@@ -1169,6 +1171,8 @@ class TacTu:
         if not self._is_tudongmuavatphamkytrancac:
             return False
 
+
+
         if self.moitruong.get_idmaupk() == IDMAUPK_DO or self.moitruong.get_diempk() > 0:
             if not self.get_is_dusoluongtoithieu("Quan Âm Thủy", 1):
                 if self.get_is_dusoluongtoithieu("Tiền đồng", 2):
@@ -1191,5 +1195,21 @@ class TacTu:
                     return True
                 return False
 
+        self.moitruong.action_tatvohieuhoapopuptabkytrancac()
+
         return False
+
+    def action_dongbotoadohientai(self, delay = 0.25):
+        if time.time() - self._thoidiemdongbotoadohientaigannhat < delay:
+            return False
+
+        return False
+
+        if self.moitruong.get_idtrangthainhanvat() != IDTRANGTHAINHANVAT_TANCONG:
+           return False
+
+        self._thoidiemdongbotoadohientaigannhat = time.time()
+        toadox, toadoy = self.moitruong.get_toado()
+
+        return self.moitruong.action_dichuyen2(toadox, toadoy, delay = 0.)
 

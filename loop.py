@@ -34,6 +34,7 @@ class LoopChinh:
         self.tactu.action_tudongtimkiemmuctieu()
         self.tactu.action_xulydichuyenuutien()
         self.tactu.action_xulytancong()
+        self.tactu.action_dongbotoadohientai()
         self.tactu.action_tudongdoithucuoi()
 
 class LoopLamMoiTrangThaiTacTu:
