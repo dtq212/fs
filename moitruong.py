@@ -93,6 +93,7 @@ class MoiTruong:
         self.diachihamdongcuahang = 0
         self.diachihamdoithoai = 0
         self.diachihamxacnhandoithoai = 0
+        self.diachihamdichuyen2 = 0
 
         self._thoidiemvutvatphamgannhat = 0.
         self._thoidiemmuakytrancacgannhat = 0.
@@ -875,14 +876,14 @@ class MoiTruong:
         asm_code = f"""
             push ebp
             mov ebp, esp
-            sub esp, 16                     
+            sub esp, 20                     
 
             mov eax, dword ptr [{hex(diachidulieu)}]
             mov ecx, dword ptr [{hex(diachidulieu + 4)}]
 
-            mov byte ptr [ebp - 12], 0x57
-            mov dword ptr [ebp - 11], eax
-            mov dword ptr [ebp - 7], ecx
+            mov byte ptr [ebp - 16], 0x57
+            mov dword ptr [ebp - 15], eax
+            mov dword ptr [ebp - 11], ecx
 
             mov dword ptr [ebp - 4], 9        
 
@@ -893,7 +894,7 @@ class MoiTruong:
             lea edx, [ebp - 4]
             push edx
 
-            lea edx, [ebp - 12]
+            lea edx, [ebp - 16]
             push edx
 
             push eax
@@ -901,8 +902,6 @@ class MoiTruong:
             mov ecx, dword ptr [eax]
             mov edx, dword ptr [ecx + 0x1C]
             call edx                        
-
-            add esp, 0x0C                   
 
             ketthuc:
             mov esp, ebp
@@ -913,7 +912,7 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamsudungvatpham, bytes(encoding), len(encoding))
 
-    def action_sudungvatpham(self, sothutuvatpham, delay=0.2):
+    def action_sudungvatpham(self, sothutuvatpham, delay = 0.2):
         if not self.diachihamsudungvatpham:
             self.khoitaohamsudungvatpham()
 
@@ -937,9 +936,8 @@ class MoiTruong:
 
         diachidulieu = self.diachihamsudungvatpham + 0x80
         write_int(self.tientrinh, diachidulieu, dbid)
-        write_bytes(self.tientrinh, diachidulieu + 4, bytes([vitriruong, vitrix, vitriy, 0]), 4)
 
-        print(hex(self.diachihamsudungvatpham))
+        write_bytes(self.tientrinh, diachidulieu + 4, bytes([vitriruong, 0, vitrix, vitriy]), 4)
 
         self.tientrinh.start_thread(self.diachihamsudungvatpham)
         return True
@@ -1081,14 +1079,76 @@ class MoiTruong:
         self.tientrinh.start_thread(self.diachihamdichuyen)
         return True
 
-    def action_dichuyengiukhoangcachtoithieu(self, idnhanvat2, khoangcachtoithieu, delay = 0.01):
+    def khoitaohamdichuyen2(self):
+        if self.diachihamdichuyen2:
+            return
+
+        self.diachihamdichuyen2 = self.tientrinh.allocate(256)
+        diachidulieu = self.diachihamdichuyen2 + 0x80
+
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        asm_code = f"""
+            push ebp
+            mov ebp, esp
+            sub esp, 16                     
+
+            mov eax, dword ptr [{hex(diachidulieu)}]
+            mov ecx, dword ptr [{hex(diachidulieu + 4)}]
+
+            mov byte ptr [ebp - 12], 0x4C
+            mov dword ptr [ebp - 11], eax
+            mov dword ptr [ebp - 7], ecx
+
+            mov dword ptr [ebp - 4], 9        
+
+            mov eax, dword ptr [{hex(self.diachigame + 0x2B3788)}]
+            test eax, eax
+            je ketthuc
+
+            lea edx, [ebp - 4]
+            push edx
+
+            lea edx, [ebp - 12]
+            push edx
+
+            push eax
+
+            mov ecx, dword ptr [eax]
+            mov edx, dword ptr [ecx + 0x1C]
+            call edx                        
+
+            ketthuc:
+            mov esp, ebp
+            pop ebp
+            ret 4                           
+        """
+
+        encoding, _ = ks.asm(asm_code)
+        write_bytes(self.tientrinh, self.diachihamdichuyen2, bytes(encoding), len(encoding))
+
+    def action_dichuyen2(self, toadox, toadoy, delay = 0.01):
+        if not self.diachihamdichuyen2:
+            self.khoitaohamdichuyen2()
+
+        if time.time() - self._thoidiemdichuyengannhat < delay:
+            return False
+
+        self._thoidiemdichuyengannhat = time.time()
+
+        diachidulieu = self.diachihamdichuyen2 + 0x80
+        write_int(self.tientrinh, diachidulieu, toadox)
+        write_int(self.tientrinh, diachidulieu + 4, toadoy)
+
+        self.tientrinh.start_thread(self.diachihamdichuyen2)
+        return True
+
+    def action_dichuyengiukhoangcachtoithieu(self, idnhanvat2, khoangcachtoithieu, buocditoithieu=30, delay=0.01):
         if not self.get_is_nhanvattontai(idnhanvat2):
             return False
 
         if time.time() - self._thoidiemdichuyengiukhoangcachtoithieu < delay:
             return False
-
-        self._thoidiemdichuyengiukhoangcachtoithieu = time.time()
 
         x1, y1 = self.get_toado()
         x2, y2 = self.get_toado(idnhanvat2)
@@ -1101,15 +1161,18 @@ class MoiTruong:
             xmoi = int(x2 - tile * (x2 - x1))
             ymoi = int(y2 - tile * (y2 - y1))
 
-            return self.action_dichuyen(xmoi, ymoi, delay = delay)
+            buocdi = math.dist((x1, y1), (xmoi, ymoi))
+            if buocdi < buocditoithieu:
+                return False
+
+            self._thoidiemdichuyengiukhoangcachtoithieu = time.time()
+            return self.action_dichuyen(xmoi, ymoi, delay=delay)
 
         return False
 
-    def action_dichuyengiukhoangcachtoithieudiem(self, toadox, toadoy, khoangcachtoithieu, delay = 0.01):
+    def action_dichuyengiukhoangcachtoithieudiem(self, toadox, toadoy, khoangcachtoithieu, buocditoithieu=30, delay=0.01):
         if time.time() - self._thoidiemdichuyengiukhoangcachtoithieu < delay:
             return False
-
-        self._thoidiemdichuyengiukhoangcachtoithieu = time.time()
 
         x1, y1 = self.get_toado()
         x2 = toadox
@@ -1123,7 +1186,12 @@ class MoiTruong:
             xmoi = int(x2 - tile * (x2 - x1))
             ymoi = int(y2 - tile * (y2 - y1))
 
-            return self.action_dichuyen(xmoi, ymoi, delay = delay)
+            buocdi = math.dist((x1, y1), (xmoi, ymoi))
+            if buocdi < buocditoithieu:
+                return False
+
+            self._thoidiemdichuyengiukhoangcachtoithieu = time.time()
+            return self.action_dichuyen(xmoi, ymoi, delay=delay)
 
         return False
 
