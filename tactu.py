@@ -1009,8 +1009,6 @@ class TacTu:
                     idmuctieu = self.moitruong.get_idmuctieutancong()
                     if idmuctieu > 0:
                         khoangcachmuctieu = self.moitruong.get_khoangcach(idmuctieu)
-                        if self.moitruong.get_tennhanvat() == "Shoudi":
-                            print("khoangcachmuctieu: {}, is_duoitheo: {}".format(khoangcachmuctieu, self.moitruong.get_is_duoitheo()))
                         khoangcachmuctieusaptoi = self.moitruong.get_khoangcachsaptoi(idmuctieu)
 
                         yeucaudichuyenmoi = {"loaidichuyen": "dungim"}
