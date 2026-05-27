@@ -1588,10 +1588,10 @@ class MoiTruong:
             mov esi, dword ptr [{hex(diachidulieu + 16)}]
 
             mov byte ptr [ebp - 28], 0x4D
-            mov dword ptr [ebp - 27], eax
+            mov dword ptr [ebp - 27], edx
             mov dword ptr [ebp - 23], ebx
             mov dword ptr [ebp - 19], ecx
-            mov dword ptr [ebp - 15], edx
+            mov dword ptr [ebp - 15], eax
             mov dword ptr [ebp - 11], esi
 
             mov dword ptr [ebp - 4], 21        
@@ -1643,7 +1643,7 @@ class MoiTruong:
         write_int(self.tientrinh, diachidulieu + 16, idkynang)  # Skill ID
 
         print(hex(self.diachihamsudungkynangtoado2))
-        self.tientrinh.start_thread(self.diachihamsudungkynangtoado2)
+        # self.tientrinh.start_thread(self.diachihamsudungkynangtoado2)
         return True
 
     def action_sudungkynangphudau(self, idnhanvat, idkynang, khoangcachtoida, delay = 0.01):

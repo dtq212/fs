@@ -316,7 +316,7 @@ class TacTu:
 
         print("toado: {}".format(self.moitruong.get_toado()))
 
-        self.moitruong.action_sudungkynangtoado2(IDKYNANG_KHUYNHTHANHNHATKICH, *self.moitruong.get_toado())
+        self.moitruong.action_sudungkynangtoado2(IDKYNANG_TAMMUOICHANHOA, *self.moitruong.get_toado())
 
     def get_is_hanhtrangday(self):
         return self.get_tongsovatphamhanhtrang() >= 35 or self.moitruong.get_trongluongtoida() - self.get_tongtrongluongvatpham() <= 25
