@@ -255,6 +255,9 @@ class MoiTruong:
     def get_capdonhanvat(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x1C + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
 
+    def get_idbienthannhanvat(self, idnhanvat = 1):
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xB10 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+
     def get_tenchunhan(self, idnhanvat = 1):
         return read_string(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0xBE9 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
 
@@ -623,9 +626,6 @@ class MoiTruong:
         if self.get_is_dangtudongtimduong() != is_dangtudongtimduong:
             write_int(self.tientrinh, self.diachigame + 0x49F0E4 + 0x000, 1 if is_dangtudongtimduong else 0)
 
-    def get_tocdoxuatchieubuaphap(self):
-        return read_int(self.tientrinh, self.diachigame + 0x4C3398 + 0x000)
-
     def get_idmauvatphamnhat(self):
         return read_int(self.tientrinh, self.diachigame + 0x4A3EB4 + 0x000)
 
@@ -671,7 +671,7 @@ class MoiTruong:
         return read_int(self.tientrinh, self.diachigame + 0x4A47A4 + 0x000)
 
     def get_trongluongtoida(self):
-        return read_int(self.tientrinh, self.diachigame + 0x4C3460 + 0x000)
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + OFFSET_DIACHICOSOMOINHANVAT + 0xA0C + 0x000)
 
     def get_is_duoitheo(self):
         return read_int(self.tientrinh, self.diachigame + 0x4A4534 + 0x000) > 0
@@ -756,11 +756,11 @@ class MoiTruong:
             write_int(self.tientrinh, self.diachigame + 0x4A382C + 0x000, idmuctieutancong)
 
     def get_idmuctieudangkhoa(self):
-        return read_int(self.tientrinh, self.diachigame + 0x4C36C4 + 0x000)
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + OFFSET_DIACHICOSOMOINHANVAT + 0xC70 + 0x000)
 
     def set_idmuctieudangkhoa(self, idmuctieudangkhoa):
         if self.get_idmuctieudangkhoa() != idmuctieudangkhoa:
-            write_int(self.tientrinh, self.diachigame + 0x4C36C4 + 0x000, idmuctieudangkhoa)
+            write_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + OFFSET_DIACHICOSOMOINHANVAT + 0xC70 + 0x000, idmuctieudangkhoa)
 
     def set_idmuctieu(self, idnhanvat):
         self.set_idmuctieudangchon(idnhanvat)

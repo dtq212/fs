@@ -77,7 +77,8 @@ class TroChoiManager:
                 cmd = None
                 if keyboard.is_pressed("ctrl+alt+shift+h"): cmd = "battat_tudongfarm"
                 elif keyboard.is_pressed("ctrl+alt+shift+r"): cmd = "battat_tudongsuavatpham"
-                elif keyboard.is_pressed("ctrl+alt+shift+y"): cmd = "action_test"
+                elif keyboard.is_pressed("ctrl+alt+shift+u"): cmd = "action_test"
+                elif keyboard.is_pressed("ctrl+alt+shift+y"): cmd = "action_mua1thancauphu"
                 elif keyboard.is_pressed("ctrl+alt+shift+t"): cmd = "battat_tudongdanhtheosautruongnhom"
                 elif keyboard.is_pressed("ctrl+alt+shift+f"): cmd = "battat_tudongtimkiemmuctieu"
                 elif keyboard.is_pressed("ctrl+alt+shift+b"): cmd = "battat_is_khongdanhcungbang"
