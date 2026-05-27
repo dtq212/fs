@@ -159,6 +159,12 @@ class MoiTruong:
     def get_sinhluctoida(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x800 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
 
+    def get_noiluchientai(self, idnhanvat = 1):
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x80C + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+
+    def get_noiluctoida(self, idnhanvat = 1):
+        return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x810 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
+
     def get_phantramkhanghoa(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x904 + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT)
 
@@ -173,6 +179,12 @@ class MoiTruong:
         if not sinhluctoida:
             return 0
         return int(self.get_sinhluchientai(idnhanvat) * 100. / sinhluctoida)
+
+    def get_phantramnoiluchientai(self, idnhanvat = 1):
+        noiluctoida = self.get_noiluctoida(idnhanvat)
+        if not noiluctoida:
+            return 0
+        return int(self.get_noiluchientai(idnhanvat) * 100. / noiluctoida)
 
     def get_toado(self, idnhanvat = 1):
         diachinhanvat = self.diachigame + OFFSET_DIACHICOSONHANVAT + idnhanvat * OFFSET_DIACHICOSOMOINHANVAT
@@ -628,6 +640,12 @@ class MoiTruong:
 
     def get_idmauvatphamnhat(self):
         return read_int(self.tientrinh, self.diachigame + 0x4A3EB4 + 0x000)
+
+    def get_phantramsinhluchoiphuc(self):
+        return read_int(self.tientrinh, self.diachigame + 0x4A37A4 + 0x000)
+
+    def get_phantramnoiluchoiphuc(self):
+        return read_int(self.tientrinh, self.diachigame + 0x4A37A8 + 0x000)
 
     def get_iddoituongtudanh(self):
         return read_int(self.tientrinh, self.diachigame + 0x4A4530 + 0x000)

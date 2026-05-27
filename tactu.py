@@ -776,6 +776,16 @@ class TacTu:
                 if self.action_sudungvatpham(QUANAMTHUY, delay = 0.):
                     return
 
+        if self.moitruong.get_phantramsinhluchientai() <= self.moitruong.get_phantramsinhluchoiphuc():
+            for tenvatpham in ["Bảo Tá Thanh lộ", "Thanh Lộ"]:
+                if self.action_sudungvatpham(tenvatpham, delay = 0.25):
+                    return
+
+        if self.moitruong.get_phantramnoiluchientai() <= self.moitruong.get_phantramnoiluchoiphuc():
+            for tenvatpham in ["Sơn Thủy chân khí", "Chân Khí"]:
+                if self.action_sudungvatpham(tenvatpham, delay = 0.25):
+                    return
+
         if self.moitruong.get_idbienthannhanvat() < 0:
             if self.action_sudungvatpham(HOALOITRANG, delay = 1.):
                 return
@@ -783,6 +793,7 @@ class TacTu:
         for tenvatpham in [THANCAUPHU, THANTIENTAN]:
             if self.action_sudungvatpham(tenvatpham, delay = 0.25):
                 return
+
 
     def action_tudongnhatvatpham(self):
         if not self.moitruong.get_is_tudongnhatvatpham():
@@ -926,7 +937,7 @@ class TacTu:
                 self.moitruong.set_is_duoitheo(False)
                 self.moitruong.set_is_dichuyenhoatdongquanhphamvi(False)
             else:
-                self.moitruong.set_is_duoitheo(True)
+                # self.moitruong.set_is_duoitheo(True)
                 if not self._is_tudongdanhtheosautruongnhom or self.moitruong.get_idtodoi() <= 0 or not self.moitruong.get_is_truongnhomcungbando():
                     self.moitruong.set_is_dichuyenhoatdongquanhphamvi(True)
                 else:
@@ -998,6 +1009,8 @@ class TacTu:
                     idmuctieu = self.moitruong.get_idmuctieutancong()
                     if idmuctieu > 0:
                         khoangcachmuctieu = self.moitruong.get_khoangcach(idmuctieu)
+                        if self.moitruong.get_tennhanvat() == "Shoudi":
+                            print("khoangcachmuctieu: {}, is_duoitheo: {}".format(khoangcachmuctieu, self.moitruong.get_is_duoitheo()))
                         khoangcachmuctieusaptoi = self.moitruong.get_khoangcachsaptoi(idmuctieu)
 
                         yeucaudichuyenmoi = {"loaidichuyen": "dungim"}
