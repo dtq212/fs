@@ -320,7 +320,9 @@ class TacTu:
         self.moitruong.action_sudungkynangtoado2(IDKYNANG_TAMMUOICHANHOA, *self.moitruong.get_toado())
 
     def action_mua1thancauphu(self):
-        self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_BIENPHU, 12, 1)
+        print("Mua 1 thần cẩu phù")
+        if self.get_is_dusoluongtoithieu(TIENDONG, 2):
+            self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_BIENPHU, 12, 1)
 
     def get_is_hanhtrangday(self):
         return self.get_tongsovatphamhanhtrang() >= 35 or self.moitruong.get_trongluongtoida() - self.get_tongtrongluongvatpham() <= 25
@@ -1168,21 +1170,21 @@ class TacTu:
 
         if self.moitruong.get_idmaupk() == IDMAUPK_DO or self.moitruong.get_diempk() > 0:
             if not self.get_is_dusoluongtoithieu("Quan Âm Thủy", 1):
-                if self.get_is_dusoluongtoithieu("Tiền đồng", 2):
+                if self.get_is_dusoluongtoithieu(TIENDONG, 2):
                     is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 10, 1)
                     if is_muathanhcong:
                         return True
                     return False
 
         if not self.get_is_dusoluongtoithieu("Thanh Lộ", 1):
-            if self.get_is_dusoluongtoithieu("Tiền đồng", 8):
+            if self.get_is_dusoluongtoithieu(TIENDONG, 8):
                 is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 21, 1)
                 if is_muathanhcong:
                     return True
                 return False
 
         if not self.get_is_dusoluongtoithieu("Chân Khí", 1):
-            if self.get_is_dusoluongtoithieu("Tiền đồng", 8):
+            if self.get_is_dusoluongtoithieu(TIENDONG, 8):
                 is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 22, 1)
                 if is_muathanhcong:
                     return True
