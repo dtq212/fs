@@ -19,7 +19,6 @@ KHOANGCACHTOIDATIMKIEMMUCTIEU = 1200
 DINGOAIPHUSIEUCAP = "Di ngoại phù (Siêu cấp)"
 HOITHANHPHUSIEUCAP = "Hồi thành phù (Siêu cấp)"
 KHULAIPHU = "Khứ Lai phù"
-TIENDONG = TIENDONG
 MATQUY = "Mặt Quỷ"
 HOAVU = "Hỏa vũ"
 BANGCO = "Băng cơ"
