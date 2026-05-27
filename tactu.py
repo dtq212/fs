@@ -67,6 +67,7 @@ class TacTu:
 
         self._is_tudongvutvatpham = False
         self._thoidiemvutvatphamgannhat = 0.
+        self._is_tudongmuavatphamkytrancac = False
 
     def __del__(self):
         try:
@@ -95,6 +96,7 @@ class TacTu:
 
             "is_tudongfarm": self._is_tudongfarm,
             "is_tudongvutvatpham": self._is_tudongvutvatpham,
+            "is_tudongmuavatphamkytrancac": self._is_tudongmuavatphamkytrancac,
             "idbandotudongfarm": self._idbandotudongfarm,
             "toadoxtudongfarm": self._toadoxtudongfarm,
             "toadoytudongfarm": self._toadoytudongfarm,
@@ -147,6 +149,9 @@ class TacTu:
             if "is_tudongvutvatpham" in thietlap:
                 self._is_tudongvutvatpham = thietlap["is_tudongvutvatpham"]
 
+            if "is_tudongmuavatphamkytrancac" in thietlap:
+                self._is_tudongmuavatphamkytrancac = thietlap["is_tudongmuavatphamkytrancac"]
+
             if "idbandotudongfarm" in thietlap:
                 self._idbandotudongfarm = thietlap["idbandotudongfarm"]
 
@@ -163,6 +168,14 @@ class TacTu:
             phatam("Bật tự động vứt rác tại chỗ")
         else:
             phatam("Tắt tự động vứt rác tại chỗ")
+
+    def battat_is_tudongmuavatphamkytrancac(self):
+        self._is_tudongmuavatphamkytrancac = not self._is_tudongmuavatphamkytrancac
+
+        if self._is_tudongmuavatphamkytrancac:
+            phatam("Bật tự động mua vật phẩm kỳ trân các")
+        else:
+            phatam("Tắt tự động mua vật phẩm kỳ trân các")
 
     def battat_tudongfarm(self):
         self._is_tudongfarm = not self._is_tudongfarm
@@ -1123,5 +1136,52 @@ class TacTu:
             if is_thanhcong:
                 self._thoidiemvutvatphamgannhat = time.time()
                 return True
+
+        return False
+
+    def get_is_dusoluongtoithieu(self, tenvatpham, soluongtoithieu):
+        tongsoluong = 0
+        for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
+            vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
+            if not vitrivatpham:
+                continue
+
+            idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
+
+            if vitriruong != IDVITRIRUONG_HANHTRANG:
+                continue
+
+            tenvatpham = self.moitruong.get_tenvatpham(idvatpham)
+            if tenvatpham == tenvatpham:
+                tongsoluong += self.moitruong.get_soluongvatpham(idvatpham)
+                if tongsoluong >= soluongtoithieu:
+                    return True
+
+        return False
+
+    def action_tudongmuavatpham(self):
+        if not self._is_tudongmuavatphamkytrancac:
+            return False
+
+        if not self.get_is_dusoluongtoithieu("Quan Âm Thủy", 2):
+            if self.get_is_dusoluongtoithieu("Tiền đồng", 2):
+                is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 10, 1)
+                if is_muathanhcong:
+                    return True
+                return False
+
+        if not self.get_is_dusoluongtoithieu("Thanh Lộ", 1):
+            if self.get_is_dusoluongtoithieu("Tiền đồng", 8):
+                is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 21, 1)
+                if is_muathanhcong:
+                    return True
+                return False
+
+        if not self.get_is_dusoluongtoithieu("Chân Khí", 1):
+            if self.get_is_dusoluongtoithieu("Tiền đồng", 8):
+                is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 22, 1)
+                if is_muathanhcong:
+                    return True
+                return False
 
         return False

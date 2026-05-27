@@ -75,8 +75,8 @@ class MoiTruong:
         self.diachihamsudungphimtat = 0
         self.diachihamvohieuhoakynangbotro3 = 0
         self.diachihamvutvatpham = 0
-        self.diachihammuavatphamktc = 0
-        self.diachihammotabktc = 0
+        self.diachihammuavatphamkytrancac = 0
+        self.diachihammotabkytrancac = 0
         self._idchunhan_map = {}
 
         self.diachihamdoimaupk = 0
@@ -95,8 +95,8 @@ class MoiTruong:
         self.diachihamxacnhandoithoai = 0
 
         self._thoidiemvutvatphamgannhat = 0.
-        self._thoidiemmuaktcgannhat = 0.
-        self._thoidiemmotabktcgannhat = 0.
+        self._thoidiemmuakytrancacgannhat = 0.
+        self._thoidiemmotabkytrancacgannhat = 0.
 
     def __del__(self):
         def safe_free(diachi):
@@ -1762,11 +1762,11 @@ class MoiTruong:
         return True
 
     def khoitaohammotabkytrancac(self):
-        if self.diachihammotabktc:
+        if self.diachihammotabkytrancac:
             return
 
-        self.diachihammotabktc = self.tientrinh.allocate(256)
-        diachidulieu = self.diachihammotabktc + 0x80
+        self.diachihammotabkytrancac = self.tientrinh.allocate(256)
+        diachidulieu = self.diachihammotabkytrancac + 0x80
 
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
@@ -1776,10 +1776,12 @@ class MoiTruong:
             sub esp, 16                     
 
             mov eax, dword ptr [{hex(diachidulieu)}]
+            mov ecx, dword ptr [{hex(diachidulieu + 4)}]
+            mov ebx, ecx
 
             mov byte ptr [ebp - 12], 0x73
             mov byte ptr [ebp - 11], al
-            mov dword ptr [ebp - 10], eax
+            mov dword ptr [ebp - 10], ecx
 
             mov dword ptr [ebp - 4], 6        
 
@@ -1808,29 +1810,38 @@ class MoiTruong:
         """
 
         encoding, _ = ks.asm(asm_code)
-        write_bytes(self.tientrinh, self.diachihammotabktc, bytes(encoding), len(encoding))
+        write_bytes(self.tientrinh, self.diachihammotabkytrancac, bytes(encoding), len(encoding))
 
-    def action_motabkytrancac(self, vitritab, delay= 0.5):
-        if not self.diachihammotabktc:
+    def action_motabkytrancac(self, vitritab, delay=0.5):
+        if not self.diachihammotabkytrancac:
             self.khoitaohammotabkytrancac()
 
-        if time.time() - self._thoidiemmotabktcgannhat < delay:
+        if time.time() - self._thoidiemmotabkytrancacgannhat < delay:
             return False
 
-        self._thoidiemmotabktcgannhat = time.time()
+        self._thoidiemmotabkytrancacgannhat = time.time()
 
-        diachidulieu = self.diachihammotabktc + 0x80
-        write_int(self.tientrinh, diachidulieu, vitritab)
+        diachidulieu = self.diachihammotabkytrancac + 0x80
+        write_int(self.tientrinh, diachidulieu, 3)
+        write_int(self.tientrinh, diachidulieu + 4, vitritab)
 
-        self.tientrinh.start_thread(self.diachihammotabktc)
+        self.tientrinh.start_thread(self.diachihammotabkytrancac)
         return True
 
+    def action_vohieuhoapopuptabkytrancac(self):
+        diachi = self.diachigame + 0x3AF8
+        write_bytes(self.tientrinh, diachi, b'\x90\x90\x90\x90\x90', 5)
+
+    def action_tatvohieuhoapopuptabkytrancac(self):
+        diachi = self.diachigame + 0x3AF8
+        write_bytes(self.tientrinh, diachi, b'\xE8\xE3\xB2\x06\x00', 5)
+
     def khoitaohammuavatphamkytrancac(self):
-        if self.diachihammuavatphamktc:
+        if self.diachihammuavatphamkytrancac:
             return
 
-        self.diachihammuavatphamktc = self.tientrinh.allocate(256)
-        diachidulieu = self.diachihammuavatphamktc + 0x80
+        self.diachihammuavatphamkytrancac = self.tientrinh.allocate(256)
+        diachidulieu = self.diachihammuavatphamkytrancac + 0x80
 
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
@@ -1875,27 +1886,30 @@ class MoiTruong:
         """
 
         encoding, _ = ks.asm(asm_code)
-        write_bytes(self.tientrinh, self.diachihammuavatphamktc, bytes(encoding), len(encoding))
+        write_bytes(self.tientrinh, self.diachihammuavatphamkytrancac, bytes(encoding), len(encoding))
 
     def action_muavatphamkytrancac(self, idtab, vitrivatpham, soluong, delay=0.5):
-        if not self.diachihammuavatphamktc:
+        if not self.diachihammuavatphamkytrancac:
             self.khoitaohammuavatphamkytrancac()
 
-        if time.time() - self._thoidiemmuaktcgannhat < delay:
+        if time.time() - self._thoidiemmuakytrancacgannhat < delay:
             return False
 
         if self.get_idtabkytrancac() != idtab:
             vitritab = VITRITAB_MAP.get(idtab)
             if vitritab is not None:
+                self.action_vohieuhoapopuptabkytrancac()
                 self.action_motabkytrancac(vitritab)
             return False
 
-        self._thoidiemmuaktcgannhat = time.time()
+        self.action_tatvohieuhoapopuptabkytrancac()
 
-        diachidulieu = self.diachihammuavatphamktc + 0x80
+        self._thoidiemmuakytrancacgannhat = time.time()
+
+        diachidulieu = self.diachihammuavatphamkytrancac + 0x80
         write_int(self.tientrinh, diachidulieu, idtab)
         write_int(self.tientrinh, diachidulieu + 4, vitrivatpham)
         write_int(self.tientrinh, diachidulieu + 8, soluong)
 
-        self.tientrinh.start_thread(self.diachihammuavatphamktc)
+        self.tientrinh.start_thread(self.diachihammuavatphamkytrancac)
         return True

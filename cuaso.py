@@ -142,6 +142,7 @@ class CuaSo:
 
                     "_is_tudongfarm": self.tactu._is_tudongfarm,
                     "_is_tudongvutvatpham": self.tactu._is_tudongvutvatpham,
+                    "_is_tudongmuavatphamkytrancac": self.tactu._is_tudongmuavatphamkytrancac,
                     "idbandotudongfarm": self.tactu._idbandotudongfarm,
                     "toadoxtudongfarm": self.tactu._toadoxtudongfarm,
                     "toadoytudongfarm": self.tactu._toadoytudongfarm,
@@ -169,6 +170,7 @@ class CuaSo:
                 elif cmd == "battat_is_sudungkynangtoadochichuot": self.tactu.battat_is_sudungkynangtoadochichuot()
                 elif cmd == "battat_is_tudongmokhoa": self.tactu.battat_tudongmokhoa()
                 elif cmd == "battat_is_tudongvutvatpham": self.tactu.battat_is_tudongvutvatpham()
+                elif cmd == "battat_is_tudongmuavatphamkytrancac": self.tactu.battat_is_tudongmuavatphamkytrancac()
                 elif cmd == "battat_is_tudongdoithucuoi": self.tactu.battat_is_tudongdoithucuoi()
                 elif cmd == "botoanbo_tennhanvattancong": self.tactu.botoanbo_tennhanvattancong()
                 elif cmd == "botoanbo_tennhanvatkhongtancong": self.tactu.botoanbo_tennhanvatkhongtancong()

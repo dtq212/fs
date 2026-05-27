@@ -60,6 +60,8 @@ class GiaoDienHienThi:
         r += 1
         self.add_check(self.grp_config, "Tự động vứt rác", "_is_tudongvutvatpham", r, "Ctrl+Alt+Shift+D")
         r += 1
+        self.add_check(self.grp_config, "Tự động mua vật phẩm", "_is_tudongmuavatphamkytrancac", r, "Ctrl+Alt+Shift+M")
+        r += 1
         self.add_check(self.grp_config, "Đánh theo sau trưởng nhóm", "_is_tudongdanhtheosautruongnhom", r, "Ctrl+Alt+Shift+T")
         r += 1
         self.add_check(self.grp_config, "Tự sửa trang bị", "_is_tudongsuavatpham", r, "Ctrl+Alt+Shift+R")
