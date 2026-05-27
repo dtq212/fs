@@ -1139,7 +1139,7 @@ class TacTu:
 
         return False
 
-    def get_is_dusoluongtoithieu(self, tenvatphamcantim, soluongtoithieu):
+    def get_is_dusoluongtoithieu(self, tenvatpham, soluongtoithieu):
         tongsoluong = 0
         for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
             vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
@@ -1151,8 +1151,8 @@ class TacTu:
             if vitriruong not in (IDVITRIRUONG_HANHTRANG, IDVITRIRUONG_DANGCAMTRENTAY):
                 continue
 
-            tenvatpham = self.moitruong.get_tenvatpham(idvatpham)
-            if tenvatpham == tenvatphamcantim:
+            tenvatphamxemxet = self.moitruong.get_tenvatpham(idvatpham)
+            if tenvatphamxemxet == tenvatpham:
                 tongsoluong += self.moitruong.get_soluongvatpham(idvatpham)
                 if tongsoluong >= soluongtoithieu:
                     return True
@@ -1163,12 +1163,13 @@ class TacTu:
         if not self._is_tudongmuavatphamkytrancac:
             return False
 
-        if not self.get_is_dusoluongtoithieu("Quan Âm Thủy", 1):
-            if self.get_is_dusoluongtoithieu("Tiền đồng", 2):
-                is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 10, 1)
-                if is_muathanhcong:
-                    return True
-                return False
+        if self.moitruong.get_idmaupk() == IDMAUPK_DO or self.moitruong.get_diempk() > 0:
+            if not self.get_is_dusoluongtoithieu("Quan Âm Thủy", 1):
+                if self.get_is_dusoluongtoithieu("Tiền đồng", 2):
+                    is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 10, 1)
+                    if is_muathanhcong:
+                        return True
+                    return False
 
         if not self.get_is_dusoluongtoithieu("Thanh Lộ", 1):
             if self.get_is_dusoluongtoithieu("Tiền đồng", 8):
