@@ -939,6 +939,8 @@ class MoiTruong:
         write_int(self.tientrinh, diachidulieu, dbid)
         write_bytes(self.tientrinh, diachidulieu + 4, bytes([vitriruong, vitrix, vitriy, 0]), 4)
 
+        print(hex(self.diachihamsudungvatpham))
+
         self.tientrinh.start_thread(self.diachihamsudungvatpham)
         return True
 
