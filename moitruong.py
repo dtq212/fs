@@ -638,7 +638,7 @@ class MoiTruong:
             return False
 
         thoidiemhoiphuckynang = self.get_thoidiemhoiphuckynang(idkynang)
-        return not thoidiemhoiphuckynang or thoidiemhoiphuckynang < self.get_donghothoigian()
+        return not thoidiemhoiphuckynang or thoidiemhoiphuckynang < self.get_donghothoigian() - 10
 
     def get_is_khuvuccothetancong(self):
         return read_int(self.tientrinh, self.diachigame + 0x29F0424 + 0x000) > 0
@@ -1570,15 +1570,16 @@ class MoiTruong:
     def khoitaohamsudungkynangtoado2(self):
         if self.diachihamsudungkynangtoado2:
             return
-        self.diachihamsudungkynangtoado2 = self.tientrinh.allocate(256)
 
-        diachidulieu = self.diachihamsudungkynangtoado2 + 0x40
+        self.diachihamsudungkynangtoado2 = self.tientrinh.allocate(256)
+        diachidulieu = self.diachihamsudungkynangtoado2 + 0x80
 
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
         asm_code = f"""
             push ebp
             mov ebp, esp
-            sub esp, 32
+            sub esp, 32                     
 
             mov eax, dword ptr [{hex(diachidulieu)}]
             mov ebx, dword ptr [{hex(diachidulieu + 4)}]
@@ -1586,26 +1587,40 @@ class MoiTruong:
             mov edx, dword ptr [{hex(diachidulieu + 12)}]
             mov esi, dword ptr [{hex(diachidulieu + 16)}]
 
-            mov byte ptr [ebp-0x1C], 0x4D
-            mov dword ptr [ebp-0x1B], edx
-            mov dword ptr [ebp-0x17], ebx
-            mov dword ptr [ebp-0x13], eax
-            mov dword ptr [ebp-0x0F], ecx
-            mov dword ptr [ebp-0x0B], esi
-            mov dword ptr [ebp-0x04], 21
+            mov byte ptr [ebp - 28], 0x4D
+            mov dword ptr [ebp - 27], eax
+            mov dword ptr [ebp - 23], ebx
+            mov dword ptr [ebp - 19], ecx
+            mov dword ptr [ebp - 15], edx
+            mov dword ptr [ebp - 11], esi
+
+            mov dword ptr [ebp - 4], 21        
 
             mov eax, dword ptr [{hex(self.diachigame + 0x2B3788)}]
-            lea ecx, [ebp - 0x1C]
-            push ecx
+            test eax, eax
+            je ketthuc
+
+            lea edx, [ebp - 4]
+            push edx
+
+            lea edx, [ebp - 28]
+            push edx
+
             push eax
+
+            lea ecx, [ebp - 28]
+
             mov edx, dword ptr [eax]
             mov edx, dword ptr [edx + 0x1C]
-            call edx
 
+            call edx                        
+
+            ketthuc:
             mov esp, ebp
             pop ebp
-            ret 4
+            ret 4                           
         """
+
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamsudungkynangtoado2, bytes(encoding), len(encoding))
 
@@ -1620,13 +1635,14 @@ class MoiTruong:
 
         self._thoidiemsudungkynanggannhat_map[idkynang] = time.time()
 
-        diachidulieu = self.diachihamsudungkynangtoado2 + 0x40
-        write_int(self.tientrinh, diachidulieu, toadox)
-        write_int(self.tientrinh, diachidulieu + 4, toadox_hientai)
-        write_int(self.tientrinh, diachidulieu + 8, toadoy_hientai)
-        write_int(self.tientrinh, diachidulieu + 12, toadoy)
-        write_int(self.tientrinh, diachidulieu + 16, idkynang)
+        diachidulieu = self.diachihamsudungkynangtoado2 + 0x80
+        write_int(self.tientrinh, diachidulieu, toadox)  # Target X
+        write_int(self.tientrinh, diachidulieu + 4, toadox_hientai)  # Current X
+        write_int(self.tientrinh, diachidulieu + 8, toadoy_hientai)  # Current Y
+        write_int(self.tientrinh, diachidulieu + 12, toadoy)  # Target Y
+        write_int(self.tientrinh, diachidulieu + 16, idkynang)  # Skill ID
 
+        print(hex(self.diachihamsudungkynangtoado2))
         self.tientrinh.start_thread(self.diachihamsudungkynangtoado2)
         return True
 
