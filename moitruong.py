@@ -690,6 +690,10 @@ class MoiTruong:
     def get_is_tamngungtancong(self):
         return read_int(self.tientrinh, self.diachigame + 0x4A3788 + 0x000)
 
+    def set_is_tamngungtancong(self, is_tamngungtancong):
+        if self.get_is_tamngungtancong() != is_tamngungtancong:
+            write_int(self.tientrinh, self.diachigame + 0x4A3788 + 0x000, 1 if is_tamngungtancong else 0)
+
     def get_is_datrieuhoithu(self):
         return read_int(self.tientrinh, self.diachigame + 0x4A47A4 + 0x000)
 
@@ -1234,6 +1238,7 @@ class MoiTruong:
                 ymoi = y1 + tilebuocdi * (ymoi - y1)
 
             self._thoidiemdichuyengiukhoangcachtoithieu = time.time()
+
             return self.action_dichuyen(int(xmoi), int(ymoi), delay = delay)
 
         return False
