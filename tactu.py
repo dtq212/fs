@@ -171,7 +171,7 @@ class TacTu:
             if "is_giukhoangcach" in thietlap:
                 self._is_giukhoangcach = thietlap["is_giukhoangcach"]
 
-    def battat_giukhoangcach(self):
+    def battat_is_giukhoangcach(self):
         self._is_giukhoangcach = not self._is_giukhoangcach
         if self._is_giukhoangcach:
             phatam("Bật tự động giữ khoảng cách")
