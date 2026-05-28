@@ -1047,7 +1047,7 @@ class TacTu:
 
                             if (is_giapsi or is_boss) and khoangcachmuctieu < self.khoangcachantoan:
                                 is_cokynangsansang = False
-                                for idkynang in ( IDKYNANG_TAMMUOICHANHOA, IDKYNANG_BANGPHONGVANLY, IDKYNANG_THAPPHUONGLIETHOA, IDKYNANG_LOIDONGCUUTHIEN, IDKYNANG_BANGPHONGBAO):
+                                for idkynang in (IDKYNANG_TAMMUOICHANHOA, IDKYNANG_THAPPHUONGLIETHOA, IDKYNANG_LOIDONGCUUTHIEN, IDKYNANG_BANGPHONGBAO):
                                     if self.moitruong.get_is_kynangsansang(idkynang):
                                         is_cokynangsansang = True
                                         break
