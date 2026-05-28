@@ -86,7 +86,8 @@ class GiaoDienHienThi:
         r += 1
         self.add_check(self.grp_config, "Ưu tiên đánh Phong quyển", "_is_uutientrieuhoithu", r, "Ctrl + S")
         r += 1
-
+        self.add_check(self.grp_config, "Giữ khoảng cách", "_is_giukhoangcach", r, "Ctrl+Alt+Shift+P")
+        r += 1
         ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 10)
         r += 1
 

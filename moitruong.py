@@ -1150,7 +1150,7 @@ class MoiTruong:
         self.tientrinh.start_thread(self.diachihamdichuyen2)
         return True
 
-    def action_dichuyengiukhoangcachtoithieu(self, idnhanvat2, khoangcachtoithieu, buocditoithieu = 30, delay = 0.01):
+    def action_dichuyengiukhoangcachtoida(self, idnhanvat2, khoangcachtoida, buocditoithieu = 30, delay = 0.01):
         if not self.get_is_nhanvattontai(idnhanvat2):
             return False
 
@@ -1162,8 +1162,8 @@ class MoiTruong:
 
         D = math.dist((x1, y1), (x2, y2))
 
-        if D > khoangcachtoithieu:
-            tile = khoangcachtoithieu / D
+        if D > khoangcachtoida:
+            tile = khoangcachtoida / D
 
             xmoi = x2 - tile * (x2 - x1)
             ymoi = y2 - tile * (y2 - y1)
@@ -1180,7 +1180,7 @@ class MoiTruong:
 
         return False
 
-    def action_dichuyengiukhoangcachtoithieudiem(self, toadox, toadoy, khoangcachtoithieu, buocditoithieu = 30, delay = 0.01):
+    def action_dichuyengiukhoangcachtoidadiem(self, toadox, toadoy, khoangcachtoida, buocditoithieu = 30, delay = 0.01):
         if time.time() - self._thoidiemdichuyengiukhoangcachtoithieu < delay:
             return False
 
@@ -1190,11 +1190,41 @@ class MoiTruong:
 
         D = math.dist((x1, y1), (x2, y2))
 
-        if D > khoangcachtoithieu:
-            tile = khoangcachtoithieu / D
+        if D > khoangcachtoida:
+            tile = khoangcachtoida / D
 
             xmoi = x2 - tile * (x2 - x1)
             ymoi = y2 - tile * (y2 - y1)
+
+            buocdi = math.dist((x1, y1), (xmoi, ymoi))
+
+            if 0 < buocdi < buocditoithieu:
+                tilebuocdi = buocditoithieu / buocdi
+                xmoi = x1 + tilebuocdi * (xmoi - x1)
+                ymoi = y1 + tilebuocdi * (ymoi - y1)
+
+            self._thoidiemdichuyengiukhoangcachtoithieu = time.time()
+            return self.action_dichuyen(int(xmoi), int(ymoi), delay = delay)
+
+        return False
+
+    def action_dichuyengiukhoangcachtoithieu(self, idnhanvat2, khoangcachtoithieu, buocditoithieu = 30, delay = 0.01):
+        if not self.get_is_nhanvattontai(idnhanvat2):
+            return False
+
+        if time.time() - self._thoidiemdichuyengiukhoangcachtoithieu < delay:
+            return False
+
+        x1, y1 = self.get_toado()
+        x2, y2 = self.get_toado(idnhanvat2)
+
+        D = math.dist((x1, y1), (x2, y2))
+
+        if 0 < D < khoangcachtoithieu:
+            tile = khoangcachtoithieu / D
+
+            xmoi = x2 + tile * (x1 - x2)
+            ymoi = y2 + tile * (y1 - y2)
 
             buocdi = math.dist((x1, y1), (xmoi, ymoi))
 
