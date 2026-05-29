@@ -1815,7 +1815,7 @@ class MoiTruong:
         target_x = int(x1 + deltax)
         target_y = int(y1 + deltay)
 
-        return self.action_sudungkynangtoado2(idkynang, target_x, target_y, delay = delay)
+        return self.action_sudungkynangtoado2(idkynang, target_x, target_y, delay = delay) and self.action_sudungkynangtoado(idkynang, target_x, target_y, delay = delay)
 
     def khoitaohamsudungphimtat(self):
         if self.diachihamsudungphimtat:
