@@ -1,1 +1,3 @@
 pyinstaller --noconfirm --onedir --windowed --uac-admin --hidden-import "pkg_resources" --collect-all "keystone" "C:\Users\Admin\PycharmProjects\fs\trochoi.py"
+
+python -m nuitka --onefile --windows-disable-console --windows-uac-admin --include-module=pkg_resources --include-package=keystone --enable-plugin=tk-inter "C:\Users\Admin\PycharmProjects\fs\trochoi.py"

@@ -1580,7 +1580,6 @@ class MoiTruong:
         diachidulieu = self.diachihamnhatvatpham2 + 0x80
         write_int(self.tientrinh, diachidulieu, dbidvatphamduoidat)
         write_bytes(self.tientrinh, diachidulieu + 4, bytes([0, 0, 0, 0]), 4)
-        print(hex(self.diachihamnhatvatpham2))
         self.tientrinh.start_thread(self.diachihamnhatvatpham2)
 
         return True
