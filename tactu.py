@@ -72,7 +72,6 @@ class TacTu:
         self._thoidiemyeucaubienthan = 0.
 
         self._is_giukhoangcach = False
-        self.khoangcachantoan = 450
 
     def __del__(self):
         try:
@@ -329,28 +328,7 @@ class TacTu:
         #         continue
         #     idvatpham, idruong, vitrix, vitriy = vitrivatpham
         #     print("#{}: {}: {}".format(sothutuvatpham, (idvatpham, idruong, vitrix, vitriy), self.moitruong.get_thongtinvatpham_display(idvatpham)))
-
-        print("toado: {}".format(self.moitruong.get_toado()))
-
-        for idvatphamduoidat in range(SOLUONGVATPHAMTOIDADUOIDAT):
-            if self.moitruong.get_is_vatphamduoidattontai(idvatphamduoidat):
-                is_nhatvatpham = False
-                if self.moitruong.get_tuchatvatphamduoidat(idvatphamduoidat) == IDTUCHATVATPHAMDUOIDAT_LUC:
-                    is_nhatvatpham = True
-
-                if not is_nhatvatpham and self.moitruong.get_is_thucuoiduoidat(idvatphamduoidat):
-                    is_nhatvatpham = True
-
-                if not is_nhatvatpham:
-                    tenvatphamduoidat = self.moitruong.get_tenvatphamduoidat(idvatphamduoidat)
-                    for tenvatpham in (TENVATPHAM_LAMBAOTHACH, TENVATPHAM_MANHHONGTHUYTINH, TENVATPHAM_HONGTHUYTINH, TENVATPHAM_HONGBAOTHACH):
-                        if tenvatpham in tenvatphamduoidat:
-                            is_nhatvatpham = True
-                            break
-
-                if is_nhatvatpham and self.moitruong.get_khoangcachvatphamduoidat(idvatphamduoidat) < 400:
-                    self.moitruong.action_nhatvatpham2(idvatphamduoidat)
-                    time.sleep(0.02)
+        print(self.moitruong.get_hieuungbotros())
 
     def action_mua1thancauphu(self):
         print("Mua 1 thần cẩu phù")
@@ -830,6 +808,10 @@ class TacTu:
             if self.action_sudungvatpham(tenvatpham, delay = 0.25):
                 return
 
+        if IDHIEUUNGBOTRO_BUFFTHUONGCHU not in self.moitruong.get_hieuungbotros():
+            if self.action_sudungvatpham(BUFFTHUONGCHU, delay = 0.25):
+                return
+
 
     def action_tudongnhatvatpham(self):
         if not self.moitruong.get_is_tudongnhatvatpham():
@@ -1044,8 +1026,8 @@ class TacTu:
                         if self._is_giukhoangcach:
                             is_giapsi = (self.moitruong.get_idloainhanvat(idmuctieu) == IDLOAINHANVAT_NGUOICHOI and self.moitruong.get_idhephai(idmuctieu) == IDHEPHAI_GIAPSI)
                             is_boss = self.moitruong.get_is_boss(idmuctieu)
-
-                            if (is_giapsi or is_boss) and khoangcachmuctieu < self.khoangcachantoan:
+                            khoangcachantoan = 300 if is_giapsi else 450 if is_boss else 2000
+                            if (is_giapsi or is_boss) and khoangcachmuctieu < khoangcachantoan:
                                 is_cokynangsansang = False
                                 for idkynang in (IDKYNANG_TAMMUOICHANHOA, IDKYNANG_THAPPHUONGLIETHOA, IDKYNANG_LOIDONGCUUTHIEN, IDKYNANG_BANGPHONGBAO):
                                     if self.moitruong.get_is_kynangsansang(idkynang):
@@ -1056,7 +1038,7 @@ class TacTu:
                                     yeucaudichuyenmoi = {
                                         "loaidichuyen": "dichuyengiukhoangcachtoithieu",
                                         "idmuctieu": idmuctieu,
-                                        "khoangcach": self.khoangcachantoan + 50
+                                        "khoangcach": khoangcachantoan + 50
                                     }
                                     self._yeucaudichuyentancong = yeucaudichuyenmoi
                                     return
@@ -1185,11 +1167,9 @@ class TacTu:
             idhephaivatpham = self.moitruong.get_idhephaivatpham(idvatpham)
 
             if danhmuctrangbi in (IDDANHMUCTRANGBI_VUKHI, IDDANHMUCTRANGBI_PHIPHONG):
-                if thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 20 or thuoctinh_map.get(
-                        IDTHUOCTINHVATPHAM_XUATCHIEUBUAPHAP, 0) >= 20:
+                if thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 20 or thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUBUAPHAP, 0) >= 20:
                     continue
-                if thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 10 and thuoctinh_map.get(
-                        IDTHUOCTINHVATPHAM_DANHTAPTRUNG, 0) >= 10:
+                if thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 10 and thuoctinh_map.get(IDTHUOCTINHVATPHAM_DANHTAPTRUNG, 0) >= 10:
                     continue
 
             if danhmuctrangbi == IDDANHMUCTRANGBI_AO:

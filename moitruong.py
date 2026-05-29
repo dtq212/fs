@@ -2197,16 +2197,12 @@ class MoiTruong:
         if time.time() - self._thoidiemmuakytrancacgannhat < delay:
             return False
 
-        print("action_muavatphamkytrancac: {}".format(self.get_idtabkytrancac()))
-
         if self.get_idtabkytrancac() != idtab:
             vitritab = VITRITAB_MAP.get(idtab)
             if vitritab is not None:
                 self.action_vohieuhoapopuptabkytrancac()
                 self.action_motabkytrancac(vitritab)
             return False
-
-        self.action_tatvohieuhoapopuptabkytrancac()
 
         self._thoidiemmuakytrancacgannhat = time.time()
 
