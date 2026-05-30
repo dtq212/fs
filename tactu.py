@@ -1225,6 +1225,13 @@ class TacTu:
                         return True
                     return False
 
+        if NIETBANCHU not in self.moitruong.get_hieuungbotros():
+            if self.get_is_dusoluongtoithieu(TIENDONG, 6):
+                is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_GIOITHIEU, 24, 1)
+                if is_muathanhcong:
+                    return True
+                return False
+
         if not self.get_is_dusoluongtoithieu("Thanh Lộ", 1):
             if self.get_is_dusoluongtoithieu(TIENDONG, 8):
                 is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 21, 1)
