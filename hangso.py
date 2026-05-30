@@ -39,6 +39,7 @@ TUIMANHPHAPBAOCAP70 = "Túi mảnh Pháp Bảo cấp 70"
 
 BUFFTHUONGCHU = "Buff Thương Chu"
 HOALOITRANG = "Hỏa Lôi Trang"
+NIETBANCHU = "Niết Bàn Chú"
 THANCAUPHU = "Thần Cẩu phù"
 THANTIENTAN = "Thần Tiên Tán"
 TIENDONG = "Tiền đồng"

@@ -72,7 +72,7 @@ class TacTu:
         self._thoidiemyeucaubienthan = 0.
 
         self._is_giukhoangcach = False
-
+        self._thoidiemtudongtimduonggannhat = 0.
     def __del__(self):
         try:
             self.moitruong.action_tatvohieuhoathietlapmuctieutancong()
@@ -603,7 +603,7 @@ class TacTu:
                 for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
                     self.moitruong.action_tathieuungbotro(idhieuungbotro)
         else:
-            for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOTINHTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
+            for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
                 self.moitruong.action_tathieuungbotro(idhieuungbotro)
 
     def get_tongtrongluongvatpham(self):
@@ -784,7 +784,8 @@ class TacTu:
 
         if diempk > 0:
             if diempk >= 8 or (diempk >= 5 and phantramsinhluchientai <= 70) or (diempk >= 3 and phantramsinhluchientai <= 60) or phantramsinhluchientai <= 50 or self._phantramsinhlucmatdi >= 20:
-                if self.action_sudungvatpham(QUANAMTHUY, delay = 0.):
+                if self.action_sudungvatpham(QUANAMTHUY, delay = 0.05):
+                    time.sleep(0.05)
                     return
 
         if self.moitruong.get_phantramsinhluchientai() <= self.moitruong.get_phantramsinhluchoiphuc() - 25:
@@ -804,14 +805,13 @@ class TacTu:
             if self.action_sudungvatpham(HOALOITRANG, delay = 1.):
                 return
 
-        for tenvatpham in [THANCAUPHU, THANTIENTAN]:
-            if self.action_sudungvatpham(tenvatpham, delay = 0.25):
-                return
-
         if IDHIEUUNGBOTRO_BUFFTHUONGCHU not in self.moitruong.get_hieuungbotros():
             if self.action_sudungvatpham(BUFFTHUONGCHU, delay = 0.25):
                 return
 
+        for tenvatpham in [THANCAUPHU, THANTIENTAN, NIETBANCHU]:
+            if self.action_sudungvatpham(tenvatpham, delay = 0.25):
+                return
 
     def action_tudongnhatvatpham(self):
         if not self.moitruong.get_is_tudongnhatvatpham():
@@ -834,7 +834,7 @@ class TacTu:
 
                 if not is_nhatvatpham:
                     tenvatphamduoidat = self.moitruong.get_tenvatphamduoidat(idvatphamduoidat)
-                    for tenvatpham in (TENVATPHAM_LAMBAOTHACH, TENVATPHAM_MANHHONGTHUYTINH, TENVATPHAM_HONGTHUYTINH, TENVATPHAM_HONGBAOTHACH):
+                    for tenvatpham in (TENVATPHAM_LAMBAOTHACH, TENVATPHAM_MANHHONGTHUYTINH, TENVATPHAM_HONGTHUYTINH, TENVATPHAM_HONGBAOTHACH, "Ngọc Bội", "Kim Cương Thạch", "Liệt Diệm nhãn"):
                         if tenvatpham in tenvatphamduoidat:
                             is_nhatvatpham = True
                             break
@@ -865,7 +865,8 @@ class TacTu:
                 if xtruongnhom > 0 and ytruongnhom > 0:
                     khoangcach = self.moitruong.get_khoangcachdiem(1, xtruongnhom, ytruongnhom)
 
-                    if khoangcach >= self.moitruong.get_khoangcachtheosau():
+                    khoangcachtheosau = self.moitruong.get_khoangcachtheosau()
+                    if khoangcach >= khoangcachtheosau:
                         if khoangcach >= 2000 or self.moitruong.get_is_dangtudongtimduong():
                             loaidichuyen = "tudongtimduong"
                         else:
@@ -873,7 +874,8 @@ class TacTu:
 
                         yeucaudichuyenmoi = {
                             "loaidichuyen": loaidichuyen,
-                            "toadodich": (xtruongnhom, ytruongnhom)
+                            "toadodich": (xtruongnhom, ytruongnhom),
+                            "khoangcach": max(khoangcachtheosau - 50, 0),
                         }
         finally:
             self._yeucaudichuyentheosautruongnhom = yeucaudichuyenmoi
@@ -934,7 +936,7 @@ class TacTu:
                 elif self._toadodichtudongtimduonggannhat:
                     toadocux, toadocuy = self._toadodichtudongtimduonggannhat
                     khoangcachchenhlech = math.hypot(toadox - toadocux, toadoy - toadocuy)
-                    if khoangcachchenhlech > 300:
+                    if khoangcachchenhlech > 500 and (time.time() - self._thoidiemtudongtimduonggannhat) > 2.5:
                         is_cancapnhatduongdi = True
                 else:
                     is_cancapnhatduongdi = True
@@ -943,13 +945,11 @@ class TacTu:
                     self.moitruong.action_tudongtimduong(toadox, toadoy)
                     self._toadodichtudongtimduonggannhat = (toadox, toadoy)
             elif loaidichuyen == "dichuyengiukhoangcachtoidadiem":
-                toadodich = yeucauduocchon.get("toadodich")
-                toadox, toadoy = toadodich
-                self.moitruong.action_dichuyengiukhoangcachtoidadiem(toadox, toadoy, 0)
+                self.moitruong.action_dichuyengiukhoangcachtoidadiem(*yeucauduocchon.get("toadodich"), khoangcachtoida = yeucauduocchon.get("khoangcach"))
             elif loaidichuyen == "dichuyengiukhoangcachtoida":
-                self.moitruong.action_dichuyengiukhoangcachtoida(yeucauduocchon.get("idmuctieu"), yeucauduocchon.get("khoangcach"))
+                self.moitruong.action_dichuyengiukhoangcachtoida(yeucauduocchon.get("idmuctieu"), khoangcachtoida = yeucauduocchon.get("khoangcach"))
             elif loaidichuyen == "dichuyengiukhoangcachtoithieu":
-                self.moitruong.action_dichuyengiukhoangcachtoithieu(yeucauduocchon.get("idmuctieu"), yeucauduocchon.get("khoangcach"))
+                self.moitruong.action_dichuyengiukhoangcachtoithieu(yeucauduocchon.get("idmuctieu"), khoangcachtoithieu = yeucauduocchon.get("khoangcach"))
         else:
             self.moitruong.set_is_tamngungtancong(False)
             if self._is_dangxulybanrac:
@@ -1034,10 +1034,10 @@ class TacTu:
                         yeucaudichuyenmoi = {"loaidichuyen": "dungim"}
 
                         if self._is_giukhoangcach:
-                            is_giapsi = (self.moitruong.get_idloainhanvat(idmuctieu) == IDLOAINHANVAT_NGUOICHOI and self.moitruong.get_idhephai(idmuctieu) == IDHEPHAI_GIAPSI)
+                            is_nguoichoicangiukhoangcach = (self.moitruong.get_idloainhanvat(idmuctieu) == IDLOAINHANVAT_NGUOICHOI and self.moitruong.get_idhephai(idmuctieu) in (IDHEPHAI_GIAPSI, IDHEPHAI_DINHAN))
                             is_boss = self.moitruong.get_is_boss(idmuctieu)
-                            khoangcachantoan = 300 if is_giapsi else 450 if is_boss else 2000
-                            if (is_giapsi or is_boss) and khoangcachmuctieu < khoangcachantoan:
+                            khoangcachantoan = 300 if is_nguoichoicangiukhoangcach else 450 if is_boss else 2000
+                            if (is_nguoichoicangiukhoangcach or is_boss) and khoangcachmuctieu < khoangcachantoan:
                                 is_cokynangsansang = False
                                 for idkynang in (IDKYNANG_TAMMUOICHANHOA, IDKYNANG_THAPPHUONGLIETHOA, IDKYNANG_LOIDONGCUUTHIEN, IDKYNANG_BANGPHONGBAO):
                                     if self.moitruong.get_is_kynangsansang(idkynang):
@@ -1063,7 +1063,7 @@ class TacTu:
                             yeucaudichuyenmoi = {
                                 "loaidichuyen": "dichuyengiukhoangcachtoida",
                                 "idmuctieu": idmuctieu,
-                                "khoangcach": khoangcachphudau - 50
+                                "khoangcach": khoangcachphudau - 100
                             }
                             self.moitruong.set_idkynang1(IDKYNANG_TAMMUOICHANHOA)
                             return
@@ -1080,7 +1080,7 @@ class TacTu:
                             yeucaudichuyenmoi = {
                                 "loaidichuyen": "dichuyengiukhoangcachtoida",
                                 "idmuctieu": idmuctieu,
-                                "khoangcach": khoangcachmuctieu - 50 if is_muctieutiepcan else khoangcachmuctieu - 100
+                                "khoangcach": khoangcachmuctieu - 100 if is_muctieutiepcan else khoangcachmuctieu - 150
                             }
                             return
 
