@@ -888,7 +888,17 @@ class TacTu:
             return
 
         yeucauduocchon = None
-        if self._yeucaudichuyentancong:
+        is_quaxatruongnhom = False
+
+        if self._yeucaudichuyentheosautruongnhom and "toadodich" in self._yeucaudichuyentheosautruongnhom:
+            toadox, toadoy = self._yeucaudichuyentheosautruongnhom["toadodich"]
+            khoangcach = self.moitruong.get_khoangcachdiem(1, toadox, toadoy)
+            if khoangcach > 600:
+                is_quaxatruongnhom = True
+
+        if is_quaxatruongnhom:
+            yeucauduocchon = self._yeucaudichuyentheosautruongnhom
+        elif self._yeucaudichuyentancong:
             yeucauduocchon = self._yeucaudichuyentancong
         elif self._yeucaudichuyenfarm:
             yeucauduocchon = self._yeucaudichuyenfarm
@@ -901,7 +911,7 @@ class TacTu:
 
             loaidichuyen = yeucauduocchon.get("loaidichuyen")
 
-            if loaidichuyen == "dichuyengiukhoangcachtoithieu":
+            if loaidichuyen == "dichuyengiukhoangcachtoithieu" or (yeucauduocchon == self._yeucaudichuyentheosautruongnhom and is_quaxatruongnhom):
                 self.moitruong.set_is_tamngungtancong(True)
             else:
                 self.moitruong.set_is_tamngungtancong(False)

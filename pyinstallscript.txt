@@ -1,3 +1,7 @@
 pyinstaller --noconfirm --onedir --windowed --uac-admin --hidden-import "pkg_resources" --collect-all "keystone" "C:\Users\Admin\PycharmProjects\fs\trochoi.py"
 
 python -m nuitka --onefile --windows-disable-console --windows-uac-admin --include-module=pkg_resources --include-package=keystone --enable-plugin=tk-inter "C:\Users\Admin\PycharmProjects\fs\trochoi.py"
+
+
+$env:CFLAGS="-Wno-error=implicit-function-declaration -Wno-error=int-conversion"
+python -m nuitka --standalone --windows-disable-console --windows-uac-admin --include-module=pkg_resources --include-data-dir="C:\Users\Admin\PycharmProjects\fs\.venv\Lib\site-packages\keystone=keystone" --enable-plugin=tk-inter --nofollow-import-to=charset_normalizer --nofollow-import-to=pygame._sdl2 "C:\Users\Admin\PycharmProjects\fs\trochoi.py"

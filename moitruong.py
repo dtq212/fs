@@ -628,7 +628,7 @@ class MoiTruong:
             return False
 
         thoidiemhoiphuckynang = self.get_thoidiemhoiphuckynang(idkynang)
-        return not thoidiemhoiphuckynang or thoidiemhoiphuckynang < self.get_donghothoigian() - 10
+        return not thoidiemhoiphuckynang or thoidiemhoiphuckynang < self.get_donghothoigian() - 5
 
     def get_is_khuvuccothetancong(self):
         return read_int(self.tientrinh, self.diachigame + 0x29F0424 + 0x000) > 0
@@ -1814,7 +1814,7 @@ class MoiTruong:
         target_x = int(x1 + deltax)
         target_y = int(y1 + deltay)
 
-        return self.action_sudungkynangtoado2(idkynang, target_x, target_y, delay = delay) and self.action_sudungkynangtoado(idkynang, target_x, target_y, delay = delay)
+        return self.action_sudungkynangtoado(idkynang, target_x, target_y, delay = delay)
 
     def khoitaohamsudungphimtat(self):
         if self.diachihamsudungphimtat:
