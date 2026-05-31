@@ -958,6 +958,8 @@ class TacTu:
             else:
                 if self.moitruong.get_idhephai() in (IDHEPHAI_GIAPSI, IDHEPHAI_DINHAN):
                     self.moitruong.set_is_duoitheo(True)
+                else:
+                    self.moitruong.set_is_duoitheo(False)
                 if not self._is_tudongdanhtheosautruongnhom or self.moitruong.get_idtodoi() <= 0 or not self.moitruong.get_is_truongnhomcungbando():
                     self.moitruong.set_is_dichuyenhoatdongquanhphamvi(True)
                 else:

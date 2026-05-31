@@ -713,7 +713,7 @@ class MoiTruong:
         return read_int(self.tientrinh, self.diachigame + 0x4A3810 + 0x000) > 0
 
     def get_is_boss(self, idnhanvat = 1):
-        if not self.get_idloainhanvat(idnhanvat) == IDLOAINHANVAT_QUAIVAT:
+        if self.get_idloainhanvat(idnhanvat) != IDLOAINHANVAT_QUAIVAT:
             return
         capdonhanvat = self.get_capdonhanvat(idnhanvat)
         sinhluctoida = self.get_sinhluctoida(idnhanvat)
