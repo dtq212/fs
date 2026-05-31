@@ -30,6 +30,8 @@ OFFSET_DIACHICOSOMOITHANHVIENDOINHOM = 0x30
 
 class MoiTruong:
     def __init__(self, idcuaso):
+        self._thoidiemphucsinhgannhat = 0.
+        self.diachihamphucsinh = 0
         self._thoidiemnhatvatphamgannhat2 = 0.
         self.diachihamnhatvatpham2 = 0
         self.diachihamsudungkynangtoado2 = 0
@@ -743,6 +745,9 @@ class MoiTruong:
     def set_idkynangbotro4(self, idkynangbotro):
         if self.get_idkynanghotro4() != idkynangbotro:
             write_int(self.tientrinh, self.diachigame + 0x4A3808 + 0x000, idkynangbotro)
+
+    def get_is_tudongphucsinh(self):
+        return read_int(self.tientrinh, self.diachigame + 0x4A47A0 + 0x000)
 
     def get_is_dichuyenhoatdongquanhphamvi(self):
         return read_int(self.tientrinh, self.diachigame + 0x4A4538 + 0x000) > 0
@@ -2214,4 +2219,70 @@ class MoiTruong:
         print("action_muavatphamkytrancac: {}, {}, {}".format(idtab, vitrivatpham, soluong))
 
         self.tientrinh.start_thread(self.diachihammuavatphamkytrancac)
+        return True
+
+    def khoitaohamphucsinh(self):
+        if self.diachihamphucsinh:
+            return
+
+        self.diachihamphucsinh = self.tientrinh.allocate(256)
+        diachidulieu = self.diachihamphucsinh + 0x40
+
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        asm_code = f"""
+            push ebp
+            mov ebp, esp
+            sub esp, 16                     
+
+            mov eax, dword ptr [{hex(diachidulieu)}]
+
+            mov byte ptr [ebp - 12], 0x6B
+            mov dword ptr [ebp - 11], eax
+
+            mov dword ptr [ebp - 4], 5        
+
+            mov eax, dword ptr [{hex(self.diachigame + 0x2B3788)}]
+            test eax, eax
+            je ketthuc
+
+            lea edx, [ebp - 4]
+            push edx
+
+            lea edx, [ebp - 12]
+            push edx
+
+            push eax
+
+            mov ecx, dword ptr [eax]
+            mov edx, dword ptr [ecx + 0x1C]
+            call edx                        
+
+            add esp, 0x0C                   
+
+            ketthuc:
+            mov esp, ebp
+            pop ebp
+            ret 4                           
+        """
+
+        encoding, _ = ks.asm(asm_code)
+        write_bytes(self.tientrinh, self.diachihamphucsinh, bytes(encoding), len(encoding))
+
+    def action_phucsinh(self, tuychonphucsinh = TUYCHONPHUCSINH_PHUCSINH, delay = 0.05):
+        if not self.diachihamphucsinh:
+            self.khoitaohamphucsinh()
+
+        if not self.get_is_nhanvatdachet():
+            return False
+
+        if time.time() - self._thoidiemphucsinhgannhat < delay:
+            return False
+
+        self._thoidiemphucsinhgannhat = time.time()
+
+        diachidulieu = self.diachihamphucsinh + 0x40
+        write_int(self.tientrinh, diachidulieu, tuychonphucsinh)
+
+        self.tientrinh.start_thread(self.diachihamphucsinh)
         return True
