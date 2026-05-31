@@ -2202,6 +2202,8 @@ class MoiTruong:
                 self.action_motabkytrancac(vitritab)
             return False
 
+        self.action_tatvohieuhoapopuptabkytrancac()
+
         self._thoidiemmuakytrancacgannhat = time.time()
 
         diachidulieu = self.diachihammuavatphamkytrancac + 0x80
