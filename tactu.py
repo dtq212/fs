@@ -20,7 +20,7 @@ class TacTu:
         self._is_tudongtimkiemmuctieu = False
         self._is_khongdanhcungbang = False
         self._is_chidanhnguoichoivatrieuhoithu = False
-        self._tennhanvattancongs = set()
+        self._tennhanvattancongs = {"108HoaHit1", "108Loveisi"}
         self._tennhanvatkhongtancongs = set()
 
         self.moitruong = moitruong
