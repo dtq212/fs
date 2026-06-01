@@ -466,7 +466,7 @@ class TacTu:
             is_danduoc = (danhmucvattutieuhao == IDDANHMUCVATTUTIEUHAO_DANDUOC)
             is_trangbi = (danhmuctrangbi in DANHMUCTRANGBI_MAP)
 
-            if not is_danduoc and not is_trangbi:
+            if not is_danduoc and not is_trangbi and not tenvatpham == "Hàn Thiết Thạch":
                 continue
 
             if is_trangbi:
@@ -1100,16 +1100,18 @@ class TacTu:
                                 self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_BANGPHONGBAO, random.randint(350, 375))
 
                     elif self._is_sudungkynangtoadochichuot:
-                        if self.moitruong.get_is_kynangsansang(IDKYNANG_TAMMUOICHANHOA):
-                            self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_TAMMUOICHANHOA, random.randint(450, 475))
-                        if self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGVANLY):
-                            self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_BANGPHONGVANLY, random.randint(450, 475))
-                        if self.moitruong.get_is_kynangsansang(IDKYNANG_THAPPHUONGLIETHOA):
-                            self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_THAPPHUONGLIETHOA, random.randint(450, 475))
-                        if self.moitruong.get_is_kynangsansang(IDKYNANG_LOIDONGCUUTHIEN):
-                            self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_LOIDONGCUUTHIEN, random.randint(450, 475))
-                        if self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGBAO):
-                            self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_BANGPHONGBAO, random.randint(350, 375))
+                        if self.moitruong.get_is_kynangsansang(IDKYNANG_CHUCDUNGCHANKHI) and not self.moitruong.get_is_cohieuungbotro(IDHIEUUNGBOTRO_CHUCDUNGCHANKHI):
+                            self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_CHUCDUNGCHANKHI, random.randint(450, 475))
+                        else:
+                            self.moitruong.action_sudungkynangtoadochichuot2(IDKYNANG_TINHTHONGBANGHE, random.randint(450, 475))
+                        # if self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGVANLY):
+                        #     self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_BANGPHONGVANLY, random.randint(450, 475))
+                        # if self.moitruong.get_is_kynangsansang(IDKYNANG_THAPPHUONGLIETHOA):
+                        #     self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_THAPPHUONGLIETHOA, random.randint(450, 475))
+                        # if self.moitruong.get_is_kynangsansang(IDKYNANG_LOIDONGCUUTHIEN):
+                        #     self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_LOIDONGCUUTHIEN, random.randint(450, 475))
+                        # if self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGBAO):
+                        #     self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_BANGPHONGBAO, random.randint(350, 375))
                 elif is_cothesudungkynangbotro:
                     if self.moitruong.get_is_kynangsansang(IDKYNANG_CHUCDUNGCHANKHI) and not self.moitruong.get_is_cohieuungbotro(IDHIEUUNGBOTRO_CHUCDUNGCHANKHI):
                         self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_CHUCDUNGCHANKHI, random.randint(450, 475))

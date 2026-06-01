@@ -1820,6 +1820,27 @@ class MoiTruong:
 
         return self.action_sudungkynangtoado(idkynang, target_x, target_y, delay = delay)
 
+    def action_sudungkynangtoadochichuot2(self, idkynang, khoangcachtoida, delay = 0.05):
+        if time.time() - self._thoidiemsudungkynanggannhat_map.get(idkynang, 0.) < delay:
+            return False
+
+        x1, y1 = self.get_toado()
+        x2, y2 = self.get_toadoclick()
+
+        deltax = x2 - x1
+        deltay = y2 - y1
+
+        khoangcach = max(round(math.sqrt(deltax ** 2 + deltay ** 2)), 1)
+
+        if khoangcach > khoangcachtoida:
+            deltax = deltax * khoangcachtoida / khoangcach
+            deltay = deltay * khoangcachtoida / khoangcach
+
+        target_x = int(x1 + deltax)
+        target_y = int(y1 + deltay)
+
+        return self.action_sudungkynangtoado2(idkynang, target_x, target_y, delay = delay)
+
     def khoitaohamsudungphimtat(self):
         if self.diachihamsudungphimtat:
             return
