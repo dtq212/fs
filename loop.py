@@ -4,7 +4,7 @@ import traceback
 
 import pymem.exception
 
-from moitruongmoi import MoiTruong
+from moitruong import MoiTruong
 from tactu import TacTu
 
 class LoopChinh:
@@ -100,7 +100,6 @@ class LoopPhu:
         self.tactu.action_tudongdanhtheosautruongnhom()
         self.tactu.action_tudongsuavatpham()
         self.tactu.action_tudongbattathieuungbotro()
-        self.tactu.action_tudongboquaboss()
         self.tactu.action_tudongnhatvatpham()
         self.tactu.action_tudongmokhoa()
         self.tactu.action_tudongsudungvatpham()

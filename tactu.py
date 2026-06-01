@@ -6,7 +6,7 @@ import time
 import pymem
 
 from hangso import *
-from moitruongmoi import MoiTruong
+from moitruong import MoiTruong
 from tienich import luuthietlap as util_luuthietlap
 from tienich import taithietlap as util_taithietlap, phatam
 
@@ -1253,7 +1253,7 @@ class TacTu:
         return False
 
     def action_tudongphucsinh(self):
-        if not self.moitruong.get_is_dangbatauto():
+        if not self.moitruong.get_is_dangbatauto() and not self.moitruong.get_is_dangtudongtimduong():
             return
 
         is_tudongphucsinh = self.moitruong.get_is_tudongphucsinh()
