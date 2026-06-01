@@ -960,20 +960,20 @@ class MoiTruong:
         import pymem.pattern
         aob = "56 6A 00 6A 01 6A 01 8B F1 E8 ?? ?? ?? ?? 8B C8 E8 ?? ?? ?? ?? 8B 44 24 0C 6A 01 6A 00 6A 01 6A 01 50"
 
-        diachi_timthay = pymem.pattern.pattern_scan_module(
+        diachitimthay = pymem.pattern.pattern_scan_module(
             self.tientrinh.process_handle,
             self.gamemodule,
-            tao_pattern_tu_aob(aob)
+            taopatterntuaob(aob)
         )
 
-        if diachi_timthay:
-            self._offsethamtudongtimduong = diachi_timthay - self.diachigame
+        if diachitimthay:
+            self._offsethamtudongtimduong = diachitimthay - self.diachigame
             print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm tự động tìm đường: {hex(self._offsethamtudongtimduong)}")
         else:
             print("[CẢNH BÁO] Không tìm thấy Pattern hàm tự động tìm đường, sử dụng offset mặc định (0x11FB10).")
             self._offsethamtudongtimduong = 0x11FB10
 
-        diachihamtudongtimduong_thucte = self.diachigame + self._offsethamtudongtimduong
+        diachihamtudongtimduongthucte = self.diachigame + self._offsethamtudongtimduong
 
         self.diachihamtudongtimduong = self.tientrinh.allocate(256)
         diachidulieu = self.diachihamtudongtimduong + 0x40
@@ -986,7 +986,7 @@ class MoiTruong:
             push edi
             push esi
             mov ecx, {hex(self.diachigame + 0x49F090 + 0x000)}
-            mov eax, {hex(diachihamtudongtimduong_thucte)}
+            mov eax, {hex(diachihamtudongtimduongthucte)}
             call eax
             ret
         """
