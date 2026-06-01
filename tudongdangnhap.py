@@ -5,7 +5,7 @@ import win32gui
 import win32con
 import win32process
 from tienich import BackgroundInput
-from moitruong import MoiTruong
+from moitruongmoi import MoiTruong
 
 DUONGDAN_GAME = r"D:\TamGioiPhanTranhPC\game.exe"
 DANH_SACH_TAI_KHOAN = [

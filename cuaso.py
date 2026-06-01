@@ -8,7 +8,7 @@ from loop import (
     LoopPhu,
     LoopLamMoiTrangThaiTacTu,
 )
-from moitruong import MoiTruong
+from moitruongmoi import MoiTruong
 from tactu import TacTu
 
 

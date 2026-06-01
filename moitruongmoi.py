@@ -199,7 +199,7 @@ class MoiTruong:
         idbando = read_int(self.tientrinh, diachinhanvat + 0x07E4)
         idkhuvuc = read_int(self.tientrinh, diachinhanvat + 0x07E8)
 
-        diachibando = self.diachigame + 0x2C571EC + (idbando * 172)
+        diachibando = self.diachigame + 0x2C57188 + (idbando * 172)
         soluongkhuvuctoida = read_int(self.tientrinh, diachibando + 0x58)
 
         if idkhuvuc < 0 or idkhuvuc >= soluongkhuvuctoida:
@@ -1508,12 +1508,10 @@ class MoiTruong:
         return True
 
     def khoitaohamboquaboss(self):
+        return
         if self.diachihamboquaboss:
             return
-
-        import pymem.pattern
-
-        aob = "8D 80 ?? ?? ?? ?? 8B C8 89 44 24 10 E8 ?? ?? ?? ?? 85 C0 0F 85 ?? ?? ?? ?? 8B 46 74 89 44 24 0C"
+        aob = "33 C9 3B C1 74 ?? 89 46 18 EB ?? 89 4E 18 69 C0 94 82 00 00"
 
         diachitimthay = pymem.pattern.pattern_scan_module(
             self.tientrinh.process_handle,
@@ -1522,15 +1520,14 @@ class MoiTruong:
         )
 
         if diachitimthay:
-            # Lùi về đúng 12 byte để chạm vào điểm Hook
-            diachi_hook = diachitimthay - 12
+            diachi_hook = diachitimthay + 20
             print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hook Bỏ qua Boss: {hex(diachi_hook - self.diachigame)}")
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Hook Bỏ qua Boss! Hủy bỏ khởi tạo.")
             return
 
-        diachi_jng = diachi_hook + 0x208
-        diachi_return = diachi_hook + 0xC
+        diachi_return = diachi_hook + 8
+        diachi_jng = diachi_hook + 11
 
         self.diachihamboquaboss = self.tientrinh.allocate(256)
         diachidulieu = self.diachihamboquaboss + 0x80
@@ -1539,28 +1536,38 @@ class MoiTruong:
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
         offset_capdo = self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x1C
         offset_sinhluctoida = self.diachigame + OFFSET_DIACHICOSONHANVAT + 0x800
+        offset_diachigame_46E540 = self.diachigame + 0x46E540
 
         asm_code = f"""
-            cmp [eax+{hex(offset_sinhluctoida)}], ebp
-            jng {hex(diachi_jng)}
+            cmp [eax+{hex(offset_diachigame_46E540)}], ecx
+            jle {hex(diachi_jng)}
 
             cmp dword ptr [{hex(diachidulieu)}], 1
             jne boqualogicboquaboss
 
-            mov ecx, dword ptr [eax+{hex(offset_capdo)}]
+            push edx
+            mov edx, dword ptr [eax+{hex(offset_capdo)}]
 
-            cmp ecx, 55
+            cmp edx, 55
             jg kiemtrabosscapcao
 
         kiemtrabosscapthap:
-            imul ecx, ecx, 2000
-            cmp [eax+{hex(offset_sinhluctoida)}], ecx
-            jnl {hex(diachi_jng)}
-            jmp boqualogicboquaboss
+            imul edx, edx, 2000
+            cmp [eax+{hex(offset_sinhluctoida)}], edx
+            jnl boss_detected
+            jmp not_boss
 
         kiemtrabosscapcao:
             cmp dword ptr [eax+{hex(offset_sinhluctoida)}], 50000
-            jg {hex(diachi_jng)}
+            jg boss_detected
+
+        not_boss:
+            pop edx
+            jmp boqualogicboquaboss
+
+        boss_detected:
+            pop edx
+            jmp {hex(diachi_jng)}
 
         boqualogicboquaboss:
             jmp {hex(diachi_return)}
@@ -1570,10 +1577,11 @@ class MoiTruong:
         write_bytes(self.tientrinh, self.diachihamboquaboss, bytes(encoding), len(encoding))
 
         jump_offset = self.diachihamboquaboss - diachi_hook - 5
-        patch_bytes = b"\xE9" + jump_offset.to_bytes(4, byteorder = sys.byteorder, signed = True) + (b"\x90" * 7)
-        write_bytes(self.tientrinh, diachi_hook, patch_bytes, 12)
+        patch_bytes = b"\xE9" + jump_offset.to_bytes(4, byteorder = sys.byteorder, signed = True) + b"\x90\x90\x90"
+        write_bytes(self.tientrinh, diachi_hook, patch_bytes, 8)
 
     def action_thietlapboquaboss(self, is_boquaboss: bool, delay = 0.5):
+        return
         if not self.diachihamboquaboss:
             self.khoitaohamboquaboss()
 

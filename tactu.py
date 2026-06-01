@@ -6,7 +6,7 @@ import time
 import pymem
 
 from hangso import *
-from moitruong import MoiTruong
+from moitruongmoi import MoiTruong
 from tienich import luuthietlap as util_luuthietlap
 from tienich import taithietlap as util_taithietlap, phatam
 
@@ -20,7 +20,7 @@ class TacTu:
         self._is_tudongtimkiemmuctieu = False
         self._is_khongdanhcungbang = False
         self._is_chidanhnguoichoivatrieuhoithu = False
-        self._tennhanvattancongs = {"108HoaHit1", "108Loveisi"}
+        self._tennhanvattancongs = set()
         self._tennhanvatkhongtancongs = set()
 
         self.moitruong = moitruong
