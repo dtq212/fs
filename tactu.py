@@ -10,7 +10,6 @@ from moitruong import MoiTruong
 from tienich import luuthietlap as util_luuthietlap
 from tienich import taithietlap as util_taithietlap, phatam
 
-
 class TacTu:
     def __init__(self, moitruong: MoiTruong):
         self._phantramsinhluchientai = 100.
