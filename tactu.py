@@ -469,7 +469,7 @@ class TacTu:
             if not is_danduoc and not is_trangbi and not tenvatpham == "Hàn Thiết Thạch":
                 continue
 
-            if is_trangbi:
+            if is_trangbi and self.moitruong.get_capdovatpham(idvatpham) < 20:
                 if phamchat != IDPHAMCHATVATPHAM_TRANGLAM:
                     continue
 
@@ -529,7 +529,7 @@ class TacTu:
             if dobentoida < 0:
                 continue
 
-            if dobenhientai < dobentoida:
+            if dobenhientai * 100 / dobentoida <= 50:
                 self.moitruong.action_suavatpham(idvatpham, delay = 0.)
                 time.sleep(0.25)
 
@@ -1100,7 +1100,7 @@ class TacTu:
                                 self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_BANGPHONGBAO, random.randint(350, 375))
 
                     elif self._is_sudungkynangtoadochichuot:
-                        if self.moitruong.get_is_kynangsansang(IDKYNANG_CHUCDUNGCHANKHI) and not self.moitruong.get_is_cohieuungbotro(IDHIEUUNGBOTRO_CHUCDUNGCHANKHI):
+                        if not self.moitruong.get_is_cohieuungbotro(IDHIEUUNGBOTRO_CHUCDUNGCHANKHI):
                             self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_CHUCDUNGCHANKHI, random.randint(450, 475))
                         else:
                             self.moitruong.action_sudungkynangtoadochichuot2(IDKYNANG_TINHTHONGBANGHE, random.randint(450, 475))

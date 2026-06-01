@@ -186,6 +186,19 @@ def Unicode_to_TCVN3(unicode_str):
 def make_lparam(x, y):
     return (y << 16) | (x & 0xFFFF)
 
+def taopatterntuaob(aob_string):
+    pattern = b""
+    for byte_str in aob_string.split():
+        if byte_str == "?" or byte_str == "??":
+            pattern += b"."
+        else:
+            b = bytes.fromhex(byte_str)
+            if b in b".^$*+?{}[]\\|()":
+                pattern += b"\\" + b
+            else:
+                pattern += b
+    return pattern
+
 class BackgroundInput:
     @staticmethod
     def _safe_post_message(hwnd, msg, wparam, lparam):

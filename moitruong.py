@@ -32,8 +32,6 @@ class MoiTruong:
     def __init__(self, idcuaso):
         self._thoidiemphucsinhgannhat = 0.
         self.diachihamphucsinh = 0
-        self._thoidiemnhatvatphamgannhat2 = 0.
-        self.diachihamnhatvatpham2 = 0
         self.diachihamsudungkynangtoado2 = 0
         self._thoidiemboquabossgannhat = 0.
         self._thoidiemvohieuhoakynangbotro3gannhat = 0.
@@ -56,11 +54,11 @@ class MoiTruong:
         self.tientrinh = pymem.Pymem()
         self.tientrinh.open_process_from_id(idtientrinh)
 
-        gamemodule = pymem.process.module_from_name(self.tientrinh.process_handle, "Game.exe")
-        if not gamemodule:
+        self.gamemodule = pymem.process.module_from_name(self.tientrinh.process_handle, "Game.exe")
+        if not self.gamemodule:
             raise Exception(
                 "Tìm không thấy module Game.exe. Có vẻ cửa sổ Game không phải cửa sổ Game Phong thần. Vui lòng thử lại")
-        self.diachigame = gamemodule.lpBaseOfDll
+        self.diachigame = self.gamemodule.lpBaseOfDll
 
         kichthuoccuaso = win32gui.GetWindowRect(self.idcuaso)
         if not kichthuoccuaso:
@@ -219,9 +217,7 @@ class MoiTruong:
         toadoy = (toadoluoiy * chieucaooluoi) + toadogocy + (offsety >> 10)
 
         return toadox, toadoy
-    
-    
-    
+
     def get_toadosaptoi(self, idnhanvat = 1):
         return (
             read_int(self.tientrinh,
@@ -960,24 +956,38 @@ class MoiTruong:
 
     def khoitaohamtudongtimduong(self):
         if self.diachihamtudongtimduong: return
-        self.diachihamtudongtimduong = self.tientrinh.allocate(256)
 
+        import pymem.pattern
+        aob = "56 6A 00 6A 01 6A 01 8B F1 E8 ?? ?? ?? ?? 8B C8 E8 ?? ?? ?? ?? 8B 44 24 0C 6A 01 6A 00 6A 01 6A 01 50"
+
+        diachi_timthay = pymem.pattern.pattern_scan_module(
+            self.tientrinh.process_handle,
+            self.gamemodule,
+            tao_pattern_tu_aob(aob)
+        )
+
+        if diachi_timthay:
+            self._offsethamtudongtimduong = diachi_timthay - self.diachigame
+            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm tự động tìm đường: {hex(self._offsethamtudongtimduong)}")
+        else:
+            print("[CẢNH BÁO] Không tìm thấy Pattern hàm tự động tìm đường, sử dụng offset mặc định (0x11FB10).")
+            self._offsethamtudongtimduong = 0x11FB10
+
+        diachihamtudongtimduong_thucte = self.diachigame + self._offsethamtudongtimduong
+
+        self.diachihamtudongtimduong = self.tientrinh.allocate(256)
         diachidulieu = self.diachihamtudongtimduong + 0x40
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
         asm_code = f"""
-            mov esi, dword ptr [{diachidulieu}]
-            mov edi, dword ptr [{diachidulieu + 4}]
-
+            mov esi, dword ptr [{hex(diachidulieu)}]
+            mov edi, dword ptr [{hex(diachidulieu + 4)}]
             push 01
             push edi
             push esi
-
             mov ecx, {hex(self.diachigame + 0x49F090 + 0x000)}
-
-            mov eax, {hex(self.diachigame + 0x11FB10)}
+            mov eax, {hex(diachihamtudongtimduong_thucte)}
             call eax
-
             ret
         """
         encoding, _ = ks.asm(asm_code)
@@ -1004,28 +1014,44 @@ class MoiTruong:
         if self.diachihamtudongtimduongxuyenbando:
             return
 
-        self.diachihamtudongtimduongxuyenbando = self.tientrinh.allocate(256)
+        import pymem.pattern
+        aob = "8B 44 24 04 85 C0 75 10 B9 ?? ?? ?? ?? E8 ?? ?? ?? ?? 83 C8 FF C2 14 00 89 44 24 04 B9 ?? ?? ?? ?? E9 ?? ?? ?? ??"
+        diachitimthay = pymem.pattern.pattern_scan_module(
+            self.tientrinh.process_handle,
+            self.gamemodule,
+            taopatterntuaob(aob)
+        )
 
+        if diachitimthay:
+            self._offsethamtudongtimduongxuyenbando = diachitimthay - self.diachigame
+            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm tìm đường xuyên bản đồ: {hex(self._offsethamtudongtimduongxuyenbando)}")
+        else:
+            print("[CẢNH BÁO] Không tìm thấy Pattern hàm tìm đường xuyên bản đồ, sử dụng offset mặc định (0x119F30).")
+            self._offsethamtudongtimduongxuyenbando = 0x119F30
+
+        diachihamtudongtimduongxuyenbandothucte = self.diachigame + self._offsethamtudongtimduongxuyenbando
+
+        self.diachihamtudongtimduongxuyenbando = self.tientrinh.allocate(256)
         diachidulieu = self.diachihamtudongtimduongxuyenbando + 0x40
         write_bytes(self.tientrinh, diachidulieu + 16, b"\x00" * 4, 4)
+
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
         asm_code = f"""
             mov ecx, {self.diachigame + 0x2B2E88 + 0x000}
 
-            push dword ptr [{diachidulieu}]
-            push {diachidulieu + 16}
-            push dword ptr [{diachidulieu + 8}]
-            push dword ptr [{diachidulieu + 4}]
-            push dword ptr [{diachidulieu + 12}]
+            push dword ptr [{hex(diachidulieu)}]
+            push {hex(diachidulieu + 16)}
+            push dword ptr [{hex(diachidulieu + 8)}]
+            push dword ptr [{hex(diachidulieu + 4)}]
+            push dword ptr [{hex(diachidulieu + 12)}]
 
-            mov eax, {self.diachigame + 0x119F30}
+            mov eax, {hex(diachihamtudongtimduongxuyenbandothucte)}
             call eax
             ret
         """
 
         encoding, _ = ks.asm(asm_code)
-
         write_bytes(self.tientrinh, self.diachihamtudongtimduongxuyenbando, bytes(encoding), len(encoding))
 
     def action_tudongtimduongxuyenbando(self, idbando, toadox, toadoy, tennpc = "", mode = IDCHEDOTIMDUONG_TONGHOP, delay = 1.0):
@@ -1056,26 +1082,44 @@ class MoiTruong:
 
     def khoitaohamdichuyen(self):
         if self.diachihamdichuyen: return
-        self.diachihamdichuyen = self.tientrinh.allocate(256)
 
+        import pymem.pattern
+        aob = "A1 ?? ?? ?? ?? 3B 05 ?? ?? ?? ?? 57 8B F9 0F 8D ?? ?? ?? ?? 8B 8F ?? ?? ?? ?? 83 F9 05 0F 84 ?? ?? ?? ??"
+        diachitimthay = pymem.pattern.pattern_scan_module(
+            self.tientrinh.process_handle,
+            self.gamemodule,
+            taopatterntuaob(aob)
+        )
+
+        if diachitimthay:
+            self._offsethamdichuyen = diachitimthay - self.diachigame
+            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm di chuyển: {hex(self._offsethamdichuyen)}")
+        else:
+            print("[CẢNH BÁO] Không tìm thấy Pattern hàm di chuyển, sử dụng offset mặc định (0x12C8E0).")
+            self._offsethamdichuyen = 0x12C8E0
+
+        diachihamdichuyenthucte = self.diachigame + self._offsethamdichuyen
+        self.diachihamdichuyen = self.tientrinh.allocate(256)
         diachidulieu = self.diachihamdichuyen + 0x40
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
         asm_code = f"""
             mov esi, {hex(self.diachigame + OFFSET_DIACHICOSONHANVAT + OFFSET_DIACHICOSOMOINHANVAT)}
-            mov edi, dword ptr [{diachidulieu}]
-            mov edx, dword ptr [{diachidulieu + 4}]
+            mov edi, dword ptr [{hex(diachidulieu)}]
+            mov edx, dword ptr [{hex(diachidulieu + 4)}]
             mov ebx, 0
 
             push ebx
             push edx
             push edi
-            
+
             mov ecx, esi
-            mov eax, {hex(self.diachigame + 0x12C8E0)}
+
+            mov eax, {hex(diachihamdichuyenthucte)} 
             call eax
             ret
         """
+
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamdichuyen, bytes(encoding), len(encoding))
 
@@ -1248,24 +1292,46 @@ class MoiTruong:
         return False
 
     def khoitaohamsuavatpham(self):
-        if self.diachihamsuavatpham: return
-        self.diachihamsuavatpham = self.tientrinh.allocate(256)
+        if self.diachihamsuavatpham:
+            return
 
-        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+        self.diachihamsuavatpham = self.tientrinh.allocate(256)
         diachidulieu = self.diachihamsuavatpham + 0x40
 
-        asm_code = f"""
-            mov ebx, dword ptr [{diachidulieu}]
-            mov ebp, dword ptr [{diachidulieu + 0x4}]
-            mov edi, dword ptr [{diachidulieu + 0x8}]
-            mov ecx, dword ptr [{diachidulieu + 0xC}]
-            mov esi, 1
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
-            push ecx
-            mov eax, {hex(self.diachigame + 0x192D10)}
-            call eax
-            add esp, 4
-            ret
+        asm_code = f"""
+            push ebp
+            mov ebp, esp
+            sub esp, 16                     
+
+            mov eax, dword ptr [{hex(diachidulieu + 0xC)}]
+
+            mov byte ptr [ebp - 12], 0x71
+            mov dword ptr [ebp - 11], eax
+
+            mov dword ptr [ebp - 4], 5
+
+            mov eax, dword ptr [{hex(self.diachigame + 0x2B3788)}]
+            test eax, eax
+            je ketthuc
+
+            lea edx, [ebp - 4]
+            push edx
+
+            lea edx, [ebp - 12]
+            push edx
+
+            push eax
+
+            mov ecx, dword ptr [eax]
+            mov edx, dword ptr [ecx + 0x1C]
+            call edx                        
+
+            ketthuc:
+            mov esp, ebp
+            pop ebp
+            ret                           
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -1278,37 +1344,20 @@ class MoiTruong:
         if time.time() - self._thoidiemsuavatphamgannhat < delay:
             return False
 
-        self._thoidiemsuavatphamgannhat = time.time()
-
-        if read_int(self.tientrinh, self.diachigame + 0x2CA3518 + 0x000 + 0x4) == 0:
-            return False
-
         dobenhientai = self.get_dobenhientaivatpham(idvatpham)
         dobentoida = self.get_dobentoidavatpham(idvatpham)
 
         if dobentoida == -1 or dobenhientai >= dobentoida or dobenhientai < 0:
             return False
 
-        diachicosothongtinvatpham = self.diachigame + OFFSET_DIACHICOSOTHONGTINVATPHAM + idvatpham * OFFSET_DIACHICOSOMOIVATPHAM
-        val_param = read_int(self.tientrinh, diachicosothongtinvatpham + 0x10C)
-        global_factor = read_int(self.tientrinh, self.diachigame + 0x2CA3518 + 0x000)
-
-        product = (val_param * global_factor) * 0x51EB851F
-        edx_val = (product >> 32) & 0xFFFFFFFF
-        if edx_val & 0x80000000: edx_val -= 0x100000000
-
-        scaled_unit = (edx_val >> 5) + ((edx_val >> 5 >> 31) & 1)
-        final_price = (scaled_unit * (dobentoida - dobenhientai)) // dobentoida
-
-        factor_addr = self.diachigame + (0x2CA3518 + 0x000 + 0x10 if dobenhientai == 0 else 0x2CA3518 + 0x000 + 0xC)
-        final_price *= read_int(self.tientrinh, factor_addr)
-
         dbid = self.get_dbidvatpham(idvatpham)
+        if dbid <= 0:
+            return False
+
+        self._thoidiemsuavatphamgannhat = time.time()
+
         diachidulieu = self.diachihamsuavatpham + 0x40
 
-        write_int(self.tientrinh, diachidulieu, int(final_price))
-        write_int(self.tientrinh, diachidulieu + 0x4, dobenhientai)
-        write_int(self.tientrinh, diachidulieu + 0x8, idvatpham * OFFSET_DIACHICOSOMOIVATPHAM)
         write_int(self.tientrinh, diachidulieu + 0xC, dbid)
 
         self.tientrinh.start_thread(self.diachihamsuavatpham)
@@ -1317,8 +1366,26 @@ class MoiTruong:
     def khoitaohambattathieuungbotro(self):
         if self.diachihambattathieuungbotro:
             return
-        self.diachihambattathieuungbotro = self.tientrinh.allocate(256)
 
+        import pymem.pattern
+        aob = "83 EC 08 8B 44 24 0C 8A 4C 24 10 89 44 24 01 A1 ?? ?? ?? ?? C6 04 24 65 88 4C 24 05 85 C0 74 ?? 8D 4C 24 10 51 8D 4C 24 04 C7 44 24 14 06 00 00 00"
+
+        diachitimthay = pymem.pattern.pattern_scan_module(
+            self.tientrinh.process_handle,
+            self.gamemodule,
+            taopatterntuaob(aob)
+        )
+
+        if diachitimthay:
+            self._offsethambattathieuungbotro = diachitimthay - self.diachigame
+            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm bật tắt hiệu ứng: {hex(self._offsethambattathieuungbotro)}")
+        else:
+            print("[CẢNH BÁO] Không tìm thấy Pattern hàm bật tắt hiệu ứng, sử dụng offset mặc định (0x192E40).")
+            self._offsethambattathieuungbotro = 0x192E40
+
+        diachihambattathieuungbotrothucte = self.diachigame + self._offsethambattathieuungbotro
+
+        self.diachihambattathieuungbotro = self.tientrinh.allocate(256)
         diachidulieu = self.diachihambattathieuungbotro + 0x40
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
@@ -1328,11 +1395,12 @@ class MoiTruong:
 
             push ecx
             push edx
-            mov eax, {hex(self.diachigame + 0x192E40)}
+            mov eax, {hex(diachihambattathieuungbotrothucte)}
             call eax
             add esp, 8
             ret
         """
+
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihambattathieuungbotro, bytes(encoding), len(encoding))
 
@@ -1365,20 +1433,36 @@ class MoiTruong:
         if self.diachihamvohieuhoakynangbotro3:
             return
 
-        self.diachihamvohieuhoakynangbotro3 = self.tientrinh.allocate(256)
+        import pymem.pattern
+        aob = "8B 0D ?? ?? ?? ?? 69 C9 ?? ?? ?? ?? 50 81 C1 ?? ?? ?? ?? E8 ?? ?? ?? ?? 85 C0 74 ?? 8B 06 8B 50 10 8B CE FF D2 83 F8 14 75 ?? 83 BD ?? ?? ?? ?? 00 EB ?? 8B 0D ?? ?? ?? ?? 8B 07"
 
+        diachitimthay = pymem.pattern.pattern_scan_module(
+            self.tientrinh.process_handle,
+            self.gamemodule,
+            taopatterntuaob(aob)
+        )
+
+        if diachitimthay:
+            self._offsethamvohieuhoakynangbotro3 = (diachitimthay + 57) - self.diachigame
+            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hook Vô hiệu hóa kỹ năng 3: {hex(self._offsethamvohieuhoakynangbotro3)}")
+        else:
+            print("[CẢNH BÁO] Không tìm thấy Pattern Hook vô hiệu hóa kỹ năng 3, sử dụng offset mặc định (0x1AAFA9).")
+            self._offsethamvohieuhoakynangbotro3 = 0x1AAFA9
+
+        diachi_hook = self.diachigame + self._offsethamvohieuhoakynangbotro3
+
+        diachi_return = diachi_hook + 8
+
+        self.diachihamvohieuhoakynangbotro3 = self.tientrinh.allocate(256)
         diachidulieu = self.diachihamvohieuhoakynangbotro3 + 0x40
         write_int(self.tientrinh, diachidulieu, 0)
 
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
-        diachi_hook = self.diachigame + 0x1AAFA9
-        diachi_return = diachi_hook + 8
-
         asm_code = f"""
             cmp edi, {self.diachigame + 0x4A3804 + 0x000}
             jne logic_goc
-            cmp dword ptr [{diachidulieu}], 1
+            cmp dword ptr [{hex(diachidulieu)}], 1
             jne logic_goc
             mov eax, 0
             jmp logic_phuchoi_imul
@@ -1386,7 +1470,7 @@ class MoiTruong:
             mov eax, dword ptr [edi]
             logic_phuchoi_imul:
             imul ecx, ecx, 0x8294
-            jmp {diachi_return}
+            jmp {hex(diachi_return)}
         """
 
         encoding, _ = ks.asm(asm_code, addr = self.diachihamvohieuhoakynangbotro3)
@@ -1417,8 +1501,29 @@ class MoiTruong:
     def khoitaohamboquaboss(self):
         if self.diachihamboquaboss:
             return
-        self.diachihamboquaboss = self.tientrinh.allocate(256)
 
+        import pymem.pattern
+        aob = "80 B8 ?? ?? ?? ?? 03 75 ?? 39 AE ?? ?? ?? ?? 0F 85 ?? ?? ?? ?? 39 A8 ?? ?? ?? ?? 0F 8E ?? ?? ?? ?? 39 A8"
+
+        diachitimthay = pymem.pattern.pattern_scan_module(
+            self.tientrinh.process_handle,
+            self.gamemodule,
+            taopatterntuaob(aob)
+        )
+
+        if diachitimthay:
+            self._offsethamboquaboss = (diachitimthay + 33) - self.diachigame
+            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hook Bỏ qua Boss: {hex(self._offsethamboquaboss)}")
+        else:
+            print("[CẢNH BÁO] Không tìm thấy Pattern Hook Bỏ qua Boss, sử dụng offset mặc định (0x1AB52C).")
+            self._offsethamboquaboss = 0x1AB52C
+
+        diachi_hook = self.diachigame + self._offsethamboquaboss
+
+        diachi_jng = diachi_hook + 0x208
+        diachi_return = diachi_hook + 0xC
+
+        self.diachihamboquaboss = self.tientrinh.allocate(256)
         diachidulieu = self.diachihamboquaboss + 0x80
         write_int(self.tientrinh, diachidulieu, 0)
 
@@ -1428,7 +1533,7 @@ class MoiTruong:
 
         asm_code = f"""
             cmp [eax+{hex(offset_sinhluctoida)}], ebp
-            jng {hex(self.diachigame + 0x1AB734)}
+            jng {hex(diachi_jng)}
 
             cmp dword ptr [{hex(diachidulieu)}], 1
             jne boqualogicboquaboss
@@ -1441,24 +1546,23 @@ class MoiTruong:
         kiemtrabosscapthap:
             imul ecx, ecx, 2000
             cmp [eax+{hex(offset_sinhluctoida)}], ecx
-            jnl {hex(self.diachigame + 0x1AB734)}
+            jnl {hex(diachi_jng)}
             jmp boqualogicboquaboss
 
         kiemtrabosscapcao:
             cmp dword ptr [eax+{hex(offset_sinhluctoida)}], 50000
-            jg {hex(self.diachigame + 0x1AB734)}
+            jg {hex(diachi_jng)}
 
         boqualogicboquaboss:
-            jmp {hex(self.diachigame + 0x1AB52C + 0xC)}
+            jmp {hex(diachi_return)}
         """
 
         encoding, _ = ks.asm(asm_code, addr = self.diachihamboquaboss)
         write_bytes(self.tientrinh, self.diachihamboquaboss, bytes(encoding), len(encoding))
-        write_bytes(self.tientrinh, self.diachigame + 0x1AB52C,
-                    b"\xE9" + (self.diachihamboquaboss - (self.diachigame + 0x1AB52C) - 5).to_bytes(4,
-                                                                                                    byteorder = sys.byteorder,
-                                                                                                    signed = True) + (
-                            b"\x90" * 7), 12)
+
+        jump_offset = self.diachihamboquaboss - diachi_hook - 5
+        patch_bytes = b"\xE9" + jump_offset.to_bytes(4, byteorder = sys.byteorder, signed = True) + (b"\x90" * 7)
+        write_bytes(self.tientrinh, diachi_hook, patch_bytes, 12)
 
     def action_thietlapboquaboss(self, is_boquaboss: bool, delay = 0.5):
         if not self.diachihamboquaboss:
@@ -1483,43 +1587,7 @@ class MoiTruong:
             return
 
         self.diachihamnhatvatpham = self.tientrinh.allocate(256)
-
-        ks = Ks(KS_ARCH_X86, KS_MODE_32)
-
-        asm_code = f"""
-            mov ecx, dword ptr [{self.diachihamnhatvatpham + 0x40}]
-            push ecx
-            mov esi, {self.diachigame + 0x49F090 + 0x000}
-            mov ecx,esi
-            mov eax, {self.diachigame + 0x122690}
-            call eax
-            ret
-        """
-
-        encoding, _ = ks.asm(asm_code)
-        write_bytes(self.tientrinh, self.diachihamnhatvatpham, bytes(encoding), len(encoding))
-
-    def action_nhatvatpham(self, idvatphamduoidat, delay = 0.02):
-        if not self.diachihamnhatvatpham:
-            self.khoitaohamnhatvatpham()
-
-        if time.time() - self._thoidiemnhatvatphamgannhat < delay:
-            return False
-
-        self._thoidiemnhatvatphamgannhat = time.time()
-
-        diachidulieu = self.diachihamnhatvatpham + 0x40
-        write_int(self.tientrinh, diachidulieu, idvatphamduoidat)
-
-        self.tientrinh.start_thread(self.diachihamnhatvatpham)
-        return True
-
-    def khoitaohamnhatvatpham2(self):
-        if self.diachihamnhatvatpham2:
-            return
-
-        self.diachihamnhatvatpham2 = self.tientrinh.allocate(256)
-        diachidulieu = self.diachihamnhatvatpham2 + 0x80
+        diachidulieu = self.diachihamnhatvatpham + 0x80
 
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
@@ -1566,40 +1634,69 @@ class MoiTruong:
         """
 
         encoding, _ = ks.asm(asm_code)
-        write_bytes(self.tientrinh, self.diachihamnhatvatpham2, bytes(encoding), len(encoding))
+        write_bytes(self.tientrinh, self.diachihamnhatvatpham, bytes(encoding), len(encoding))
 
-    def action_nhatvatpham2(self, idvatphamduoidat, delay = 0.05):
-        if not self.diachihamnhatvatpham2:
-            self.khoitaohamnhatvatpham2()
+    def action_nhatvatpham(self, idvatphamduoidat, delay = 0.05):
+        if not self.diachihamnhatvatpham:
+            self.khoitaohamnhatvatpham()
 
-        if time.time() - self._thoidiemnhatvatphamgannhat2 < delay:
+        if time.time() - self._thoidiemnhatvatphamgannhat < delay:
             return False
 
         dbidvatphamduoidat = self.get_dbidvatphamduoidat(idvatphamduoidat)
         if dbidvatphamduoidat <= 0:
             return False
 
-        self._thoidiemnhatvatphamgannhat2 = time.time()
+        self._thoidiemnhatvatphamgannhat = time.time()
 
-        diachidulieu = self.diachihamnhatvatpham2 + 0x80
+        diachidulieu = self.diachihamnhatvatpham + 0x80
         write_int(self.tientrinh, diachidulieu, dbidvatphamduoidat)
         write_bytes(self.tientrinh, diachidulieu + 4, bytes([0, 0, 0, 0]), 4)
-        self.tientrinh.start_thread(self.diachihamnhatvatpham2)
+        self.tientrinh.start_thread(self.diachihamnhatvatpham)
 
         return True
 
     def khoitaohamdoimaupk(self):
         if self.diachihamdoimaupk:
             return
+
         self.diachihamdoimaupk = self.tientrinh.allocate(256)
+        diachidulieu = self.diachihamdoimaupk + 0x40
 
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
         asm_code = f"""
-            mov eax, dword ptr [{self.diachihamdoimaupk + 0x40}]
+            push ebp
+            mov ebp, esp
+            sub esp, 16
+
+            mov eax, dword ptr [{hex(diachidulieu)}]
+
+            mov byte ptr [ebp - 12], 0x6D
+            mov byte ptr [ebp - 11], al
+
+            mov dword ptr [ebp - 4], 2
+
+            mov eax, dword ptr [{hex(self.diachigame + 0x2B3788)}]
+            test eax, eax
+            je ketthuc
+
+            lea edx, [ebp - 4]
+            push edx
+
+            lea edx, [ebp - 12]
+            push edx
+
             push eax
-            mov ecx, {hex(self.diachigame + 0x4A3728)}
-            mov edx, {hex(self.diachigame + 0x1BAE80)}
-            call edx
+
+            mov ecx, dword ptr [eax]
+            mov edx, dword ptr [ecx + 0x1C]
+            call edx                        
+
+            add esp, 0x0C
+
+            ketthuc:
+            mov esp, ebp
+            pop ebp
             ret
         """
         encoding, _ = ks.asm(asm_code)
@@ -1608,6 +1705,8 @@ class MoiTruong:
     def action_doimaupk(self, idmaupk):
         if not self.diachihamdoimaupk:
             self.khoitaohamdoimaupk()
+
+        self._thoidiemdoimaupkgannhat = time.time()
 
         diachidulieu = self.diachihamdoimaupk + 0x40
         write_int(self.tientrinh, diachidulieu, idmaupk - 8)
@@ -1618,19 +1717,39 @@ class MoiTruong:
     def khoitaohammokhoa(self):
         if self.diachihammokhoa:
             return
+
+        import pymem.pattern
+        aob = "83 EC 2C A1 ?? ?? ?? ?? 33 C4 89 44 24 28 8B 44 24 34 85 C0 74 ?? 8A 4C 24 30 6A 20 50 8D 54 24 0E 52 C6 44 24 10 74 88 4C 24 11 FF 15 ?? ?? ?? ?? A1 ?? ?? ?? ?? 83 C4 0C 85 C0 74 ??"
+
+        diachitimthay = pymem.pattern.pattern_scan_module(
+            self.tientrinh.process_handle,
+            self.gamemodule,
+            taopatterntuaob(aob)
+        )
+
+        if diachitimthay:
+            self._offsethammokhoa = diachitimthay - self.diachigame
+            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm mở khóa: {hex(self._offsethammokhoa)}")
+        else:
+            print("[CẢNH BÁO] Không tìm thấy Pattern hàm mở khóa, sử dụng offset mặc định (0x1206F0).")
+            self._offsethammokhoa = 0x1206F0
+
+        diachihammokhoathucte = self.diachigame + self._offsethammokhoa
+
         self.diachihammokhoa = self.tientrinh.allocate(256)
+        diachidulieu = self.diachihammokhoa + 0x40
 
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
-        diachidulieu = self.diachihammokhoa + 0x40
 
         asm_code = f"""
             push {hex(diachidulieu)}
             push 03
             mov ecx, {hex(self.diachigame + 0x49F090 + 0x000)}
-            mov eax, {hex(self.diachigame + 0x1206F0)}
+            mov eax, {hex(diachihammokhoathucte)}
             call eax
             ret
         """
+
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihammokhoa, bytes(encoding), len(encoding))
 
@@ -1654,18 +1773,39 @@ class MoiTruong:
     def khoitaohamsudungkynangtoado(self):
         if self.diachihamsudungkynangtoado:
             return
+
+        import pymem.pattern
+        aob = "56 8B F1 8B 86 ?? ?? ?? ?? 83 F8 05 0F 84 ?? ?? ?? ?? 83 F8 04 0F 84 ?? ?? ?? ?? 8B 86 ?? ?? ?? ?? 83 F8 05 0F 84 ?? ?? ?? ?? 83 F8 06 0F 84 ?? ?? ?? ??"
+
+        diachitimthay = pymem.pattern.pattern_scan_module(
+            self.tientrinh.process_handle,
+            self.gamemodule,
+            taopatterntuaob(aob)
+        )
+
+        if diachitimthay:
+            self._offsethamsudungkynangtoado = diachitimthay - self.diachigame
+            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm sử dụng kỹ năng tọa độ: {hex(self._offsethamsudungkynangtoado)}")
+        else:
+            print("[CẢNH BÁO] Không tìm thấy Pattern hàm sử dụng kỹ năng tọa độ, sử dụng offset mặc định (0x12CB20).")
+            self._offsethamsudungkynangtoado = 0x12CB20
+
+        diachihamsudungkynangtoadothucte = self.diachigame + self._offsethamsudungkynangtoado
+
         self.diachihamsudungkynangtoado = self.tientrinh.allocate(256)
         diachidulieu = self.diachihamsudungkynangtoado + 0x40
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
         asm_code = f"""
             push dword ptr [{hex(diachidulieu + 8)}]
             push dword ptr [{hex(diachidulieu + 4)}]
             push dword ptr [{hex(diachidulieu)}]
             mov ecx, {hex(self.diachigame + OFFSET_DIACHICOSONHANVAT + OFFSET_DIACHICOSOMOINHANVAT)}
-            mov eax, {hex(self.diachigame + 0x12CB20)}
+            mov eax, {hex(diachihamsudungkynangtoadothucte)}
             call eax
             ret
         """
+
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamsudungkynangtoado, bytes(encoding), len(encoding))
 
@@ -1845,6 +1985,24 @@ class MoiTruong:
         if self.diachihamsudungphimtat:
             return
 
+        import pymem.pattern
+        aob = "55 8B EC 83 EC 44 E8 ?? ?? ?? ?? 85 C0 74 ?? E9 ?? ?? ?? ?? 83 3D ?? ?? ?? ?? 00 0F 84 ?? ?? ?? ?? 83 7D 08 00 0F 8C ?? ?? ?? ?? 83 7D 08 09 0F 8D ?? ?? ?? ??"
+
+        diachitimthay = pymem.pattern.pattern_scan_module(
+            self.tientrinh.process_handle,
+            self.gamemodule,
+            taopatterntuaob(aob)
+        )
+
+        if diachitimthay:
+            self._offsethamsudungphimtat = diachitimthay - self.diachigame
+            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm sử dụng phím tắt: {hex(self._offsethamsudungphimtat)}")
+        else:
+            print("[CẢNH BÁO] Không tìm thấy Pattern hàm sử dụng phím tắt, sử dụng offset mặc định (0xB90D0).")
+            self._offsethamsudungphimtat = 0xB90D0
+
+        diachihamsudungphimtatthucte = self.diachigame + self._offsethamsudungphimtat
+
         self.diachihamsudungphimtat = self.tientrinh.allocate(256)
         diachidulieu = self.diachihamsudungphimtat + 0x40
 
@@ -1858,7 +2016,7 @@ class MoiTruong:
             push {hex(1)}
             push edx
 
-            mov ecx, {hex(self.diachigame + 0xB90D0)}
+            mov ecx, {hex(diachihamsudungphimtatthucte)}
             call ecx
 
             add esp, 0x0C
@@ -1886,20 +2044,43 @@ class MoiTruong:
         return True
 
     def khoitaohambanvatpham(self):
-        if self.diachihambanvatpham: return
+        if self.diachihambanvatpham:
+            return
+
+        import pymem.pattern
+        aob = "83 EC 0C 83 3D ?? ?? ?? ?? 00 75 ?? 8B 44 24 10 89 44 24 05 A1 ?? ?? ?? ?? C6 44 24 04 5A 85 C0 74 ?? 8D 14 24 52 8D 54 24 08 C7 44 24 04 05 00 00 00"
+
+        diachitimthay = pymem.pattern.pattern_scan_module(
+            self.tientrinh.process_handle,
+            self.gamemodule,
+            taopatterntuaob(aob)
+        )
+
+        if diachitimthay:
+            self._offsethambanvatpham = diachitimthay - self.diachigame
+            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm bán vật phẩm: {hex(self._offsethambanvatpham)}")
+        else:
+            print("[CẢNH BÁO] Không tìm thấy Pattern hàm bán vật phẩm, sử dụng offset mặc định (0x192E90).")
+            self._offsethambanvatpham = 0x192E90
+
+        diachihambanvatphamthucte = self.diachigame + self._offsethambanvatpham
+
         self.diachihambanvatpham = self.tientrinh.allocate(256)
+        diachidulieu = self.diachihambanvatpham + 0x40
 
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
         asm_code = f"""
-            mov ebx, dword ptr [{self.diachihambanvatpham + 0x40}]
-            mov ecx, dword ptr [{self.diachihambanvatpham + 0x40 + 0x4}]
-            mov edx, dword ptr [{self.diachihambanvatpham + 0x40 + 0x8}]
+            mov ebx, dword ptr [{hex(diachidulieu)}]
+            mov ecx, dword ptr [{hex(diachidulieu + 0x4)}]
+            mov edx, dword ptr [{hex(diachidulieu + 0x8)}]
             push edx
-            mov eax, {self.diachigame + 0x192E90}
+            mov eax, {hex(diachihambanvatphamthucte)}
             call eax
             add esp, 4
             ret
         """
+
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihambanvatpham, bytes(encoding), len(encoding))
 
@@ -1925,18 +2106,41 @@ class MoiTruong:
         return True
 
     def khoitaohamdoithoai(self):
-        if self.diachihamdoithoai: return
+        if self.diachihamdoithoai:
+            return
+
+        import pymem.pattern
+        aob = "83 EC 08 56 8B 74 24 10 57 8B F9 85 F6 7E ?? 8B C6 69 C0 ?? ?? ?? ?? 83 B8 ?? ?? ?? ?? 00 7E ?? 8B 80 ?? ?? ?? ?? 89 44 24 09 A1 ?? ?? ?? ?? C6 44 24 08 62 85 C0 74 ?? 8D 54 24 14"
+
+        diachitimthay = pymem.pattern.pattern_scan_module(
+            self.tientrinh.process_handle,
+            self.gamemodule,
+            taopatterntuaob(aob)
+        )
+
+        if diachitimthay:
+            self._offsethamdoithoai = diachitimthay - self.diachigame
+            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm đối thoại: {hex(self._offsethamdoithoai)}")
+        else:
+            print("[CẢNH BÁO] Không tìm thấy Pattern hàm đối thoại, sử dụng offset mặc định (0x1219E0).")
+            self._offsethamdoithoai = 0x1219E0
+
+        diachihamdoithoaithucte = self.diachigame + self._offsethamdoithoai
+
         self.diachihamdoithoai = self.tientrinh.allocate(256)
+        diachidulieu = self.diachihamdoithoai + 0x40
 
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
         asm_code = f"""
-            mov ebx, dword ptr [{self.diachihamdoithoai + 0x40}]
+            mov ebx, dword ptr [{hex(diachidulieu)}]
             push ebx
-            mov ecx, {self.diachigame + 0x49F090 + 0x000} 
-            mov eax, {self.diachigame + 0x1219E0} 
+            mov ecx, {hex(self.diachigame + 0x49F090 + 0x000)} 
+            mov eax, {hex(diachihamdoithoaithucte)} 
             call eax
             ret
         """
+
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamdoithoai, bytes(encoding), len(encoding))
 
@@ -2160,7 +2364,6 @@ class MoiTruong:
 
         self.tientrinh.start_thread(self.diachihammotabkytrancac)
         return True
-
 
     def khoitaohammuavatphamkytrancac(self):
         if self.diachihammuavatphamkytrancac:
