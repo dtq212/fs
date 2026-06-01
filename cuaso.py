@@ -31,6 +31,10 @@ class CuaSo:
         self.command_dict = command_dict
 
         self.moitruong = MoiTruong(idcuaso)
+
+        if not self.moitruong.get_is_nhanvattontai():
+            self.moitruong._indanhsachgiatrihientaicuatoanbocacbiens()
+
         self.tactu = TacTu(self.moitruong)
         self.main_stop = threading.Event()
 

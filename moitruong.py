@@ -957,7 +957,6 @@ class MoiTruong:
     def khoitaohamtudongtimduong(self):
         if self.diachihamtudongtimduong: return
 
-        import pymem.pattern
         aob = "56 6A 00 6A 01 6A 01 8B F1 E8 ?? ?? ?? ?? 8B C8 E8 ?? ?? ?? ?? 8B 44 24 0C 6A 01 6A 00 6A 01 6A 01 50"
 
         diachitimthay = pymem.pattern.pattern_scan_module(
@@ -1014,7 +1013,6 @@ class MoiTruong:
         if self.diachihamtudongtimduongxuyenbando:
             return
 
-        import pymem.pattern
         aob = "8B 44 24 04 85 C0 75 10 B9 ?? ?? ?? ?? E8 ?? ?? ?? ?? 83 C8 FF C2 14 00 89 44 24 04 B9 ?? ?? ?? ?? E9 ?? ?? ?? ??"
         diachitimthay = pymem.pattern.pattern_scan_module(
             self.tientrinh.process_handle,
@@ -1083,7 +1081,6 @@ class MoiTruong:
     def khoitaohamdichuyen(self):
         if self.diachihamdichuyen: return
 
-        import pymem.pattern
         aob = "A1 ?? ?? ?? ?? 3B 05 ?? ?? ?? ?? 57 8B F9 0F 8D ?? ?? ?? ?? 8B 8F ?? ?? ?? ?? 83 F9 05 0F 84 ?? ?? ?? ??"
         diachitimthay = pymem.pattern.pattern_scan_module(
             self.tientrinh.process_handle,
@@ -1367,7 +1364,6 @@ class MoiTruong:
         if self.diachihambattathieuungbotro:
             return
 
-        import pymem.pattern
         aob = "83 EC 08 8B 44 24 0C 8A 4C 24 10 89 44 24 01 A1 ?? ?? ?? ?? C6 04 24 65 88 4C 24 05 85 C0 74 ?? 8D 4C 24 10 51 8D 4C 24 04 C7 44 24 14 06 00 00 00"
 
         diachitimthay = pymem.pattern.pattern_scan_module(
@@ -1433,7 +1429,6 @@ class MoiTruong:
         if self.diachihamvohieuhoakynangbotro3:
             return
 
-        import pymem.pattern
         aob = "8B 0D ?? ?? ?? ?? 69 C9 ?? ?? ?? ?? 50 81 C1 ?? ?? ?? ?? E8 ?? ?? ?? ?? 85 C0 74 ?? 8B 06 8B 50 10 8B CE FF D2 83 F8 14 75 ?? 83 BD ?? ?? ?? ?? 00 EB ?? 8B 0D ?? ?? ?? ?? 8B 07"
 
         diachitimthay = pymem.pattern.pattern_scan_module(
@@ -1502,7 +1497,6 @@ class MoiTruong:
         if self.diachihamboquaboss:
             return
 
-        import pymem.pattern
         aob = "80 B8 ?? ?? ?? ?? 03 75 ?? 39 AE ?? ?? ?? ?? 0F 85 ?? ?? ?? ?? 39 A8 ?? ?? ?? ?? 0F 8E ?? ?? ?? ?? 39 A8"
 
         diachitimthay = pymem.pattern.pattern_scan_module(
@@ -1718,7 +1712,6 @@ class MoiTruong:
         if self.diachihammokhoa:
             return
 
-        import pymem.pattern
         aob = "83 EC 2C A1 ?? ?? ?? ?? 33 C4 89 44 24 28 8B 44 24 34 85 C0 74 ?? 8A 4C 24 30 6A 20 50 8D 54 24 0E 52 C6 44 24 10 74 88 4C 24 11 FF 15 ?? ?? ?? ?? A1 ?? ?? ?? ?? 83 C4 0C 85 C0 74 ??"
 
         diachitimthay = pymem.pattern.pattern_scan_module(
@@ -1774,7 +1767,6 @@ class MoiTruong:
         if self.diachihamsudungkynangtoado:
             return
 
-        import pymem.pattern
         aob = "56 8B F1 8B 86 ?? ?? ?? ?? 83 F8 05 0F 84 ?? ?? ?? ?? 83 F8 04 0F 84 ?? ?? ?? ?? 8B 86 ?? ?? ?? ?? 83 F8 05 0F 84 ?? ?? ?? ?? 83 F8 06 0F 84 ?? ?? ?? ??"
 
         diachitimthay = pymem.pattern.pattern_scan_module(
@@ -1985,7 +1977,6 @@ class MoiTruong:
         if self.diachihamsudungphimtat:
             return
 
-        import pymem.pattern
         aob = "55 8B EC 83 EC 44 E8 ?? ?? ?? ?? 85 C0 74 ?? E9 ?? ?? ?? ?? 83 3D ?? ?? ?? ?? 00 0F 84 ?? ?? ?? ?? 83 7D 08 00 0F 8C ?? ?? ?? ?? 83 7D 08 09 0F 8D ?? ?? ?? ??"
 
         diachitimthay = pymem.pattern.pattern_scan_module(
@@ -2047,7 +2038,6 @@ class MoiTruong:
         if self.diachihambanvatpham:
             return
 
-        import pymem.pattern
         aob = "83 EC 0C 83 3D ?? ?? ?? ?? 00 75 ?? 8B 44 24 10 89 44 24 05 A1 ?? ?? ?? ?? C6 44 24 04 5A 85 C0 74 ?? 8D 14 24 52 8D 54 24 08 C7 44 24 04 05 00 00 00"
 
         diachitimthay = pymem.pattern.pattern_scan_module(
@@ -2109,7 +2099,6 @@ class MoiTruong:
         if self.diachihamdoithoai:
             return
 
-        import pymem.pattern
         aob = "83 EC 08 56 8B 74 24 10 57 8B F9 85 F6 7E ?? 8B C6 69 C0 ?? ?? ?? ?? 83 B8 ?? ?? ?? ?? 00 7E ?? 8B 80 ?? ?? ?? ?? 89 44 24 09 A1 ?? ?? ?? ?? C6 44 24 08 62 85 C0 74 ?? 8D 54 24 14"
 
         diachitimthay = pymem.pattern.pattern_scan_module(
@@ -2510,3 +2499,31 @@ class MoiTruong:
 
         self.tientrinh.start_thread(self.diachihamphucsinh)
         return True
+
+    def _indanhsachgiatrihientaicuatoanbocacbiens(self):
+        import inspect
+
+        print("=" * 60)
+        print(f"{'TÊN HÀM (THUỘC TÍNH)'.ljust(45)} | GIÁ TRỊ")
+        print("=" * 60)
+
+        danhsachham = inspect.getmembers(self, predicate = inspect.ismethod)
+
+        for tenham, ham in danhsachham:
+            if tenham.startswith("get_"):
+                sig = inspect.signature(ham)
+                is_cothegoitructiep = True
+
+                for ten_tham_so, tham_so in sig.parameters.items():
+                    if tham_so.default == inspect.Parameter.empty and ten_tham_so != 'self':
+                        is_cothegoitructiep = False
+                        break
+
+                if is_cothegoitructiep:
+                    try:
+                        giatri = ham()
+                        print(f"{tenham.ljust(45)} : {giatri}")
+                    except Exception as e:
+                        print(f"{tenham.ljust(45)} : [LỖI ĐỌC BỘ NHỚ] {e}")
+
+        print("=" * 60)

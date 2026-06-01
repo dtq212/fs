@@ -466,10 +466,10 @@ class TacTu:
             is_danduoc = (danhmucvattutieuhao == IDDANHMUCVATTUTIEUHAO_DANDUOC)
             is_trangbi = (danhmuctrangbi in DANHMUCTRANGBI_MAP)
 
-            if not is_danduoc and not is_trangbi and not tenvatpham == "Hàn Thiết Thạch":
+            if not is_danduoc and not is_trangbi and tenvatpham != "Hàn Thiết Thạch":
                 continue
 
-            if is_trangbi and self.moitruong.get_capdovatpham(idvatpham) < 20:
+            if is_trangbi:
                 if phamchat != IDPHAMCHATVATPHAM_TRANGLAM:
                     continue
 
@@ -839,7 +839,7 @@ class TacTu:
                             is_nhatvatpham = True
                             break
                 if is_nhatvatpham and self.moitruong.get_khoangcachvatphamduoidat(idvatphamduoidat) < 400:
-                    self.moitruong.action_nhatvatpham2(idvatphamduoidat)
+                    self.moitruong.action_nhatvatpham(idvatphamduoidat)
                     time.sleep(0.02)
 
     def action_tudongmokhoa(self):
