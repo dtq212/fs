@@ -321,12 +321,12 @@ class TacTu:
         phatam("Bỏ toàn bộ thiết lập tên nhân vật không tấn công")
     
     def action_test(self):
-        # for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
-        #     vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
-        #     if not vitrivatpham:
-        #         continue
-        #     idvatpham, idruong, vitrix, vitriy = vitrivatpham
-        #     print("#{}: {}: {}".format(sothutuvatpham, (idvatpham, idruong, vitrix, vitriy), self.moitruong.get_thongtinvatpham_display(idvatpham)))
+        for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
+            vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
+            if not vitrivatpham:
+                continue
+            idvatpham, idruong, vitrix, vitriy = vitrivatpham
+            print("#{}: {}: {}".format(sothutuvatpham, (idvatpham, idruong, vitrix, vitriy), self.moitruong.get_thongtinvatpham_display(idvatpham)))
         print(self.moitruong.get_hieuungbotros())
 
     def action_mua1thancauphu(self):

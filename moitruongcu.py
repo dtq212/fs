@@ -903,7 +903,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 9        
 
-            mov eax, dword ptr [{hex(self.diachigame + 0x2B3788)}]
+            mov eax, dword ptr [{hex(self.diachigame + 0x267448)}]
             test eax, eax
             je ketthuc
 
@@ -1117,7 +1117,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 9        
 
-            mov eax, dword ptr [{hex(self.diachigame + 0x2B3788)}]
+            mov eax, dword ptr [{hex(self.diachigame + 0x267448)}]
             test eax, eax
             je ketthuc
 
@@ -1541,7 +1541,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 8        
 
-            mov eax, dword ptr [{hex(self.diachigame + 0x2B3788)}]
+            mov eax, dword ptr [{hex(self.diachigame + 0x267448)}]
             test eax, eax
             je ketthuc
 
@@ -1715,7 +1715,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 21        
 
-            mov eax, dword ptr [{hex(self.diachigame + 0x2B3788)}]
+            mov eax, dword ptr [{hex(self.diachigame + 0x267448)}]
             test eax, eax
             je ketthuc
 
@@ -2018,7 +2018,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 5        
 
-            mov eax, dword ptr [{hex(self.diachigame + 0x2B3788)}]
+            mov eax, dword ptr [{hex(self.diachigame + 0x267448)}]
             test eax, eax
             je ketthuc
 
@@ -2097,7 +2097,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 6        
 
-            mov eax, dword ptr [{hex(self.diachigame + 0x2B3788)}]
+            mov eax, dword ptr [{hex(self.diachigame + 0x267448)}]
             test eax, eax
             je ketthuc
 
@@ -2166,7 +2166,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 13        
 
-            mov eax, dword ptr [{hex(self.diachigame + 0x2B3788)}]
+            mov eax, dword ptr [{hex(self.diachigame + 0x267448)}]
             test eax, eax
             je ketthuc
 
@@ -2242,7 +2242,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 5        
 
-            mov eax, dword ptr [{hex(self.diachigame + 0x2B3788)}]
+            mov eax, dword ptr [{hex(self.diachigame + 0x267448)}]
             test eax, eax
             je ketthuc
 
