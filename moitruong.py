@@ -723,6 +723,20 @@ class MoiTruong:
         if self.get_idkynang1() != idkynang1:
             write_int(self.tientrinh, self.diachigame + 0x4574E4, idkynang1)
 
+    def get_idkynanghotro1(self):
+        return read_int(self.tientrinh, self.diachigame + 0x4574CC)
+
+    def set_idkynangbotro1(self, idkynangbotro):
+        if self.get_idkynanghotro1() != idkynangbotro:
+            write_int(self.tientrinh, self.diachigame + 0x4574CC, idkynangbotro)
+
+    def get_idkynanghotro2(self):
+        return read_int(self.tientrinh, self.diachigame + 0x4574D0)
+
+    def set_idkynangbotro2(self, idkynangbotro):
+        if self.get_idkynanghotro2() != idkynangbotro:
+            write_int(self.tientrinh, self.diachigame + 0x4574D0, idkynangbotro)
+
     def get_idkynanghotro3(self):
         return read_int(self.tientrinh, self.diachigame + 0x4574D4)
 
