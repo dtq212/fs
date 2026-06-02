@@ -189,7 +189,7 @@ class TacTu:
             if dbid > 0 and ten and dbid not in self._dbidnhanvattodoitudongs:
                 self._dbidnhanvattodoitudongs.add(dbid)
                 self._tennhanvattodoitudongs.add(ten)
-                print(f"Danh sách Tổ đội: {self._tennhanvattodoitudongs}")
+                print(f"Danh sách Tổ đội: {self._tennhanvattodoitudongs}, dbid: {self._dbidnhanvattodoitudongs}")
                 phatam(f"Thêm nhân vật tổ đội. Tổng {len(self._tennhanvattodoitudongs)}")
 
     def botoanbo_dbidnhanvattodoitudong(self):

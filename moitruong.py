@@ -2574,6 +2574,7 @@ class MoiTruong:
 
         diachidulieu = self.diachihammoitodoi + 0x40
         write_int(self.tientrinh, diachidulieu, dbidnhanvat)
+
         self.tientrinh.start_thread(self.diachihammoitodoi)
 
         return True
@@ -2641,6 +2642,8 @@ class MoiTruong:
         diachidulieu = self.diachihamnhanloimoitodoi + 0x40
         write_int(self.tientrinh, diachidulieu, dbidnguoimoi)
         write_int(self.tientrinh, diachidulieu + 4, 1 if is_dongy else 0)
+
+        print("{}: {}".format(self.get_tennhanvat(), hex(self.diachihamnhanloimoitodoi)))
 
         self.tientrinh.start_thread(self.diachihamnhanloimoitodoi)
         return True
