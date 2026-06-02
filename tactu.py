@@ -329,6 +329,8 @@ class TacTu:
             print("#{}: {}: {}".format(sothutuvatpham, (idvatpham, idruong, vitrix, vitriy), self.moitruong.get_thongtinvatpham_display(idvatpham)))
         print(self.moitruong.get_hieuungbotros())
 
+        self.action_bantoanbovatpham()
+
     def action_mua1thancauphu(self):
         print("Mua 1 thần cẩu phù")
         if self.get_is_dusoluongtoithieu(TIENDONG, 2):
@@ -448,9 +450,6 @@ class TacTu:
             if vitriruong != IDVITRIRUONG_HANHTRANG:
                 continue
 
-            # if vitriy < 1:
-            #     continue
-
             tenvatpham = self.moitruong.get_tenvatpham(idvatpham)
             if not tenvatpham or tenvatpham in VATPHAMKHONGBANs:
                 continue
@@ -501,7 +500,7 @@ class TacTu:
             self.moitruong.action_banvatpham(sothutuvatpham, delay = 0.)
             time.sleep(0.25)
 
-        self.moitruong.action_dongcuahang(delay = 0.)
+        # self.moitruong.action_dongcuahang(delay = 0.)
 
         return True
 
