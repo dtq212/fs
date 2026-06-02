@@ -10,7 +10,7 @@ class GiaoDienHienThi:
         self.shared_data = shared_data
 
         self.root.title("Phong Thần")
-        self.root.geometry("450x800")
+        self.root.geometry("450x900")
         self.root.resizable(False, True)
 
         style = ttk.Style()
@@ -124,6 +124,14 @@ class GiaoDienHienThi:
         self.lbl_tennhanvatkhongtancongs.grid(row=r, column=0, sticky="w", padx=10, pady=(0, 5))
         r += 1
 
+        lbl_guide_td = ttk.Label(self.grp_config, text = "[Ctrl+V] Thêm  |  [Ctrl+Alt+V] Xóa danh sách Auto Tổ Đội", font = ("Arial", 9, "bold"))
+        lbl_guide_td.grid(row = r, column = 0, sticky = "w", padx = 10)
+        r += 1
+
+        self.lbl_tennhanvattodoitudongs = ttk.Label(self.grp_config, text = "→ Trống", foreground = "purple", wraplength = 380)
+        self.lbl_tennhanvattodoitudongs.grid(row = r, column = 0, sticky = "w", padx = 10, pady = (0, 5))
+        r += 1
+
         self.current_hwnd = None
         self.is_running = True
         self.thread = threading.Thread(target = self.loop_update_ui, daemon = True)
@@ -178,6 +186,18 @@ class GiaoDienHienThi:
 
         self.lbl_tennhanvattancongs.config(text = f"→ {str_tancong}")
         self.lbl_tennhanvatkhongtancongs.config(text = f"→ {str_khongtancong}")
+
+        str_tancong = data.get("_tennhanvattancongs", "")
+        str_khongtancong = data.get("_tennhanvatkhongtancongs", "")
+        str_todoi = data.get("_tennhanvattodoitudongs", "")
+
+        if not str_tancong: str_tancong = "Trống"
+        if not str_khongtancong: str_khongtancong = "Trống"
+        if not str_todoi: str_todoi = "Trống"
+
+        self.lbl_tennhanvattancongs.config(text = f"→ {str_tancong}")
+        self.lbl_tennhanvatkhongtancongs.config(text = f"→ {str_khongtancong}")
+        self.lbl_tennhanvattodoitudongs.config(text = f"→ {str_todoi}")
 
     def loop_update_ui(self):
         while self.is_running:

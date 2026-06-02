@@ -72,6 +72,13 @@ class TacTu:
 
         self._is_giukhoangcach = False
         self._thoidiemtudongtimduonggannhat = 0.
+
+        self._dbidnhanvattodoitudongs = set()
+        self._tennhanvattodoitudongs = set()
+
+        self._thoidiemmoitodoigannhat_map = {}
+        self._thoidiemnhanloimoitodoigannhat_map = {}
+
     def __del__(self):
         try:
             self.moitruong.action_tatvohieuhoathietlapmuctieutancong()
@@ -94,6 +101,8 @@ class TacTu:
             "is_chidanhnguoichoivatrieuhoithu": self._is_chidanhnguoichoivatrieuhoithu,
             "tennhanvattancongs": self._tennhanvattancongs,
             "tennhanvatkhongtancongs": self._tennhanvatkhongtancongs,
+            "dbidnhanvattodoitudongs": self._dbidnhanvattodoitudongs,
+            "tennhanvattodoitudongs": self._tennhanvattodoitudongs,
             "is_tudongmokhoa": self._is_tudongmokhoa,
             "is_tudongdoithucuoi": self._is_tudongdoithucuoi,
 
@@ -141,7 +150,10 @@ class TacTu:
 
             if "tennhanvatkhongtancongs" in thietlap:
                 self._tennhanvatkhongtancongs = thietlap["tennhanvatkhongtancongs"]
-
+            if "dbidnhanvattodoitudongs" in thietlap:
+                self._dbidnhanvattodoitudongs = thietlap["dbidnhanvattodoitudongs"]
+            if "tennhanvattodoitudongs" in thietlap:
+                self._tennhanvattodoitudongs = thietlap["tennhanvattodoitudongs"]
             if "is_tudongmokhoa" in thietlap:
                 self._is_tudongmokhoa = thietlap["is_tudongmokhoa"]
 
@@ -168,6 +180,22 @@ class TacTu:
 
             if "is_giukhoangcach" in thietlap:
                 self._is_giukhoangcach = thietlap["is_giukhoangcach"]
+
+    def them_dbidnhanvattodoitudong(self):
+        idmuctieu = self.moitruong.get_idmuctieudangchichuot()
+        if idmuctieu > 0 and self.moitruong.get_idloainhanvat(idmuctieu) == IDLOAINHANVAT_NGUOICHOI:
+            dbid = self.moitruong.get_dbidnhanvat(idmuctieu)
+            ten = self.moitruong.get_tennhanvat(idmuctieu)
+            if dbid > 0 and ten and dbid not in self._dbidnhanvattodoitudongs:
+                self._dbidnhanvattodoitudongs.add(dbid)
+                self._tennhanvattodoitudongs.add(ten)
+                print(f"Danh sách Tổ đội: {self._tennhanvattodoitudongs}")
+                phatam(f"Thêm nhân vật tổ đội. Tổng {len(self._tennhanvattodoitudongs)}")
+
+    def botoanbo_dbidnhanvattodoitudong(self):
+        self._dbidnhanvattodoitudongs.clear()
+        self._tennhanvattodoitudongs.clear()
+        phatam("Bỏ toàn bộ danh sách tổ đội")
 
     def battat_is_giukhoangcach(self):
         self._is_giukhoangcach = not self._is_giukhoangcach
@@ -1279,3 +1307,51 @@ class TacTu:
 
         return self.moitruong.action_dichuyen2(toadox, toadoy, delay = 0.)
 
+    def action_tudongmoitodoi(self):
+        if not self._dbidnhanvattodoitudongs:
+            return
+
+        idtodoi = self.moitruong.get_idtodoi()
+        if idtodoi > 0 and not self.moitruong.get_is_truongnhom():
+            return
+
+        ungviens = []
+
+        for dbid in self._dbidnhanvattodoitudongs:
+            thoidiemgannhat = self._thoidiemmoitodoigannhat_map.get(dbid, 0.)
+
+            if time.time() - thoidiemgannhat > 2.5:
+                ungviens.append((dbid, thoidiemgannhat))
+
+        if not ungviens:
+            return
+
+        ungviens.sort(key = lambda x: x[1])
+        dbidnhanvatduocchon = ungviens[0][0]
+
+        if self.moitruong.action_moitodoi(dbidnhanvatduocchon, delay = 0.25):
+            self._thoidiemmoitodoigannhat_map[dbidnhanvatduocchon] = time.time()
+
+    def action_tudongnhanloimoitodoi(self):
+        if not self._dbidnhanvattodoitudongs:
+            return
+
+        if self.moitruong.get_idtodoi() > 0:
+            return
+
+        ungviens = []
+
+        for dbid in self._dbidnhanvattodoitudongs:
+            thoidiemgannhat = self._thoidiemnhanloimoitodoigannhat_map.get(dbid, 0.)
+
+            if time.time() - thoidiemgannhat > 2.5:
+                ungviens.append((dbid, thoidiemgannhat))
+
+        if not ungviens:
+            return
+
+        ungviens.sort(key = lambda x: x[1])
+        dbidnhanvatduocchon = ungviens[0][0]
+
+        if self.moitruong.action_nhanloimoitodoi(dbidnhanvatduocchon, is_dongy = True, delay = 0.25):
+            self._thoidiemnhanloimoitodoigannhat_map[dbidnhanvatduocchon] = time.time()

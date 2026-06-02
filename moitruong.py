@@ -9,6 +9,10 @@ from tienich import *
 
 class MoiTruong:
     def __init__(self, idcuaso):
+        self._thoidiemnhanloimoitodoigannhat = 0.
+        self._thoidiemmoitodoigannhat = 0.
+        self.diachihammoitodoi = 0
+        self.diachihamnhanloimoitodoi = 0
         self._thoidiemphucsinhgannhat = 0.
         self.diachihamphucsinh = 0
         self.diachihamsudungkynangtoado2 = 0
@@ -110,7 +114,6 @@ class MoiTruong:
 
         self.action_timkiemtoanbodiachiham()
 
-
     def __del__(self):
         def safe_free(diachi):
             try:
@@ -159,6 +162,9 @@ class MoiTruong:
             self.diachigame + self.offsetdiachicosonhanvat + 0x18 + idnhanvat * self.offsetdiachicosomoinhanvat) > 0 and read_int(
             self.tientrinh,
             self.diachigame + self.offsetdiachicosonhanvat + 0x7E8 + idnhanvat * self.offsetdiachicosomoinhanvat) >= 0
+
+    def get_dbidnhanvat(self, idnhanvat = 1):
+        return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + idnhanvat * self.offsetdiachicosomoinhanvat)
 
     def get_tennhanvat(self, idnhanvat = 1):
         return read_string(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0xBC9 + idnhanvat * self.offsetdiachicosomoinhanvat)
@@ -2506,6 +2512,137 @@ class MoiTruong:
         write_int(self.tientrinh, diachidulieu, tuychonphucsinh)
 
         self.tientrinh.start_thread(self.diachihamphucsinh)
+        return True
+
+    def khoitaohammoitodoi(self):
+        if self.diachihammoitodoi:
+            return
+
+        self.diachihammoitodoi = self.tientrinh.allocate(256)
+        diachidulieu = self.diachihammoitodoi + 0x40
+
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        asm_code = f"""
+            push ebp
+            mov ebp, esp
+            sub esp, 16                     
+
+            mov eax, dword ptr [{hex(diachidulieu)}]
+
+            mov byte ptr [ebp - 12], 0x63
+            mov dword ptr [ebp - 11], eax
+
+            mov dword ptr [ebp - 4], 5        
+
+            mov eax, dword ptr [{hex(self.diachigame)} + {hex(self.offsetdiachicosohamchinh)}]
+            test eax, eax
+            je ketthuc
+
+            lea edx, [ebp - 4]
+            push edx
+
+            lea edx, [ebp - 12]
+            push edx
+
+            push eax
+
+            mov ecx, dword ptr [eax]
+            mov edx, dword ptr [ecx + 0x1C]
+            call edx                        
+
+            ketthuc:
+            mov esp, ebp
+            pop ebp
+            ret                           
+        """
+
+        encoding, _ = ks.asm(asm_code)
+        write_bytes(self.tientrinh, self.diachihammoitodoi, bytes(encoding), len(encoding))
+
+    def action_moitodoi(self, dbidnhanvat, delay = 0.25):
+        if not self.diachihammoitodoi:
+            self.khoitaohammoitodoi()
+
+        if time.time() - self._thoidiemmoitodoigannhat < delay:
+            return False
+
+        if dbidnhanvat <= 0:
+            return False
+
+        self._thoidiemmoitodoigannhat = time.time()
+
+        diachidulieu = self.diachihammoitodoi + 0x40
+        write_int(self.tientrinh, diachidulieu, dbidnhanvat)
+        self.tientrinh.start_thread(self.diachihammoitodoi)
+
+        return True
+
+    def khoitaohamnhanloimoitodoi(self):
+        if self.diachihamnhanloimoitodoi:
+            return
+
+        self.diachihamnhanloimoitodoi = self.tientrinh.allocate(256)
+        diachidulieu = self.diachihamnhanloimoitodoi + 0x40
+
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        asm_code = f"""
+            push ebp
+            mov ebp, esp
+            sub esp, 20                     
+
+            mov eax, dword ptr [{hex(diachidulieu)}]
+            mov ecx, dword ptr [{hex(diachidulieu + 4)}]
+
+            mov byte ptr [ebp - 16], 0x66
+            mov byte ptr [ebp - 15], cl
+            mov dword ptr [ebp - 14], eax
+
+            mov dword ptr [ebp - 4], 6        
+
+            mov eax, dword ptr [{hex(self.diachigame)} + {hex(self.offsetdiachicosohamchinh)}]
+            test eax, eax
+            je ketthuc
+
+            lea edx, [ebp - 4]
+            push edx
+
+            lea edx, [ebp - 16]
+            push edx
+
+            push eax
+
+            mov ecx, dword ptr [eax]
+            mov edx, dword ptr [ecx + 0x1C]
+            call edx                        
+
+            ketthuc:
+            mov esp, ebp
+            pop ebp
+            ret                           
+        """
+
+        encoding, _ = ks.asm(asm_code)
+        write_bytes(self.tientrinh, self.diachihamnhanloimoitodoi, bytes(encoding), len(encoding))
+
+    def action_nhanloimoitodoi(self, dbidnguoimoi, is_dongy = True, delay = 0.25):
+        if not self.diachihamnhanloimoitodoi:
+            self.khoitaohamnhanloimoitodoi()
+
+        if time.time() - self._thoidiemnhanloimoitodoigannhat < delay:
+            return False
+
+        if dbidnguoimoi <= 0:
+            return False
+
+        self._thoidiemnhanloimoitodoigannhat = time.time()
+
+        diachidulieu = self.diachihamnhanloimoitodoi + 0x40
+        write_int(self.tientrinh, diachidulieu, dbidnguoimoi)
+        write_int(self.tientrinh, diachidulieu + 4, 1 if is_dongy else 0)
+
+        self.tientrinh.start_thread(self.diachihamnhanloimoitodoi)
         return True
 
     def action_timkiemtoanbodiachiham(self):
