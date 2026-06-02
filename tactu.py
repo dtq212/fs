@@ -1262,7 +1262,7 @@ class TacTu:
                     return False
 
         if self._is_tudongbattathieuungbotro:
-            if not {IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN} & set(hieuungbotros):
+            if not ({IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN} & set(hieuungbotros)):
                 if not self.get_is_dusoluongtoithieu(THANTIENTAN, 1):
                     if self.get_is_dusoluongtoithieu(TIENDONG, 9):
                         is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 23, 1)
