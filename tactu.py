@@ -1252,7 +1252,8 @@ class TacTu:
                         return True
                     return False
 
-        if IDHIEUUNGBOTRO_NIETBANCHU not in self.moitruong.get_hieuungbotros():
+        hieuungbotros = self.moitruong.get_hieuungbotros()
+        if IDHIEUUNGBOTRO_NIETBANCHU not in hieuungbotros:
             if not self.get_is_dusoluongtoithieu(NIETBANCHU, 1):
                 if self.get_is_dusoluongtoithieu(TIENDONG, 6):
                     is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_GIOITHIEU, 24, 1)
@@ -1260,14 +1261,23 @@ class TacTu:
                         return True
                     return False
 
-        if not self.get_is_dusoluongtoithieu("Thanh Lộ", 1):
+        if self._is_tudongbattathieuungbotro:
+            if not {IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN} & set(hieuungbotros):
+                if not self.get_is_dusoluongtoithieu(THANTIENTAN, 1):
+                    if self.get_is_dusoluongtoithieu(TIENDONG, 9):
+                        is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 23, 1)
+                        if is_muathanhcong:
+                            return True
+                        return False
+
+        if not self.get_is_dusoluongtoithieu(THANHLO, 1):
             if self.get_is_dusoluongtoithieu(TIENDONG, 8):
                 is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 21, 1)
                 if is_muathanhcong:
                     return True
                 return False
 
-        if not self.get_is_dusoluongtoithieu("Chân Khí", 1):
+        if not self.get_is_dusoluongtoithieu(CHANKHI, 1):
             if self.get_is_dusoluongtoithieu(TIENDONG, 8):
                 is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 22, 1)
                 if is_muathanhcong:
