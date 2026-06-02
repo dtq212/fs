@@ -825,6 +825,8 @@ class TacTu:
             self._thoidiemyeucaubienthan = time.time()
 
         if time.time() - self._thoidiemyeucaubienthan > 2.5 and self.moitruong.get_idbienthannhanvat() < 0:
+            if self.action_sudungvatpham("Tề Thiên phù", delay = 1.):
+                return
             if self.action_sudungvatpham(HOALOITRANG, delay = 1.):
                 return
 
