@@ -500,7 +500,7 @@ class TacTu:
             self.moitruong.action_banvatpham(sothutuvatpham, delay = 0.)
             time.sleep(0.25)
 
-        # self.moitruong.action_dongcuahang(delay = 0.)
+        self.moitruong.action_dongcuahang(delay = 0.)
 
         return True
 
