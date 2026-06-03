@@ -495,7 +495,7 @@ class TacTu:
             if not is_danduoc and not is_trangbi and tenvatpham != "Hàn Thiết Thạch":
                 continue
 
-            if is_trangbi:
+            if is_trangbi and self.moitruong.get_capdovatpham(idvatpham) != 10:
                 if phamchat != IDPHAMCHATVATPHAM_TRANGLAM:
                     continue
 
