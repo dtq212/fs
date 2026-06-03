@@ -980,7 +980,7 @@ class MoiTruong:
         )
         if diachi_scan_ham:
             diachi_ham = diachi_scan_ham
-            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm tự động tìm đường: {hex(diachi_ham - self.diachigame)}")
+            #print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm tự động tìm đường: {hex(diachi_ham - self.diachigame)}")
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern hàm tự động tìm đường! Hủy bỏ khởi tạo.")
             return
@@ -993,7 +993,7 @@ class MoiTruong:
         )
         if diachi_scan_obj:
             diachi_doituong = read_int(self.tientrinh, diachi_scan_obj + 19)
-            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Đối tượng UI tìm đường: {hex(diachi_doituong - self.diachigame)}")
+            #print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Đối tượng UI tìm đường: {hex(diachi_doituong - self.diachigame)}")
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Đối tượng UI tìm đường! Hủy bỏ khởi tạo.")
             return
@@ -1050,7 +1050,7 @@ class MoiTruong:
 
         if diachi_scan_ham:
             diachi_ham = diachi_scan_ham
-            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm tìm đường xuyên bản đồ: {hex(diachi_ham - self.diachigame)}")
+            #print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm tìm đường xuyên bản đồ: {hex(diachi_ham - self.diachigame)}")
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern hàm tìm đường xuyên bản đồ! Hủy bỏ khởi tạo.")
             return
@@ -1064,7 +1064,7 @@ class MoiTruong:
 
         if diachi_scan_obj:
             diachi_doituong = read_int(self.tientrinh, diachi_scan_obj + 3)
-            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Đối tượng UI xuyên bản đồ: {hex(diachi_doituong - self.diachigame)}")
+            #print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Đối tượng UI xuyên bản đồ: {hex(diachi_doituong - self.diachigame)}")
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Đối tượng UI xuyên bản đồ! Hủy bỏ khởi tạo.")
             return
@@ -1133,7 +1133,7 @@ class MoiTruong:
 
         if diachi_scan_ham:
             diachi_ham = diachi_scan_ham
-            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm di chuyển: {hex(diachi_ham - self.diachigame)}")
+            #print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm di chuyển: {hex(diachi_ham - self.diachigame)}")
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern hàm di chuyển! Hủy bỏ khởi tạo.")
             return
@@ -1416,7 +1416,7 @@ class MoiTruong:
 
         if diachitimthay:
             diachi_ham = diachitimthay
-            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm bật tắt hiệu ứng: {hex(diachi_ham - self.diachigame)}")
+            #print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm bật tắt hiệu ứng: {hex(diachi_ham - self.diachigame)}")
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern hàm bật tắt hiệu ứng! Hủy bỏ khởi tạo.")
             return
@@ -1481,7 +1481,7 @@ class MoiTruong:
 
         if diachitimthay:
             diachi_hook = diachitimthay + 33
-            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hook Vô hiệu hóa kỹ năng 3: {hex(diachi_hook - self.diachigame)}")
+            #print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hook Vô hiệu hóa kỹ năng 3: {hex(diachi_hook - self.diachigame)}")
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Hook vô hiệu hóa kỹ năng 3! Hủy bỏ khởi tạo.")
             return
@@ -1677,7 +1677,7 @@ class MoiTruong:
 
         if diachi_scan_ham:
             diachi_ham = diachi_scan_ham
-            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm mở khóa: {hex(diachi_ham - self.diachigame)}")
+            #print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm mở khóa: {hex(diachi_ham - self.diachigame)}")
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern hàm mở khóa! Hủy bỏ khởi tạo.")
             return
@@ -1691,7 +1691,7 @@ class MoiTruong:
 
         if diachi_scan_obj:
             diachi_doituong = read_int(self.tientrinh, diachi_scan_obj + 12)
-            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Đối tượng UI mở khóa: {hex(diachi_doituong - self.diachigame)}")
+            #print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Đối tượng UI mở khóa: {hex(diachi_doituong - self.diachigame)}")
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Đối tượng UI mở khóa! Hủy bỏ khởi tạo.")
             return
@@ -1747,7 +1747,7 @@ class MoiTruong:
 
         if diachi_scan_ham:
             diachi_ham = diachi_scan_ham
-            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm sử dụng kỹ năng tọa độ: {hex(diachi_ham - self.diachigame)}")
+            #print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm sử dụng kỹ năng tọa độ: {hex(diachi_ham - self.diachigame)}")
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern hàm sử dụng kỹ năng tọa độ! Hủy bỏ khởi tạo.")
             return
@@ -1955,7 +1955,7 @@ class MoiTruong:
 
         if diachi_scan_ham:
             diachi_ham = diachi_scan_ham
-            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm sử dụng phím tắt: {hex(diachi_ham - self.diachigame)}")
+            #print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm sử dụng phím tắt: {hex(diachi_ham - self.diachigame)}")
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern hàm sử dụng phím tắt! Hủy bỏ khởi tạo.")
             return
@@ -2082,7 +2082,7 @@ class MoiTruong:
 
         if diachi_scan_ham:
             diachi_ham = diachi_scan_ham
-            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm đối thoại: {hex(diachi_ham - self.diachigame)}")
+            #print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Hàm đối thoại: {hex(diachi_ham - self.diachigame)}")
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern hàm đối thoại! Hủy bỏ khởi tạo.")
             return
@@ -2096,7 +2096,7 @@ class MoiTruong:
 
         if diachi_scan_obj:
             diachi_doituong = read_int(self.tientrinh, diachi_scan_obj + 23)
-            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Đối tượng UI đối thoại: {hex(diachi_doituong - self.diachigame)}")
+            #print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Đối tượng UI đối thoại: {hex(diachi_doituong - self.diachigame)}")
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Đối tượng UI đối thoại! Hủy bỏ khởi tạo.")
             return
@@ -2150,10 +2150,10 @@ class MoiTruong:
 
         if diachi_scan:
             diachi_doituong = read_int(self.tientrinh, diachi_scan + 8)
-            print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Đối tượng UI xác nhận đối thoại: {hex(diachi_doituong - self.diachigame)}")
+            #print(f"[THÀNH CÔNG] Tự động tìm thấy Offset Đối tượng UI xác nhận đối thoại: {hex(diachi_doituong - self.diachigame)}")
             khoang_cach_call = read_int(self.tientrinh, diachi_scan + 28)
             diachi_ham = diachi_scan + 27 + 5 + khoang_cach_call
-            print(f"[THÀNH CÔNG] Tự động tính toán được Offset Hàm xác nhận đối thoại: {hex(diachi_ham - self.diachigame)}")
+            #print(f"[THÀNH CÔNG] Tự động tính toán được Offset Hàm xác nhận đối thoại: {hex(diachi_ham - self.diachigame)}")
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern hàm xác nhận đối thoại! Hủy bỏ khởi tạo.")
             return
@@ -2210,7 +2210,7 @@ class MoiTruong:
         if diachi_scan:
             khoang_cach_call = read_int(self.tientrinh, diachi_scan + 14)
             diachi_ham = diachi_scan + 13 + 5 + khoang_cach_call
-            print(f"[THÀNH CÔNG] Tự động tính toán được Offset Hàm đóng cửa hàng: {hex(diachi_ham - self.diachigame)}")
+            #print(f"[THÀNH CÔNG] Tự động tính toán được Offset Hàm đóng cửa hàng: {hex(diachi_ham - self.diachigame)}")
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Hàm đóng cửa hàng! Hủy bỏ khởi tạo.")
             return
@@ -2663,8 +2663,6 @@ class MoiTruong:
         return True
 
     def action_timkiemtoanbodiachiham(self):
-        import pymem.pattern
-
         print("=" * 75)
         print("BẮT ĐẦU QUÉT VÀ KHỞI TẠO TOÀN BỘ CÁC HÀM (PATTERN SCANNING)...".center(75))
         print("=" * 75)
@@ -2676,12 +2674,12 @@ class MoiTruong:
         if scan_nv:
             size_nv = read_int(self.tientrinh, scan_nv + 7)
             base_nv = read_int(self.tientrinh, scan_nv + 24) - self.diachigame
-            print(f"[THÀNH CÔNG] OFFSET_DIACHICOSOMOINHANVAT = {hex(size_nv)}")
-            print(f"[THÀNH CÔNG] OFFSET_DIACHICOSONHANVAT = {hex(base_nv)}")
+            #print(f"[THÀNH CÔNG] OFFSET_DIACHICOSOMOINHANVAT = {hex(size_nv)}")
+            #print(f"[THÀNH CÔNG] OFFSET_DIACHICOSONHANVAT = {hex(base_nv)}")
             self.offsetdiachicosonhanvat = base_nv
             self.offsetdiachicosomoinhanvat = size_nv
         else:
-            print("[LỖI] Không tìm thấy Pattern Offset cơ sở nhân vật!")
+            print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset cơ sở nhân vật!")
 
         aob_vtvp = "83 EC 0C 83 3D ?? ?? ?? ?? 00 75 ?? 8B 44 24 10 89 44 24 05 A1"
         scan_vtvp = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_vtvp))
@@ -2692,10 +2690,10 @@ class MoiTruong:
             self.offsetdiachicosovitrivatpham = base_vtvp
             self.offsetdiachicosovitrimoivatpham = 0x10
 
-            print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOVITRIMOIVATPHAM = {hex(self.offsetdiachicosovitrimoivatpham)}".upper())
-            print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOVITRIVATPHAM = {hex(self.offsetdiachicosovitrivatpham)}".upper())
+            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOVITRIMOIVATPHAM = {hex(self.offsetdiachicosovitrimoivatpham)}".upper())
+            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOVITRIVATPHAM = {hex(self.offsetdiachicosovitrivatpham)}".upper())
         else:
-            print("[LỖI] Không tìm thấy Pattern Offset vị trí vật phẩm!")
+            print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset vị trí vật phẩm!")
 
         aob_vpdd = "8B C8 69 C9 ?? ?? ?? ?? 83 B9 ?? ?? ?? ?? 00 7E ?? 39 B9 ?? ?? ?? ?? 74 ?? 50 8B CE"
         scan_vpdd = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_vpdd))
@@ -2706,10 +2704,10 @@ class MoiTruong:
             self.offsetdiachicosomoivatphamduoidat = size_vpdd
             self.offsetdiachicosothongtinvatphamduoidat = base_vpdd
 
-            print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOMOIVATPHAMDUOIDAT = {hex(self.offsetdiachicosomoivatphamduoidat)}".upper())
-            print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOTHONGTINVATPHAMDUOIDAT = {hex(self.offsetdiachicosothongtinvatphamduoidat)}".upper())
+            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOMOIVATPHAMDUOIDAT = {hex(self.offsetdiachicosomoivatphamduoidat)}".upper())
+            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOTHONGTINVATPHAMDUOIDAT = {hex(self.offsetdiachicosothongtinvatphamduoidat)}".upper())
         else:
-            print("[LỖI] Không tìm thấy Pattern Offset vật phẩm dưới đất!")
+            print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset vật phẩm dưới đất!")
 
         aob_ttvp = "8B 5B 04 8D 4B FF 81 F9 FE 03 00 00 0F 87 ?? ?? ?? ?? 69 DB ?? ?? ?? ?? 8B 93 ?? ?? ?? ?? 52 E8"
         scan_ttvp = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_ttvp))
@@ -2722,10 +2720,10 @@ class MoiTruong:
             self.offsetdiachicosomoivatpham = size_ttvp
             self.offsetdiachicosothongtinvatpham = base_ttvp
 
-            print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOMOIVATPHAM = {hex(self.offsetdiachicosomoivatpham)}".upper())
-            print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOTHONGTINVATPHAM = {hex(self.offsetdiachicosothongtinvatpham)}".upper())
+            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOMOIVATPHAM = {hex(self.offsetdiachicosomoivatpham)}".upper())
+            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOTHONGTINVATPHAM = {hex(self.offsetdiachicosothongtinvatpham)}".upper())
         else:
-            print("[LỖI] Không tìm thấy Pattern Offset thông tin vật phẩm!")
+            print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset thông tin vật phẩm!")
 
         aob_nhom = "8B 54 24 04 56 B8 ?? ?? ?? ?? 42 57 8B F8 8B F2 83 C0 ?? B9 ?? ?? ?? ??"
         scan_nhom = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_nhom))
@@ -2736,10 +2734,10 @@ class MoiTruong:
             self.offsetdiachicosothongtinthanhviendoinhom = base_nhom
             self.offsetdiachicosomoithanhviendoinhom = size_nhom
 
-            print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOMOITHANHVIENDOINHOM = {hex(self.offsetdiachicosomoithanhviendoinhom)}".upper())
-            print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOTHONGTINTHANHVIENDOINHOM = {hex(self.offsetdiachicosothongtinthanhviendoinhom)}".upper())
+            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOMOITHANHVIENDOINHOM = {hex(self.offsetdiachicosomoithanhviendoinhom)}".upper())
+            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOTHONGTINTHANHVIENDOINHOM = {hex(self.offsetdiachicosothongtinthanhviendoinhom)}".upper())
         else:
-            print("[LỖI] Không tìm thấy Pattern Offset thông tin thành viên đội nhóm!")
+            print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset thông tin thành viên đội nhóm!")
 
         aob_nvtt = "8B 45 01 57 0F B6 7D 1B 50 B9 ?? ?? ?? ?? 89 7C 24 14 E8 ?? ?? ?? ?? 8B D8 89 5C 24 0C"
         scan_nvtt = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_nvtt))
@@ -2748,18 +2746,18 @@ class MoiTruong:
 
             self.offsetdiachicosonhanvattieptheo = base_nvtt
 
-            print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSONHANVATTIEPTHEO = {hex(self.offsetdiachicosonhanvattieptheo)}".upper())
+            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSONHANVATTIEPTHEO = {hex(self.offsetdiachicosonhanvattieptheo)}".upper())
         else:
-            print("[LỖI] Không tìm thấy Pattern Offset nhân vật tiếp theo!")
+            print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset nhân vật tiếp theo!")
 
         aob_core = "FF 15 ?? ?? ?? ?? A1 ?? ?? ?? ?? 83 C4 0C 85 C0 74 ?? 8D 14 24"
         scan_core = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_core))
         if scan_core:
             base_core = read_int(self.tientrinh, scan_core + 7) - self.diachigame
             self.offsetdiachicosohamchinh = base_core
-            print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOHAMCHINH = {hex(self.diachigame + self.offsetdiachicosohamchinh)}".upper())
+            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOHAMCHINH = {hex(self.diachigame + self.offsetdiachicosohamchinh)}".upper())
         else:
-            print("[LỖI] Không tìm thấy Pattern Offset Core!")
+            print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset Core!")
 
         print("\n--- ĐANG QUÉT CÁC HÀM KHỞI TẠO (CALL/HOOK) ---")
         danhsachthuoctinh = dir(self)
