@@ -834,7 +834,7 @@ class TacTu:
             if self.action_sudungvatpham(BUFFTHUONGCHU, delay = 0.25):
                 return
 
-        for tenvatpham in [THANCAUPHU, THANTIENTAN, NIETBANCHU]:
+        for tenvatpham in [THANCAUPHU, THANTIENTAN, NIETBANCHU, ]:
             if self.action_sudungvatpham(tenvatpham, delay = 0.25):
                 return
 
