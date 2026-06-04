@@ -19,7 +19,7 @@ class TacTu:
         self._is_tudongtimkiemmuctieu = False
         self._is_khongdanhcungbang = False
         self._is_chidanhnguoichoivatrieuhoithu = False
-        self._tennhanvattancongs = set() # {"108HoaHit1", "108Loveisi", "108kiuasud"}
+        self._tennhanvattancongs = {"108HoaHit1", "108Loveisi", "108kiuasud"}
         self._tennhanvatkhongtancongs = set()
 
         self.moitruong = moitruong
@@ -145,8 +145,8 @@ class TacTu:
             if "is_chidanhnguoichoivatrieuhoithu" in thietlap:
                 self._is_chidanhnguoichoivatrieuhoithu = thietlap["is_chidanhnguoichoivatrieuhoithu"]
 
-            if "tennhanvattancongs" in thietlap:
-                self._tennhanvattancongs = thietlap["tennhanvattancongs"]
+            # if "tennhanvattancongs" in thietlap:
+            #     self._tennhanvattancongs = thietlap["tennhanvattancongs"]
 
             if "tennhanvatkhongtancongs" in thietlap:
                 self._tennhanvatkhongtancongs = thietlap["tennhanvatkhongtancongs"]

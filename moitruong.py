@@ -634,7 +634,6 @@ class MoiTruong:
 
     def get_donghothoigian(self):
         #game.g_SubWorldSet
-        print(hex(self.offsetdiachidongho))
         if not self.offsetdiachidongho:
             return 0
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachidongho)
