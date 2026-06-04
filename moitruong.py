@@ -111,6 +111,10 @@ class MoiTruong:
         self._thoidiemmotabkytrancacgannhat = 0.
 
         self.offsetdiachicosohamchinh = 0
+        self.offsetdiachicosobando = 0
+        self.offsetdiachidongho = 0
+        self.offsetdiachiidbandohientai = 0
+        self.offsetdiachitenbandohientai = 0
 
         self.action_timkiemtoanbodiachiham()
 
@@ -203,7 +207,11 @@ class MoiTruong:
         return int(self.get_noiluchientai(idnhanvat) * 100. / noiluctoida)
 
     def get_toado(self, idnhanvat = 1):
+        if not self.offsetdiachicosonhanvat or not self.offsetdiachicosobando:
+            return -1, -1
+
         diachinhanvat = self.diachigame + self.offsetdiachicosonhanvat + idnhanvat * self.offsetdiachicosomoinhanvat
+
         toadoluoix = read_int(self.tientrinh, diachinhanvat + 0x0ACC)
         toadoluoiy = read_int(self.tientrinh, diachinhanvat + 0x0AD0)
         offsetx = read_int(self.tientrinh, diachinhanvat + 0x0AD8)
@@ -212,7 +220,7 @@ class MoiTruong:
         idbando = read_int(self.tientrinh, diachinhanvat + 0x07E4)
         idkhuvuc = read_int(self.tientrinh, diachinhanvat + 0x07E8)
 
-        diachibando = self.diachigame + 0x2C57188 + (idbando * 172)
+        diachibando = self.diachigame + self.offsetdiachicosobando + (idbando * 172)
         soluongkhuvuctoida = read_int(self.tientrinh, diachibando + 0x58)
 
         if idkhuvuc < 0 or idkhuvuc >= soluongkhuvuctoida:
@@ -625,10 +633,24 @@ class MoiTruong:
         return not thoidiemhoiphuckynang or thoidiemhoiphuckynang < self.get_donghothoigian() - 5
 
     def get_donghothoigian(self):
-        return read_int(self.tientrinh, self.diachigame + 0x2998018)
+        #game.g_SubWorldSet
+        print(hex(self.offsetdiachidongho))
+        if not self.offsetdiachidongho:
+            return 0
+        return read_int(self.tientrinh, self.diachigame + self.offsetdiachidongho)
 
     def get_is_khuvuccothetancong(self):
-        return read_int(self.tientrinh, self.diachigame + 0x29A4114) > 0
+        return read_int(self.tientrinh, self.diachigame + self.offsetdiachidongho + 0x8 + 0xC0F4) > 0
+
+    def get_idbandohientai(self):
+        if not self.offsetdiachiidbandohientai:
+            return -1
+        return read_int(self.tientrinh, self.diachigame + self.offsetdiachiidbandohientai)
+
+    def get_tenbandohientai(self):
+        if not self.offsetdiachitenbandohientai:
+            return ""
+        return read_string(self.tientrinh, self.diachigame + self.offsetdiachitenbandohientai)
 
     def get_is_dangbatauto(self):
         return read_int(self.tientrinh, self.diachigame + 0x458498)
@@ -764,12 +786,6 @@ class MoiTruong:
     def get_is_dangkhoa(self):
         return read_int(self.tientrinh, self.diachigame + 0x4585A4) > 0
 
-    def get_idbandohientai(self):
-        return read_int(self.tientrinh, self.diachigame + 0x295E944)
-
-    def get_tenbandohientai(self):
-        return read_string(self.tientrinh, self.diachigame + 0x295E8F4)
-
     def get_is_tudongnhatvatpham(self):
         return read_int(self.tientrinh, self.diachigame + 0x457B7C)
 
@@ -808,7 +824,7 @@ class MoiTruong:
             self.set_idmuctieudangkhoa(0)
 
     def get_idnhanvattieptheo(self, idnhanvat = 1):
-        diachicosonhanvattieptheo = read_int(self.tientrinh, self.diachigame + 0x29bc630) #1 biến nào đó mà + FE0 thì phải đấy
+        diachicosonhanvattieptheo = read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvattieptheo) #1 biến nào đó mà + FE0 thì phải đấy
         idnhanvattieptheo = read_int(self.tientrinh, diachicosonhanvattieptheo + 0x4 + 0x8 * idnhanvat)
         if idnhanvattieptheo > SOLUONGNHANVATTOIDA or idnhanvattieptheo < 0:
             return -1
@@ -2663,23 +2679,24 @@ class MoiTruong:
         return True
 
     def action_timkiemtoanbodiachiham(self):
-        print("=" * 75)
-        print("BẮT ĐẦU QUÉT VÀ KHỞI TẠO TOÀN BỘ CÁC HÀM (PATTERN SCANNING)...".center(75))
-        print("=" * 75)
-
-        print("\n--- ĐANG QUÉT CÁC OFFSET HẰNG SỐ ---")
-
         aob_nv = "A1 ?? ?? ?? ?? 69 C0 ?? ?? ?? ?? 83 EC ?? 57 8B 7C 24 ?? 8B 4F 01 3B 88 ?? ?? ?? ?? 0F 85"
         scan_nv = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_nv))
         if scan_nv:
             size_nv = read_int(self.tientrinh, scan_nv + 7)
             base_nv = read_int(self.tientrinh, scan_nv + 24) - self.diachigame
-            #print(f"[THÀNH CÔNG] OFFSET_DIACHICOSOMOINHANVAT = {hex(size_nv)}")
-            #print(f"[THÀNH CÔNG] OFFSET_DIACHICOSONHANVAT = {hex(base_nv)}")
             self.offsetdiachicosonhanvat = base_nv
             self.offsetdiachicosomoinhanvat = size_nv
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset cơ sở nhân vật!")
+
+        aob_bando = "8B 81 ?? ?? ?? ?? 52 8B 91 ?? ?? ?? ?? 50 8B 81 ?? ?? ?? ?? 8B 89 ?? ?? ?? ?? 69 C9 ?? ?? ?? ?? 52 50 81 C1"
+        scan_bando = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_bando))
+
+        if scan_bando:
+            diachi_bando_tinh = read_int(self.tientrinh, scan_bando + 36)
+            self.offsetdiachicosobando = diachi_bando_tinh - self.diachigame
+        else:
+            print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset cơ sở mảng bản đồ!")
 
         aob_vtvp = "83 EC 0C 83 3D ?? ?? ?? ?? 00 75 ?? 8B 44 24 10 89 44 24 05 A1"
         scan_vtvp = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_vtvp))
@@ -2689,9 +2706,6 @@ class MoiTruong:
 
             self.offsetdiachicosovitrivatpham = base_vtvp
             self.offsetdiachicosovitrimoivatpham = 0x10
-
-            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOVITRIMOIVATPHAM = {hex(self.offsetdiachicosovitrimoivatpham)}".upper())
-            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOVITRIVATPHAM = {hex(self.offsetdiachicosovitrivatpham)}".upper())
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset vị trí vật phẩm!")
 
@@ -2703,27 +2717,22 @@ class MoiTruong:
 
             self.offsetdiachicosomoivatphamduoidat = size_vpdd
             self.offsetdiachicosothongtinvatphamduoidat = base_vpdd
-
-            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOMOIVATPHAMDUOIDAT = {hex(self.offsetdiachicosomoivatphamduoidat)}".upper())
-            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOTHONGTINVATPHAMDUOIDAT = {hex(self.offsetdiachicosothongtinvatphamduoidat)}".upper())
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset vật phẩm dưới đất!")
 
-        aob_ttvp = "8B 5B 04 8D 4B FF 81 F9 FE 03 00 00 0F 87 ?? ?? ?? ?? 69 DB ?? ?? ?? ?? 8B 93 ?? ?? ?? ?? 52 E8"
+        aob_ttvp = "85 C0 74 ?? 57 8B 7C 24 ?? EB ?? 8D A4 24 ?? ?? ?? ?? 8B C8 69 C9 ?? ?? ?? ?? 39 B9 ?? ?? ?? ?? 74 ?? 50 8B CE"
         scan_ttvp = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_ttvp))
+
         if scan_ttvp:
-            size_ttvp = read_int(self.tientrinh, scan_ttvp + 20)
-            diachi_aob = read_int(self.tientrinh, scan_ttvp + 26)
+            size_ttvp = read_int(self.tientrinh, scan_ttvp + 22)
+            diachi_aob = read_int(self.tientrinh, scan_ttvp + 28)
             offset_dbid = 0x698
             base_ttvp = diachi_aob - self.diachigame - offset_dbid
 
             self.offsetdiachicosomoivatpham = size_ttvp
             self.offsetdiachicosothongtinvatpham = base_ttvp
-
-            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOMOIVATPHAM = {hex(self.offsetdiachicosomoivatpham)}".upper())
-            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOTHONGTINVATPHAM = {hex(self.offsetdiachicosothongtinvatpham)}".upper())
         else:
-            print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset thông tin vật phẩm!")
+            print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset thông tin vật phẩm mới!. Nhân vật: {}".format(self.get_tennhanvat()))
 
         aob_nhom = "8B 54 24 04 56 B8 ?? ?? ?? ?? 42 57 8B F8 8B F2 83 C0 ?? B9 ?? ?? ?? ??"
         scan_nhom = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_nhom))
@@ -2733,9 +2742,6 @@ class MoiTruong:
 
             self.offsetdiachicosothongtinthanhviendoinhom = base_nhom
             self.offsetdiachicosomoithanhviendoinhom = size_nhom
-
-            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOMOITHANHVIENDOINHOM = {hex(self.offsetdiachicosomoithanhviendoinhom)}".upper())
-            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOTHONGTINTHANHVIENDOINHOM = {hex(self.offsetdiachicosothongtinthanhviendoinhom)}".upper())
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset thông tin thành viên đội nhóm!")
 
@@ -2743,10 +2749,7 @@ class MoiTruong:
         scan_nvtt = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_nvtt))
         if scan_nvtt:
             base_nvtt = read_int(self.tientrinh, scan_nvtt + 10) - self.diachigame + 0xFE0
-
             self.offsetdiachicosonhanvattieptheo = base_nvtt
-
-            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSONHANVATTIEPTHEO = {hex(self.offsetdiachicosonhanvattieptheo)}".upper())
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset nhân vật tiếp theo!")
 
@@ -2755,11 +2758,30 @@ class MoiTruong:
         if scan_core:
             base_core = read_int(self.tientrinh, scan_core + 7) - self.diachigame
             self.offsetdiachicosohamchinh = base_core
-            #print(f"[THÀNH CÔNG] SELF.OFFSETDIACHICOSOHAMCHINH = {hex(self.diachigame + self.offsetdiachicosohamchinh)}".upper())
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset Core!")
 
-        print("\n--- ĐANG QUÉT CÁC HÀM KHỞI TẠO (CALL/HOOK) ---")
+        aob_dongho = "8B 01 8B 40 34 52 8D 54 24 ?? 52 FF D0 66 8B 44 24 ?? 66 85 C0 74 ?? 0F BF C8 A1 ?? ?? ?? ?? 99 F7 F9"
+        scan_dongho = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_dongho))
+
+        if scan_dongho:
+            diachi_dongho_tinh = read_int(self.tientrinh, scan_dongho + 27)
+            self.offsetdiachidongho = diachi_dongho_tinh - self.diachigame
+        else:
+            print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Đồng hồ thời gian!")
+
+        aob_bandohientai = "B9 ?? ?? ?? ?? E8 ?? ?? ?? ?? B9 ?? ?? ?? ?? E8 ?? ?? ?? ?? B8 01 00 00 00 C3"
+        scan_bandohientai = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_bandohientai))
+
+        if scan_bandohientai:
+            diachi_cautruc_bando = read_int(self.tientrinh, scan_bandohientai + 11)
+            offset_cautruc_bando = diachi_cautruc_bando - self.diachigame
+            print("Địa chỉ thông tin bản đồ hiện tại: {}".format(offset_cautruc_bando))
+            self.offsetdiachiidbandohientai = offset_cautruc_bando + 0x3314C
+            self.offsetdiachitenbandohientai = offset_cautruc_bando + 0x330FC
+        else:
+            print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Thông tin bản đồ hiện tại!")
+
         danhsachthuoctinh = dir(self)
         tongsoham = 0
 
@@ -2767,13 +2789,7 @@ class MoiTruong:
             if tenthuoctinh.startswith("khoitaoham") and callable(getattr(self, tenthuoctinh)):
                 tongsoham += 1
                 ham_khoi_tao = getattr(self, tenthuoctinh)
-
-                print(f"\n[{tongsoham}] Đang xử lý: {tenthuoctinh}...")
                 try:
                     ham_khoi_tao()
                 except Exception as e:
                     print(f"[LỖI NGOẠI LỆ CỦA PYTHON] Xảy ra lỗi khi chạy {tenthuoctinh}: {e}")
-
-        print("\n" + "=" * 75)
-        print(f"ĐÃ QUYÉT VÀ KIỂM TRA XONG {tongsoham} HÀM KHỞI TẠO!".center(75))
-        print("=" * 75)
