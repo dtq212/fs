@@ -69,7 +69,7 @@ class CuaSo:
 
         if self.idcuaso in self.shared_data:
             del self.shared_data[self.idcuaso]
-            
+
         if self.idcuaso in self.command_dict:
             del self.command_dict[self.idcuaso]
 
@@ -134,6 +134,8 @@ class CuaSo:
                     "_is_tudongtimkiemmuctieu": self.tactu._is_tudongtimkiemmuctieu,
                     "_is_giukhoangcach": self.tactu._is_giukhoangcach,
                     "_is_khongdanhcungbang": self.tactu._is_khongdanhcungbang,
+                    "_is_duoitheo": self.tactu._is_duoitheo,
+                    "_is_khongsudungnhieukynang": self.tactu._is_khongsudungnhieukynang,
                     "_is_uutientrieuhoithu": self.tactu._is_uutientrieuhoithu,
                     "_is_chidanhnguoichoivatrieuhoithu": self.tactu._is_chidanhnguoichoivatrieuhoithu,
 
@@ -155,39 +157,68 @@ class CuaSo:
             except Exception as err:
                 print(f"Lỗi ở loop_hienthigiaodien: {err}")
                 traceback.print_exc()
-            time.sleep(1.0) 
+            time.sleep(1.0)
 
     def loop_xulyphimtat(self):
         while not self.main_stop.is_set():
             cmd = self.command_dict.get(self.idcuaso)
-            
+
             if cmd:
-                if cmd == "battat_tudongfarm": self.tactu.battat_tudongfarm()
-                elif cmd == "battat_tudongsuavatpham": self.tactu.battat_tudongsuavatpham()
-                elif cmd == "action_test": self.tactu.action_test()
-                elif cmd == "action_mua1thancauphu": self.tactu.action_mua1thancauphu()
-                elif cmd == "battat_tudongdanhtheosautruongnhom": self.tactu.battat_tudongdanhtheosautruongnhom()
-                elif cmd == "battat_tudongtimkiemmuctieu": self.tactu.battat_tudongtimkiemmuctieu()
-                elif cmd == "battat_is_giukhoangcach": self.tactu.battat_is_giukhoangcach()
-                elif cmd == "battat_is_khongdanhcungbang": self.tactu.battat_is_khongdanhcungbang()
-                elif cmd == "battat_is_tudongbattathieuungbotro": self.tactu.battat_tudongbattathieuungbotro()
-                elif cmd == "battat_is_uutientrieuhoithu": self.tactu.battat_is_uutientrieuhoithu()
-                elif cmd == "battat_is_sudungkynangtoadochichuot": self.tactu.battat_is_sudungkynangtoadochichuot()
-                elif cmd == "battat_is_tudongmokhoa": self.tactu.battat_tudongmokhoa()
-                elif cmd == "battat_is_tudongvutvatpham": self.tactu.battat_is_tudongvutvatpham()
-                elif cmd == "battat_is_tudongmuavatphamkytrancac": self.tactu.battat_is_tudongmuavatphamkytrancac()
-                elif cmd == "battat_is_tudongdoithucuoi": self.tactu.battat_is_tudongdoithucuoi()
-                elif cmd == "botoanbo_tennhanvattancong": self.tactu.botoanbo_tennhanvattancong()
-                elif cmd == "botoanbo_tennhanvatkhongtancong": self.tactu.botoanbo_tennhanvatkhongtancong()
-                elif cmd == "them_tennhanvattancong": self.tactu.them_tennhanvattancong()
-                elif cmd == "them_tennhanvatkhongtancong": self.tactu.them_tennhanvatkhongtancong()
-                elif cmd == "bat_is_chidanhnguoichoivatrieuhoithu": self.tactu.bat_is_chidanhnguoichoivatrieuhoithu()
-                elif cmd == "tat_is_chidanhnguoichoivatrieuhoithu": self.tactu.tat_is_chidanhnguoichoivatrieuhoithu()
-                elif cmd == "them_dbidnhanvattodoitudong": self.tactu.them_dbidnhanvattodoitudong()
-                elif cmd == "botoanbo_dbidnhanvattodoitudong": self.tactu.botoanbo_dbidnhanvattodoitudong()
-                elif cmd == "action_batpk": self.tactu.action_batpk()
-                elif cmd == "action_tatpk": self.tactu.action_tatpk()
-                
+                if cmd == "battat_tudongfarm":
+                    self.tactu.battat_tudongfarm()
+                elif cmd == "battat_tudongsuavatpham":
+                    self.tactu.battat_tudongsuavatpham()
+                elif cmd == "action_test":
+                    self.tactu.action_test()
+                elif cmd == "action_mua1thancauphu":
+                    self.tactu.action_mua1thancauphu()
+                elif cmd == "battat_tudongdanhtheosautruongnhom":
+                    self.tactu.battat_tudongdanhtheosautruongnhom()
+                elif cmd == "battat_tudongtimkiemmuctieu":
+                    self.tactu.battat_tudongtimkiemmuctieu()
+                elif cmd == "battat_is_giukhoangcach":
+                    self.tactu.battat_is_giukhoangcach()
+                elif cmd == "battat_is_khongdanhcungbang":
+                    self.tactu.battat_is_khongdanhcungbang()
+                elif cmd == "battat_is_tudongbattathieuungbotro":
+                    self.tactu.battat_tudongbattathieuungbotro()
+                elif cmd == "battat_is_uutientrieuhoithu":
+                    self.tactu.battat_is_uutientrieuhoithu()
+                elif cmd == "battat_is_sudungkynangtoadochichuot":
+                    self.tactu.battat_is_sudungkynangtoadochichuot()
+                elif cmd == "battat_is_tudongmokhoa":
+                    self.tactu.battat_tudongmokhoa()
+                elif cmd == "battat_is_tudongvutvatpham":
+                    self.tactu.battat_is_tudongvutvatpham()
+                elif cmd == "battat_is_tudongmuavatphamkytrancac":
+                    self.tactu.battat_is_tudongmuavatphamkytrancac()
+                elif cmd == "battat_is_tudongdoithucuoi":
+                    self.tactu.battat_is_tudongdoithucuoi()
+                elif cmd == "battat_is_duoitheo":
+                    self.tactu.battat_is_duoitheo()
+                elif cmd == "battat_is_khongsudungnhieukynang":
+                    self.tactu.battat_is_khongsudungnhieukynang()
+                elif cmd == "botoanbo_tennhanvattancong":
+                    self.tactu.botoanbo_tennhanvattancong()
+                elif cmd == "botoanbo_tennhanvatkhongtancong":
+                    self.tactu.botoanbo_tennhanvatkhongtancong()
+                elif cmd == "them_tennhanvattancong":
+                    self.tactu.them_tennhanvattancong()
+                elif cmd == "them_tennhanvatkhongtancong":
+                    self.tactu.them_tennhanvatkhongtancong()
+                elif cmd == "bat_is_chidanhnguoichoivatrieuhoithu":
+                    self.tactu.bat_is_chidanhnguoichoivatrieuhoithu()
+                elif cmd == "tat_is_chidanhnguoichoivatrieuhoithu":
+                    self.tactu.tat_is_chidanhnguoichoivatrieuhoithu()
+                elif cmd == "them_dbidnhanvattodoitudong":
+                    self.tactu.them_dbidnhanvattodoitudong()
+                elif cmd == "botoanbo_dbidnhanvattodoitudong":
+                    self.tactu.botoanbo_dbidnhanvattodoitudong()
+                elif cmd == "action_batpk":
+                    self.tactu.action_batpk()
+                elif cmd == "action_tatpk":
+                    self.tactu.action_tatpk()
+
                 self.command_dict[self.idcuaso] = None
 
             time.sleep(0.15)

@@ -76,6 +76,12 @@ class GiaoDienHienThi:
 
         self.add_check(self.grp_config, "Tự tìm mục tiêu", "_is_tudongtimkiemmuctieu", r, "Ctrl+Alt+Shift+F")
         r += 1
+
+        self.add_check(self.grp_config, "Tự động đuổi mục tiêu", "_is_duoitheo", r, "Ctrl+Alt+Shift+P")
+        r += 1
+        self.add_check(self.grp_config, "Chỉ dùng 1 kỹ năng (Đạo sĩ)", "_is_khongsudungnhieukynang", r, "Ctrl+Alt+Shift+O")
+        r += 1
+
         self.add_check(self.grp_config, "Không đánh cùng Bang", "_is_khongdanhcungbang", r, "Ctrl+Alt+Shift+B")
         r += 1
 

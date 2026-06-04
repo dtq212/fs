@@ -7,6 +7,7 @@ from multiprocessing import Process, Manager, freeze_support
 from cuaso import CuaSo
 from giaodienhienthi import GiaoDienHienThi
 
+
 def run_bot_process(hwnd, shared_data, command_dict):
     try:
         bot = CuaSo(hwnd, shared_data, command_dict)
@@ -18,6 +19,7 @@ def run_bot_process(hwnd, shared_data, command_dict):
     except Exception as e:
         pass
 
+
 class TroChoiManager:
     def __init__(self):
         self.manager = Manager()
@@ -27,11 +29,13 @@ class TroChoiManager:
 
     def _timcuasogame(self):
         ds_hwnd = []
+
         def callback(hwnd, _):
             if win32gui.IsWindowVisible(hwnd):
                 title = win32gui.GetWindowText(hwnd)
                 if title and "TGPC:" in title:
                     ds_hwnd.append(hwnd)
+
         win32gui.EnumWindows(callback, None)
         return ds_hwnd
 
@@ -66,49 +70,79 @@ class TroChoiManager:
             for h in dead:
                 del self.bot_processes[h]
                 if h in self.shared_data: del self.shared_data[h]
-                if h in self.command_dict: del self.command_dict[h] # Dọn dẹp rác
+                if h in self.command_dict: del self.command_dict[h]  # Dọn dẹp rác
 
             time.sleep(2)
 
     def loop_hotkey(self):
         while True:
-            hwnd = win32gui.GetForegroundWindow() # Chỉ bắt phím cho tab đang active
+            hwnd = win32gui.GetForegroundWindow()  # Chỉ bắt phím cho tab đang active
             if hwnd in self.bot_processes:
                 cmd = None
-                if keyboard.is_pressed("ctrl+alt+shift+h"): cmd = "battat_tudongfarm"
-                elif keyboard.is_pressed("ctrl+alt+shift+r"): cmd = "battat_tudongsuavatpham"
-                elif keyboard.is_pressed("ctrl+alt+shift+u"): cmd = "action_test"
-                elif keyboard.is_pressed("ctrl+alt+shift+y"): cmd = "action_mua1thancauphu"
-                elif keyboard.is_pressed("ctrl+alt+shift+t"): cmd = "battat_tudongdanhtheosautruongnhom"
-                elif keyboard.is_pressed("ctrl+alt+shift+f"): cmd = "battat_tudongtimkiemmuctieu"
-                elif keyboard.is_pressed("ctrl+alt+shift+b"): cmd = "battat_is_khongdanhcungbang"
-                elif keyboard.is_pressed("ctrl+alt+shift+j"): cmd = "battat_is_tudongbattathieuungbotro"
-                elif keyboard.is_pressed("ctrl+alt+shift+k"): cmd = "battat_is_giukhoangcach"
-                elif keyboard.is_pressed("ctrl+alt+shift+l"): cmd = "battat_is_tudongmokhoa"
-                elif keyboard.is_pressed("ctrl+alt+shift+w"): cmd = "battat_is_tudongdoithucuoi"
-                elif keyboard.is_pressed("ctrl+alt+shift+d"): cmd = "battat_is_tudongvutvatpham"
-                elif keyboard.is_pressed("ctrl+alt+shift+m"): cmd = "battat_is_tudongmuavatphamkytrancac"
-                elif keyboard.is_pressed("ctrl+alt+c"): cmd = "botoanbo_tennhanvattancong"
-                elif keyboard.is_pressed("ctrl+alt+x"): cmd = "botoanbo_tennhanvatkhongtancong"
-                elif keyboard.is_pressed("ctrl+alt+v"): cmd = "botoanbo_dbidnhanvattodoitudong"
-                elif keyboard.is_pressed("ctrl+c"): cmd = "them_tennhanvattancong"
-                elif keyboard.is_pressed("ctrl+x"): cmd = "them_tennhanvatkhongtancong"
-                elif keyboard.is_pressed("ctrl+v"): cmd = "them_dbidnhanvattodoitudong"
-                elif keyboard.is_pressed("ctrl+d"): cmd = "bat_is_chidanhnguoichoivatrieuhoithu"
-                elif keyboard.is_pressed("ctrl+s"): cmd = "battat_is_uutientrieuhoithu"
-                elif keyboard.is_pressed("ctrl+a"): cmd = "tat_is_chidanhnguoichoivatrieuhoithu"
-                elif keyboard.is_pressed("ctrl+e"): cmd = "action_batpk"
-                elif keyboard.is_pressed("ctrl+q"): cmd = "action_tatpk"
-                elif keyboard.is_pressed("ctrl+g"): cmd = "battat_is_sudungkynangtoadochichuot"
+                if keyboard.is_pressed("ctrl+alt+shift+h"):
+                    cmd = "battat_tudongfarm"
+                elif keyboard.is_pressed("ctrl+alt+shift+r"):
+                    cmd = "battat_tudongsuavatpham"
+                elif keyboard.is_pressed("ctrl+alt+shift+u"):
+                    cmd = "action_test"
+                elif keyboard.is_pressed("ctrl+alt+shift+y"):
+                    cmd = "action_mua1thancauphu"
+                elif keyboard.is_pressed("ctrl+alt+shift+t"):
+                    cmd = "battat_tudongdanhtheosautruongnhom"
+                elif keyboard.is_pressed("ctrl+alt+shift+f"):
+                    cmd = "battat_tudongtimkiemmuctieu"
+                elif keyboard.is_pressed("ctrl+alt+shift+b"):
+                    cmd = "battat_is_khongdanhcungbang"
+                elif keyboard.is_pressed("ctrl+alt+shift+j"):
+                    cmd = "battat_is_tudongbattathieuungbotro"
+                elif keyboard.is_pressed("ctrl+alt+shift+k"):
+                    cmd = "battat_is_giukhoangcach"
+                elif keyboard.is_pressed("ctrl+alt+shift+l"):
+                    cmd = "battat_is_tudongmokhoa"
+                elif keyboard.is_pressed("ctrl+alt+shift+w"):
+                    cmd = "battat_is_tudongdoithucuoi"
+                elif keyboard.is_pressed("ctrl+alt+shift+p"):
+                    cmd = "battat_is_duoitheo"
+                elif keyboard.is_pressed("ctrl+alt+shift+o"):
+                    cmd = "battat_is_khongsudungnhieukynang"
+                elif keyboard.is_pressed("ctrl+alt+shift+d"):
+                    cmd = "battat_is_tudongvutvatpham"
+                elif keyboard.is_pressed("ctrl+alt+shift+m"):
+                    cmd = "battat_is_tudongmuavatphamkytrancac"
+                elif keyboard.is_pressed("ctrl+alt+c"):
+                    cmd = "botoanbo_tennhanvattancong"
+                elif keyboard.is_pressed("ctrl+alt+x"):
+                    cmd = "botoanbo_tennhanvatkhongtancong"
+                elif keyboard.is_pressed("ctrl+alt+v"):
+                    cmd = "botoanbo_dbidnhanvattodoitudong"
+                elif keyboard.is_pressed("ctrl+c"):
+                    cmd = "them_tennhanvattancong"
+                elif keyboard.is_pressed("ctrl+x"):
+                    cmd = "them_tennhanvatkhongtancong"
+                elif keyboard.is_pressed("ctrl+v"):
+                    cmd = "them_dbidnhanvattodoitudong"
+                elif keyboard.is_pressed("ctrl+d"):
+                    cmd = "bat_is_chidanhnguoichoivatrieuhoithu"
+                elif keyboard.is_pressed("ctrl+s"):
+                    cmd = "battat_is_uutientrieuhoithu"
+                elif keyboard.is_pressed("ctrl+a"):
+                    cmd = "tat_is_chidanhnguoichoivatrieuhoithu"
+                elif keyboard.is_pressed("ctrl+e"):
+                    cmd = "action_batpk"
+                elif keyboard.is_pressed("ctrl+q"):
+                    cmd = "action_tatpk"
+                elif keyboard.is_pressed("ctrl+g"):
+                    cmd = "battat_is_sudungkynangtoadochichuot"
 
                 if cmd:
                     self.command_dict[hwnd] = cmd
                     time.sleep(0.3)
-            time.sleep(0.05) 
+            time.sleep(0.05)
 
     def stop_all(self):
         for p in self.bot_processes.values(): p.terminate()
         os._exit(0)
+
 
 if __name__ == "__main__":
     freeze_support()
