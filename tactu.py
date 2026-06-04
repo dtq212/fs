@@ -1249,6 +1249,9 @@ class TacTu:
             if danhmuctrangbi not in DANHMUCTRANGBI_MAP:
                 continue
 
+            if danhmuctrangbi == IDDANHMUCTRANGBI_THUCUOI:
+                continue
+
             if phamchat != IDPHAMCHATVATPHAM_TRANGLAM:
                 continue
 
