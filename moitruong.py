@@ -110,7 +110,7 @@ class MoiTruong:
         self._thoidiemmuakytrancacgannhat = 0.
         self._thoidiemmotabkytrancacgannhat = 0.
 
-        self.offsetdiachicosohamchinh = 0
+        self.offsetdiachicosothuchiencaulenh = 0
         self.offsetdiachicosobando = 0
         self.offsetdiachidongho = 0
         self.offsetdiachiidbandohientai = 0
@@ -928,7 +928,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 9        
 
-            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosohamchinh)}]
+            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosothuchiencaulenh)}]
             test eax, eax
             je ketthuc
 
@@ -1215,7 +1215,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 9        
 
-            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosohamchinh)}]
+            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosothuchiencaulenh)}]
             test eax, eax
             je ketthuc
 
@@ -1366,7 +1366,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 5
 
-            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosohamchinh)}]
+            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosothuchiencaulenh)}]
             test eax, eax
             je ketthuc
 
@@ -1575,7 +1575,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 8        
 
-            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosohamchinh)}]
+            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosothuchiencaulenh)}]
             test eax, eax
             je ketthuc
 
@@ -1642,7 +1642,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 2
 
-            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosohamchinh)}]
+            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosothuchiencaulenh)}]
             test eax, eax
             je ketthuc
 
@@ -1830,7 +1830,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 21        
 
-            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosohamchinh)}]
+            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosothuchiencaulenh)}]
             test eax, eax
             je ketthuc
 
@@ -2036,7 +2036,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 5        
 
-            mov eax, dword ptr [{hex(self.diachigame)} + {hex(self.offsetdiachicosohamchinh)}]
+            mov eax, dword ptr [{hex(self.diachigame)} + {hex(self.offsetdiachicosothuchiencaulenh)}]
             test eax, eax
             je ketthuc
 
@@ -2275,7 +2275,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 5        
 
-            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosohamchinh)}]
+            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosothuchiencaulenh)}]
             test eax, eax
             je ketthuc
 
@@ -2354,7 +2354,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 6        
 
-            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosohamchinh)}]
+            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosothuchiencaulenh)}]
             test eax, eax
             je ketthuc
 
@@ -2422,7 +2422,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 13        
 
-            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosohamchinh)}]
+            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosothuchiencaulenh)}]
             test eax, eax
             je ketthuc
 
@@ -2498,7 +2498,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 5        
 
-            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosohamchinh)}]
+            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosothuchiencaulenh)}]
             test eax, eax
             je ketthuc
 
@@ -2564,7 +2564,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 5        
 
-            mov eax, dword ptr [{hex(self.diachigame)} + {hex(self.offsetdiachicosohamchinh)}]
+            mov eax, dword ptr [{hex(self.diachigame)} + {hex(self.offsetdiachicosothuchiencaulenh)}]
             test eax, eax
             je ketthuc
 
@@ -2631,7 +2631,7 @@ class MoiTruong:
 
             mov dword ptr [ebp - 4], 6        
 
-            mov eax, dword ptr [{hex(self.diachigame)} + {hex(self.offsetdiachicosohamchinh)}]
+            mov eax, dword ptr [{hex(self.diachigame)} + {hex(self.offsetdiachicosothuchiencaulenh)}]
             test eax, eax
             je ketthuc
 
@@ -2756,7 +2756,7 @@ class MoiTruong:
         scan_core = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_core))
         if scan_core:
             base_core = read_int(self.tientrinh, scan_core + 7) - self.diachigame
-            self.offsetdiachicosohamchinh = base_core
+            self.offsetdiachicosothuchiencaulenh = base_core
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset Core!")
 

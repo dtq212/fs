@@ -1096,6 +1096,7 @@ class TacTu:
                                 danhsachkynang = [IDKYNANG_TAMMUOICHANHOA] if self._is_khongsudungnhieukynang else [IDKYNANG_TAMMUOICHANHOA, IDKYNANG_BANGPHONGVANLY, IDKYNANG_THAPPHUONGLIETHOA, IDKYNANG_LOIDONGCUUTHIEN, IDKYNANG_BANGPHONGBAO]
                                 for idkynang in danhsachkynang:
                                     if self.moitruong.get_is_kynangsansang(idkynang):
+                                        self.moitruong.action_dichuyen2(*self.moitruong.get_toado(), delay = 1.)
                                         self.moitruong.action_sudungkynangphudau(idmuctieu, idkynang, random.randint(450, 475))
                                         return
 
@@ -1205,7 +1206,7 @@ class TacTu:
         if not self._is_tudongdoithucuoi:
             return
 
-        if self.moitruong.get_idhephai() == IDHEPHAI_DAOSI:
+        if self.moitruong.get_idhephai() in (IDHEPHAI_DAOSI, IDHEPHAI_VUSI):
             if self.moitruong.get_is_khuvuccothetancong() and (not self.moitruong.get_is_tamngungtancong() or time.time() - self._thoidiemtamngungtanconggannhat < 0.25) and not self.moitruong.get_is_dangtudongtimduong():
                 self.moitruong.action_sudungphimtat(2)
             else:
