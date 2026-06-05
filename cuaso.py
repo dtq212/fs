@@ -143,7 +143,7 @@ class CuaSo:
 
                     "_tennhanvattancongs": ", ".join(self.tactu._tennhanvattancongs),
                     "_tennhanvatkhongtancongs": ", ".join(self.tactu._tennhanvatkhongtancongs),
-                    "_tennhanvattodoitudongs": ", ".join(self.tactu._tennhanvattodoitudongs),
+                    "_tennhanvattodoitudongs": ", ".join(self.tactu.tennhanvattodoitudong_map.values()),
 
                     "_is_tudongfarm": self.tactu._is_tudongfarm,
                     "_is_tudongvutvatpham": self.tactu._is_tudongvutvatpham,

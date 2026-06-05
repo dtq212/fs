@@ -407,6 +407,20 @@ class MoiTruong:
             )
         return -1, -1
 
+    def get_tenthanhviendoinhoms(self):
+        tenthanhviens = set()
+
+        if self.get_idtodoi() <= 0:
+            return tenthanhviens
+
+        for sothutu in range(12):
+            diachi = self.diachigame + self.offsetdiachicosothongtinthanhviendoinhom + (self.offsetdiachicosomoithanhviendoinhom * sothutu)
+            tennhanvat = read_string(self.tientrinh, diachi)
+
+            if tennhanvat:
+                tenthanhviens.add(tennhanvat)
+
+        return tenthanhviens
     def get_is_truongnhomcungbando(self):
         if self.get_idtodoi() <= 0:
             return False
