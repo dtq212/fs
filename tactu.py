@@ -1013,7 +1013,7 @@ class TacTu:
             else:
                 if not self._is_duoitheo:
                     self.moitruong.set_is_duoitheo(False)
-                elif self.moitruong.get_idhephai() in (IDHEPHAI_GIAPSI, IDHEPHAI_DINHAN):
+                elif self.moitruong.get_idhephai() in (IDHEPHAI_GIAPSI, IDHEPHAI_DINHAN, IDHEPHAI_VUSI):
                     self.moitruong.set_is_duoitheo(True)
                 else:
                     self.moitruong.set_is_duoitheo(False)
