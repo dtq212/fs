@@ -2789,7 +2789,6 @@ class MoiTruong:
         if scan_bandohientai:
             diachi_cautruc_bando = read_int(self.tientrinh, scan_bandohientai + 11)
             offset_cautruc_bando = diachi_cautruc_bando - self.diachigame
-            print("Địa chỉ thông tin bản đồ hiện tại: {}".format(offset_cautruc_bando))
             self.offsetdiachiidbandohientai = offset_cautruc_bando + 0x3314C
             self.offsetdiachitenbandohientai = offset_cautruc_bando + 0x330FC
         else:
