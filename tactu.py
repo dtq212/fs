@@ -1087,15 +1087,10 @@ class TacTu:
                             if 500 < khoangcachmuctieu <= 750:
                                 danhsachkynang = [IDKYNANG_TAMMUOICHANHOA] if self._is_khongsudungnhieukynang else [IDKYNANG_TAMMUOICHANHOA, IDKYNANG_BANGPHONGVANLY, IDKYNANG_THAPPHUONGLIETHOA, IDKYNANG_LOIDONGCUUTHIEN, IDKYNANG_BANGPHONGBAO]
 
-                                is_dacokynangduocsudung = False
                                 for idkynang in danhsachkynang:
                                     if self.moitruong.get_is_kynangsansang(idkynang):
                                         self.moitruong.action_sudungkynangphudau(idmuctieu, idkynang, random.randint(450, 475) if idkynang != IDKYNANG_BANGPHONGBAO else random.randint(350, 375))
-                                        is_dacokynangduocsudung = True
                                         break
-                                if not is_dacokynangduocsudung:
-                                    self.moitruong.action_dichuyen2(*self.moitruong.get_toado(), delay = 0.5)
-
                                 return
 
                             elif khoangcachmuctieu <= 500:
@@ -1218,14 +1213,10 @@ class TacTu:
                             if 500 < khoangcachmuctieu <= 900:
                                 danhsachkynang = [IDKYNANG_XASAT] if self._is_khongsudungnhieukynang else [IDKYNANG_XASAT, IDKYNANG_BACHBOXUYENDUONG, ]
 
-                                is_dacokynangduocsudung = False
                                 for idkynang in danhsachkynang:
                                     if self.moitruong.get_is_kynangsansang(idkynang):
                                         self.moitruong.action_sudungkynangphudau(idmuctieu, idkynang, random.randint(450, 475))
-                                        is_dacokynangduocsudung = True
                                         break
-                                if not is_dacokynangduocsudung:
-                                    self.moitruong.action_dichuyen2(*self.moitruong.get_toado(), delay = 0.5)
                                 return
 
                             elif khoangcachmuctieu <= 500:
