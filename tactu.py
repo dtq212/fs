@@ -918,7 +918,7 @@ class TacTu:
                         yeucaudichuyenmoi = {
                             "loaidichuyen": loaidichuyen,
                             "toadodich": (xtruongnhom, ytruongnhom),
-                            "khoangcach": 0, #max(khoangcachtheosau - 50, 0),
+                            "khoangcach": max(khoangcachtheosau - 50, 0),
                         }
         finally:
             self._yeucaudichuyentheosautruongnhom = yeucaudichuyenmoi
@@ -1209,7 +1209,7 @@ class TacTu:
                         khoangcachmuctieusaptoi = self.moitruong.get_khoangcachsaptoi(idmuctieu)
 
                         if not self._is_duoitheo:
-                            if 500 < khoangcachmuctieu <= 750:
+                            if 500 < khoangcachmuctieu <= 900:
                                 danhsachkynang = [IDKYNANG_XASAT] if self._is_khongsudungnhieukynang else [IDKYNANG_XASAT, IDKYNANG_BACHBOXUYENDUONG, ]
 
                                 is_dacokynangduocsudung = False
