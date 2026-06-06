@@ -1377,7 +1377,7 @@ class TacTu:
 
             vitriracs.append(sothutuvatpham)
 
-        soluongractoithieudevut = 4
+        soluongractoithieudevut = 5
 
         if len(vitriracs) >= soluongractoithieudevut:
             self._is_dangdondeprac = True
