@@ -1439,21 +1439,21 @@ class TacTu:
             if not ({IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN} & set(hieuungbotros)):
                 if not self.get_is_dusoluongtoithieu(THANTIENTAN, 1):
                     if self.get_is_dusoluongtoithieu(TIENDONG, 9):
-                        is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 23, 1)
+                        is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 23, 1, delay = 2.5)
                         if is_muathanhcong:
                             return True
                         return False
 
         if not self.get_is_dusoluongtoithieu(THANHLO, 1):
             if self.get_is_dusoluongtoithieu(TIENDONG, 8):
-                is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 21, 1)
+                is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 21, 1, delay = 2.5)
                 if is_muathanhcong:
                     return True
                 return False
 
         if not self.get_is_dusoluongtoithieu(CHANKHI, 1):
             if self.get_is_dusoluongtoithieu(TIENDONG, 8):
-                is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 22, 1)
+                is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 22, 1, delay = 2.5)
                 if is_muathanhcong:
                     return True
                 return False
