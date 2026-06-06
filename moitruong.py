@@ -313,7 +313,7 @@ class MoiTruong:
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0xB2C + idnhanvat * self.offsetdiachicosomoinhanvat)
 
     def get_idkynang(self, iddiachikynang):
-        return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0xC0 + 0x24 * iddiachikynang + 1 * self.offsetdiachicosomoinhanvat)
+        return read_short_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0xC0 + 0x24 * iddiachikynang + 1 * self.offsetdiachicosomoinhanvat, 2)
 
     def get_iddiachikynang(self, idkynang):
         iddiachikynang_map = IDDIACHIKYNANG_MAP.get(self.get_idhephai(), 0)
@@ -337,6 +337,8 @@ class MoiTruong:
         return capdokynang > 0
 
     def get_thoidiemhoiphuckynang(self, idkynang, idnhanvat = 1):
+        if self.get_idhephai() == IDHEPHAI_VUSI:
+            return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0xD8 + 0x24 * idkynang + idnhanvat * self.offsetdiachicosomoinhanvat)
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0xB4 + 0x24 * idkynang + idnhanvat * self.offsetdiachicosomoinhanvat)
 
     def get_diachicosohieuungbotro(self, idnhanvat = 1):
