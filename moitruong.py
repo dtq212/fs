@@ -756,6 +756,9 @@ class MoiTruong:
     def get_is_quaixanh(self, idnhanvat = 1):
         return self.get_idloainhanvat(idnhanvat) == IDLOAINHANVAT_QUAIVAT and self.get_tocdodichuyen(idnhanvat) > TOCDODICHUYENQUAITHUONG
 
+    def get_idkynangtaytrai(self):
+        return read_int(self.tientrinh, self.diachigame + 0x452D68)
+
     def get_idkynang1(self):
         return read_int(self.tientrinh, self.diachigame + 0x4574E4)
 
