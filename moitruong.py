@@ -333,13 +333,15 @@ class MoiTruong:
         return read_short_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0xC4 + 0x24 * iddiachikynang + 1 * self.offsetdiachicosomoinhanvat)
 
     def get_is_dahockynang(self, idkynang):
-        capdokynang = self.get_capdokynang(idkynang)
-        return capdokynang > 0
+        return self.get_capdokynang(idkynang) > 0
 
     def get_thoidiemhoiphuckynang(self, idkynang, idnhanvat = 1):
-        if self.get_idhephai() == IDHEPHAI_VUSI:
-            return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0xD8 + 0x24 * idkynang + idnhanvat * self.offsetdiachicosomoinhanvat)
-        return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0xB4 + 0x24 * idkynang + idnhanvat * self.offsetdiachicosomoinhanvat)
+        if idkynang > SOLUONGKYNANGTOIDA or idkynang < 0:
+            return -1
+        iddiachikynang = self.get_iddiachikynang(idkynang)
+        if iddiachikynang <= 0:
+            return -1
+        return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0xD8 + 0x24 * iddiachikynang + idnhanvat * self.offsetdiachicosomoinhanvat)
 
     def get_diachicosohieuungbotro(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x98 + idnhanvat * self.offsetdiachicosomoinhanvat)
@@ -646,6 +648,7 @@ class MoiTruong:
             return False
 
         thoidiemhoiphuckynang = self.get_thoidiemhoiphuckynang(idkynang)
+
         return not thoidiemhoiphuckynang or thoidiemhoiphuckynang < self.get_donghothoigian() - 5
 
     def get_donghothoigian(self):
