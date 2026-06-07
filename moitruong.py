@@ -759,7 +759,10 @@ class MoiTruong:
         sinhluctoida = self.get_sinhluctoida(idnhanvat)
         if capdonhanvat <= 55:
             return sinhluctoida >= 2000 * capdonhanvat
-        return sinhluctoida > 50_000
+        elif capdonhanvat <= 75:
+            return sinhluctoida > 50_000
+        elif capdonhanvat <= 75:
+            return sinhluctoida > 100_000
 
     def get_is_quaixanh(self, idnhanvat = 1):
         return self.get_idloainhanvat(idnhanvat) == IDLOAINHANVAT_QUAIVAT and self.get_tocdodichuyen(idnhanvat) > TOCDODICHUYENQUAITHUONG
