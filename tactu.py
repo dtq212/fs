@@ -1185,6 +1185,8 @@ class TacTu:
                             else:
                                 self.moitruong.action_sudungkynangtoadochichuot2(IDKYNANG_TINHTHONGHOAHE, random.randint(450, 475))
                         else:
+                            if self.moitruong.get_is_kynangsansang(IDKYNANG_TAMMUOICHANHOA):
+                                self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_TAMMUOICHANHOA, random.randint(450, 475))
                             if self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGVANLY):
                                 self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_BANGPHONGVANLY, random.randint(450, 475))
                             if self.moitruong.get_is_kynangsansang(IDKYNANG_THAPPHUONGLIETHOA):
