@@ -343,6 +343,14 @@ class MoiTruong:
             return -1
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0xD8 + 0x24 * iddiachikynang + idnhanvat * self.offsetdiachicosomoinhanvat)
 
+    def set_thoidiemhoiphuckynang(self, idkynang, thoidiemhoiphuckynang = 0, idnhanvat = 1):
+        if idkynang > SOLUONGKYNANGTOIDA or idkynang < 0:
+            return False
+        iddiachikynang = self.get_iddiachikynang(idkynang)
+        if iddiachikynang <= 0:
+            return False
+        write_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0xD8 + 0x24 * iddiachikynang + idnhanvat * self.offsetdiachicosomoinhanvat, thoidiemhoiphuckynang)
+        return True
     def get_diachicosohieuungbotro(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x98 + idnhanvat * self.offsetdiachicosomoinhanvat)
 
