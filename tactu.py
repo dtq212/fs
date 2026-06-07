@@ -1154,6 +1154,7 @@ class TacTu:
                             if self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGVANLY):
                                 self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_BANGPHONGVANLY, random.randint(450, 475))
                                 return
+
                         if khoangcachmuctieu > 500:
                             yeucaudichuyenmoi = {
                                 "loaidichuyen": "dichuyengiukhoangcachtoida",
@@ -1173,7 +1174,7 @@ class TacTu:
                                 self.moitruong.set_idkynang1(IDKYNANG_LOIDONGCUUTHIEN)
                             elif self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGBAO):
                                 self.moitruong.set_idkynang1(IDKYNANG_BANGPHONGBAO)
-                                if 400 <= khoangcachmuctieu < 500 and is_cothesudungkynang:
+                                if 400 <= khoangcachmuctieu <= 500 and is_cothesudungkynang:
                                     self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_BANGPHONGBAO, random.randint(350, 375))
 
                     elif self._is_sudungkynangtoadochichuot:
