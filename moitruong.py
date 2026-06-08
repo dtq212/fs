@@ -761,7 +761,7 @@ class MoiTruong:
             return sinhluctoida >= 2000 * capdonhanvat
         elif capdonhanvat <= 75:
             return sinhluctoida > 50_000
-        elif capdonhanvat <= 75:
+        else:
             return sinhluctoida > 100_000
 
     def get_is_quaixanh(self, idnhanvat = 1):
