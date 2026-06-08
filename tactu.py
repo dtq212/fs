@@ -1144,7 +1144,7 @@ class TacTu:
                             yeucaudichuyenmoi = {
                                 "loaidichuyen": "dichuyengiukhoangcachtoida",
                                 "idmuctieu": idmuctieu,
-                                "khoangcach": khoangcachphudau - 100
+                                "khoangcach": khoangcachphudau - random.randint(100, 150)
                             }
                             self.moitruong.set_idkynang1(IDKYNANG_TAMMUOICHANHOA)
                             return
@@ -1153,7 +1153,7 @@ class TacTu:
                             if self.moitruong.get_is_kynangsansang(IDKYNANG_TAMMUOICHANHOA):
                                 self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_TAMMUOICHANHOA, random.randint(450, 475))
                                 return
-                            if self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGVANLY):
+                            if is_muctieutiepcan and self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGVANLY):
                                 self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_BANGPHONGVANLY, random.randint(450, 475))
                                 return
 
@@ -1161,7 +1161,7 @@ class TacTu:
                             yeucaudichuyenmoi = {
                                 "loaidichuyen": "dichuyengiukhoangcachtoida",
                                 "idmuctieu": idmuctieu,
-                                "khoangcach": khoangcachmuctieu - 100 if is_muctieutiepcan else khoangcachmuctieu - 150
+                                "khoangcach": khoangcachmuctieu - random.randint(100, 150) if is_muctieutiepcan else khoangcachmuctieu - random.randint(200, 300)
                             }
                             return
 
@@ -1268,7 +1268,7 @@ class TacTu:
                             yeucaudichuyenmoi = {
                                 "loaidichuyen": "dichuyengiukhoangcachtoida",
                                 "idmuctieu": idmuctieu,
-                                "khoangcach": khoangcachphudau - 100
+                                "khoangcach": khoangcachphudau - random.randint(100, 150)
                             }
                             self.moitruong.set_idkynang1(IDKYNANG_XASAT)
                             return
@@ -1285,7 +1285,7 @@ class TacTu:
                             yeucaudichuyenmoi = {
                                 "loaidichuyen": "dichuyengiukhoangcachtoida",
                                 "idmuctieu": idmuctieu,
-                                "khoangcach": khoangcachmuctieu - 100 if is_muctieutiepcan else khoangcachmuctieu - 150
+                                "khoangcach": khoangcachmuctieu - random.randint(100, 150) if is_muctieutiepcan else khoangcachmuctieu - random.randint(200, 300)
                             }
                             return
 
