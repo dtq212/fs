@@ -100,7 +100,7 @@ class TroChoiManager:
                 elif keyboard.is_pressed("ctrl+alt+shift+l"):
                     cmd = "battat_is_tudongmokhoa"
                 elif keyboard.is_pressed("ctrl+alt+shift+w"):
-                    cmd = "battat_is_tudongdoithucuoi"
+                    cmd = "battat_is_tudongdoisetdo"
                 elif keyboard.is_pressed("ctrl+alt+shift+p"):
                     cmd = "battat_is_duoitheo"
                 elif keyboard.is_pressed("ctrl+alt+shift+o"):
@@ -109,16 +109,16 @@ class TroChoiManager:
                     cmd = "battat_is_tudongvutvatpham"
                 elif keyboard.is_pressed("ctrl+alt+shift+m"):
                     cmd = "battat_is_tudongmuavatphamkytrancac"
-                elif keyboard.is_pressed("ctrl+alt+shift+1"):
-                    cmd = "luusetdo_1"
-                elif keyboard.is_pressed("ctrl+alt+shift+2"):
-                    cmd = "luusetdo_2"
                 elif keyboard.is_pressed("ctrl+alt+c"):
                     cmd = "botoanbo_tennhanvattancong"
                 elif keyboard.is_pressed("ctrl+alt+x"):
                     cmd = "botoanbo_tennhanvatkhongtancong"
                 elif keyboard.is_pressed("ctrl+alt+v"):
                     cmd = "botoanbo_dbidnhanvattodoitudong"
+                elif keyboard.is_pressed("ctrl+alt+1"):
+                    cmd = "luusetdo_1"
+                elif keyboard.is_pressed("ctrl+alt+2"):
+                    cmd = "luusetdo_2"
                 elif keyboard.is_pressed("ctrl+c"):
                     cmd = "them_tennhanvattancong"
                 elif keyboard.is_pressed("ctrl+x"):

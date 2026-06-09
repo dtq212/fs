@@ -35,7 +35,7 @@ class LoopChinh:
         self.tactu.action_xulydichuyenuutien()
         self.tactu.action_xulytancong()
         self.tactu.action_dongbotoadohientai()
-        self.tactu.action_tudongdoithucuoi()
+        self.tactu.action_tudongdoisetdo()
 
 class LoopLamMoiTrangThaiTacTu:
     def __init__(self, moitruong: MoiTruong, tactu: TacTu, stop: threading.Event):

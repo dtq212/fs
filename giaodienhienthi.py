@@ -66,7 +66,19 @@ class GiaoDienHienThi:
         r += 1
         self.add_check(self.grp_config, "Tự bật / tắt lắc", "_is_tudongbattathieuungbotro", r, "Ctrl+Alt+Shift+J")
         r += 1
-        self.add_check(self.grp_config, "Tự đổi thú cưỡi (Phím 2: Đánh, Phím 3: Chạy)", "_is_tudongdoithucuoi", r, "Ctrl+Alt+Shift+W")
+        self.add_check(self.grp_config, "Tự động đổi sét đồ (Sét 1: Đánh, Sét 2: Chạy)", "_is_tudongdoisetdo", r, "Ctrl+Alt+Shift+W")
+        r += 1
+
+        lbl_guide_set = ttk.Label(self.grp_config, text = "[Ctrl+Alt+Shift+1/2] Lưu nguyên Sét Đồ 1/2", font = ("Arial", 9, "bold"))
+        lbl_guide_set.grid(row = r, column = 0, sticky = "w", padx = 25, pady = (2, 2))
+        r += 1
+
+        self.lbl_set_1 = ttk.Label(self.grp_config, text = "→ Sét 1 (Đánh): Chưa lưu", foreground = "blue", wraplength = 380)
+        self.lbl_set_1.grid(row = r, column = 0, sticky = "w", padx = 25, pady = (0, 2))
+        r += 1
+
+        self.lbl_set_2 = ttk.Label(self.grp_config, text = "→ Sét 2 (Chạy): Chưa lưu", foreground = "blue", wraplength = 380)
+        self.lbl_set_2.grid(row = r, column = 0, sticky = "w", padx = 25, pady = (0, 5))
         r += 1
 
         ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 5)
@@ -131,21 +143,6 @@ class GiaoDienHienThi:
         # self.lbl_tennhanvattodoitudongs = ttk.Label(self.grp_config, text = "→ Trống", foreground = "purple", wraplength = 380)
         # self.lbl_tennhanvattodoitudongs.grid(row = r, column = 0, sticky = "w", padx = 10, pady = (0, 5))
         # r += 1
-
-        ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 5)
-        r += 1
-
-        lbl_guide_set = ttk.Label(self.grp_config, text = "[Ctrl+Alt+Shift+1/2] Lưu nguyên Sét Đồ 1/2", font = ("Arial", 9, "bold"))
-        lbl_guide_set.grid(row = r, column = 0, sticky = "w", padx = 10)
-        r += 1
-
-        self.lbl_set_1 = ttk.Label(self.grp_config, text = "→ Sét 1 (Đánh): Chưa lưu", foreground = "blue", wraplength = 380)
-        self.lbl_set_1.grid(row = r, column = 0, sticky = "w", padx = 10, pady = (0, 2))
-        r += 1
-
-        self.lbl_set_2 = ttk.Label(self.grp_config, text = "→ Sét 2 (Chạy): Chưa lưu", foreground = "blue", wraplength = 380)
-        self.lbl_set_2.grid(row = r, column = 0, sticky = "w", padx = 10, pady = (0, 5))
-        r += 1
 
         self.current_hwnd = None
         self.is_running = True

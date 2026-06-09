@@ -47,7 +47,7 @@ class TacTu:
         self._thoidiembathieuungbotrogannhat = 0.
         self._is_sudungkynangtoadochichuot = False
 
-        self._is_tudongdoithucuoi = False
+        self._is_tudongdoisetdo = False
 
         self._thoidiemthongbaohetquanamthuygannhat = 0.
 
@@ -112,7 +112,7 @@ class TacTu:
             "tennhanvatkhongtancongs": self._tennhanvatkhongtancongs,
             "tennhanvattodoitudong_map": self.tennhanvattodoitudong_map,
             "is_tudongmokhoa": self._is_tudongmokhoa,
-            "is_tudongdoithucuoi": self._is_tudongdoithucuoi,
+            "is_tudongdoisetdo": self._is_tudongdoisetdo,
 
             "is_tudongfarm": self._is_tudongfarm,
             "is_tudongvutvatpham": self._is_tudongvutvatpham,
@@ -169,8 +169,8 @@ class TacTu:
             if "is_tudongmokhoa" in thietlap:
                 self._is_tudongmokhoa = thietlap["is_tudongmokhoa"]
 
-            if "is_tudongdoithucuoi" in thietlap:
-                self._is_tudongdoithucuoi = thietlap["is_tudongdoithucuoi"]
+            if "is_tudongdoisetdo" in thietlap:
+                self._is_tudongdoisetdo = thietlap["is_tudongdoisetdo"]
 
             if "is_tudongfarm" in thietlap:
                 self._is_tudongfarm = thietlap["is_tudongfarm"]
@@ -277,13 +277,13 @@ class TacTu:
         else:
             phatam("Tắt tự động đánh theo sau trưởng nhóm")
 
-    def battat_is_tudongdoithucuoi(self):
-        self._is_tudongdoithucuoi = not self._is_tudongdoithucuoi
+    def battat_is_tudongdoisetdo(self):
+        self._is_tudongdoisetdo = not self._is_tudongdoisetdo
 
-        if self._is_tudongdoithucuoi:
-            phatam("Bật tự động đổi thú cưỡi")
+        if self._is_tudongdoisetdo:
+            phatam("Bật tự động đổi sét đồ")
         else:
-            phatam("Tắt tự động đổi thú cưỡi")
+            phatam("Tắt tự động đổi sét đồ")
 
     def battat_is_sudungkynangtoadochichuot(self):
         self._is_sudungkynangtoadochichuot = not self._is_sudungkynangtoadochichuot
@@ -1382,21 +1382,17 @@ class TacTu:
         finally:
             self._yeucaudichuyentancong = yeucaudichuyenmoi
 
-    def action_tudongdoithucuoi(self):
-        if not self._is_tudongdoithucuoi:
+    def action_tudongdoisetdo(self):
+        if not self._is_tudongdoisetdo:
             return
 
         if self.moitruong.get_idhephai() in (IDHEPHAI_DAOSI, IDHEPHAI_VUSI, IDHEPHAI_GIAPSI):
             if self.moitruong.get_is_khuvuccothetancong() and (not self.moitruong.get_is_tamngungtancong() or time.time() - self._thoidiemtamngungtanconggannhat < 0.25) and not self.moitruong.get_is_dangtudongtimduong():
                 if self._setdo1_map:
                     self._macsetdo(self._setdo1_map)
-                else:
-                    self.moitruong.action_sudungphimtat(2)
             else:
                 if self._setdo2_map:
                     self._macsetdo(self._setdo2_map)
-                else:
-                    self.moitruong.action_sudungphimtat(3)
 
     def action_tudongvutvatpham(self):
         if not self._is_tudongvutvatpham:

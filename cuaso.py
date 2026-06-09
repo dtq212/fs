@@ -139,7 +139,7 @@ class CuaSo:
                     "_is_uutientrieuhoithu": self.tactu._is_uutientrieuhoithu,
                     "_is_chidanhnguoichoivatrieuhoithu": self.tactu._is_chidanhnguoichoivatrieuhoithu,
 
-                    "_is_tudongdoithucuoi": self.tactu._is_tudongdoithucuoi,
+                    "_is_tudongdoisetdo": self.tactu._is_tudongdoisetdo,
 
                     "_tennhanvattancongs": ", ".join(self.tactu._tennhanvattancongs),
                     "_tennhanvatkhongtancongs": ", ".join(self.tactu._tennhanvatkhongtancongs),
@@ -194,8 +194,8 @@ class CuaSo:
                     self.tactu.battat_is_tudongvutvatpham()
                 elif cmd == "battat_is_tudongmuavatphamkytrancac":
                     self.tactu.battat_is_tudongmuavatphamkytrancac()
-                elif cmd == "battat_is_tudongdoithucuoi":
-                    self.tactu.battat_is_tudongdoithucuoi()
+                elif cmd == "battat_is_tudongdoisetdo":
+                    self.tactu.battat_is_tudongdoisetdo()
                 elif cmd == "battat_is_duoitheo":
                     self.tactu.battat_is_duoitheo()
                 elif cmd == "battat_is_khongsudungnhieukynang":
