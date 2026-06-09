@@ -83,6 +83,11 @@ class TacTu:
         self._is_khongsudungnhieukynang = False
         self._is_dangdondeprac = False
 
+        self._setdo1goc_map = {}
+        self._setdo2goc_map = {}
+        self._setdo1_map = {}
+        self._setdo2_map = {}
+
     def __del__(self):
         try:
             self.moitruong.action_tatvohieuhoathietlapmuctieutancong()
@@ -119,6 +124,8 @@ class TacTu:
             "is_giukhoangcach": self._is_giukhoangcach,
             "is_duoitheo": self._is_duoitheo,
             "is_khongsudungnhieukynang": self._is_khongsudungnhieukynang,
+            "setdo1_goc": self._setdo1goc_map,
+            "setdo2_goc": self._setdo2goc_map,
         }
 
         util_luuthietlap(str(tennhanvat), thietlap)
@@ -189,6 +196,14 @@ class TacTu:
                 self._is_duoitheo = thietlap["is_duoitheo"]
             if "is_khongsudungnhieukynang" in thietlap:
                 self._is_khongsudungnhieukynang = thietlap["is_khongsudungnhieukynang"]
+
+            if "setdo1_goc" in thietlap:
+                self._setdo1goc_map = thietlap["setdo1_goc"]
+            if "setdo2_goc" in thietlap:
+                self._setdo2goc_map = thietlap["setdo2_goc"]
+
+            self._setdo1_map = {k: v for k, v in self._setdo1goc_map.items() if k not in self._setdo2goc_map}
+            self._setdo2_map = {k: v for k, v in self._setdo2goc_map.items() if k not in self._setdo1goc_map}
 
     def them_dbidnhanvattodoitudong(self):
         idmuctieu = self.moitruong.get_idmuctieudangchichuot()
@@ -378,6 +393,70 @@ class TacTu:
         #     print("#{}: {}: {}".format(sothutuvatpham, (idvatpham, idruong, vitrix, vitriy), self.moitruong.get_thongtinvatpham_display(idvatpham)))
 
         print(self.moitruong.get_hieuungbotros())
+
+    def _taochukyvatpham(self, idvatpham):
+        tenvatpham = self.moitruong.get_tenvatpham(idvatpham)
+        if not tenvatpham:
+            return None
+
+        thuoctinh_map = self.moitruong.get_thuoctinhvatpham_map(idvatpham)
+        thuoctinh_str = str(sorted(thuoctinh_map.items())) if thuoctinh_map else "KhongCoChiSo"
+
+        return f"{tenvatpham}___{thuoctinh_str}"
+
+    def luusetdo(self, sttset):
+        setdo_map = {}
+        for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
+            vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
+            if not vitrivatpham:
+                continue
+
+            idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
+
+            if vitriruong == IDVITRIRUONG_TRANGBI:
+                chuky = self._taochukyvatpham(idvatpham)
+                tenvatpham = self.moitruong.get_tenvatpham(idvatpham)
+                if chuky and tenvatpham:
+                    setdo_map[chuky] = tenvatpham
+
+        if sttset == 1:
+            self._setdo1goc_map = setdo_map
+        elif sttset == 2:
+            self._setdo2goc_map = setdo_map
+
+        self._setdo1_map = {k: v for k, v in self._setdo1goc_map.items() if k not in self._setdo2goc_map}
+        self._setdo2_map = {k: v for k, v in self._setdo2goc_map.items() if k not in self._setdo1goc_map}
+
+        if sttset == 1:
+            print(f"Sét đồ 1 đã lưu (sau khi lọc trùng): {self._setdo1_map}")
+            phatam(f"Đã lưu sét đồ 1. Cần đổi {len(self._setdo1_map)} món")
+        elif sttset == 2:
+            print(f"Sét đồ 2 đã lưu (sau khi lọc trùng): {self._setdo2_map}")
+            phatam(f"Đã lưu sét đồ 2. Cần đổi {len(self._setdo2_map)} món")
+
+    def _macsetdo(self, setdo_map):
+        if not setdo_map:
+            return
+
+        chukyhanhtrangcanmacs = list(setdo_map.keys())
+
+        for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
+            vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
+            if not vitrivatpham:
+                continue
+
+            idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
+
+            if vitriruong == IDVITRIRUONG_HANHTRANG:
+                chukyhanhtrang = self._taochukyvatpham(idvatpham)
+
+                if chukyhanhtrang and chukyhanhtrang in chukyhanhtrangcanmacs:
+                    self.moitruong.action_sudungvatpham(sothutuvatpham, delay = 0.05)
+                    chukyhanhtrangcanmacs.remove(chukyhanhtrang)
+                    time.sleep(0.05)
+
+                    if not chukyhanhtrangcanmacs:
+                        break
 
     def action_mua1thancauphu(self):
         print("Mua 1 thần cẩu phù")
@@ -1307,16 +1386,17 @@ class TacTu:
         if not self._is_tudongdoithucuoi:
             return
 
-        if self.moitruong.get_idhephai() in (IDHEPHAI_DAOSI, IDHEPHAI_VUSI):
+        if self.moitruong.get_idhephai() in (IDHEPHAI_DAOSI, IDHEPHAI_VUSI, IDHEPHAI_GIAPSI):
             if self.moitruong.get_is_khuvuccothetancong() and (not self.moitruong.get_is_tamngungtancong() or time.time() - self._thoidiemtamngungtanconggannhat < 0.25) and not self.moitruong.get_is_dangtudongtimduong():
-                self.moitruong.action_sudungphimtat(2)
+                if self._setdo1_map:
+                    self._macsetdo(self._setdo1_map)
+                else:
+                    self.moitruong.action_sudungphimtat(2)
             else:
-                self.moitruong.action_sudungphimtat(3)
-        elif self.moitruong.get_idhephai() == IDHEPHAI_GIAPSI:
-            if self.moitruong.get_is_khuvuccothetancong() and (not self.moitruong.get_is_tamngungtancong() or time.time() - self._thoidiemtamngungtanconggannhat < 0.25) and not self.moitruong.get_is_dangtudongtimduong():
-                self.moitruong.action_sudungphimtat(2)
-            else:
-                self.moitruong.action_sudungphimtat(3)
+                if self._setdo2_map:
+                    self._macsetdo(self._setdo2_map)
+                else:
+                    self.moitruong.action_sudungphimtat(3)
 
     def action_tudongvutvatpham(self):
         if not self._is_tudongvutvatpham:

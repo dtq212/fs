@@ -64,8 +64,6 @@ class GiaoDienHienThi:
         r += 1
         self.add_check(self.grp_config, "Đánh theo sau trưởng nhóm", "_is_tudongdanhtheosautruongnhom", r, "Ctrl+Alt+Shift+T")
         r += 1
-        self.add_check(self.grp_config, "Tự sửa trang bị", "_is_tudongsuavatpham", r, "Ctrl+Alt+Shift+R")
-        r += 1
         self.add_check(self.grp_config, "Tự bật / tắt lắc", "_is_tudongbattathieuungbotro", r, "Ctrl+Alt+Shift+J")
         r += 1
         self.add_check(self.grp_config, "Tự đổi thú cưỡi (Phím 2: Đánh, Phím 3: Chạy)", "_is_tudongdoithucuoi", r, "Ctrl+Alt+Shift+W")
@@ -97,10 +95,6 @@ class GiaoDienHienThi:
         ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 10)
         r += 1
 
-        self.lbl_info_1 = ttk.Label(self.grp_config, text = "Trạng thái: ---", foreground = "blue", font = ("Arial", 10, "bold"))
-        self.lbl_info_1.grid(row = r, column = 0, sticky = "w", padx = 10)
-        r += 1
-
         self.lbl_info_2 = ttk.Label(self.grp_config, text = "Tọa độ: (0, 0)")
         self.lbl_info_2.grid(row = r, column = 0, sticky = "w", padx = 10)
         r += 1
@@ -130,12 +124,27 @@ class GiaoDienHienThi:
         self.lbl_tennhanvatkhongtancongs.grid(row=r, column=0, sticky="w", padx=10, pady=(0, 5))
         r += 1
 
-        lbl_guide_td = ttk.Label(self.grp_config, text = "[Ctrl+V] Thêm  |  [Ctrl+Alt+V] Xóa danh sách Auto Tổ Đội", font = ("Arial", 9, "bold"))
-        lbl_guide_td.grid(row = r, column = 0, sticky = "w", padx = 10)
+        # lbl_guide_td = ttk.Label(self.grp_config, text = "[Ctrl+V] Thêm  |  [Ctrl+Alt+V] Xóa danh sách Auto Tổ Đội", font = ("Arial", 9, "bold"))
+        # lbl_guide_td.grid(row = r, column = 0, sticky = "w", padx = 10)
+        # r += 1
+        #
+        # self.lbl_tennhanvattodoitudongs = ttk.Label(self.grp_config, text = "→ Trống", foreground = "purple", wraplength = 380)
+        # self.lbl_tennhanvattodoitudongs.grid(row = r, column = 0, sticky = "w", padx = 10, pady = (0, 5))
+        # r += 1
+
+        ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 5)
         r += 1
 
-        self.lbl_tennhanvattodoitudongs = ttk.Label(self.grp_config, text = "→ Trống", foreground = "purple", wraplength = 380)
-        self.lbl_tennhanvattodoitudongs.grid(row = r, column = 0, sticky = "w", padx = 10, pady = (0, 5))
+        lbl_guide_set = ttk.Label(self.grp_config, text = "[Ctrl+Alt+Shift+1/2] Lưu nguyên Sét Đồ 1/2", font = ("Arial", 9, "bold"))
+        lbl_guide_set.grid(row = r, column = 0, sticky = "w", padx = 10)
+        r += 1
+
+        self.lbl_set_1 = ttk.Label(self.grp_config, text = "→ Sét 1 (Đánh): Chưa lưu", foreground = "blue", wraplength = 380)
+        self.lbl_set_1.grid(row = r, column = 0, sticky = "w", padx = 10, pady = (0, 2))
+        r += 1
+
+        self.lbl_set_2 = ttk.Label(self.grp_config, text = "→ Sét 2 (Chạy): Chưa lưu", foreground = "blue", wraplength = 380)
+        self.lbl_set_2.grid(row = r, column = 0, sticky = "w", padx = 10, pady = (0, 5))
         r += 1
 
         self.current_hwnd = None
@@ -164,8 +173,6 @@ class GiaoDienHienThi:
 
     def refresh_detail(self):
         if not self.current_hwnd or self.current_hwnd not in self.shared_data:
-            self.lbl_info_1.config(text = "Trạng thái: Mất kết nối / Chưa chọn")
-            
             self.lbl_tennhanvattancongs.config(text = "→ Trống") 
             self.lbl_tennhanvatkhongtancongs.config(text = "→ Trống")
             return
@@ -175,8 +182,6 @@ class GiaoDienHienThi:
         for key, var in self.vars_config.items():
             var.set(data.get(key, False))
 
-        status_str = data.get("status", "-")
-        self.lbl_info_1.config(text = f"Trạng thái: {status_str}")
         self.lbl_info_2.config(text = f"Tọa độ: {data.get('x', 0)}, {data.get('y', 0)} | Map: {data.get('tenbando', '-')}")
 
         farm_map = data.get("idbandotudongfarm", 0)
@@ -195,15 +200,21 @@ class GiaoDienHienThi:
 
         str_tancong = data.get("_tennhanvattancongs", "")
         str_khongtancong = data.get("_tennhanvatkhongtancongs", "")
-        str_todoi = data.get("_tennhanvattodoitudongs", "")
 
         if not str_tancong: str_tancong = "Trống"
         if not str_khongtancong: str_khongtancong = "Trống"
-        if not str_todoi: str_todoi = "Trống"
 
         self.lbl_tennhanvattancongs.config(text = f"→ {str_tancong}")
         self.lbl_tennhanvatkhongtancongs.config(text = f"→ {str_khongtancong}")
-        self.lbl_tennhanvattodoitudongs.config(text = f"→ {str_todoi}")
+
+        set_1 = data.get("_setdo1_map", {})
+        set_2 = data.get("_setdo2_map", {})
+
+        str_set_1 = f"Cần đổi {len(set_1)} món ({', '.join(set_1.values())})" if set_1 else "Chưa lưu / Không có khác biệt"
+        str_set_2 = f"Cần đổi {len(set_2)} món ({', '.join(set_2.values())})" if set_2 else "Chưa lưu / Không có khác biệt"
+
+        self.lbl_set_1.config(text = f"→ Sét 1 (Đánh): {str_set_1}")
+        self.lbl_set_2.config(text = f"→ Sét 2 (Chạy): {str_set_2}")
 
     def loop_update_ui(self):
         while self.is_running:

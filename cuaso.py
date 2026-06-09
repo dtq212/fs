@@ -151,6 +151,8 @@ class CuaSo:
                     "idbandotudongfarm": self.tactu._idbandotudongfarm,
                     "toadoxtudongfarm": self.tactu._toadoxtudongfarm,
                     "toadoytudongfarm": self.tactu._toadoytudongfarm,
+                    "_setdo1_map": self.tactu._setdo1_map,
+                    "_setdo2_map": self.tactu._setdo2_map,
                 }
                 self.shared_data[self.idcuaso] = info
 
@@ -218,7 +220,10 @@ class CuaSo:
                     self.tactu.action_batpk()
                 elif cmd == "action_tatpk":
                     self.tactu.action_tatpk()
-
+                elif cmd == "luusetdo_1":
+                    self.tactu.luusetdo(1)
+                elif cmd == "luusetdo_2":
+                    self.tactu.luusetdo(2)
                 self.command_dict[self.idcuaso] = None
 
             time.sleep(0.15)
