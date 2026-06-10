@@ -1018,7 +1018,7 @@ class TacTu:
         if self._yeucaudichuyentheosautruongnhom and "toadodich" in self._yeucaudichuyentheosautruongnhom:
             toadox, toadoy = self._yeucaudichuyentheosautruongnhom["toadodich"]
             khoangcach = self.moitruong.get_khoangcachdiem(1, toadox, toadoy)
-            if khoangcach > 600:
+            if khoangcach > 900:
                 is_quaxatruongnhom = True
 
         if not self._is_duoitheo:
