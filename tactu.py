@@ -790,7 +790,7 @@ class TacTu:
         if not self.moitruong.get_is_cothetancong(idnhanvat):
             return False
 
-        if self._is_khongdanhcungbang and self.moitruong.get_idbandohientai() == IDBANDO_CHIENTRUONG and self.moitruong.get_is_chungbang(idnhanvat):
+        if self._is_khongdanhcungbang and self.moitruong.get_idbandohientai() != IDBANDO_CHIENTRUONG and self.moitruong.get_is_chungbang(idnhanvat):
             return False
 
         return True
