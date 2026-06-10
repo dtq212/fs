@@ -990,7 +990,7 @@ class TacTu:
 
                     khoangcachtheosau = self.moitruong.get_khoangcachtheosau()
                     if khoangcach >= khoangcachtheosau:
-                        if khoangcach >= 2000 or self.moitruong.get_is_dangtudongtimduong():
+                        if khoangcach >= 1200 or self.moitruong.get_is_dangtudongtimduong():
                             loaidichuyen = "tudongtimduong"
                         else:
                             loaidichuyen = "dichuyengiukhoangcachtoidadiem"
