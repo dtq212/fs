@@ -998,7 +998,7 @@ class TacTu:
                         yeucaudichuyenmoi = {
                             "loaidichuyen": loaidichuyen,
                             "toadodich": (xtruongnhom, ytruongnhom),
-                            "khoangcach": max(khoangcachtheosau - 50, 0),
+                            "khoangcach": 0 if khoangcach >= 900 else max(khoangcachtheosau - 50, 0),
                         }
         finally:
             self._yeucaudichuyentheosautruongnhom = yeucaudichuyenmoi
