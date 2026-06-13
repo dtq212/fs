@@ -917,20 +917,20 @@ class TacTu:
                     time.sleep(0.05)
                     return
 
-        if self.moitruong.get_phantramsinhluchientai() <= self.moitruong.get_phantramsinhluchoiphuc() - 25:
-            for tenvatpham in [BAOTATHANHLO, THANHLO]:
-                if self.action_sudungvatpham(tenvatpham, delay = 0.25):
-                    return
-
-        if self.moitruong.get_phantramnoiluchientai() <= self.moitruong.get_phantramnoiluchoiphuc() - 25:
-            for tenvatpham in [SONTHUYCHANKHI, CHANKHI]:
-                if self.action_sudungvatpham(tenvatpham, delay = 0.25):
-                    return
+        # if self.moitruong.get_phantramsinhluchientai() <= self.moitruong.get_phantramsinhluchoiphuc() - 25:
+        #     for tenvatpham in [BAOTATHANHLO, THANHLO]:
+        #         if self.action_sudungvatpham(tenvatpham, delay = 0.25):
+        #             return
+        #
+        # if self.moitruong.get_phantramnoiluchientai() <= self.moitruong.get_phantramnoiluchoiphuc() - 25:
+        #     for tenvatpham in [SONTHUYCHANKHI, CHANKHI]:
+        #         if self.action_sudungvatpham(tenvatpham, delay = 0.25):
+        #             return
 
         if self.moitruong.get_idbienthannhanvat() >= 0:
             self._thoidiemyeucaubienthan = time.time()
 
-        if time.time() - self._thoidiemyeucaubienthan > 2.5 and self.moitruong.get_idbienthannhanvat() < 0:
+        if time.time() - self._thoidiemyeucaubienthan > 2.5 and self.moitruong.get_idbienthannhanvat() < 0 and self.moitruong.get_is_dangbatauto():
             if self.action_sudungvatpham(BIENPHUs[random.randint(0, len(BIENPHUs) - 1)], delay = 1.):
                 return
 
@@ -1008,7 +1008,7 @@ class TacTu:
                             self._toadokiemtrabiket = (x_hientai, y_hientai)
                             self._thoidiemkiemtrabiket = time.time()
 
-                        if khoangcach >= 1200 or self.moitruong.get_is_dangtudongtimduong() or self._is_dangbiket:
+                        if khoangcach >= KHOANGCACHTOIDATIMKIEMMUCTIEU or self._is_dangbiket:
                             loaidichuyen = "tudongtimduong"
                         else:
                             loaidichuyen = "dichuyengiukhoangcachtoidadiem"
@@ -1016,7 +1016,7 @@ class TacTu:
                         yeucaudichuyenmoi = {
                             "loaidichuyen": loaidichuyen,
                             "toadodich": (xtruongnhom, ytruongnhom),
-                            "khoangcach": random.randint(100, 150) if khoangcach >= 900 else max(khoangcachtheosau - random.randint(100, 150), 0),
+                            "khoangcach": random.randint(100, 150) if khoangcach >= 1200 else max(khoangcachtheosau - random.randint(100, 150), 0),
                         }
         finally:
             self._yeucaudichuyentheosautruongnhom = yeucaudichuyenmoi
