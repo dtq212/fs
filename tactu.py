@@ -1184,7 +1184,7 @@ class TacTu:
                         khoangcachmuctieu = self.moitruong.get_khoangcach(idmuctieu)
                         khoangcachmuctieusaptoi = self.moitruong.get_khoangcachsaptoi(idmuctieu)
 
-                        if not self._is_duoitheo:
+                        if 0 and not self._is_duoitheo:
                             if 500 < khoangcachmuctieu <= 750:
                                 danhsachkynang = [IDKYNANG_TAMMUOICHANHOA] if self._is_khongsudungnhieukynang else [IDKYNANG_TAMMUOICHANHOA, IDKYNANG_BANGPHONGVANLY, IDKYNANG_THAPPHUONGLIETHOA, IDKYNANG_LOIDONGCUUTHIEN, IDKYNANG_BANGPHONGBAO]
 
@@ -1239,7 +1239,7 @@ class TacTu:
                         is_muctieudungim = idtrangthainhanvatmuctieu in (IDTRANGTHAINHANVAT_DUNGIM, IDTRANGTHAINHANVAT_TANCONG, IDTRANGTHAINHANVAT_TRONGTHUONG)
                         is_muctieutiepcan = idtrangthainhanvatmuctieu == IDTRANGTHAINHANVAT_DICHUYEN and khoangcachmuctieusaptoi < khoangcachmuctieu
 
-                        khoangcachphudau = 750 if is_muctieutiepcan else 650 if is_muctieudungim else 550
+                        khoangcachphudau = 500 # 750 if is_muctieutiepcan else 650 if is_muctieudungim else 550
 
                         if khoangcachmuctieu > khoangcachphudau:
                             yeucaudichuyenmoi = {
