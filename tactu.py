@@ -92,6 +92,8 @@ class TacTu:
         self._thoidiemkiemtrabiket = 0.
         self._is_dangbiket = False
 
+        self._is_phucsinhnhanh = True
+
     def __del__(self):
         try:
             self.moitruong.action_tatvohieuhoathietlapmuctieutancong()
@@ -104,6 +106,7 @@ class TacTu:
             return
             
         thietlap = {
+            "is_phucsinhnhanh": self._is_phucsinhnhanh,
             "is_danhtheosautruongnhom": self._is_tudongdanhtheosautruongnhom,
             "is_tudongsuavatpham": self._is_tudongsuavatpham,
             "is_tudongbattathieuungbotro": self._is_tudongbattathieuungbotro,
@@ -140,6 +143,8 @@ class TacTu:
 
         thietlap = util_taithietlap(str(tennhanvat))
         if thietlap:
+            if "is_phucsinhnhanh" in thietlap:
+                self._is_phucsinhnhanh = thietlap["is_phucsinhnhanh"]
             if "is_danhtheosautruongnhom" in thietlap:
                 self._is_tudongdanhtheosautruongnhom = thietlap["is_danhtheosautruongnhom"]
 
@@ -236,6 +241,14 @@ class TacTu:
             phatam("Bật chỉ dùng một kỹ năng")
         else:
             phatam("Tắt chỉ dùng một kỹ năng, cho phép đổi kỹ năng")
+
+    def battat_phucsinhnhanh(self):
+        self._is_phucsinhnhanh = not self._is_phucsinhnhanh
+
+        if self._is_phucsinhnhanh:
+            phatam("Bật phục sinh nhanh")
+        else:
+            phatam("Tắt phục sinh nhanh, nhường cho auto in-game xử lý")
 
     def battat_is_giukhoangcach(self):
         self._is_giukhoangcach = not self._is_giukhoangcach
@@ -1305,6 +1318,7 @@ class TacTu:
                 #         self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_BANGCOTUYETCOT, random.randint(450, 475))
                 #     elif self.moitruong.get_is_kynangsansang(IDKYNANG_LOIPHONGGIAP) and not self.moitruong.get_is_cohieuungbotro(IDHIEUUNGBOTRO_LOIPHONGGIAP):
                 #         self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_LOIPHONGGIAP, random.randint(450, 475))
+
             elif self.moitruong.get_idhephai() == IDHEPHAI_VUSI:
                 is_cothesudungkynang = self.moitruong.get_is_dangbatauto() and self.moitruong.get_is_khuvuccothetancong() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong()
 
@@ -1556,6 +1570,9 @@ class TacTu:
         return False
 
     def action_tudongphucsinh(self):
+        if not self._is_phucsinhnhanh:
+            return
+
         if not self.moitruong.get_is_dangbatauto() and not self.moitruong.get_is_dangtudongtimduong():
             return
 

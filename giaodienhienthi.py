@@ -68,7 +68,8 @@ class GiaoDienHienThi:
         r += 1
         self.add_check(self.grp_config, "Tự động đổi sét đồ (Sét 1: Đánh, Sét 2: Chạy)", "_is_tudongdoisetdo", r, "Ctrl+Alt+Shift+W")
         r += 1
-
+        self.add_check(self.grp_config, "Phục sinh nhanh", "_is_phucsinhnhanh", r, "Ctrl+Alt+Shift+I")
+        r += 1
         lbl_guide_set = ttk.Label(self.grp_config, text = "[Ctrl+Alt+1/2] Lưu Sét Đồ 1/2", font = ("Arial", 9, "bold"))
         lbl_guide_set.grid(row = r, column = 0, sticky = "w", padx = 25, pady = (2, 2))
         r += 1

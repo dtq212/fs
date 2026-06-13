@@ -105,6 +105,8 @@ class TroChoiManager:
                     cmd = "battat_is_duoitheo"
                 elif keyboard.is_pressed("ctrl+alt+shift+o"):
                     cmd = "battat_is_khongsudungnhieukynang"
+                elif keyboard.is_pressed("ctrl+alt+shift+i"):
+                    cmd = "battat_phucsinhnhanh"
                 elif keyboard.is_pressed("ctrl+alt+shift+d"):
                     cmd = "battat_is_tudongvutvatpham"
                 elif keyboard.is_pressed("ctrl+alt+shift+m"):
