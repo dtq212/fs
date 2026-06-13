@@ -930,16 +930,6 @@ class TacTu:
                     time.sleep(0.05)
                     return
 
-        # if self.moitruong.get_phantramsinhluchientai() <= self.moitruong.get_phantramsinhluchoiphuc() - 25:
-        #     for tenvatpham in [BAOTATHANHLO, THANHLO]:
-        #         if self.action_sudungvatpham(tenvatpham, delay = 0.25):
-        #             return
-        #
-        # if self.moitruong.get_phantramnoiluchientai() <= self.moitruong.get_phantramnoiluchoiphuc() - 25:
-        #     for tenvatpham in [SONTHUYCHANKHI, CHANKHI]:
-        #         if self.action_sudungvatpham(tenvatpham, delay = 0.25):
-        #             return
-
         if self.moitruong.get_idbienthannhanvat() >= 0:
             self._thoidiemyeucaubienthan = time.time()
 
