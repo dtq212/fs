@@ -96,8 +96,9 @@ class TacTu:
 
     def __del__(self):
         try:
-            self.moitruong.action_tatvohieuhoathietlapmuctieutancong()
-            self.moitruong.action_tatvohieuhoathietlapmuctieudangchon()
+            # self.moitruong.action_tatvohieuhoathietlapmuctieutancong()
+            # self.moitruong.action_tatvohieuhoathietlapmuctieudangchon()
+            pass
         except (pymem.exception.PymemError, pymem.exception.WinAPIError):
             pass
 
@@ -838,12 +839,12 @@ class TacTu:
 
     def action_tudongtimkiemmuctieu(self):
         if not self._is_tudongtimkiemmuctieu:
-            self.moitruong.action_tatvohieuhoathietlapmuctieutancong()
-            self.moitruong.action_tatvohieuhoathietlapmuctieudangchon()
+            # self.moitruong.action_tatvohieuhoathietlapmuctieutancong()
+            # self.moitruong.action_tatvohieuhoathietlapmuctieudangchon()
             return
 
-        self.moitruong.action_vohieuhoathietlapmuctieutancong()
-        self.moitruong.action_vohieuhoathietlapmuctieudangchon()
+        # self.moitruong.action_vohieuhoathietlapmuctieutancong()
+        # self.moitruong.action_vohieuhoathietlapmuctieudangchon()
         self.moitruong.set_iddoituongtudanh(IDDOITUONGTUDANH_MUCTIEUDANGCHON)
 
         khoangcachtoida = min(KHOANGCACHTOIDATIMKIEMMUCTIEU,  self.moitruong.get_phamvitimkiemmuctieu())
@@ -946,35 +947,6 @@ class TacTu:
         for tenvatpham in [THANCAUPHU, THANTIENTAN, NIETBANCHU, ]:
             if self.action_sudungvatpham(tenvatpham, delay = 0.25):
                 return
-
-    def action_tudongnhatvatpham(self):
-        if not self.moitruong.get_is_tudongnhatvatpham():
-            return
-        
-        self._thoidiemtudongnhatdogannhat = time.time()
-
-        if self.get_is_hanhtrangday():
-            return
-
-        for idvatphamduoidat in range(SOLUONGVATPHAMTOIDADUOIDAT):
-            if self.moitruong.get_is_vatphamduoidattontai(idvatphamduoidat):
-                is_nhatvatpham = False
-                tuchatvatphamduoidat = self.moitruong.get_tuchatvatphamduoidat(idvatphamduoidat)
-                if tuchatvatphamduoidat >= IDTUCHATVATPHAMDUOIDAT_LUC:
-                    is_nhatvatpham = True
-
-                if not is_nhatvatpham and self.moitruong.get_is_thucuoiduoidat(idvatphamduoidat):
-                    is_nhatvatpham = True
-
-                if not is_nhatvatpham:
-                    tenvatphamduoidat = self.moitruong.get_tenvatphamduoidat(idvatphamduoidat)
-                    for tenvatpham in (TENVATPHAM_LAMBAOTHACH, TENVATPHAM_MANHHONGTHUYTINH, TENVATPHAM_HONGTHUYTINH, TENVATPHAM_HONGBAOTHACH, ):
-                        if tenvatpham in tenvatphamduoidat:
-                            is_nhatvatpham = True
-                            break
-                if is_nhatvatpham and self.moitruong.get_khoangcachvatphamduoidat(idvatphamduoidat) < 400:
-                    self.moitruong.action_nhatvatpham(idvatphamduoidat)
-                    time.sleep(0.02)
 
     def action_tudongmokhoa(self):
         if not self._is_tudongmokhoa:

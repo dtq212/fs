@@ -246,13 +246,6 @@ class MoiTruong:
             read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x102C + idnhanvat * self.offsetdiachicosomoinhanvat)
         )
 
-    def get_toadoclick(self):
-        toadox, toadoy = self.get_toado()
-        return (
-            toadox + read_int(self.tientrinh, self.diachigame + 0x260F44) - int(self.kichthuoccuasogame[0] / 2),
-            toadoy + int(read_int(self.tientrinh, self.diachigame + 0x260F48) - int(self.kichthuoccuasogame[1] / 2)) * 2
-        )
-
     def get_tocdodichuyen(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x934 + idnhanvat * self.offsetdiachicosomoinhanvat)
 
@@ -679,82 +672,73 @@ class MoiTruong:
         return read_string(self.tientrinh, self.diachigame + self.offsetdiachitenbandohientai)
 
     def get_is_dangbatauto(self):
-        return read_int(self.tientrinh, self.diachigame + 0x458498)
+        return read_int(self.tientrinh, self.diachigame + 0x464E40)
 
     def get_is_dangtudongtimduong(self):
-        return read_int(self.tientrinh, self.diachigame + 0x452DBC) > 0
+        return read_int(self.tientrinh, self.diachigame + 0x45F69C) > 0
 
     def set_is_dangtudongtimduong(self, is_dangtudongtimduong):
         if self.get_is_dangtudongtimduong() != is_dangtudongtimduong:
-            write_int(self.tientrinh, self.diachigame + 0x452DBC, 1 if is_dangtudongtimduong else 0)
-
-    def get_idmauvatphamnhat(self):
-        return read_int(self.tientrinh, self.diachigame + 0x457B84)
-
-    def get_phantramsinhluchoiphuc(self):
-        return read_int(self.tientrinh, self.diachigame + 0x457474)
-
-    def get_phantramnoiluchoiphuc(self):
-        return read_int(self.tientrinh, self.diachigame + 0x457478)
+            write_int(self.tientrinh, self.diachigame + 0x45F69C, 1 if is_dangtudongtimduong else 0)
 
     def get_iddoituongtudanh(self):
-        return read_int(self.tientrinh, self.diachigame + 0x458200)
+        return read_int(self.tientrinh, self.diachigame + 0x464AE0)
 
     def set_iddoituongtudanh(self, iddoituongtudanh):
         if self.get_iddoituongtudanh() != iddoituongtudanh:
-            write_int(self.tientrinh, self.diachigame + 0x458200, iddoituongtudanh)
+            write_int(self.tientrinh, self.diachigame + 0x464AE0, iddoituongtudanh)
 
     def get_tennguoidanhtheosau(self):
-        return read_string(self.tientrinh, self.diachigame + 0x457B94)
+        return read_string(self.tientrinh, self.diachigame + 0x4629F8)
 
     def get_khoangcachtheosau(self):
-        return read_int(self.tientrinh, self.diachigame + 0x457BB4)
+        return read_int(self.tientrinh, self.diachigame + 0x464494)
 
     def get_idtabkytrancac(self):
-        return read_int(self.tientrinh, self.diachigame + 0x456118)
+        return read_int(self.tientrinh, self.diachigame + 0x4629F8)
 
     def set_idtabkytrancac(self, idtab):
         if self.get_idtabkytrancac() != idtab:
-            write_int(self.tientrinh, self.diachigame + 0x456118, idtab)
+            write_int(self.tientrinh, self.diachigame + 0x4629F8, idtab)
             
     def get_is_theosau(self):
-        return read_int(self.tientrinh, self.diachigame + 0x457B90)
+        return read_int(self.tientrinh, self.diachigame + 0x464470)
 
     def set_is_theosau(self, is_theosau):
         if self.get_is_theosau() != is_theosau:
-            write_int(self.tientrinh, self.diachigame + 0x457B90, 1 if is_theosau else 0)
+            write_int(self.tientrinh, self.diachigame + 0x464470, 1 if is_theosau else 0)
 
     def get_phamvitimkiemmuctieu(self):
-        return read_int(self.tientrinh, self.diachigame + 0x4574C4)
+        return read_int(self.tientrinh, self.diachigame + 0x463DA4)
 
     def get_idtrangthaiclickchuot(self):
-        return read_int(self.tientrinh, self.diachigame + 0x266BE4)
+        return read_int(self.tientrinh, self.diachigame + 0x26B70C)
 
     def get_is_dangmocuahang(self):
-        return read_int(self.tientrinh, self.diachigame + 0x26684C) > 0
+        return read_int(self.tientrinh, self.diachigame + 0x26B360) > 0
 
     def get_is_dangdoithoaixacnhan(self):
-        return read_int(self.tientrinh, self.diachigame + 0x263E3C) > 0
+        return read_int(self.tientrinh, self.diachigame + 0x2698EC) > 0
 
     def get_is_tamngungtancong(self):
-        return read_int(self.tientrinh, self.diachigame + 0x457458)
+        return read_int(self.tientrinh, self.diachigame + 0x463D38)
 
     def set_is_tamngungtancong(self, is_tamngungtancong):
         if self.get_is_tamngungtancong() != is_tamngungtancong:
-            write_int(self.tientrinh, self.diachigame + 0x457458, 1 if is_tamngungtancong else 0)
+            write_int(self.tientrinh, self.diachigame + 0x463D38, 1 if is_tamngungtancong else 0)
 
     def get_is_datrieuhoithu(self):
-        return read_int(self.tientrinh, self.diachigame + 0x458494)
+        return read_int(self.tientrinh, self.diachigame + 0x464E3C)
 
     def get_is_duoitheo(self):
-        return read_int(self.tientrinh, self.diachigame + 0x458204) > 0
+        return read_int(self.tientrinh, self.diachigame + 0x464AE4) > 0
 
     def set_is_duoitheo(self, is_duoitheo):
         if self.get_is_duoitheo() != is_duoitheo:
-            write_int(self.tientrinh, self.diachigame + 0x458204, 1 if is_duoitheo else 0)
+            write_int(self.tientrinh, self.diachigame + 0x464AE4, 1 if is_duoitheo else 0)
 
     def get_is_tranhboss(self):
-        return read_int(self.tientrinh, self.diachigame + 0x4574E0) > 0
+        return read_int(self.tientrinh, self.diachigame + 0x463DC0) > 0
 
     def get_is_boss(self, idnhanvat = 1):
         if self.get_idloainhanvat(idnhanvat) != IDLOAINHANVAT_QUAIVAT:
@@ -772,61 +756,44 @@ class MoiTruong:
         return self.get_idloainhanvat(idnhanvat) == IDLOAINHANVAT_QUAIVAT and self.get_tocdodichuyen(idnhanvat) > TOCDODICHUYENQUAITHUONG
 
     def get_idkynangtaytrai(self):
-        return read_int(self.tientrinh, self.diachigame + 0x452D68)
+        return read_int(self.tientrinh, self.diachigame + 0x45F648)
 
     def get_idkynang1(self):
-        return read_int(self.tientrinh, self.diachigame + 0x4574E4)
+        return read_int(self.tientrinh, self.diachigame + 0x463DC4)
 
     def set_idkynang1(self, idkynang1):
         if self.get_idkynang1() != idkynang1:
-            write_int(self.tientrinh, self.diachigame + 0x4574E4, idkynang1)
-
-    def get_idkynanghotro1(self):
-        return read_int(self.tientrinh, self.diachigame + 0x4574CC)
-
-    def set_idkynangbotro1(self, idkynangbotro):
-        if self.get_idkynanghotro1() != idkynangbotro:
-            write_int(self.tientrinh, self.diachigame + 0x4574CC, idkynangbotro)
-
-    def get_idkynanghotro2(self):
-        return read_int(self.tientrinh, self.diachigame + 0x4574D0)
-
-    def set_idkynangbotro2(self, idkynangbotro):
-        if self.get_idkynanghotro2() != idkynangbotro:
-            write_int(self.tientrinh, self.diachigame + 0x4574D0, idkynangbotro)
+            write_int(self.tientrinh, self.diachigame + 0x463DC4, idkynang1)
 
     def get_idkynanghotro3(self):
-        return read_int(self.tientrinh, self.diachigame + 0x4574D4)
+        return read_int(self.tientrinh, self.diachigame + 0x463DB4)
 
     def set_idkynangbotro3(self, idkynangbotro):
         if self.get_idkynanghotro3() != idkynangbotro:
-            write_int(self.tientrinh, self.diachigame + 0x4574D4, idkynangbotro)
+            write_int(self.tientrinh, self.diachigame + 0x463DB4, idkynangbotro)
 
     def get_idkynanghotro4(self):
-        return read_int(self.tientrinh, self.diachigame + 0x4574D8)
+        return read_int(self.tientrinh, self.diachigame + 0x463DB8)
 
     def set_idkynangbotro4(self, idkynangbotro):
         if self.get_idkynanghotro4() != idkynangbotro:
-            write_int(self.tientrinh, self.diachigame + 0x4574D8, idkynangbotro)
+            write_int(self.tientrinh, self.diachigame + 0x463DB8, idkynangbotro)
 
     def get_is_tudongphucsinh(self):
-        return read_int(self.tientrinh, self.diachigame + 0x458490)
+        return read_int(self.tientrinh, self.diachigame + 0x464E38)
 
     def get_is_dichuyenhoatdongquanhphamvi(self):
-        return read_int(self.tientrinh, self.diachigame + 0x458228) > 0
+        return read_int(self.tientrinh, self.diachigame + 0x464BD0) > 0
 
     def set_is_dichuyenhoatdongquanhphamvi(self, is_dichuyenhoatdongquanhphamvi):
         if self.get_is_dichuyenhoatdongquanhphamvi() != is_dichuyenhoatdongquanhphamvi:
-            write_int(self.tientrinh, self.diachigame + 0x458228, 1 if is_dichuyenhoatdongquanhphamvi else 0)
+            write_int(self.tientrinh, self.diachigame + 0x464BD0, 1 if is_dichuyenhoatdongquanhphamvi else 0)
 
     def get_is_dangkhoa(self):
-        return read_int(self.tientrinh, self.diachigame + 0x4585A4) > 0
-
-    def get_is_tudongnhatvatpham(self):
-        return read_int(self.tientrinh, self.diachigame + 0x457B7C)
+        return read_int(self.tientrinh, self.diachigame + 0x464F4C) > 0
 
     def get_idmuctieudangchichuot(self):
-        return read_int(self.tientrinh, self.diachigame + 0x452D80)
+        return read_int(self.tientrinh, self.diachigame + 0x45F660)
 
     def get_idmuctieudangkhoa(self):
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + self.offsetdiachicosomoinhanvat + 0xC70)
@@ -837,19 +804,19 @@ class MoiTruong:
 
     def get_idmuctieudangchon(self):
         # Tìm theo hàm vô hiệu hóa
-        return read_int(self.tientrinh, self.diachigame + 0x4585B8)
+        return read_int(self.tientrinh, self.diachigame + 0x464F60)
 
     def set_idmuctieudangchon(self, idmuctieudangchon):
         if self.get_idmuctieudangchon() != idmuctieudangchon:
-            write_int(self.tientrinh, self.diachigame + 0x4585B8, idmuctieudangchon)
+            write_int(self.tientrinh, self.diachigame + 0x464F60, idmuctieudangchon)
 
     def get_idmuctieutancong(self):
         # Tìm theo hàm vô hiệu hóa
-        return read_int(self.tientrinh, self.diachigame + 0x4574FC)
+        return read_int(self.tientrinh, self.diachigame + 0x463DDC)
 
     def set_idmuctieutancong(self, idmuctieutancong):
         if self.get_idmuctieutancong() != idmuctieutancong:
-            write_int(self.tientrinh, self.diachigame + 0x4574FC, idmuctieutancong)
+            write_int(self.tientrinh, self.diachigame + 0x463DDC, idmuctieutancong)
 
     def set_idmuctieu(self, idnhanvat):
         self.set_idmuctieudangchon(idnhanvat)
@@ -865,6 +832,13 @@ class MoiTruong:
         if idnhanvattieptheo > SOLUONGNHANVATTOIDA or idnhanvattieptheo < 0:
             return -1
         return idnhanvattieptheo
+    
+    def get_toadoclick(self):
+        toadox, toadoy = self.get_toado()
+        return (
+            toadox + read_int(self.tientrinh, self.diachigame + 0x265A84) - int(self.kichthuoccuasogame[0] / 2),
+            toadoy + int(read_int(self.tientrinh, self.diachigame + 0x265A88) - int(self.kichthuoccuasogame[1] / 2)) * 2
+        )
 
     def action_tatvohieuhoapopuptabkytrancac(self):
         diachi = self.diachigame + 0x3AF8
@@ -889,11 +863,11 @@ class MoiTruong:
     def action_tatvohieuhoathietlapmuctieudangchon(self):
         if read_bytes(self.tientrinh, self.diachigame + 0x16AB57, 1) != bytes.fromhex("89"):
             write_bytes(self.tientrinh, self.diachigame + 0x16AB57, bytes.fromhex("89 0D"), 2)
-            write_int(self.tientrinh, self.diachigame + 0x16AB57 + 0x2, self.diachigame + 0x4585B8)
+            write_int(self.tientrinh, self.diachigame + 0x16AB57 + 0x2, self.diachigame + 0x464F60)
 
         if read_bytes(self.tientrinh, self.diachigame + 0x11AADF, 1) != bytes.fromhex("C7"):
             write_bytes(self.tientrinh, self.diachigame + 0x11AADF, bytes.fromhex("C7 05"), 10)
-            write_int(self.tientrinh, self.diachigame + 0x11AADF + 0x2, self.diachigame + 0x4585B8)
+            write_int(self.tientrinh, self.diachigame + 0x11AADF + 0x2, self.diachigame + 0x464F60)
             write_int(self.tientrinh, self.diachigame + 0x11AADF + 0x6, 0)
 
     def action_vohieuhoathietlapmuctieudangchon(self):
@@ -1547,7 +1521,7 @@ class MoiTruong:
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
         asm_code = f"""
-            cmp edi, {self.diachigame + 0x4574D4}
+            cmp edi, {self.diachigame + 0x463DB4}
             jne logic_goc
             cmp dword ptr [{hex(diachidulieu)}], 1
             jne logic_goc
