@@ -713,6 +713,10 @@ class MoiTruong:
     def get_idtabkytrancac(self):
         return read_int(self.tientrinh, self.diachigame + 0x456118)
 
+    def set_idtabkytrancac(self, idtab):
+        if self.get_idtabkytrancac() != idtab:
+            write_int(self.tientrinh, self.diachigame + 0x456118, idtab)
+            
     def get_is_theosau(self):
         return read_int(self.tientrinh, self.diachigame + 0x457B90)
 

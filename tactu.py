@@ -754,6 +754,9 @@ class TacTu:
         tenbandohientai = self.moitruong.get_tenbandohientai()
         if tenbandohientai != self._tenbandohientai:
             self._thoidiemthaydoibandogannhat = time.time()
+            if self._tenbandohientai:
+                self.moitruong.set_idtabkytrancac(-1)
+
         self._tenbandohientai = tenbandohientai
 
         phantramsinhluchientai = self.moitruong.get_phantramsinhluchientai()
@@ -998,7 +1001,7 @@ class TacTu:
                         yeucaudichuyenmoi = {
                             "loaidichuyen": loaidichuyen,
                             "toadodich": (xtruongnhom, ytruongnhom),
-                            "khoangcach": max(khoangcachtheosau - 50, 0),
+                            "khoangcach": max(khoangcachtheosau - random.randint(100, 150), 0),
                         }
         finally:
             self._yeucaudichuyentheosautruongnhom = yeucaudichuyenmoi
