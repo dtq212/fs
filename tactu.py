@@ -1016,7 +1016,7 @@ class TacTu:
                         yeucaudichuyenmoi = {
                             "loaidichuyen": loaidichuyen,
                             "toadodich": (xtruongnhom, ytruongnhom),
-                            "khoangcach": 0 if khoangcach >= 900 else max(khoangcachtheosau - random.randint(100, 150), 0),
+                            "khoangcach": random.randint(100, 150) if khoangcach >= 900 else max(khoangcachtheosau - random.randint(100, 150), 0),
                         }
         finally:
             self._yeucaudichuyentheosautruongnhom = yeucaudichuyenmoi
