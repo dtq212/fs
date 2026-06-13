@@ -88,6 +88,10 @@ class TacTu:
         self._setdo1_map = {}
         self._setdo2_map = {}
 
+        self._toadokiemtrabiket = (0, 0)
+        self._thoidiemkiemtrabiket = 0.
+        self._is_dangbiket = False
+
     def __del__(self):
         try:
             self.moitruong.action_tatvohieuhoathietlapmuctieutancong()
@@ -990,10 +994,21 @@ class TacTu:
 
                 if xtruongnhom > 0 and ytruongnhom > 0:
                     khoangcach = self.moitruong.get_khoangcachdiem(1, xtruongnhom, ytruongnhom)
-
                     khoangcachtheosau = self.moitruong.get_khoangcachtheosau()
                     if khoangcach >= khoangcachtheosau:
-                        if khoangcach >= 1200 or self.moitruong.get_is_dangtudongtimduong():
+                        if time.time() - self._thoidiemkiemtrabiket > 1.5:
+                            x_hientai, y_hientai = self.moitruong.get_toado()
+                            x_cu, y_cu = self._toadokiemtrabiket
+                            khoangcachdadi = math.hypot(x_hientai - x_cu, y_hientai - y_cu)
+                            if khoangcachdadi < 300:
+                                self._is_dangbiket = True
+                            else:
+                                self._is_dangbiket = False
+
+                            self._toadokiemtrabiket = (x_hientai, y_hientai)
+                            self._thoidiemkiemtrabiket = time.time()
+
+                        if khoangcach >= 1200 or self.moitruong.get_is_dangtudongtimduong() or self._is_dangbiket:
                             loaidichuyen = "tudongtimduong"
                         else:
                             loaidichuyen = "dichuyengiukhoangcachtoidadiem"
