@@ -91,7 +91,7 @@ class TacTu:
         self._is_dangbiket = False
 
         self._is_phucsinhnhanh = True
-        self._is_danhtheotennhanvat = False
+        self._is_danhtheotennhanvat = True
 
     def __del__(self):
         try:
