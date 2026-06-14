@@ -48,6 +48,13 @@ class GiaoDienHienThi:
 
         self.tree.bind("<<TreeviewSelect>>", self.on_select_char)
 
+        self.custom_order = []
+        self.drag_data = {"item": None}
+
+        self.tree.bind("<ButtonPress-1>", self.on_drag_start)
+        self.tree.bind("<B1-Motion>", self.on_drag_motion)
+        self.tree.bind("<ButtonRelease-1>", self.on_drag_release)
+
         self.frame_bot = ttk.Frame(self.paned)
         self.paned.add(self.frame_bot, weight = 3)
 
@@ -151,6 +158,24 @@ class GiaoDienHienThi:
         self.thread = threading.Thread(target = self.loop_update_ui, daemon = True)
         self.thread.start()
 
+    def on_drag_start(self, event):
+        item = self.tree.identify_row(event.y)
+        if item:
+            self.drag_data["item"] = item
+
+    def on_drag_motion(self, event):
+        if not self.drag_data["item"]:
+            return
+        target_item = self.tree.identify_row(event.y)
+        if target_item and target_item != self.drag_data["item"]:
+            target_index = self.tree.index(target_item)
+            self.tree.move(self.drag_data["item"], "", target_index)
+
+    def on_drag_release(self, event):
+        if self.drag_data["item"]:
+            self.drag_data["item"] = None
+            self.custom_order = [int(iid) for iid in self.tree.get_children()]
+
     def on_them_tu_ui(self):
         tennhanvatduocchon = self.cbo_nguoichoi.get().strip()
         if tennhanvatduocchon and self.current_hwnd:
@@ -242,7 +267,13 @@ class GiaoDienHienThi:
                 for hwnd, data in self.shared_data.items():
                     raw_list.append((hwnd, data))
 
-                sorted_list = sorted(raw_list, key = lambda x: x[1].get("tennhanvat", "").lower())
+                def sort_key(item):
+                    hwnd = item[0]
+                    try:
+                        return self.custom_order.index(hwnd)
+                    except ValueError:
+                        return 1_000_000
+                sorted_list = sorted(raw_list, key = lambda x: (sort_key(x), x[1].get("tennhanvat", "").lower()))
 
                 active_hwnds = [item[0] for item in sorted_list]
                 active_focus_hwnd = None
