@@ -11,7 +11,7 @@ class GiaoDienHienThi:
         self.command_dict = command_dict
 
         self.root.title("Phong Thần")
-        self.root.geometry("450x900")
+        self.root.geometry("450x950")
         self.root.resizable(False, True)
 
         style = ttk.Style()
