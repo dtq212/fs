@@ -403,11 +403,21 @@ class TacTu:
         else:
             phatam("Tắt không đánh cùng bang")
 
-    def them_tennhanvattancong_theotennhanvat(self, tennhanvat):
-        if tennhanvat and tennhanvat not in self._tennhanvattancongs:
-            self._tennhanvattancongs.add(tennhanvat)
-            print("Danh sách nhân vật tấn công cập nhật từ UI: {}".format(self._tennhanvattancongs))
-            phatam("Thêm mục tiêu từ giao diện")
+    def them_tennhanvattancong_theotennhanvat(self, tennhanvats):
+        if not tennhanvats:
+            return
+
+        tennhanvats = [ten.strip() for ten in tennhanvats.split(",") if ten.strip()]
+
+        soluongthemmoi = 0
+        for tennhanvat in tennhanvats:
+            if tennhanvat not in self._tennhanvattancongs:
+                self._tennhanvattancongs.add(tennhanvat)
+                soluongthemmoi += 1
+
+        if soluongthemmoi > 0:
+            print(f"Danh sách nhân vật tấn công cập nhật từ UI: {self._tennhanvattancongs}")
+            phatam(f"Đã thêm {soluongthemmoi} mục tiêu từ giao diện")
 
     def them_tennhanvattancong(self):
         print("them_tennhanvattancong")

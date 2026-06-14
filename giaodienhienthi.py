@@ -138,7 +138,7 @@ class GiaoDienHienThi:
         frame_chon_nhanh.grid(row = r, column = 0, sticky = "w", padx = 10, pady = 2)
         r += 1
 
-        self.cbo_nguoichoi = ttk.Combobox(frame_chon_nhanh, width = 22)
+        self.cbo_nguoichoi = ttk.Combobox(frame_chon_nhanh, width = 45)
         self.cbo_nguoichoi.pack(side = "left", padx = (0, 5), fill = "y")
         btn_them_ui = ttk.Button(frame_chon_nhanh, text = "Thêm nhanh", command = self.on_them_tu_ui, style = "Compact.TButton")
         btn_them_ui.pack(side = "left", fill = "y")
