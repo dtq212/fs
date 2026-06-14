@@ -1185,9 +1185,8 @@ class TacTu:
 
                         if self._is_giukhoangcach:
                             is_nguoichoicangiukhoangcach = (self.moitruong.get_idloainhanvat(idmuctieu) == IDLOAINHANVAT_NGUOICHOI and self.moitruong.get_idhephai(idmuctieu) in (IDHEPHAI_GIAPSI, IDHEPHAI_DINHAN))
-                            is_boss = self.moitruong.get_is_boss(idmuctieu)
-                            khoangcachantoan = 300 if is_nguoichoicangiukhoangcach else 450 if is_boss else 2000
-                            if (is_nguoichoicangiukhoangcach or is_boss) and khoangcachmuctieu < khoangcachantoan:
+                            khoangcachantoan = 300
+                            if is_nguoichoicangiukhoangcach and khoangcachmuctieu < khoangcachantoan:
                                 is_cokynangsansang = False
                                 for idkynang in (IDKYNANG_TAMMUOICHANHOA, IDKYNANG_THAPPHUONGLIETHOA, IDKYNANG_LOIDONGCUUTHIEN, ):
                                     if self.moitruong.get_is_kynangsansang(idkynang):
@@ -1271,6 +1270,7 @@ class TacTu:
                                 self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_LOIDONGCUUTHIEN, random.randint(450, 475))
                             if self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGBAO):
                                 self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_BANGPHONGBAO, random.randint(350, 375))
+
                 # elif is_cothesudungkynangbotro:
                 #     if self.moitruong.get_is_kynangsansang(IDKYNANG_CHUCDUNGCHANKHI) and not self.moitruong.get_is_cohieuungbotro(IDHIEUUNGBOTRO_CHUCDUNGCHANKHI):
                 #         self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_CHUCDUNGCHANKHI, random.randint(450, 475))
@@ -1312,9 +1312,8 @@ class TacTu:
 
                         if self._is_giukhoangcach:
                             is_nguoichoicangiukhoangcach = (self.moitruong.get_idloainhanvat(idmuctieu) == IDLOAINHANVAT_NGUOICHOI and self.moitruong.get_idhephai(idmuctieu) in (IDHEPHAI_GIAPSI, IDHEPHAI_DINHAN))
-                            is_boss = self.moitruong.get_is_boss(idmuctieu)
-                            khoangcachantoan = 300 if is_nguoichoicangiukhoangcach else 450 if is_boss else 2000
-                            if (is_nguoichoicangiukhoangcach or is_boss) and khoangcachmuctieu < khoangcachantoan:
+                            khoangcachantoan = 300
+                            if is_nguoichoicangiukhoangcach and khoangcachmuctieu < khoangcachantoan:
                                 is_cokynangsansang = False
                                 for idkynang in (IDKYNANG_XASAT, IDKYNANG_BACHBOXUYENDUONG, ):
                                     if self.moitruong.get_is_kynangsansang(idkynang):
