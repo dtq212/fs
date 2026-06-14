@@ -109,6 +109,8 @@ class GiaoDienHienThi:
         r += 1
         self.add_check(self.grp_config, "Giữ khoảng cách (Đạo sĩ)", "_is_giukhoangcach", r, "Ctrl+Alt+Shift+K", "battat_is_giukhoangcach")
         r += 1
+        self.add_check(self.grp_config, "Đánh phủ đầu (Đạo sĩ / Vũ sĩ)", "_is_danhphudau", r, "", "battat_is_danhphudau")
+        r += 1
         ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 4)
         r += 1
 
@@ -273,6 +275,7 @@ class GiaoDienHienThi:
                         return self.custom_order.index(hwnd)
                     except ValueError:
                         return 1_000_000
+
                 sorted_list = sorted(raw_list, key = lambda x: (sort_key(x), x[1].get("tennhanvat", "").lower()))
 
                 active_hwnds = [item[0] for item in sorted_list]
