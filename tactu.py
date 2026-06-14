@@ -934,10 +934,9 @@ class TacTu:
         if self.moitruong.get_idbienthannhanvat() >= 0:
             self._thoidiemyeucaubienthan = time.time()
 
-        if self._is_tudongdoisetdo:
-            if time.time() - self._thoidiemyeucaubienthan > 2.5 and self.moitruong.get_idbienthannhanvat() < 0 and self.moitruong.get_is_dangbatauto():
-                if self.action_sudungvatpham(BIENPHUs[random.randint(0, len(BIENPHUs) - 1)], delay = 1.):
-                    return
+        if time.time() - self._thoidiemyeucaubienthan > 2.5 and self.moitruong.get_idbienthannhanvat() < 0 and self.moitruong.get_is_dangbatauto():
+            if self.action_sudungvatpham(BIENPHUs[random.randint(0, len(BIENPHUs) - 1)], delay = 1.):
+                return
 
         hieuungbotros = self.moitruong.get_hieuungbotros()
         if IDHIEUUNGBOTRO_BUFFTHUONGCHU1 not in hieuungbotros and IDHIEUUNGBOTRO_BUFFTHUONGCHU2 not in hieuungbotros:

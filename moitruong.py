@@ -688,9 +688,6 @@ class MoiTruong:
         if self.get_iddoituongtudanh() != iddoituongtudanh:
             write_int(self.tientrinh, self.diachigame + 0x464AE0, iddoituongtudanh)
 
-    def get_tennguoidanhtheosau(self):
-        return read_string(self.tientrinh, self.diachigame + 0x4629F8)
-
     def get_khoangcachtheosau(self):
         return read_int(self.tientrinh, self.diachigame + 0x464494)
 
@@ -841,9 +838,10 @@ class MoiTruong:
         )
 
     def action_tatvohieuhoapopuptabkytrancac(self):
+        #Nhớ lâu lâu vào đúng địa chỉ này để xem code nó có còn là b'\xE8\xA3\xB1\x06\x00' không nhé
         diachi = self.diachigame + 0x3AF8
         if read_bytes(self.tientrinh, self.diachigame + 0x3AF8, 1) != bytes.fromhex("E8"):
-            write_bytes(self.tientrinh, diachi, b'\xE8\xD3\xBD\x06\x00', 5)
+            write_bytes(self.tientrinh, diachi, b'\xE8\xA3\xB1\x06\x00', 5)
 
     def action_vohieuhoapopuptabkytrancac(self):
         diachi = self.diachigame + 0x3AF8
