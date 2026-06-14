@@ -934,7 +934,7 @@ class TacTu:
         if self.moitruong.get_idbienthannhanvat() >= 0:
             self._thoidiemyeucaubienthan = time.time()
 
-        if time.time() - self._thoidiemyeucaubienthan > 2.5 and self.moitruong.get_idbienthannhanvat() < 0 and self.moitruong.get_is_dangbatauto():
+        if self.moitruong.get_is_khuvuccothetancong() and time.time() - self._thoidiemyeucaubienthan > 2.5 and self.moitruong.get_idbienthannhanvat() < 0 and self.moitruong.get_is_dangbatauto():
             if self.action_sudungvatpham(BIENPHUs[random.randint(0, len(BIENPHUs) - 1)], delay = 1.):
                 return
 
