@@ -838,12 +838,16 @@ class MoiTruong:
         )
 
     def action_tatvohieuhoapopuptabkytrancac(self):
+        return
+        print("action_tatvohieuhoapopuptabkytrancac")
         #Nhớ lâu lâu vào đúng địa chỉ này để xem code nó có còn là b'\xE8\xA3\xB1\x06\x00' không nhé
         diachi = self.diachigame + 0x3AF8
         if read_bytes(self.tientrinh, self.diachigame + 0x3AF8, 1) != bytes.fromhex("E8"):
             write_bytes(self.tientrinh, diachi, b'\xE8\xA3\xB1\x06\x00', 5)
 
     def action_vohieuhoapopuptabkytrancac(self):
+        return
+        print("action_vohieuhoapopuptabkytrancac")
         diachi = self.diachigame + 0x3AF8
         if read_bytes(self.tientrinh, self.diachigame + 0x3AF8, 1) != bytes.fromhex("90"):
             write_bytes(self.tientrinh, diachi, b'\x90\x90\x90\x90\x90', 5)
