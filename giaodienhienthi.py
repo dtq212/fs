@@ -11,7 +11,7 @@ class GiaoDienHienThi:
         self.command_dict = command_dict
 
         self.root.title("Phong Thần")
-        self.root.geometry("450x950")
+        self.root.geometry("450x900")
         self.root.resizable(False, True)
 
         style = ttk.Style()
@@ -122,11 +122,14 @@ class GiaoDienHienThi:
         lbl_guide_tc.grid(row = r, column = 0, sticky = "w", padx = 10)
         r += 1
 
+        self.add_check(self.grp_config, "Chỉ đánh theo tên trong danh sách", "_is_danhtheotennhanvat", r, "Ctrl+Alt+Shift+C", "battat_is_danhtheotennhanvat")
+        r += 1
+
         frame_chon_nhanh = ttk.Frame(self.grp_config)
         frame_chon_nhanh.grid(row = r, column = 0, sticky = "w", padx = 10, pady = 2)
         r += 1
 
-        self.cbo_nguoichoi = ttk.Combobox(frame_chon_nhanh, width = 22, state = "readonly")
+        self.cbo_nguoichoi = ttk.Combobox(frame_chon_nhanh, width = 22)
         self.cbo_nguoichoi.pack(side = "left", padx = (0, 5), fill = "y")
         btn_them_ui = ttk.Button(frame_chon_nhanh, text = "Thêm nhanh", command = self.on_them_tu_ui, style = "Compact.TButton")
         btn_them_ui.pack(side = "left", fill = "y")
@@ -149,9 +152,10 @@ class GiaoDienHienThi:
         self.thread.start()
 
     def on_them_tu_ui(self):
-        tennhanvatduocchon = self.cbo_nguoichoi.get()
+        tennhanvatduocchon = self.cbo_nguoichoi.get().strip()
         if tennhanvatduocchon and self.current_hwnd:
             self.command_dict[self.current_hwnd] = f"them_tennhanvattancong_theotennhanvat:{tennhanvatduocchon}"
+            self.cbo_nguoichoi.set("")
 
     def add_check(self, parent, text, key, r, shortcut, cmd_string):
         var = tk.BooleanVar()

@@ -76,11 +76,13 @@ class TroChoiManager:
 
     def loop_hotkey(self):
         while True:
-            hwnd = win32gui.GetForegroundWindow()  # Chỉ bắt phím cho tab đang active
+            hwnd = win32gui.GetForegroundWindow()
             if hwnd in self.bot_processes:
                 cmd = None
                 if keyboard.is_pressed("ctrl+alt+shift+h"):
                     cmd = "battat_tudongfarm"
+                elif keyboard.is_pressed("ctrl+alt+shift+c"):
+                    cmd = "battat_is_danhtheotennhanvat"
                 elif keyboard.is_pressed("ctrl+alt+shift+r"):
                     cmd = "battat_tudongsuavatpham"
                 elif keyboard.is_pressed("ctrl+alt+shift+u"):

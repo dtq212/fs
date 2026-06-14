@@ -175,6 +175,8 @@ class CuaSo:
                     "_setdo2_map": self.tactu._setdo2_map,
 
                     "tennguoichoixungquanhs": tennguoichoixungquanhs,
+
+                    "_is_danhtheotennhanvat": self.tactu._is_danhtheotennhanvat,
                 }
                 self.shared_data[self.idcuaso] = info
 
@@ -245,6 +247,8 @@ class CuaSo:
                     self.tactu.botoanbo_tennhanvattodoitudong()
                 elif cmd == "battat_is_chidanhnguoichoivatrieuhoithu":
                     self.tactu.battat_is_chidanhnguoichoivatrieuhoithu()
+                elif cmd == "battat_is_danhtheotennhanvat":
+                    self.tactu.battat_is_danhtheotennhanvat()
                 elif cmd == "action_batpk":
                     self.tactu.action_batpk()
                 elif cmd == "action_tatpk":

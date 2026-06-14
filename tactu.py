@@ -91,6 +91,7 @@ class TacTu:
         self._is_dangbiket = False
 
         self._is_phucsinhnhanh = True
+        self._is_danhtheotennhanvat = False
 
     def __del__(self):
         try:
@@ -132,6 +133,8 @@ class TacTu:
             "is_khongsudungnhieukynang": self._is_khongsudungnhieukynang,
             "setdo1_goc": self._setdo1goc_map,
             "setdo2_goc": self._setdo2goc_map,
+
+            "is_danhtheotennhanvat": self._is_danhtheotennhanvat,
         }
 
         util_luuthietlap(str(tennhanvat), thietlap)
@@ -210,8 +213,18 @@ class TacTu:
             if "setdo2_goc" in thietlap:
                 self._setdo2goc_map = thietlap["setdo2_goc"]
 
+            if "is_danhtheotennhanvat" in thietlap:
+                self._is_danhtheotennhanvat = thietlap["is_danhtheotennhanvat"]
+
             self._setdo1_map = {k: v for k, v in self._setdo1goc_map.items() if k not in self._setdo2goc_map}
             self._setdo2_map = {k: v for k, v in self._setdo2goc_map.items() if k not in self._setdo1goc_map}
+
+    def battat_is_danhtheotennhanvat(self):
+        self._is_danhtheotennhanvat = not self._is_danhtheotennhanvat
+        if self._is_danhtheotennhanvat:
+            phatam("Bật chỉ đánh theo tên nhân vật")
+        else:
+            phatam("Tắt chỉ đánh theo tên nhân vật, chuyển sang đánh tự do")
 
     def them_tennhanvattodoitudong(self):
         idmuctieu = self.moitruong.get_idmuctieudangchichuot()
@@ -808,7 +821,7 @@ class TacTu:
         if not self.moitruong.get_is_nhanvattontai(idnhanvat):
             return False
 
-        if self._tennhanvattancongs and self.moitruong.get_tennhanvat(idnhanvat) not in self._tennhanvattancongs:
+        if self._is_danhtheotennhanvat and self._tennhanvattancongs and self.moitruong.get_tennhanvat(idnhanvat) not in self._tennhanvattancongs:
             return False
 
         if self._tennhanvatkhongtancongs and self.moitruong.get_tennhanvat(idnhanvat) in self._tennhanvatkhongtancongs:
