@@ -144,7 +144,6 @@ class CuaSo:
 
                     "_tennhanvattancongs": ", ".join(self.tactu._tennhanvattancongs),
                     "_tennhanvatkhongtancongs": ", ".join(self.tactu._tennhanvatkhongtancongs),
-                    "_tennhanvattodoitudongs": ", ".join(self.tactu.tennhanvattodoitudong_map.values()),
 
                     "_is_tudongfarm": self.tactu._is_tudongfarm,
                     "_is_tudongvutvatpham": self.tactu._is_tudongvutvatpham,
@@ -215,10 +214,10 @@ class CuaSo:
                     self.tactu.bat_is_chidanhnguoichoivatrieuhoithu()
                 elif cmd == "tat_is_chidanhnguoichoivatrieuhoithu":
                     self.tactu.tat_is_chidanhnguoichoivatrieuhoithu()
-                elif cmd == "them_dbidnhanvattodoitudong":
-                    self.tactu.them_dbidnhanvattodoitudong()
-                elif cmd == "botoanbo_dbidnhanvattodoitudong":
-                    self.tactu.botoanbo_dbidnhanvattodoitudong()
+                elif cmd == "them_tennhanvattodoitudong":
+                    self.tactu.them_tennhanvattodoitudong()
+                elif cmd == "botoanbo_tennhanvattodoitudong":
+                    self.tactu.botoanbo_tennhanvattodoitudong()
                 elif cmd == "action_batpk":
                     self.tactu.action_batpk()
                 elif cmd == "action_tatpk":

@@ -74,8 +74,6 @@ class TacTu:
         self._thoidiemtudongtimduonggannhat = 0.
 
         self._tennhanvattodoitudongs = set()
-        self.tennhanvattodoitudong_map = {}
-
         self._thoidiemmoitodoigannhat_map = {}
         self._thoidiemnhanloimoitodoigannhat_map = {}
 
@@ -118,7 +116,7 @@ class TacTu:
             "is_chidanhnguoichoivatrieuhoithu": self._is_chidanhnguoichoivatrieuhoithu,
             "tennhanvattancongs": self._tennhanvattancongs,
             "tennhanvatkhongtancongs": self._tennhanvatkhongtancongs,
-            "tennhanvattodoitudong_map": self.tennhanvattodoitudong_map,
+            "tennhanvattodoitudongs": list(self._tennhanvattodoitudongs),
             "is_tudongmokhoa": self._is_tudongmokhoa,
             "is_tudongdoisetdo": self._is_tudongdoisetdo,
 
@@ -173,8 +171,8 @@ class TacTu:
             if "tennhanvatkhongtancongs" in thietlap:
                 self._tennhanvatkhongtancongs = thietlap["tennhanvatkhongtancongs"]
 
-            if "tennhanvattodoitudong_map" in thietlap:
-                self.tennhanvattodoitudong_map = thietlap["tennhanvattodoitudong_map"]
+            if "tennhanvattodoitudongs" in thietlap:
+                self._tennhanvattodoitudongs = set(thietlap["tennhanvattodoitudongs"])
 
             if "is_tudongmokhoa" in thietlap:
                 self._is_tudongmokhoa = thietlap["is_tudongmokhoa"]
@@ -215,18 +213,17 @@ class TacTu:
             self._setdo1_map = {k: v for k, v in self._setdo1goc_map.items() if k not in self._setdo2goc_map}
             self._setdo2_map = {k: v for k, v in self._setdo2goc_map.items() if k not in self._setdo1goc_map}
 
-    def them_dbidnhanvattodoitudong(self):
+    def them_tennhanvattodoitudong(self):
         idmuctieu = self.moitruong.get_idmuctieudangchichuot()
         if idmuctieu > 0 and self.moitruong.get_idloainhanvat(idmuctieu) == IDLOAINHANVAT_NGUOICHOI:
-            dbid = self.moitruong.get_dbidnhanvat(idmuctieu)
             tenhanvat = self.moitruong.get_tennhanvat(idmuctieu)
-            if dbid > 0 and tenhanvat and dbid not in self.tennhanvattodoitudong_map:
-                self.tennhanvattodoitudong_map[dbid] = tenhanvat
-                print(f"Danh sách Tổ đội: {list(self.tennhanvattodoitudong_map.values())}, dbid: {list(self.tennhanvattodoitudong_map.keys())}")
-                phatam(f"Thêm nhân vật tổ đội. Tổng {len(self.tennhanvattodoitudong_map)}")
+            if tenhanvat and tenhanvat not in self._tennhanvattodoitudongs:
+                self._tennhanvattodoitudongs.add(tenhanvat)
+                print(f"Danh sách Tổ đội: {list(self._tennhanvattodoitudongs)}")
+                phatam(f"Thêm nhân vật tổ đội. Tổng {len(self._tennhanvattodoitudongs)}")
 
-    def botoanbo_dbidnhanvattodoitudong(self):
-        self.tennhanvattodoitudong_map.clear()
+    def botoanbo_tennhanvattodoitudong(self):
+        self._tennhanvattodoitudongs.clear()
         phatam("Bỏ toàn bộ danh sách tổ đội")
 
     def battat_is_duoitheo(self):
@@ -1566,32 +1563,26 @@ class TacTu:
         return self.moitruong.action_dichuyen2(toadox, toadoy, delay = 0.)
 
     def action_tudongmoitodoi(self):
-        if not self.tennhanvattodoitudong_map:
+        if not self._tennhanvattodoitudongs:
             return
-
         idtodoi = self.moitruong.get_idtodoi()
         if idtodoi > 0 and not self.moitruong.get_is_truongnhom():
             return
-
         tenthanhvientrongdois = self.moitruong.get_tenthanhviendoinhoms()
-
         ungviens = []
-
-        for dbid, tenungvien in self.tennhanvattodoitudong_map.items():
-
+        for tenungvien in self._tennhanvattodoitudongs:
             if tenungvien and tenungvien in tenthanhvientrongdois:
                 continue
-
-            thoidiemgannhat = self._thoidiemmoitodoigannhat_map.get(dbid, 0.)
-
+            thoidiemgannhat = self._thoidiemmoitodoigannhat_map.get(tenungvien, 0.)
             if time.time() - thoidiemgannhat > 2.5:
-                ungviens.append((dbid, thoidiemgannhat))
-
+                idnhanvat_ungvien = self.action_timkiemnhanvat(tennhanvat = tenungvien, khoangcach = 800)
+                if idnhanvat_ungvien > 0:
+                    dbid_hientai = self.moitruong.get_dbidnhanvat(idnhanvat_ungvien)
+                    if dbid_hientai > 0:
+                        ungviens.append((dbid_hientai, tenungvien, thoidiemgannhat))
         if not ungviens:
             return
-
-        ungviens.sort(key = lambda x: x[1])
-        dbidnhanvatduocchon = ungviens[0][0]
-
+        ungviens.sort(key = lambda x: x[2])
+        dbidnhanvatduocchon, tennhanvatduocchon, _ = ungviens[0]
         if self.moitruong.action_moitodoi(dbidnhanvatduocchon, delay = 0.25):
-            self._thoidiemmoitodoigannhat_map[dbidnhanvatduocchon] = time.time()
+            self._thoidiemmoitodoigannhat_map[tennhanvatduocchon] = time.time()

@@ -137,14 +137,6 @@ class GiaoDienHienThi:
         self.lbl_tennhanvatkhongtancongs.grid(row=r, column=0, sticky="w", padx=10, pady=(0, 5))
         r += 1
 
-        # lbl_guide_td = ttk.Label(self.grp_config, text = "[Ctrl+V] Thêm  |  [Ctrl+Alt+V] Xóa danh sách Auto Tổ Đội", font = ("Arial", 9, "bold"))
-        # lbl_guide_td.grid(row = r, column = 0, sticky = "w", padx = 10)
-        # r += 1
-        #
-        # self.lbl_tennhanvattodoitudongs = ttk.Label(self.grp_config, text = "→ Trống", foreground = "purple", wraplength = 380)
-        # self.lbl_tennhanvattodoitudongs.grid(row = r, column = 0, sticky = "w", padx = 10, pady = (0, 5))
-        # r += 1
-
         self.current_hwnd = None
         self.is_running = True
         self.thread = threading.Thread(target = self.loop_update_ui, daemon = True)
