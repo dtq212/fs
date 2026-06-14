@@ -254,6 +254,7 @@ class TacTu:
             phatam("Bật tự động giữ khoảng cách")
         else:
             phatam("Tắt tự động giữ khoảng cách")
+
     def battat_is_tudongvutvatpham(self):
         self._is_tudongvutvatpham = not self._is_tudongvutvatpham
 
@@ -340,6 +341,14 @@ class TacTu:
             phatam("Bật tự động sửa vật phẩm")
         else:
             phatam("Tắt tự động sửa vật phẩm")
+
+    def battat_is_chidanhnguoichoivatrieuhoithu(self):
+        self._is_chidanhnguoichoivatrieuhoithu = not self._is_chidanhnguoichoivatrieuhoithu
+        if self._is_chidanhnguoichoivatrieuhoithu:
+            self._is_tudongtimkiemmuctieu = True
+            phatam("Bật chỉ đánh người chơi và triệu hồi thú")
+        else:
+            phatam("Tắt chỉ đánh người chơi và triệu hồi thú")
 
     def bat_is_chidanhnguoichoivatrieuhoithu(self):
         if not self._is_chidanhnguoichoivatrieuhoithu:

@@ -5,9 +5,10 @@ import time
 
 
 class GiaoDienHienThi:
-    def __init__(self, root, shared_data):
+    def __init__(self, root, shared_data, command_dict):
         self.root = root
         self.shared_data = shared_data
+        self.command_dict = command_dict
 
         self.root.title("Phong Thần")
         self.root.geometry("450x950")
@@ -56,19 +57,19 @@ class GiaoDienHienThi:
 
         r = 0
 
-        self.add_check(self.grp_config, "Tự động Farm & Bán rác", "_is_tudongfarm", r, "Ctrl+Alt+Shift+H")
+        self.add_check(self.grp_config, "Tự động Farm & Bán rác", "_is_tudongfarm", r, "Ctrl+Alt+Shift+H", "battat_tudongfarm")
         r += 1
-        self.add_check(self.grp_config, "Tự động vứt rác", "_is_tudongvutvatpham", r, "Ctrl+Alt+Shift+D")
+        self.add_check(self.grp_config, "Tự động vứt rác", "_is_tudongvutvatpham", r, "Ctrl+Alt+Shift+D", "battat_is_tudongvutvatpham")
         r += 1
-        self.add_check(self.grp_config, "Tự động mua vật phẩm", "_is_tudongmuavatphamkytrancac", r, "Ctrl+Alt+Shift+M")
+        self.add_check(self.grp_config, "Tự động mua vật phẩm", "_is_tudongmuavatphamkytrancac", r, "Ctrl+Alt+Shift+M", "battat_is_tudongmuavatphamkytrancac")
         r += 1
-        self.add_check(self.grp_config, "Đánh theo sau trưởng nhóm", "_is_tudongdanhtheosautruongnhom", r, "Ctrl+Alt+Shift+T")
+        self.add_check(self.grp_config, "Đánh theo sau trưởng nhóm", "_is_tudongdanhtheosautruongnhom", r, "Ctrl+Alt+Shift+T", "battat_tudongdanhtheosautruongnhom")
         r += 1
-        self.add_check(self.grp_config, "Tự bật / tắt lắc", "_is_tudongbattathieuungbotro", r, "Ctrl+Alt+Shift+J")
+        self.add_check(self.grp_config, "Tự bật / tắt lắc", "_is_tudongbattathieuungbotro", r, "Ctrl+Alt+Shift+J", "battat_is_tudongbattathieuungbotro")
         r += 1
-        self.add_check(self.grp_config, "Phục sinh nhanh", "_is_phucsinhnhanh", r, "Ctrl+Alt+Shift+N")
+        self.add_check(self.grp_config, "Phục sinh nhanh", "_is_phucsinhnhanh", r, "Ctrl+Alt+Shift+N", "battat_phucsinhnhanh")
         r += 1
-        self.add_check(self.grp_config, "Tự động đổi sét đồ (Sét 1: Đánh, Sét 2: Chạy)", "_is_tudongdoisetdo", r, "Ctrl+Alt+Shift+W")
+        self.add_check(self.grp_config, "Tự động đổi sét đồ (Sét 1: Đánh, Sét 2: Chạy)", "_is_tudongdoisetdo", r, "Ctrl+Alt+Shift+W", "battat_is_tudongdoisetdo")
         r += 1
         lbl_guide_set = ttk.Label(self.grp_config, text = "[Ctrl+Alt+1/2] Lưu Sét Đồ 1/2", font = ("Arial", 9, "bold"))
         lbl_guide_set.grid(row = r, column = 0, sticky = "w", padx = 25, pady = (2, 2))
@@ -84,26 +85,21 @@ class GiaoDienHienThi:
 
         ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 5)
         r += 1
-
-        self.add_check(self.grp_config, "Tự tìm mục tiêu", "_is_tudongtimkiemmuctieu", r, "Ctrl+Alt+Shift+F")
+        self.add_check(self.grp_config, "Tự tìm mục tiêu", "_is_tudongtimkiemmuctieu", r, "Ctrl+Alt+Shift+F", "battat_tudongtimkiemmuctieu")
         r += 1
-
-        self.add_check(self.grp_config, "Tự động đuổi mục tiêu", "_is_duoitheo", r, "Ctrl+Alt+Shift+P")
+        self.add_check(self.grp_config, "Tự động đuổi mục tiêu", "_is_duoitheo", r, "Ctrl+Alt+Shift+P", "battat_is_duoitheo")
         r += 1
-        self.add_check(self.grp_config, "Chỉ dùng 1 kỹ năng (Đạo sĩ)", "_is_khongsudungnhieukynang", r, "Ctrl+Alt+Shift+O")
+        self.add_check(self.grp_config, "Chỉ dùng 1 kỹ năng (Đạo sĩ)", "_is_khongsudungnhieukynang", r, "Ctrl+Alt+Shift+O", "battat_is_khongsudungnhieukynang")
         r += 1
-
-        self.add_check(self.grp_config, "Không đánh cùng Bang", "_is_khongdanhcungbang", r, "Ctrl+Alt+Shift+B")
+        self.add_check(self.grp_config, "Không đánh cùng Bang", "_is_khongdanhcungbang", r, "Ctrl+Alt+Shift+B", "battat_is_khongdanhcungbang")
         r += 1
-
         ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 5)
         r += 1
-
-        self.add_check(self.grp_config, "Chỉ đánh Người / Phong quyển", "_is_chidanhnguoichoivatrieuhoithu", r, "Ctrl+D / Ctrl+A")
+        self.add_check(self.grp_config, "Chỉ đánh Người / Phong quyển", "_is_chidanhnguoichoivatrieuhoithu", r, "Ctrl+D / Ctrl+A", "battat_is_chidanhnguoichoivatrieuhoithu")
         r += 1
-        self.add_check(self.grp_config, "Ưu tiên đánh Phong quyển", "_is_uutientrieuhoithu", r, "Ctrl + S")
+        self.add_check(self.grp_config, "Ưu tiên đánh Phong quyển", "_is_uutientrieuhoithu", r, "Ctrl + S", "battat_is_uutientrieuhoithu")
         r += 1
-        self.add_check(self.grp_config, "Giữ khoảng cách (Đạo sĩ)", "_is_giukhoangcach", r, "Ctrl+Alt+Shift+K")
+        self.add_check(self.grp_config, "Giữ khoảng cách (Đạo sĩ)", "_is_giukhoangcach", r, "Ctrl+Alt+Shift+K", "battat_is_giukhoangcach")
         r += 1
         ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 10)
         r += 1
@@ -142,13 +138,17 @@ class GiaoDienHienThi:
         self.thread = threading.Thread(target = self.loop_update_ui, daemon = True)
         self.thread.start()
 
-    def add_check(self, parent, text, key, r, shortcut):
+    def add_check(self, parent, text, key, r, shortcut, cmd_string):
         var = tk.BooleanVar()
         display_text = text
         if shortcut:
             display_text = f"{text}   [{shortcut}]"
 
-        chk = ttk.Checkbutton(parent, text = display_text, variable = var, state = "disabled")
+        def on_toggle():
+            if self.current_hwnd:
+                self.command_dict[self.current_hwnd] = cmd_string
+
+        chk = ttk.Checkbutton(parent, text = display_text, variable = var, command = on_toggle)
         chk.grid(row = r, column = 0, sticky = "w", padx = 10, pady = 2)
         self.vars_config[key] = var
 

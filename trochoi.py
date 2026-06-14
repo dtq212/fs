@@ -41,7 +41,7 @@ class TroChoiManager:
 
     def run(self):
         root = tk.Tk()
-        gui = GiaoDienHienThi(root, self.shared_data)
+        gui = GiaoDienHienThi(root, self.shared_data, self.command_dict)
 
         import threading
         t_scan = threading.Thread(target = self.loop_scan, daemon = True)

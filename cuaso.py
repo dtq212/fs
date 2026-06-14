@@ -159,7 +159,7 @@ class CuaSo:
             except Exception as err:
                 print(f"Lỗi ở loop_hienthigiaodien: {err}")
                 traceback.print_exc()
-            time.sleep(1.0)
+            time.sleep(0.25)
 
     def loop_xulyphimtat(self):
         while not self.main_stop.is_set():
@@ -218,6 +218,8 @@ class CuaSo:
                     self.tactu.them_tennhanvattodoitudong()
                 elif cmd == "botoanbo_tennhanvattodoitudong":
                     self.tactu.botoanbo_tennhanvattodoitudong()
+                elif cmd == "battat_is_chidanhnguoichoivatrieuhoithu":
+                    self.tactu.battat_is_chidanhnguoichoivatrieuhoithu()
                 elif cmd == "action_batpk":
                     self.tactu.action_batpk()
                 elif cmd == "action_tatpk":
