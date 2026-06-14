@@ -11,7 +11,7 @@ class GiaoDienHienThi:
         self.command_dict = command_dict
 
         self.root.title("Phong Thần")
-        self.root.geometry("450x1050")
+        self.root.geometry("450x950")
         self.root.resizable(False, True)
 
         style = ttk.Style()
@@ -52,7 +52,7 @@ class GiaoDienHienThi:
         self.paned.add(self.frame_bot, weight = 3)
 
         self.grp_config = ttk.LabelFrame(self.frame_bot, text = " Trạng Thái & Phím Tắt ")
-        self.grp_config.pack(fill = tk.BOTH, expand = True, padx = 5, pady = 5)
+        self.grp_config.pack(fill = tk.BOTH, expand = True, padx = 5, pady = 2)
 
         self.vars_config = {}
 
@@ -84,7 +84,7 @@ class GiaoDienHienThi:
         self.lbl_set_2.grid(row = r, column = 0, sticky = "w", padx = 25, pady = (0, 5))
         r += 1
 
-        ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 5)
+        ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 2)
         r += 1
         self.add_check(self.grp_config, "Tự tìm mục tiêu", "_is_tudongtimkiemmuctieu", r, "Ctrl+Alt+Shift+F", "battat_tudongtimkiemmuctieu")
         r += 1
@@ -94,7 +94,7 @@ class GiaoDienHienThi:
         r += 1
         self.add_check(self.grp_config, "Không đánh cùng Bang", "_is_khongdanhcungbang", r, "Ctrl+Alt+Shift+B", "battat_is_khongdanhcungbang")
         r += 1
-        ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 5)
+        ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 2)
         r += 1
         self.add_check(self.grp_config, "Chỉ đánh Người / Phong quyển", "_is_chidanhnguoichoivatrieuhoithu", r, "Ctrl+D / Ctrl+A", "battat_is_chidanhnguoichoivatrieuhoithu")
         r += 1
@@ -102,7 +102,7 @@ class GiaoDienHienThi:
         r += 1
         self.add_check(self.grp_config, "Giữ khoảng cách (Đạo sĩ)", "_is_giukhoangcach", r, "Ctrl+Alt+Shift+K", "battat_is_giukhoangcach")
         r += 1
-        ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 10)
+        ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 4)
         r += 1
 
         self.lbl_info_2 = ttk.Label(self.grp_config, text = "Tọa độ: (0, 0)")
@@ -113,13 +113,13 @@ class GiaoDienHienThi:
         self.lbl_info_farm.grid(row = r, column = 0, sticky = "w", padx = 10)
         r += 1
 
-        ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 5)
+        ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 2)
         r += 1
-        ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 5)
+        ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 2)
         r += 1
 
-        lbl_guide_tc = ttk.Label(self.grp_config, text="[Ctrl+C] Thêm  |  [Ctrl+Alt+C] Xóa danh sách Tấn công", font=("Arial", 9, "bold"))
-        lbl_guide_tc.grid(row=r, column=0, sticky="w", padx=10)
+        lbl_guide_tc = ttk.Label(self.grp_config, text = "[Ctrl+C] Thêm  |  [Ctrl+Alt+C] Xóa danh sách Tấn công", font = ("Arial", 9, "bold"))
+        lbl_guide_tc.grid(row = r, column = 0, sticky = "w", padx = 10)
         r += 1
 
         frame_chon_nhanh = ttk.Frame(self.grp_config)
@@ -130,17 +130,17 @@ class GiaoDienHienThi:
         self.cbo_nguoichoi.pack(side = "left", padx = (0, 5), fill = "y")
         btn_them_ui = ttk.Button(frame_chon_nhanh, text = "Thêm nhanh", command = self.on_them_tu_ui, style = "Compact.TButton")
         btn_them_ui.pack(side = "left", fill = "y")
-        
-        self.lbl_tennhanvattancongs = ttk.Label(self.grp_config, text="→ Trống", foreground="red", wraplength=380)
-        self.lbl_tennhanvattancongs.grid(row=r, column=0, sticky="w", padx=10, pady=(0, 5))
+
+        self.lbl_tennhanvattancongs = ttk.Label(self.grp_config, text = "→ Trống", foreground = "red", wraplength = 380)
+        self.lbl_tennhanvattancongs.grid(row = r, column = 0, sticky = "w", padx = 10, pady = (0, 5))
         r += 1
 
-        lbl_guide_ktc = ttk.Label(self.grp_config, text="[Ctrl+X] Thêm  |  [Ctrl+Alt+X] Xóa danh sách Bỏ qua", font=("Arial", 9, "bold"))
-        lbl_guide_ktc.grid(row=r, column=0, sticky="w", padx=10)
+        lbl_guide_ktc = ttk.Label(self.grp_config, text = "[Ctrl+X] Thêm  |  [Ctrl+Alt+X] Xóa danh sách Bỏ qua", font = ("Arial", 9, "bold"))
+        lbl_guide_ktc.grid(row = r, column = 0, sticky = "w", padx = 10)
         r += 1
 
-        self.lbl_tennhanvatkhongtancongs = ttk.Label(self.grp_config, text="→ Trống", foreground="green", wraplength=380)
-        self.lbl_tennhanvatkhongtancongs.grid(row=r, column=0, sticky="w", padx=10, pady=(0, 5))
+        self.lbl_tennhanvatkhongtancongs = ttk.Label(self.grp_config, text = "→ Trống", foreground = "green", wraplength = 380)
+        self.lbl_tennhanvatkhongtancongs.grid(row = r, column = 0, sticky = "w", padx = 10, pady = (0, 5))
         r += 1
 
         self.current_hwnd = None
@@ -164,7 +164,7 @@ class GiaoDienHienThi:
                 self.command_dict[self.current_hwnd] = cmd_string
 
         chk = ttk.Checkbutton(parent, text = display_text, variable = var, command = on_toggle)
-        chk.grid(row = r, column = 0, sticky = "w", padx = 10, pady = 2)
+        chk.grid(row = r, column = 0, sticky = "w", padx = 10, pady = 0)
         self.vars_config[key] = var
 
     def on_select_char(self, event):
@@ -178,7 +178,7 @@ class GiaoDienHienThi:
 
     def refresh_detail(self):
         if not self.current_hwnd or self.current_hwnd not in self.shared_data:
-            self.lbl_tennhanvattancongs.config(text = "→ Trống") 
+            self.lbl_tennhanvattancongs.config(text = "→ Trống")
             self.lbl_tennhanvatkhongtancongs.config(text = "→ Trống")
             return
 
