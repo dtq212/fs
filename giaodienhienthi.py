@@ -11,7 +11,7 @@ class GiaoDienHienThi:
         self.command_dict = command_dict
 
         self.root.title("Phong Thần")
-        self.root.geometry("450x950")
+        self.root.geometry("450x1050")
         self.root.resizable(False, True)
 
         style = ttk.Style()
@@ -19,6 +19,7 @@ class GiaoDienHienThi:
         style.configure("Treeview", rowheight = 25, font = ("Arial", 9))
         style.configure("TLabelFrame", font = ("Arial", 10, "bold"))
         style.configure("TCheckbutton", font = ("Arial", 10))
+        style.configure("Compact.TButton", padding = (4, 0))
 
         self.paned = ttk.PanedWindow(self.root, orient = tk.VERTICAL)
         self.paned.pack(fill = tk.BOTH, expand = True, padx = 2, pady = 2)
@@ -126,10 +127,9 @@ class GiaoDienHienThi:
         r += 1
 
         self.cbo_nguoichoi = ttk.Combobox(frame_chon_nhanh, width = 22, state = "readonly")
-        self.cbo_nguoichoi.pack(side = "left", padx = (0, 5))
-
-        btn_them_ui = ttk.Button(frame_chon_nhanh, text = "Thêm nhanh", command = self.on_them_tu_ui)
-        btn_them_ui.pack(side = "left")
+        self.cbo_nguoichoi.pack(side = "left", padx = (0, 5), fill = "y")
+        btn_them_ui = ttk.Button(frame_chon_nhanh, text = "Thêm nhanh", command = self.on_them_tu_ui, style = "Compact.TButton")
+        btn_them_ui.pack(side = "left", fill = "y")
         
         self.lbl_tennhanvattancongs = ttk.Label(self.grp_config, text="→ Trống", foreground="red", wraplength=380)
         self.lbl_tennhanvattancongs.grid(row=r, column=0, sticky="w", padx=10, pady=(0, 5))
