@@ -120,6 +120,16 @@ class GiaoDienHienThi:
         lbl_guide_tc = ttk.Label(self.grp_config, text="[Ctrl+C] Thêm  |  [Ctrl+Alt+C] Xóa danh sách Tấn công", font=("Arial", 9, "bold"))
         lbl_guide_tc.grid(row=r, column=0, sticky="w", padx=10)
         r += 1
+
+        frame_chon_nhanh = ttk.Frame(self.grp_config)
+        frame_chon_nhanh.grid(row = r, column = 0, sticky = "w", padx = 10, pady = 2)
+        r += 1
+
+        self.cbo_nguoichoi = ttk.Combobox(frame_chon_nhanh, width = 22, state = "readonly")
+        self.cbo_nguoichoi.pack(side = "left", padx = (0, 5))
+
+        btn_them_ui = ttk.Button(frame_chon_nhanh, text = "Thêm nhanh", command = self.on_them_tu_ui)
+        btn_them_ui.pack(side = "left")
         
         self.lbl_tennhanvattancongs = ttk.Label(self.grp_config, text="→ Trống", foreground="red", wraplength=380)
         self.lbl_tennhanvattancongs.grid(row=r, column=0, sticky="w", padx=10, pady=(0, 5))
@@ -137,6 +147,11 @@ class GiaoDienHienThi:
         self.is_running = True
         self.thread = threading.Thread(target = self.loop_update_ui, daemon = True)
         self.thread.start()
+
+    def on_them_tu_ui(self):
+        tennhanvatduocchon = self.cbo_nguoichoi.get()
+        if tennhanvatduocchon and self.current_hwnd:
+            self.command_dict[self.current_hwnd] = f"them_tennhanvattancong_theotennhanvat:{tennhanvatduocchon}"
 
     def add_check(self, parent, text, key, r, shortcut, cmd_string):
         var = tk.BooleanVar()
@@ -205,6 +220,16 @@ class GiaoDienHienThi:
 
         self.lbl_set_1.config(text = f"→ Sét 1 (Đánh): {str_set_1}")
         self.lbl_set_2.config(text = f"→ Sét 2 (Chạy): {str_set_2}")
+
+        tennguoichoixungquanhs = data.get("tennguoichoixungquanhs", [])
+        current_values = self.cbo_nguoichoi["values"]
+
+        if tuple(tennguoichoixungquanhs) != current_values:
+            self.cbo_nguoichoi["values"] = tennguoichoixungquanhs
+            if tennguoichoixungquanhs and not self.cbo_nguoichoi.get():
+                self.cbo_nguoichoi.set(tennguoichoixungquanhs[0])
+            elif not tennguoichoixungquanhs:
+                self.cbo_nguoichoi.set("")
 
     def loop_update_ui(self):
         while self.is_running:

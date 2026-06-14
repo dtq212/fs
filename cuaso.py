@@ -118,6 +118,26 @@ class CuaSo:
                 elif idtrangthainhanvat == IDTRANGTHAINHANVAT_DACHET:
                     tentrangthainhanvat = "Đã chết"
                 x, y = self.moitruong.get_toado()
+
+                tennguoichoixungquanhs = []
+                try:
+                    id_quet = 0
+                    while True:
+                        id_quet = self.moitruong.get_idnhanvattieptheo(id_quet)
+                        if id_quet <= 0:
+                            break
+                        if not self.moitruong.get_is_nhanvattontai(id_quet):
+                            continue
+
+                        if self.moitruong.get_idloainhanvat(id_quet) == IDLOAINHANVAT_NGUOICHOI:
+                            tennguoichoi = self.moitruong.get_tennhanvat(id_quet)
+                            if tennguoichoi and tennguoichoi != tennhanvat:
+                                tennguoichoixungquanhs.append(tennguoichoi)
+
+                    tennguoichoixungquanhs = sorted(list(set(tennguoichoixungquanhs)))
+                except:
+                    tennguoichoixungquanhs = []
+
                 info = {
                     "tennhanvat": tennhanvat,
                     "tenbando": self.moitruong.get_tenbandohientai(),
@@ -153,6 +173,8 @@ class CuaSo:
                     "toadoytudongfarm": self.tactu._toadoytudongfarm,
                     "_setdo1_map": self.tactu._setdo1_map,
                     "_setdo2_map": self.tactu._setdo2_map,
+
+                    "tennguoichoixungquanhs": tennguoichoixungquanhs,
                 }
                 self.shared_data[self.idcuaso] = info
 
@@ -166,6 +188,9 @@ class CuaSo:
             cmd = self.command_dict.get(self.idcuaso)
 
             if cmd:
+                if cmd.startswith("them_tennhanvattancong_theotennhanvat:"):
+                    tennhanvat = cmd.split(":", 1)[1]
+                    self.tactu.them_tennhanvattancong_theotennhanvat(tennhanvat)
                 if cmd == "battat_tudongfarm":
                     self.tactu.battat_tudongfarm()
                 elif cmd == "battat_tudongsuavatpham":
