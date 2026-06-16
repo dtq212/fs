@@ -1,12 +1,15 @@
 import time
 import os
+import traceback
+
 import win32gui
 import tkinter as tk
 import keyboard
 from multiprocessing import Process, Manager, freeze_support
 from cuaso import CuaSo
 from giaodienhienthi import GiaoDienHienThi
-
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 def run_bot_process(hwnd, shared_data, command_dict):
     try:
@@ -17,7 +20,9 @@ def run_bot_process(hwnd, shared_data, command_dict):
             time.sleep(1)
         bot.tatauto()
     except Exception as e:
-        pass
+        print(f"\n[CRASH TẠI PROCESS CON - HWND {hwnd}]:")
+        traceback.print_exc()
+        time.sleep(10)
 
 
 class TroChoiManager:
