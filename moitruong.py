@@ -744,6 +744,12 @@ class MoiTruong:
     def get_is_tranhboss(self):
         return read_int(self.tientrinh, self.diachigame + 0x463DC0) > 0
 
+    def get_is_danhnguoichoi(self):
+        return read_int(self.tientrinh, self.diachigame + 0x464468) > 0
+
+    def get_is_danhquai(self):
+        return read_int(self.tientrinh, self.diachigame + 0x46446C) > 0
+
     def get_is_boss(self, idnhanvat = 1):
         if self.get_idloainhanvat(idnhanvat) != IDLOAINHANVAT_QUAIVAT:
             return

@@ -849,7 +849,15 @@ class TacTu:
         if self._tennhanvatkhongtancongs and self.moitruong.get_tennhanvat(idnhanvat) in self._tennhanvatkhongtancongs:
             return False
 
-        if self._is_chidanhnguoichoivatrieuhoithu and self.moitruong.get_idloainhanvat(idnhanvat) not in (IDLOAINHANVAT_NGUOICHOI, IDLOAINHANVAT_TRIEUHOITHU):
+        idloainhanvat = self.moitruong.get_idloainhanvat(idnhanvat)
+
+        if not self.moitruong.get_is_danhnguoichoi() and idloainhanvat == IDLOAINHANVAT_NGUOICHOI:
+            return False
+
+        if not self.moitruong.get_is_danhquai() and idloainhanvat != IDLOAINHANVAT_NGUOICHOI:
+            return False
+
+        if self._is_chidanhnguoichoivatrieuhoithu and idloainhanvat not in (IDLOAINHANVAT_NGUOICHOI, IDLOAINHANVAT_TRIEUHOITHU):
             return False
 
         if self.moitruong.get_is_tranhboss() and self.moitruong.get_is_boss(idnhanvat):
