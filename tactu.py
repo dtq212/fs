@@ -854,7 +854,7 @@ class TacTu:
         if not self.moitruong.get_is_danhnguoichoi() and idloainhanvat == IDLOAINHANVAT_NGUOICHOI:
             return False
 
-        if not self.moitruong.get_is_danhquai() and idloainhanvat != IDLOAINHANVAT_NGUOICHOI:
+        if not self.moitruong.get_is_danhquai() and idloainhanvat != IDLOAINHANVAT_QUAIVAT:
             return False
 
         if self._is_chidanhnguoichoivatrieuhoithu and idloainhanvat not in (IDLOAINHANVAT_NGUOICHOI, IDLOAINHANVAT_TRIEUHOITHU):
