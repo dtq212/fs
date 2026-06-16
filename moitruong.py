@@ -698,6 +698,13 @@ class MoiTruong:
         if self.get_idtabkytrancac() != idtab:
             write_int(self.tientrinh, self.diachigame + 0x4629F8, idtab)
             
+    def get_is_tiepcan(self):
+        return read_int(self.tientrinh, self.diachigame + 0x463DA0)
+
+    def set_is_tiepcan(self, is_tiepcan):
+        if self.get_is_tiepcan() != is_tiepcan:
+            write_int(self.tientrinh, self.diachigame + 0x463DA0, 1 if is_tiepcan else 0)
+
     def get_is_theosau(self):
         return read_int(self.tientrinh, self.diachigame + 0x464470)
 

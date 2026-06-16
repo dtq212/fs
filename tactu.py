@@ -1173,6 +1173,7 @@ class TacTu:
                 if is_cothesudungkynang:
                     idkynang1 = IDKYNANG_LACDIATRAM
                     idmuctieu = self.moitruong.get_idmuctieutancong()
+                    is_tiepcan = False
                     if idmuctieu > 0:
                         khoangcachmuctieu = self.moitruong.get_khoangcach(idmuctieu)
                         khoangcachmuctieusaptoi = self.moitruong.get_khoangcachsaptoi(idmuctieu)
@@ -1182,10 +1183,13 @@ class TacTu:
 
                         if not is_muctieudangdichuyen or self.moitruong.get_idloainhanvat(idmuctieu) != IDLOAINHANVAT_NGUOICHOI:
                             idkynang1 = 0
+                        if not is_muctieudangdichuyen:
+                            is_tiepcan = True
                     elif self._is_sudungkynangtoadochichuot:
                         self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_KHUYNHTHANHNHATKICH, 0)
 
                     self.moitruong.set_idkynang1(idkynang1)
+                    self.moitruong.set_is_tiepcan(is_tiepcan)
 
             elif self.moitruong.get_idhephai() == IDHEPHAI_DAOSI:
                 if self.moitruong.get_phantramkhanghoa() < self.moitruong.get_phantramkhanghoatoida():
