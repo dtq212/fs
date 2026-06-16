@@ -178,6 +178,7 @@ class CuaSo:
 
                     "_is_danhtheotennhanvat": self.tactu._is_danhtheotennhanvat,
                     "_is_danhphudau": self.tactu._is_danhphudau,
+                    "_is_khonguutiengiapsi": self.tactu._is_khonguutiengiapsi,
                 }
                 self.shared_data[self.idcuaso] = info
 
@@ -252,6 +253,8 @@ class CuaSo:
                     self.tactu.battat_is_danhtheotennhanvat()
                 elif cmd == "battat_is_danhphudau":
                     self.tactu.battat_is_danhphudau()
+                elif cmd == "battat_is_khonguutiengiapsi":
+                    self.tactu.battat_is_khonguutiengiapsi()
                 elif cmd == "action_batpk":
                     self.tactu.action_batpk()
                 elif cmd == "action_tatpk":

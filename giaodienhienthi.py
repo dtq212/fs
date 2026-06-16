@@ -111,6 +111,8 @@ class GiaoDienHienThi:
         r += 1
         self.add_check(self.grp_config, "Đánh phủ đầu (Đạo sĩ / Vũ sĩ)", "_is_danhphudau", r, "", "battat_is_danhphudau")
         r += 1
+        self.add_check(self.grp_config, "Không ưu tiên Giáp sĩ", "_is_khonguutiengiapsi", r, "Ctrl+Alt+Shift+Z", "battat_is_khonguutiengiapsi")
+        r += 1
         ttk.Separator(self.grp_config, orient = "horizontal").grid(row = r, column = 0, sticky = "ew", pady = 4)
         r += 1
 

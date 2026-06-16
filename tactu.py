@@ -93,6 +93,7 @@ class TacTu:
         self._is_phucsinhnhanh = True
         self._is_danhtheotennhanvat = True
         self._is_danhphudau = True
+        self._is_khonguutiengiapsi = False
 
     def __del__(self):
         try:
@@ -137,6 +138,7 @@ class TacTu:
 
             "is_danhtheotennhanvat": self._is_danhtheotennhanvat,
             "is_danhphudau": self._is_danhphudau,
+            "is_khonguutiengiapsi": self._is_khonguutiengiapsi,
         }
 
         util_luuthietlap(str(tennhanvat), thietlap)
@@ -221,8 +223,18 @@ class TacTu:
             if "is_danhphudau" in thietlap:
                 self._is_danhphudau = thietlap["is_danhphudau"]
 
+            if "is_khonguutiengiapsi" in thietlap:
+                self._is_khonguutiengiapsi = thietlap["is_khonguutiengiapsi"]
+
             self._setdo1_map = {k: v for k, v in self._setdo1goc_map.items() if k not in self._setdo2goc_map}
             self._setdo2_map = {k: v for k, v in self._setdo2goc_map.items() if k not in self._setdo1goc_map}
+
+    def battat_is_khonguutiengiapsi(self):
+        self._is_khonguutiengiapsi = not self._is_khonguutiengiapsi
+        if self._is_khonguutiengiapsi:
+            phatam("Bật không ưu tiên Giáp sĩ")
+        else:
+            phatam("Tắt không ưu tiên Giáp sĩ")
 
     def battat_is_danhtheotennhanvat(self):
         self._is_danhtheotennhanvat = not self._is_danhtheotennhanvat
@@ -870,26 +882,36 @@ class TacTu:
             return False
 
         return True
-    
+
     def _sosanhmuctieuuutien(self, idnhanvata, idnhanvatb, toadocosox, toadocosoy):
         if idnhanvatb <= 0:
             return True
-        
+
         khoangcacha = self.moitruong.get_khoangcachdiem(idnhanvata, toadocosox, toadocosoy)
         khoangcachb = self.moitruong.get_khoangcachdiem(idnhanvatb, toadocosox, toadocosoy)
 
+        idloainhanvata = self.moitruong.get_idloainhanvat(idnhanvata)
+        idloainhanvatb = self.moitruong.get_idloainhanvat(idnhanvatb)
+
         if self._is_uutientrieuhoithu:
             if khoangcacha <= 650:
-                idloainhanvata = self.moitruong.get_idloainhanvat(idnhanvata)
-                idloainhanvatb = self.moitruong.get_idloainhanvat(idnhanvatb)
                 if idloainhanvata == IDLOAINHANVAT_TRIEUHOITHU and idloainhanvatb != IDLOAINHANVAT_TRIEUHOITHU:
                     return True
                 if idloainhanvatb == IDLOAINHANVAT_TRIEUHOITHU and idloainhanvata != IDLOAINHANVAT_TRIEUHOITHU:
                     return False
 
+        if self._is_khonguutiengiapsi:
+            if khoangcacha < 800 and idloainhanvata == IDLOAINHANVAT_NGUOICHOI and idloainhanvatb == IDLOAINHANVAT_NGUOICHOI:
+                hephaia = self.moitruong.get_idhephai(idnhanvata)
+                hephaib = self.moitruong.get_idhephai(idnhanvatb)
+                if hephaia != IDHEPHAI_GIAPSI and hephaib == IDHEPHAI_GIAPSI:
+                    return True
+                if hephaia == IDHEPHAI_GIAPSI and hephaib != IDHEPHAI_GIAPSI:
+                    return False
+
         if khoangcacha < khoangcachb:
             return True
-        
+
         return False
 
     def action_tudongtimkiemmuctieu(self):

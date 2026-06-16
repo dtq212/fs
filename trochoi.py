@@ -141,7 +141,8 @@ class TroChoiManager:
                     cmd = "action_tatpk"
                 elif keyboard.is_pressed("ctrl+g"):
                     cmd = "battat_is_sudungkynangtoadochichuot"
-
+                elif keyboard.is_pressed("ctrl+alt+shift+z"):
+                    cmd = "battat_is_khonguutiengiapsi"
                 if cmd:
                     self.command_dict[hwnd] = cmd
                     time.sleep(0.3)
