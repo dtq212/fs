@@ -952,11 +952,6 @@ class TacTu:
             self._yeucaudichuyentheosautruongnhom = yeucaudichuyenmoi
 
     def action_xulydichuyenuutien(self):
-        if self.moitruong.get_is_dangdoithoaixacnhan() or self.moitruong.get_is_dangmocuahang():
-            self.moitruong.set_is_duoitheo(False)
-            self.moitruong.set_is_dichuyenhoatdongquanhphamvi(False)
-            return
-
         if self.moitruong.get_idtrangthaiclickchuot() == IDTRANGTHAICLICKCHUOT_CHUOTTRAI:
             return
 
