@@ -24,6 +24,9 @@ class LoopChinh:
             except (pymem.exception.PymemError, pymem.exception.WinAPIError) as err:
                 print("Luồng chính: {}".format(err))
                 time.sleep(1)
+
+            except Exception as err:
+                print("{}".format(err))
             time.sleep(0.2)
 
     def step(self):
@@ -54,6 +57,8 @@ class LoopLamMoiTrangThaiTacTu:
             except (pymem.exception.PymemError, pymem.exception.WinAPIError) as err:
                 print("Luồng làm mới trạng thái tác tử: {}".format(err))
                 time.sleep(1)
+            except Exception as err:
+                print("{}".format(err))
             time.sleep(0.2)
 
     def step(self):
@@ -86,6 +91,8 @@ class LoopPhu:
             except (pymem.exception.PymemError, pymem.exception.WinAPIError) as err:
                 print("Luồng phụ: {}: {}".format(err, traceback.format_exc()))
                 time.sleep(1)
+            except Exception as err:
+                print("{}".format(err))
             time.sleep(0.2)
 
     def step(self):
