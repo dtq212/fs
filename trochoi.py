@@ -2,6 +2,7 @@ import time
 import os
 import traceback
 
+import pymem
 import win32gui
 import tkinter as tk
 import keyboard
