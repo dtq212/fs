@@ -4,3 +4,5 @@ python -m nuitka --onefile --windows-disable-console --windows-uac-admin --inclu
 
 $env:CFLAGS="-Wno-error=implicit-function-declaration -Wno-error=int-conversion"
 python -m nuitka --standalone --windows-disable-console --windows-uac-admin --include-module=pkg_resources --include-data-dir="C:\Users\Admin\PycharmProjects\fs\.venv\Lib\site-packages\keystone=keystone" --enable-plugin=tk-inter --nofollow-import-to=charset_normalizer --nofollow-import-to=pygame._sdl2 "C:\Users\Admin\PycharmProjects\fs\trochoi.py"
+
+InjectorCLIx86.exe game.exe HookLibraryx86.dll
