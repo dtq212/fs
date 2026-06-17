@@ -9,6 +9,9 @@ from multiprocessing import Process, Manager, freeze_support
 from cuaso import CuaSo
 from giaodienhienthi import GiaoDienHienThi
 import os
+
+import ctypes
+import sys
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 def run_bot_process(hwnd, shared_data, command_dict):
@@ -156,7 +159,6 @@ class TroChoiManager:
     def stop_all(self):
         for p in self.bot_processes.values(): p.terminate()
         os._exit(0)
-
 
 if __name__ == "__main__":
     freeze_support()

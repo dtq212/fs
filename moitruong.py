@@ -7,8 +7,8 @@ from keystone import Ks, KS_ARCH_X86, KS_MODE_32
 from hangso import *
 from tienich import *
 
-
 class MoiTruong:
+
     def __init__(self, idcuaso):
         self._thoidiemnhanloimoitodoigannhat = 0.
         self._thoidiemmoitodoigannhat = 0.
