@@ -930,7 +930,7 @@ class TacTu:
                             x_hientai, y_hientai = self.moitruong.get_toado()
                             x_cu, y_cu = self._toadokiemtrabiket
                             khoangcachdadi = math.hypot(x_hientai - x_cu, y_hientai - y_cu)
-                            if khoangcach > khoangcachtheosau and khoangcachdadi < 150:
+                            if khoangcach > khoangcachtheosau + 300 and khoangcachdadi < 150:
                                 self._is_dangbiket = True
                             else:
                                 self._is_dangbiket = False
@@ -938,7 +938,7 @@ class TacTu:
                             self._toadokiemtrabiket = (x_hientai, y_hientai)
                             self._thoidiemkiemtrabiket = time.time()
 
-                        if khoangcach >= KHOANGCACHTOIDATIMKIEMMUCTIEU or self._is_dangbiket:
+                        if self._is_dangbiket:
                             loaidichuyen = "tudongtimduong"
                         else:
                             loaidichuyen = "dichuyengiukhoangcachtoidadiem"
