@@ -946,7 +946,7 @@ class TacTu:
                         yeucaudichuyenmoi = {
                             "loaidichuyen": loaidichuyen,
                             "toadodich": (xtruongnhom, ytruongnhom),
-                            "khoangcach": random.randint(100, 150) # if khoangcach >= 1200 else max(khoangcachtheosau - random.randint(100, 150), 0),
+                            "khoangcach": random.randint(100, 150) if khoangcach >= 1200 else max(khoangcachtheosau - random.randint(100, 150), 0),
                         }
         finally:
             self._yeucaudichuyentheosautruongnhom = yeucaudichuyenmoi
@@ -1008,7 +1008,7 @@ class TacTu:
                 elif self._toadodichtudongtimduonggannhat:
                     toadocux, toadocuy = self._toadodichtudongtimduonggannhat
                     khoangcachchenhlech = math.hypot(toadox - toadocux, toadoy - toadocuy)
-                    if khoangcachchenhlech > 600 and (time.time() - self._thoidiemtudongtimduonggannhat) > 4.5:
+                    if khoangcachchenhlech > 1200 and (time.time() - self._thoidiemtudongtimduonggannhat) > 2.5:
                         is_cancapnhatduongdi = True
                 else:
                     is_cancapnhatduongdi = True
