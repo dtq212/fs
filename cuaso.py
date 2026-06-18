@@ -149,7 +149,6 @@ class CuaSo:
                     "is_window_active": self.moitruong.get_is_cuasogamekichhoat(),
 
                     "_is_tudongdanhtheosautruongnhom": self.tactu._is_tudongdanhtheosautruongnhom,
-                    "_is_tudongsuavatpham": self.tactu._is_tudongsuavatpham,
                     "_is_tudongbattathieuungbotro": self.tactu._is_tudongbattathieuungbotro,
                     "_is_tudongtimkiemmuctieu": self.tactu._is_tudongtimkiemmuctieu,
                     "_is_giukhoangcach": self.tactu._is_giukhoangcach,
@@ -195,10 +194,6 @@ class CuaSo:
                 if cmd.startswith("them_tennhanvattancong_theotennhanvat:"):
                     tennhanvat = cmd.split(":", 1)[1]
                     self.tactu.them_tennhanvattancong_theotennhanvat(tennhanvat)
-                if cmd == "battat_tudongfarm":
-                    self.tactu.battat_tudongfarm()
-                elif cmd == "battat_tudongsuavatpham":
-                    self.tactu.battat_tudongsuavatpham()
                 elif cmd == "action_test":
                     self.tactu.action_test()
                 elif cmd == "action_mua1thancauphu":
@@ -255,10 +250,6 @@ class CuaSo:
                     self.tactu.battat_is_danhphudau()
                 elif cmd == "battat_is_khonguutiengiapsi":
                     self.tactu.battat_is_khonguutiengiapsi()
-                elif cmd == "action_batpk":
-                    self.tactu.action_batpk()
-                elif cmd == "action_tatpk":
-                    self.tactu.action_tatpk()
                 elif cmd == "luusetdo_1":
                     self.tactu.luusetdo(1)
                 elif cmd == "luusetdo_2":

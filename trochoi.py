@@ -88,12 +88,8 @@ class TroChoiManager:
             hwnd = win32gui.GetForegroundWindow()
             if hwnd in self.bot_processes:
                 cmd = None
-                if keyboard.is_pressed("ctrl+alt+shift+h"):
-                    cmd = "battat_tudongfarm"
-                elif keyboard.is_pressed("ctrl+alt+shift+c"):
+                if keyboard.is_pressed("ctrl+alt+shift+c"):
                     cmd = "battat_is_danhtheotennhanvat"
-                elif keyboard.is_pressed("ctrl+alt+shift+r"):
-                    cmd = "battat_tudongsuavatpham"
                 elif keyboard.is_pressed("ctrl+alt+shift+u"):
                     cmd = "action_test"
                 elif keyboard.is_pressed("ctrl+alt+shift+y"):
@@ -142,10 +138,6 @@ class TroChoiManager:
                     cmd = "battat_is_uutientrieuhoithu"
                 elif keyboard.is_pressed("ctrl+a"):
                     cmd = "tat_is_chidanhnguoichoivatrieuhoithu"
-                elif keyboard.is_pressed("ctrl+e"):
-                    cmd = "action_batpk"
-                elif keyboard.is_pressed("ctrl+q"):
-                    cmd = "action_tatpk"
                 elif keyboard.is_pressed("ctrl+g"):
                     cmd = "battat_is_sudungkynangtoadochichuot"
                 elif keyboard.is_pressed("ctrl+alt+shift+z"):
