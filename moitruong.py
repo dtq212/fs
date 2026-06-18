@@ -1302,7 +1302,7 @@ class MoiTruong:
 
         asm_code = f"""
             push {hex(diachidulieu)}
-            push 00
+            push 03
 
             mov ecx, dword ptr [{hex(diachi_ptr_cauhinh)}]
             add ecx, {hex(offset_cauhinh_mokhoa)}
