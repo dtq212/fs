@@ -111,7 +111,6 @@ class TacTu:
             "is_chidanhnguoichoivatrieuhoithu": self._is_chidanhnguoichoivatrieuhoithu,
             "tennhanvattancongs": self._tennhanvattancongs,
             "tennhanvatkhongtancongs": self._tennhanvatkhongtancongs,
-            "tennhanvattodoitudongs": list(self._tennhanvattodoitudongs),
             "is_tudongmokhoa": self._is_tudongmokhoa,
             "is_tudongdoisetdo": self._is_tudongdoisetdo,
 
@@ -169,9 +168,6 @@ class TacTu:
 
             if "tennhanvatkhongtancongs" in thietlap:
                 self._tennhanvatkhongtancongs = thietlap["tennhanvatkhongtancongs"]
-
-            if "tennhanvattodoitudongs" in thietlap:
-                self._tennhanvattodoitudongs = set(thietlap["tennhanvattodoitudongs"])
 
             if "is_tudongmokhoa" in thietlap:
                 self._is_tudongmokhoa = thietlap["is_tudongmokhoa"]
@@ -234,19 +230,6 @@ class TacTu:
             phatam("Bật chỉ đánh theo tên nhân vật")
         else:
             phatam("Tắt chỉ đánh theo tên nhân vật, chuyển sang đánh tự do")
-
-    def them_tennhanvattodoitudong(self):
-        idmuctieu = self.moitruong.get_idmuctieudangchichuot()
-        if idmuctieu > 0 and self.moitruong.get_idloainhanvat(idmuctieu) == IDLOAINHANVAT_NGUOICHOI:
-            tenhanvat = self.moitruong.get_tennhanvat(idmuctieu)
-            if tenhanvat and tenhanvat not in self._tennhanvattodoitudongs:
-                self._tennhanvattodoitudongs.add(tenhanvat)
-                print(f"Danh sách Tổ đội: {list(self._tennhanvattodoitudongs)}")
-                phatam(f"Thêm nhân vật tổ đội. Tổng {len(self._tennhanvattodoitudongs)}")
-
-    def botoanbo_tennhanvattodoitudong(self):
-        self._tennhanvattodoitudongs.clear()
-        phatam("Bỏ toàn bộ danh sách tổ đội")
 
     def battat_is_danhphudau(self):
         self._is_danhphudau = not self._is_danhphudau
