@@ -1336,7 +1336,7 @@ class MoiTruong:
         if self.diachihamsudungkynangtoado:
             return
 
-        aob = "33 C0 5D 8B 8C 24 ?? ?? ?? ?? 5E 5B 5F 33 CC E8 ?? ?? ?? ?? 81 C4 ?? ?? ?? ?? C2 ?? ??"
+        aob = "A1 ?? ?? ?? ?? 51 52 8D 8C 06 C0 00 00 00 E8 ?? ?? ?? ??"
 
         scan_diachi = pymem.pattern.pattern_scan_module(
             self.tientrinh.process_handle,
@@ -1345,11 +1345,11 @@ class MoiTruong:
         )
 
         if scan_diachi:
-            diachi_lenh_call = scan_diachi + 15
+            diachi_lenh_call = scan_diachi + 14
             khoang_cach_call = read_int(self.tientrinh, diachi_lenh_call + 1)
             diachi_ham = diachi_lenh_call + 5 + khoang_cach_call
         else:
-            print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern hàm sử dụng kỹ năng tọa độ (tại 13B77A)! Hủy bỏ khởi tạo.")
+            print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern hàm sử dụng kỹ năng tọa độ (13B570)! Hủy bỏ khởi tạo.")
             return
 
         self.diachihamsudungkynangtoado = self.tientrinh.allocate(256)
