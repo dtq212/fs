@@ -1041,26 +1041,6 @@ class TacTu:
         try:
             if self.moitruong.get_idhephai() == IDHEPHAI_DINHAN:
                 is_datrieuhoithu = self.moitruong.get_is_datrieuhoithu()
-                is_vohieuhoa_o3 = True
-
-                if not is_datrieuhoithu:
-                    danhsachhieuungbotros = (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN)
-
-                    is_cohieuungnhungchuabat = False
-                    is_dabatitnhat1hieuungbotro = False
-
-                    for idhieuung in danhsachhieuungbotros:
-                        if self.moitruong.get_is_cohieuungbotro(idhieuung):
-                            if self.moitruong.get_is_hieuungbotrodangbat(idhieuung):
-                                is_dabatitnhat1hieuungbotro = True
-                                break
-                            else:
-                                is_cohieuungnhungchuabat = True
-
-                    if is_dabatitnhat1hieuungbotro or not is_cohieuungnhungchuabat:
-                        is_vohieuhoa_o3 = False
-
-                self.moitruong.set_is_vohieuhoakynangbotro3(is_vohieuhoa_o3)
 
                 if is_datrieuhoithu and self._idtrieuhoithu > 0 and self.moitruong.get_khoangcach(self._idtrieuhoithu) < 800 and (self.moitruong.get_sinhluctoida(self._idtrieuhoithu) - self.moitruong.get_sinhluchientai(self._idtrieuhoithu) >= 200):
                     self.moitruong.set_idkynangbotro4(IDKYNANG_BOTAMCHU)
