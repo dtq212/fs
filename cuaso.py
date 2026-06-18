@@ -250,6 +250,10 @@ class CuaSo:
                     self.tactu.battat_is_danhphudau()
                 elif cmd == "battat_is_khonguutiengiapsi":
                     self.tactu.battat_is_khonguutiengiapsi()
+                elif cmd == "action_batpk":
+                    self.tactu.action_batpk()
+                elif cmd == "action_tatpk":
+                    self.tactu.action_tatpk()
                 elif cmd == "luusetdo_1":
                     self.tactu.luusetdo(1)
                 elif cmd == "luusetdo_2":
