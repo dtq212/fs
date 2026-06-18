@@ -1600,7 +1600,10 @@ class MoiTruong:
 
     def action_mokhoa(self, makhoa, delay = 0.5):
         if not self.diachihammokhoa:
+            print("action_mokhoa 1")
             self.khoitaohammokhoa()
+
+        print("action_mokhoa 2")
 
         if time.time() - self._thoidiemmokhoagannhat < delay:
             return False
