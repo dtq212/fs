@@ -53,12 +53,6 @@ class TacTu:
 
         self._thoidiemtamngungtanconggannhat = 0.
 
-        self._is_tudongfarm = False
-        self._idbandotudongfarm = 0
-        self._toadoxtudongfarm = 0
-        self._toadoytudongfarm = 0
-        self._is_dadichuyentoivitrifarm = False
-
         self._toadodichtudongtimduonggannhat = None
 
         self._is_tudongvutvatpham = False
@@ -102,7 +96,6 @@ class TacTu:
         thietlap = {
             "is_phucsinhnhanh": self._is_phucsinhnhanh,
             "is_danhtheosautruongnhom": self._is_tudongdanhtheosautruongnhom,
-            "is_tudongsuavatpham": self._is_tudongsuavatpham,
             "is_tudongbattathieuungbotro": self._is_tudongbattathieuungbotro,
 
             "is_uutientrieuhoithu": self._is_uutientrieuhoithu,
@@ -114,12 +107,8 @@ class TacTu:
             "is_tudongmokhoa": self._is_tudongmokhoa,
             "is_tudongdoisetdo": self._is_tudongdoisetdo,
 
-            "is_tudongfarm": self._is_tudongfarm,
             "is_tudongvutvatpham": self._is_tudongvutvatpham,
             "is_tudongmuavatphamkytrancac": self._is_tudongmuavatphamkytrancac,
-            "idbandotudongfarm": self._idbandotudongfarm,
-            "toadoxtudongfarm": self._toadoxtudongfarm,
-            "toadoytudongfarm": self._toadoytudongfarm,
 
             "is_giukhoangcach": self._is_giukhoangcach,
             "is_duoitheo": self._is_duoitheo,
@@ -144,9 +133,6 @@ class TacTu:
                 self._is_phucsinhnhanh = thietlap["is_phucsinhnhanh"]
             if "is_danhtheosautruongnhom" in thietlap:
                 self._is_tudongdanhtheosautruongnhom = thietlap["is_danhtheosautruongnhom"]
-
-            if "is_tudongsuavatpham" in thietlap:
-                self._is_tudongsuavatpham = thietlap["is_tudongsuavatpham"]
 
             if "is_tudongbattathieuungbotro" in thietlap:
                 self._is_tudongbattathieuungbotro = thietlap["is_tudongbattathieuungbotro"]
@@ -175,23 +161,11 @@ class TacTu:
             if "is_tudongdoisetdo" in thietlap:
                 self._is_tudongdoisetdo = thietlap["is_tudongdoisetdo"]
 
-            if "is_tudongfarm" in thietlap:
-                self._is_tudongfarm = thietlap["is_tudongfarm"]
-
             if "is_tudongvutvatpham" in thietlap:
                 self._is_tudongvutvatpham = thietlap["is_tudongvutvatpham"]
 
             if "is_tudongmuavatphamkytrancac" in thietlap:
                 self._is_tudongmuavatphamkytrancac = thietlap["is_tudongmuavatphamkytrancac"]
-
-            if "idbandotudongfarm" in thietlap:
-                self._idbandotudongfarm = thietlap["idbandotudongfarm"]
-
-            if "toadoxtudongfarm" in thietlap:
-                self._toadoxtudongfarm = thietlap["toadoxtudongfarm"]
-
-            if "toadoytudongfarm" in thietlap:
-                self._toadoytudongfarm = thietlap["toadoytudongfarm"]
 
             if "is_giukhoangcach" in thietlap:
                 self._is_giukhoangcach = thietlap["is_giukhoangcach"]
@@ -283,20 +257,6 @@ class TacTu:
         else:
             phatam("Tắt tự động mua vật phẩm kỳ trân các")
 
-    def battat_tudongfarm(self):
-        self._is_tudongfarm = not self._is_tudongfarm
-
-        if self._is_tudongfarm:
-            if self.moitruong.get_is_khuvuccothetancong():
-                self._idbandotudongfarm = self.moitruong.get_idbandohientai()
-                self._toadoxtudongfarm, self._toadoytudongfarm = self.moitruong.get_toado()
-                print(f"Đã lưu tọa độ Farm: Map {self._idbandotudongfarm} - {self._toadoxtudongfarm}:{self._toadoytudongfarm}")
-
-            phatam("Bật tự động Farm và Bán rác")
-
-        else:
-            phatam("Tắt tự động Farm và Bán rác")
-
     def battat_tudongdanhtheosautruongnhom(self):
         self._is_tudongdanhtheosautruongnhom = not self._is_tudongdanhtheosautruongnhom
 
@@ -345,14 +305,6 @@ class TacTu:
             phatam("Bật tự động bật / tắt hiệu ứng bổ trợ")
         else:
             phatam("Tắt tự động bật / tắt hiệu ứng bổ trợ")
-
-    def battat_tudongsuavatpham(self):
-        self._is_tudongsuavatpham = not self._is_tudongsuavatpham
-
-        if self._is_tudongsuavatpham:
-            phatam("Bật tự động sửa vật phẩm")
-        else:
-            phatam("Tắt tự động sửa vật phẩm")
 
     def battat_is_chidanhnguoichoivatrieuhoithu(self):
         self._is_chidanhnguoichoivatrieuhoithu = not self._is_chidanhnguoichoivatrieuhoithu

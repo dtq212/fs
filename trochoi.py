@@ -126,6 +126,10 @@ class TroChoiManager:
                     cmd = "luusetdo_1"
                 elif keyboard.is_pressed("ctrl+alt+2"):
                     cmd = "luusetdo_2"
+                elif keyboard.is_pressed("ctrl+q"):
+                    cmd = "action_tatpk"
+                elif keyboard.is_pressed("ctrl+e"):
+                    cmd = "action_batpk"
                 elif keyboard.is_pressed("ctrl+c"):
                     cmd = "them_tennhanvattancong"
                 elif keyboard.is_pressed("ctrl+x"):

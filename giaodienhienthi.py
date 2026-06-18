@@ -65,8 +65,6 @@ class GiaoDienHienThi:
 
         r = 0
 
-        self.add_check(self.grp_config, "Tự động Farm & Bán rác", "_is_tudongfarm", r, "Ctrl+Alt+Shift+H", "battat_tudongfarm")
-        r += 1
         self.add_check(self.grp_config, "Tự động vứt rác", "_is_tudongvutvatpham", r, "Ctrl+Alt+Shift+D", "battat_is_tudongvutvatpham")
         r += 1
         self.add_check(self.grp_config, "Tự động mua vật phẩm", "_is_tudongmuavatphamkytrancac", r, "Ctrl+Alt+Shift+M", "battat_is_tudongmuavatphamkytrancac")
@@ -221,11 +219,6 @@ class GiaoDienHienThi:
             var.set(data.get(key, False))
 
         self.lbl_info_2.config(text = f"Tọa độ: {data.get('x', 0)}, {data.get('y', 0)} | Map: {data.get('tenbando', '-')}")
-
-        farm_map = data.get("idbandotudongfarm", 0)
-        farm_x = data.get("toadoxtudongfarm", 0)
-        farm_y = data.get("toadoytudongfarm", 0)
-        self.lbl_info_farm.config(text = f"Điểm Farm: ({farm_x}, {farm_y}) | ID Map: {farm_map}")
 
         str_tancong = data.get("_tennhanvattancongs", "")
         str_khongtancong = data.get("_tennhanvatkhongtancongs", "")

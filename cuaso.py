@@ -164,12 +164,8 @@ class CuaSo:
                     "_tennhanvattancongs": ", ".join(self.tactu._tennhanvattancongs),
                     "_tennhanvatkhongtancongs": ", ".join(self.tactu._tennhanvatkhongtancongs),
 
-                    "_is_tudongfarm": self.tactu._is_tudongfarm,
                     "_is_tudongvutvatpham": self.tactu._is_tudongvutvatpham,
                     "_is_tudongmuavatphamkytrancac": self.tactu._is_tudongmuavatphamkytrancac,
-                    "idbandotudongfarm": self.tactu._idbandotudongfarm,
-                    "toadoxtudongfarm": self.tactu._toadoxtudongfarm,
-                    "toadoytudongfarm": self.tactu._toadoytudongfarm,
                     "_setdo1_map": self.tactu._setdo1_map,
                     "_setdo2_map": self.tactu._setdo2_map,
 

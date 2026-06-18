@@ -1240,6 +1240,7 @@ class MoiTruong:
 
         return True
 
+
     def khoitaohamdoimaupk(self):
         if self.diachihamdoimaupk:
             return
@@ -1274,15 +1275,18 @@ class MoiTruong:
 
             mov ecx, dword ptr [eax]
             mov edx, dword ptr [ecx + 0x1C]
-            call edx
+            call edx                        
+
+            add esp, 0x0C
 
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret 4
+            ret
         """
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamdoimaupk, bytes(encoding), len(encoding))
+
 
     def action_doimaupk(self, idmaupk):
         if not self.diachihamdoimaupk:
