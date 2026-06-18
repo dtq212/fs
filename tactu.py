@@ -91,8 +91,6 @@ class TacTu:
 
     def __del__(self):
         try:
-            self.moitruong.action_tatvohieuhoathietlapmuctieutancong()
-            self.moitruong.action_tatvohieuhoathietlapmuctieudangchon()
             pass
         except (pymem.exception.PymemError, pymem.exception.WinAPIError):
             pass
@@ -1340,8 +1338,6 @@ class TacTu:
                 if is_muathanhcong:
                     return True
                 return False
-
-        self.moitruong.action_tatvohieuhoapopuptabkytrancac()
 
         return False
 

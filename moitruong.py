@@ -1118,7 +1118,7 @@ class MoiTruong:
             mov ebp, esp
             sub esp, 16                     
 
-            mov eax, dword ptr [{hex(diachidulieu + 0xC)}]
+            mov eax, dword ptr [{hex(diachidulieu)}]
 
             mov byte ptr [ebp - 12], 0x71
             mov dword ptr [ebp - 11], eax
@@ -1139,12 +1139,12 @@ class MoiTruong:
 
             mov ecx, dword ptr [eax]
             mov edx, dword ptr [ecx + 0x1C]
-            call edx                        
+            call edx
 
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret                           
+            ret 4
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -1274,14 +1274,12 @@ class MoiTruong:
 
             mov ecx, dword ptr [eax]
             mov edx, dword ptr [ecx + 0x1C]
-            call edx                        
-
-            add esp, 0x0C
+            call edx
 
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret
+            ret 4
         """
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamdoimaupk, bytes(encoding), len(encoding))
@@ -1597,11 +1595,8 @@ class MoiTruong:
         if self.get_idtabkytrancac() != idtab:
             vitritab = VITRITAB_MAP.get(idtab)
             if vitritab is not None:
-                self.action_vohieuhoapopuptabkytrancac()
                 self.action_motabkytrancac(vitritab)
             return False
-
-        self.action_tatvohieuhoapopuptabkytrancac()
 
         self._thoidiemmuakytrancacgannhat = time.time()
 
