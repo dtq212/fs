@@ -1559,31 +1559,24 @@ class MoiTruong:
     def khoitaohammokhoa(self):
         if self.diachihammokhoa:
             return
-        aob_ham = "83 EC 2C A1 ?? ?? ?? ?? 33 C4 89 44 24 28 8B 44 24 34 85 C0 74 ?? 8A 4C 24 30 6A 20 50 8D 54 24 0E 52 C6 44 24 10 74 88 4C 24 11 FF 15 ?? ?? ?? ?? A1 ?? ?? ?? ?? 83 C4 0C 85 C0 74 ??"
-        diachi_scan_ham = pymem.pattern.pattern_scan_module(
+
+        aob_wrapper_mokhoa = "53 6A 00 8B 0D ?? ?? ?? ?? 81 C1 ?? ?? ?? ?? E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? 85 DB 0F 84 ?? ?? ?? ?? 53 6A 07 EB ?? 85 DB"
+        scan_wrapper = pymem.pattern.pattern_scan_module(
             self.tientrinh.process_handle,
             self.gamemodule,
-            taopatterntuaob(aob_ham)
+            taopatterntuaob(aob_wrapper_mokhoa)
         )
 
-        if diachi_scan_ham:
-            diachi_ham = diachi_scan_ham
-        else:
-            print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern hàm mở khóa! Hủy bỏ khởi tạo.")
+        if not scan_wrapper:
+            print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Wrapper Mở khóa! Hủy bỏ khởi tạo.")
             return
 
-        aob_doituong = "85 DB 0F 84 ?? ?? ?? ?? 53 6A 03 B9 ?? ?? ?? ?? E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? 53 6A 09"
-        diachi_scan_obj = pymem.pattern.pattern_scan_module(
-            self.tientrinh.process_handle,
-            self.gamemodule,
-            taopatterntuaob(aob_doituong)
-        )
+        diachi_ptr_cauhinh = read_int(self.tientrinh, scan_wrapper + 5)
 
-        if diachi_scan_obj:
-            diachi_doituong = read_int(self.tientrinh, diachi_scan_obj + 12)
-        else:
-            print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Đối tượng UI mở khóa! Hủy bỏ khởi tạo.")
-            return
+        offset_cauhinh_mokhoa = read_int(self.tientrinh, scan_wrapper + 11)
+
+        khoang_cach_call = read_int(self.tientrinh, scan_wrapper + 16)
+        diachi_ham_mokhoa = scan_wrapper + 20 + khoang_cach_call
 
         self.diachihammokhoa = self.tientrinh.allocate(256)
         diachidulieu = self.diachihammokhoa + 0x40
@@ -1592,12 +1585,12 @@ class MoiTruong:
 
         asm_code = f"""
             push {hex(diachidulieu)}
-            push 03
+            push 00
 
-            mov ecx, {hex(diachi_doituong)}
+            mov ecx, dword ptr [{hex(diachi_ptr_cauhinh)}]
+            add ecx, {hex(offset_cauhinh_mokhoa)}
 
-            mov eax, {hex(diachi_ham)}
-
+            mov eax, {hex(diachi_ham_mokhoa)}
             call eax
             ret
         """
