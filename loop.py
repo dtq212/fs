@@ -102,7 +102,6 @@ class LoopPhu:
             return
 
         self.tactu.action_tudongfarm()
-        self.tactu.action_tudongvutvatpham()
         self.tactu.action_tudongmuavatpham()
         self.tactu.action_tudongdanhtheosautruongnhom()
         self.tactu.action_tudongsuavatpham()
