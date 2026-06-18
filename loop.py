@@ -34,11 +34,11 @@ class LoopChinh:
             return
         if self.moitruong.get_is_dangmatketnoi():
             return
-        # self.tactu.action_tudongtimkiemmuctieu()
-        # self.tactu.action_xulydichuyenuutien()
-        # self.tactu.action_xulytancong()
-        # self.tactu.action_dongbotoadohientai()
-        # self.tactu.action_tudongdoisetdo()
+        self.tactu.action_tudongtimkiemmuctieu()
+        self.tactu.action_xulydichuyenuutien()
+        self.tactu.action_xulytancong()
+        self.tactu.action_dongbotoadohientai()
+        self.tactu.action_tudongdoisetdo()
 
 class LoopLamMoiTrangThaiTacTu:
     def __init__(self, moitruong: MoiTruong, tactu: TacTu, stop: threading.Event):
@@ -66,8 +66,8 @@ class LoopLamMoiTrangThaiTacTu:
             return
         if self.moitruong.get_is_dangmatketnoi():
             return
-        # self.tactu.action_lammoitrangthaitactu()
-        # self.tactu.action_kiemtraxulyloitudongtimduong()
+        self.tactu.action_lammoitrangthaitactu()
+        self.tactu.action_kiemtraxulyloitudongtimduong()
 
 class LoopPhu:
     def __init__(self, moitruong: MoiTruong, tactu: TacTu, stop: threading.Event):
@@ -101,13 +101,13 @@ class LoopPhu:
         if self.moitruong.get_is_dangmatketnoi():
             return
 
-        # self.tactu.action_tudongfarm()
-        # self.tactu.action_tudongmuavatpham()
-        # self.tactu.action_tudongdanhtheosautruongnhom()
-        # self.tactu.action_tudongsuavatpham()
-        # self.tactu.action_tudongbattathieuungbotro()
-        # self.tactu.action_tudongmokhoa()
-        # self.tactu.action_tudongsudungvatpham()
-        # self.tactu.action_tudongphucsinh()
-        # self.tactu.action_tudongmoitodoi()
-        # self.moitruong.action_vohieuhoagiamxuatchieukhithaydo()
+        self.tactu.action_tudongfarm()
+        self.tactu.action_tudongmuavatpham()
+        self.tactu.action_tudongdanhtheosautruongnhom()
+        self.tactu.action_tudongsuavatpham()
+        self.tactu.action_tudongbattathieuungbotro()
+        self.tactu.action_tudongmokhoa()
+        self.tactu.action_tudongsudungvatpham()
+        self.tactu.action_tudongphucsinh()
+        self.tactu.action_tudongmoitodoi()
+        self.moitruong.action_vohieuhoagiamxuatchieukhithaydo()
