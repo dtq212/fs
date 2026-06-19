@@ -633,7 +633,7 @@ class TacTu:
             self._thoidiemtamngungtanconggannhat = time.time()
 
     def action_kiemtraxulyloitudongtimduong(self):
-        if self.moitruong.get_idtrangthainhanvat() == IDTRANGTHAINHANVAT_DUNGIM and time.time() - self._thoidiemnhanvattudongtimduongdungimgannhat > 2. and self.moitruong.get_is_dangtudongtimduong():
+        if self.moitruong.get_idtrangthainhanvat() == IDTRANGTHAINHANVAT_DUNGIM and time.time() - self._thoidiemnhanvattudongtimduongdungimgannhat > 2. and self.moitruong.get_is_dangtudongtimduong() and time.time() - self._thoidiemtudongtimduonggannhat >= 3.0:
             self.moitruong.set_is_dangtudongtimduong(False)
             self._toadodichtudongtimduonggannhat = None
 
