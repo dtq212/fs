@@ -826,7 +826,6 @@ class MoiTruong:
     def get_is_dangmokytrancac(self):
         return read_int(self.tientrinh, self.diachigame + 0x26B8D4)
 
-
     def khoitaohamsudungvatpham(self):
         if self.diachihamsudungvatpham:
             return

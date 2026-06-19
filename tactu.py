@@ -855,7 +855,7 @@ class TacTu:
                         yeucaudichuyenmoi = {
                             "loaidichuyen": loaidichuyen,
                             "toadodich": (xtruongnhom, ytruongnhom),
-                            "khoangcach": random.randint(100, 150) if khoangcach >= 1200 else max(khoangcachtheosau - random.randint(100, 150), 0),
+                            "khoangcach": random.randint(100, 150) if khoangcach >= 1200 else max(khoangcachtheosau - random.randint(200, 300), 0),
                         }
         finally:
             self._yeucaudichuyentheosautruongnhom = yeucaudichuyenmoi
@@ -1235,8 +1235,6 @@ class TacTu:
         if not self._is_tudongmuavatphamkytrancac:
             return False
         
-        
-        
         if self.moitruong.get_idmaupk() == IDMAUPK_DO or self.moitruong.get_diempk() > 0:
             if not self.get_is_dusoluongtoithieu(QUANAMTHUY, 1):
                 if self.get_is_dusoluongtoithieu(TIENDONG, 2):
@@ -1286,8 +1284,6 @@ class TacTu:
             if self.moitruong.get_is_dangmokytrancac():
                 self.moitruong.action_dongkytrancac(delay = 1.0)
             self._is_dangmuavatpham = False
-
-        self.moitruong.action_tatvohieuhoapopuptabkytrancac()
 
         return False
 
