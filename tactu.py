@@ -916,14 +916,18 @@ class TacTu:
                 if is_cancapnhatduongdi:
                     self.moitruong.action_tudongtimduong(toadox, toadoy)
                     self._toadodichtudongtimduonggannhat = (toadox, toadoy)
+                    self._thoidiemtudongtimduonggannhat = time.time()
             elif loaidichuyen == "dichuyengiukhoangcachtoidadiem":
-                self.moitruong.set_is_dangtudongtimduong(False)
+                if time.time() - self._thoidiemtudongtimduonggannhat >= 3.0:
+                    self.moitruong.set_is_dangtudongtimduong(False)
                 self.moitruong.action_dichuyengiukhoangcachtoidadiem(*yeucauduocchon.get("toadodich"), khoangcachtoida = yeucauduocchon.get("khoangcach"))
             elif loaidichuyen == "dichuyengiukhoangcachtoida":
-                self.moitruong.set_is_dangtudongtimduong(False)
+                if time.time() - self._thoidiemtudongtimduonggannhat >= 3.0:
+                    self.moitruong.set_is_dangtudongtimduong(False)
                 self.moitruong.action_dichuyengiukhoangcachtoida(yeucauduocchon.get("idmuctieu"), khoangcachtoida = yeucauduocchon.get("khoangcach"))
             elif loaidichuyen == "dichuyengiukhoangcachtoithieu":
-                self.moitruong.set_is_dangtudongtimduong(False)
+                if time.time() - self._thoidiemtudongtimduonggannhat >= 3.0:
+                    self.moitruong.set_is_dangtudongtimduong(False)
                 self.moitruong.action_dichuyengiukhoangcachtoithieu(yeucauduocchon.get("idmuctieu"), khoangcachtoithieu = yeucauduocchon.get("khoangcach"))
         else:
             self.moitruong.set_is_tamngungtancong(False)
