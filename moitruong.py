@@ -1132,7 +1132,7 @@ class MoiTruong:
             mov ebp, esp
             sub esp, 16                     
 
-            mov eax, dword ptr [{hex(diachidulieu)}]
+            mov eax, dword ptr [{hex(diachidulieu + 0xC)}]
 
             mov byte ptr [ebp - 12], 0x71
             mov dword ptr [ebp - 11], eax
@@ -1182,8 +1182,6 @@ class MoiTruong:
             return False
 
         self._thoidiemsuavatphamgannhat = time.time()
-
-        print("action_suavatpham: {}".format(idvatpham))
 
         diachidulieu = self.diachihamsuavatpham + 0x40
 
