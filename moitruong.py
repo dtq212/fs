@@ -1577,7 +1577,7 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihammotabkytrancac, bytes(encoding), len(encoding))
 
-    def action_motabkytrancac(self, vitritab, delay = 0.5):
+    def action_motabkytrancac(self, vitritab, delay = 0.05):
         if not self.diachihammotabkytrancac:
             self.khoitaohammotabkytrancac()
 
@@ -1645,7 +1645,7 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihammuavatphamkytrancac, bytes(encoding), len(encoding))
 
-    def action_muavatphamkytrancac(self, idtab, vitrivatpham, soluong, delay = 0.25):
+    def action_muavatphamkytrancac(self, idtab, vitrivatpham, soluong, delay = 0.05):
         if not self.diachihammuavatphamkytrancac:
             self.khoitaohammuavatphamkytrancac()
 
