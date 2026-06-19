@@ -910,7 +910,7 @@ class TacTu:
                 elif self._toadodichtudongtimduonggannhat:
                     toadocux, toadocuy = self._toadodichtudongtimduonggannhat
                     khoangcachchenhlech = math.hypot(toadox - toadocux, toadoy - toadocuy)
-                    if khoangcachchenhlech > 1200 and (time.time() - self._thoidiemtudongtimduonggannhat) > 2.5:
+                    if khoangcachchenhlech > 1200 and (time.time() - self._thoidiemtudongtimduonggannhat) > 3.:
                         is_cancapnhatduongdi = True
                 else:
                     is_cancapnhatduongdi = True
