@@ -1302,5 +1302,5 @@ class TacTu:
         if not is_tudongphucsinh:
             return
 
-        if self.moitruong.get_is_nhanvatdachet():
+        if not self.moitruong.get_is_dangmokytrancac() and self.moitruong.get_is_nhanvatdachet():
             self.moitruong.action_phucsinh()
