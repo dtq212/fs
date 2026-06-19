@@ -517,7 +517,7 @@ class TacTu:
             if dobentoida < 0:
                 continue
 
-            if dobenhientai * 100 / dobentoida <= 75:
+            if dobenhientai != dobentoida: # dobenhientai * 100 / dobentoida <= 75:
                 self.moitruong.action_suavatpham(idvatpham, delay = 0.)
                 time.sleep(0.25)
 

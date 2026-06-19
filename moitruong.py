@@ -1183,6 +1183,8 @@ class MoiTruong:
 
         self._thoidiemsuavatphamgannhat = time.time()
 
+        print("action_suavatpham: {}".format(idvatpham))
+
         diachidulieu = self.diachihamsuavatpham + 0x40
 
         write_int(self.tientrinh, diachidulieu + 0xC, dbid)
