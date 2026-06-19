@@ -12,6 +12,7 @@ from tienich import taithietlap as util_taithietlap, phatam
 
 class TacTu:
     def __init__(self, moitruong: MoiTruong):
+        self._is_dangmuavatpham = False
         self._phantramsinhluchientai = 100.
         self._phantramsinhlucmatdi = 0.
         self._is_tudongdanhtheosautruongnhom = False
@@ -1233,10 +1234,13 @@ class TacTu:
     def action_tudongmuavatpham(self):
         if not self._is_tudongmuavatphamkytrancac:
             return False
-
+        
+        
+        
         if self.moitruong.get_idmaupk() == IDMAUPK_DO or self.moitruong.get_diempk() > 0:
             if not self.get_is_dusoluongtoithieu(QUANAMTHUY, 1):
                 if self.get_is_dusoluongtoithieu(TIENDONG, 2):
+                    self._is_dangmuavatpham = True
                     is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 10, 1)
                     if is_muathanhcong:
                         return True
@@ -1246,6 +1250,7 @@ class TacTu:
         if IDHIEUUNGBOTRO_NIETBANCHU not in hieuungbotros:
             if not self.get_is_dusoluongtoithieu(NIETBANCHU, 1):
                 if self.get_is_dusoluongtoithieu(TIENDONG, 6):
+                    self._is_dangmuavatpham = True
                     is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_GIOITHIEU, 24, 1)
                     if is_muathanhcong:
                         return True
@@ -1255,6 +1260,7 @@ class TacTu:
             if not ({IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN} & set(hieuungbotros)):
                 if not self.get_is_dusoluongtoithieu(THANTIENTAN, 1):
                     if self.get_is_dusoluongtoithieu(TIENDONG, 9):
+                        self._is_dangmuavatpham = True
                         is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 23, 1, delay = 2.5)
                         if is_muathanhcong:
                             return True
@@ -1262,6 +1268,7 @@ class TacTu:
 
         if not self.get_is_dusoluongtoithieu(THANHLO, 1):
             if self.get_is_dusoluongtoithieu(TIENDONG, 8):
+                self._is_dangmuavatpham = True
                 is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 21, 1, delay = 2.5)
                 if is_muathanhcong:
                     return True
@@ -1269,10 +1276,18 @@ class TacTu:
 
         if not self.get_is_dusoluongtoithieu(CHANKHI, 1):
             if self.get_is_dusoluongtoithieu(TIENDONG, 8):
+                self._is_dangmuavatpham = True
                 is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 22, 1, delay = 2.5)
                 if is_muathanhcong:
                     return True
                 return False
+
+        if self._is_dangmuavatpham:
+            if self.moitruong.get_is_dangmokytrancac():
+                self.moitruong.action_dongkytrancac(delay = 1.0)
+            self._is_dangmuavatpham = False
+
+        self.moitruong.action_tatvohieuhoapopuptabkytrancac()
 
         return False
 

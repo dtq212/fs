@@ -814,7 +814,7 @@ class MoiTruong:
         return idnhanvattieptheo
 
     def get_idtrangthaiclickchuot(self):
-        return read_int(self.tientrinh, self.diachigame + 0x2696AC)
+        return read_int(self.tientrinh, self.diachigame + 0x26E6F4)
 
     def get_toadoclick(self):
         toadox, toadoy = self.get_toado()
@@ -822,6 +822,10 @@ class MoiTruong:
             toadox + read_int(self.tientrinh, self.diachigame + 0x2639D4) - int(self.kichthuoccuasogame[0] / 2),
             toadoy + int(read_int(self.tientrinh, self.diachigame + 0x2639D8) - int(self.kichthuoccuasogame[1] / 2)) * 2
         )
+
+    def get_is_dangmokytrancac(self):
+        return read_int(self.tientrinh, self.diachigame + 0x26B8D4)
+
 
     def khoitaohamsudungvatpham(self):
         if self.diachihamsudungvatpham:
