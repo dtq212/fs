@@ -1480,7 +1480,8 @@ class MoiTruong:
         if self.diachihamdongkytrancac:
             return
 
-        aob = "75 17 8B 55 FC 83 7A 20 00 74 0C 6A 00 6A 00 E8 ?? ?? ?? ?? 83 C4 08 EB 15 8B 45 FC 83 78 20 00 75 0C 6A 00 6A 01 E8 ?? ?? ?? ?? 83 C4 08 8B 4D FC E8 ?? ?? ?? ?? 8B E5 5D C2 04 00"
+        aob = "81 7D 08 00 01 00 00 75 12 83 7D 0C 1B 75 0A 6A 00 E8 ?? ?? ?? ?? 83 C4 04 EB 33"
+
         scan_diachi = pymem.pattern.pattern_scan_module(
             self.tientrinh.process_handle,
             self.gamemodule,
@@ -1488,23 +1489,22 @@ class MoiTruong:
         )
 
         if scan_diachi:
-            diachi_lenh_call = scan_diachi + 15
+            diachi_lenh_call = scan_diachi + 17
             khoang_cach_call = read_int(self.tientrinh, diachi_lenh_call + 1)
             diachi_ham = diachi_lenh_call + 5 + khoang_cach_call
         else:
-            print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern hàm đóng kỳ trân các! Hủy bỏ khởi tạo.")
+            print("[LỖI] Không tìm thấy Pattern đóng KTC!")
             return
 
         self.diachihamdongkytrancac = self.tientrinh.allocate(256)
         ks = Ks(KS_ARCH_X86, KS_MODE_32)
 
         asm_code = f"""
-            push 00                
-            push 00                
+            push 0
             mov eax, {hex(diachi_ham)}
             call eax
-            add esp, 08            
-            ret 4                  
+            add esp, 4
+            ret 4               
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -1513,12 +1513,10 @@ class MoiTruong:
     def action_dongkytrancac(self, delay = 0.05):
         if not self.diachihamdongkytrancac:
             self.khoitaohamdongkytrancac()
-
         if time.time() - self._thoidiemdongkytrancacgannhat < delay:
             return False
 
         self._thoidiemdongkytrancacgannhat = time.time()
-
         self.tientrinh.start_thread(self.diachihamdongkytrancac)
         return True
 
