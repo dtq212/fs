@@ -262,9 +262,6 @@ class MoiTruong:
         return self.get_idtrangthainhanvat(idnhanvat) == IDTRANGTHAINHANVAT_DACHET
 
     def get_idloainhanvat(self, idnhanvat = 1):
-        return read_short_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x20 + idnhanvat * self.offsetdiachicosomoinhanvat)
-
-    def get_idloainhanvat(self, idnhanvat = 1):
         if idnhanvat <= 0:
             return -1
         return read_short_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x20 + idnhanvat * self.offsetdiachicosomoinhanvat)
@@ -302,11 +299,15 @@ class MoiTruong:
         return read_string(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0xB75 + idnhanvat * self.offsetdiachicosomoinhanvat)
 
     def get_idtodoi(self, idnhanvat = 1):
+        if idnhanvat <= 0:
+            return -1
+
         if self.get_idloainhanvat(idnhanvat) == IDLOAINHANVAT_TRIEUHOITHU:
             idchunhan = self.get_idchunhan(idnhanvat)
-            if not idchunhan:
+            if not idchunhan or idchunhan <= 0:
                 return -1
             return self.get_idtodoi(idchunhan)
+
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0xB2C + idnhanvat * self.offsetdiachicosomoinhanvat)
 
     def get_idkynang(self, iddiachikynang):
@@ -387,21 +388,22 @@ class MoiTruong:
         if not tenchunhan:
             return -1
         idchunhan = self._idchunhan_map.get(tenchunhan, False)
-        if idchunhan and self.get_tennhanvat(idchunhan) == tenchunhan and self.get_is_nhanvattontai(idchunhan):
+        if idchunhan and idchunhan > 0 and self.get_tennhanvat(idchunhan) == tenchunhan and self.get_is_nhanvattontai(idchunhan):
             return idchunhan
-        else:
-            idnhanvatxemxet = 0
-            while True:
-                idnhanvatxemxet = self.get_idnhanvattieptheo(idnhanvatxemxet)
-                if idnhanvatxemxet <= 0:
-                    break
-                if not self.get_is_nhanvattontai(idnhanvatxemxet):
-                    continue
-                if self.get_idloainhanvat(idnhanvatxemxet) != IDLOAINHANVAT_NGUOICHOI:
-                    continue
-                if self.get_tennhanvat(idnhanvatxemxet) == tenchunhan:
-                    self._idchunhan_map[tenchunhan] = idnhanvatxemxet
-                    return idnhanvatxemxet
+
+        idnhanvatxemxet = 0
+        while True:
+            idnhanvatxemxet = self.get_idnhanvattieptheo(idnhanvatxemxet)
+            if idnhanvatxemxet <= 0:
+                break
+            if not self.get_is_nhanvattontai(idnhanvatxemxet):
+                continue
+            if self.get_idloainhanvat(idnhanvatxemxet) != IDLOAINHANVAT_NGUOICHOI:
+                continue
+            if self.get_tennhanvat(idnhanvatxemxet) == tenchunhan:
+                self._idchunhan_map[tenchunhan] = idnhanvatxemxet
+                return idnhanvatxemxet
+
         return -1
 
     def get_is_truongnhom(self):

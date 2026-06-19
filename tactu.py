@@ -705,6 +705,8 @@ class TacTu:
             self.moitruong.set_phamvitimkiemmuctieu(KHOANGCACHTOIDATIMKIEMMUCTIEU)
             return
 
+        self.moitruong.set_phamvitimkiemmuctieu(0)
+
         self.moitruong.set_iddoituongtudanh(IDDOITUONGTUDANH_MUCTIEUDANGCHON)
 
         khoangcachtoida = KHOANGCACHTOIDATIMKIEMMUCTIEU
@@ -751,11 +753,6 @@ class TacTu:
                 self.moitruong.set_idmuctieu(idungvienso1)
             elif idmuctieudangchon > 0 or idmuctieutancong > 0:
                 self.moitruong.set_idmuctieu(0)
-
-        if idungvienso1 == 0:
-            self.moitruong.set_phamvitimkiemmuctieu(0)
-        else:
-            self.moitruong.set_phamvitimkiemmuctieu(KHOANGCACHTOIDATIMKIEMMUCTIEU)
 
     def action_batpk(self):
         if self.moitruong.get_idmaupk() != IDMAUPK_DO:
@@ -1285,7 +1282,7 @@ class TacTu:
 
         if self._is_dangmuavatpham:
             if self.moitruong.get_is_dangmokytrancac():
-                self.moitruong.action_dongkytrancac(delay = 1.0)
+                self.moitruong.action_dongkytrancac(delay = 0.0)
             self._is_dangmuavatpham = False
 
         return False
