@@ -852,7 +852,7 @@ class TacTu:
                         yeucaudichuyenmoi = {
                             "loaidichuyen": loaidichuyen,
                             "toadodich": (xtruongnhom, ytruongnhom),
-                            "khoangcach": random.randint(100, 150) if khoangcach >= 1200 else max(khoangcachtheosau - random.randint(200, 300), 0),
+                            "khoangcach": random.randint(0, 150)
                         }
         finally:
             self._yeucaudichuyentheosautruongnhom = yeucaudichuyenmoi
@@ -965,7 +965,7 @@ class TacTu:
 
                         if not is_muctieudangdichuyen or self.moitruong.get_idloainhanvat(idmuctieu) != IDLOAINHANVAT_NGUOICHOI:
                             idkynang1 = 0
-                        if not is_muctieudangdichuyen:
+                        if not is_muctieudangdichuyen and self.moitruong.get_idloainhanvat(idmuctieu) == IDLOAINHANVAT_NGUOICHOI:
                             is_tiepcan = True
                     elif self._is_sudungkynangtoadochichuot:
                         self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_KHUYNHTHANHNHATKICH, 0)
@@ -1238,7 +1238,6 @@ class TacTu:
         if self.moitruong.get_idmaupk() == IDMAUPK_DO or self.moitruong.get_diempk() > 0:
             if not self.get_is_dusoluongtoithieu(QUANAMTHUY, 1):
                 if self.get_is_dusoluongtoithieu(TIENDONG, 2):
-                    self._is_dangmuavatpham = True
                     is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 10, 1)
                     if is_muathanhcong:
                         return True
@@ -1248,7 +1247,6 @@ class TacTu:
         if IDHIEUUNGBOTRO_NIETBANCHU not in hieuungbotros:
             if not self.get_is_dusoluongtoithieu(NIETBANCHU, 1):
                 if self.get_is_dusoluongtoithieu(TIENDONG, 6):
-                    self._is_dangmuavatpham = True
                     is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_GIOITHIEU, 24, 1)
                     if is_muathanhcong:
                         return True
@@ -1258,7 +1256,6 @@ class TacTu:
             if not ({IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN} & set(hieuungbotros)):
                 if not self.get_is_dusoluongtoithieu(THANTIENTAN, 1):
                     if self.get_is_dusoluongtoithieu(TIENDONG, 9):
-                        self._is_dangmuavatpham = True
                         is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 23, 1, delay = 2.5)
                         if is_muathanhcong:
                             return True
@@ -1266,7 +1263,6 @@ class TacTu:
 
         if not self.get_is_dusoluongtoithieu(THANHLO, 1):
             if self.get_is_dusoluongtoithieu(TIENDONG, 8):
-                self._is_dangmuavatpham = True
                 is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 21, 1, delay = 2.5)
                 if is_muathanhcong:
                     return True
@@ -1274,16 +1270,10 @@ class TacTu:
 
         if not self.get_is_dusoluongtoithieu(CHANKHI, 1):
             if self.get_is_dusoluongtoithieu(TIENDONG, 8):
-                self._is_dangmuavatpham = True
                 is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 22, 1, delay = 2.5)
                 if is_muathanhcong:
                     return True
                 return False
-
-        if self._is_dangmuavatpham:
-            if self.moitruong.get_is_dangmokytrancac():
-                self.moitruong.action_dongkytrancac(delay = 0.0)
-            self._is_dangmuavatpham = False
 
         return False
 
@@ -1302,5 +1292,5 @@ class TacTu:
         if not is_tudongphucsinh:
             return
 
-        if not self.moitruong.get_is_dangmokytrancac() and self.moitruong.get_is_nhanvatdachet():
+        if self.moitruong.get_is_nhanvatdachet():
             self.moitruong.action_phucsinh()
