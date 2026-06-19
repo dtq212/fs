@@ -844,7 +844,7 @@ class TacTu:
                             self._toadokiemtrabiket = (x_hientai, y_hientai)
                             self._thoidiemkiemtrabiket = time.time()
 
-                        if self._is_dangbiket:
+                        if self._is_dangbiket or time.time() - self._thoidiemtudongtimduonggannhat < 3.:
                             loaidichuyen = "tudongtimduong"
                         else:
                             loaidichuyen = "dichuyengiukhoangcachtoidadiem"
