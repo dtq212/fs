@@ -264,6 +264,11 @@ class MoiTruong:
     def get_idloainhanvat(self, idnhanvat = 1):
         return read_short_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x20 + idnhanvat * self.offsetdiachicosomoinhanvat)
 
+    def get_idloainhanvat(self, idnhanvat = 1):
+        if idnhanvat <= 0:
+            return -1
+        return read_short_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x20 + idnhanvat * self.offsetdiachicosomoinhanvat)
+
     def get_idtrangthainhanvat(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0xB4 + idnhanvat * self.offsetdiachicosomoinhanvat)
 

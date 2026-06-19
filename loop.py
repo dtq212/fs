@@ -23,6 +23,7 @@ class LoopChinh:
                 self.step()
             except (pymem.exception.PymemError, pymem.exception.WinAPIError) as err:
                 print("Luồng chính: {}".format(err))
+                traceback.print_exc()
                 time.sleep(1)
 
             except Exception as err:

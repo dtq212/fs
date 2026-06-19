@@ -904,14 +904,7 @@ class TacTu:
             elif loaidichuyen == "tudongtimduong":
                 toadodich = yeucauduocchon.get("toadodich")
                 toadox, toadoy = toadodich
-
                 is_dangtudongtimduong = self.moitruong.get_is_dangtudongtimduong()
-                khoangcachtoidich = self.moitruong.get_khoangcachdiem(1, toadox, toadoy)
-
-                if khoangcachtoidich < 300 and is_dangtudongtimduong:
-                    self.moitruong.set_is_dangtudongtimduong(False)
-                    return
-
                 is_cancapnhatduongdi = False
                 if not is_dangtudongtimduong:
                     is_cancapnhatduongdi = True
@@ -927,10 +920,13 @@ class TacTu:
                     self.moitruong.action_tudongtimduong(toadox, toadoy)
                     self._toadodichtudongtimduonggannhat = (toadox, toadoy)
             elif loaidichuyen == "dichuyengiukhoangcachtoidadiem":
+                self.moitruong.set_is_dangtudongtimduong(False)
                 self.moitruong.action_dichuyengiukhoangcachtoidadiem(*yeucauduocchon.get("toadodich"), khoangcachtoida = yeucauduocchon.get("khoangcach"))
             elif loaidichuyen == "dichuyengiukhoangcachtoida":
+                self.moitruong.set_is_dangtudongtimduong(False)
                 self.moitruong.action_dichuyengiukhoangcachtoida(yeucauduocchon.get("idmuctieu"), khoangcachtoida = yeucauduocchon.get("khoangcach"))
             elif loaidichuyen == "dichuyengiukhoangcachtoithieu":
+                self.moitruong.set_is_dangtudongtimduong(False)
                 self.moitruong.action_dichuyengiukhoangcachtoithieu(yeucauduocchon.get("idmuctieu"), khoangcachtoithieu = yeucauduocchon.get("khoangcach"))
         else:
             self.moitruong.set_is_tamngungtancong(False)
