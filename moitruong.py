@@ -1649,13 +1649,15 @@ class MoiTruong:
         if not self.diachihammuavatphamkytrancac:
             self.khoitaohammuavatphamkytrancac()
 
-        if time.time() - self._thoidiemmuakytrancacgannhat < delay:
-            return False
-
         if self.get_idtabkytrancac() != idtab:
             vitritab = VITRITAB_MAP.get(idtab)
             if vitritab is not None:
                 self.action_motabkytrancac(vitritab)
+            return False
+        if self.get_is_dangmokytrancac():
+            self.action_dongkytrancac()
+
+        if time.time() - self._thoidiemmuakytrancacgannhat < delay:
             return False
 
         self._thoidiemmuakytrancacgannhat = time.time()
@@ -1666,6 +1668,7 @@ class MoiTruong:
         write_int(self.tientrinh, diachidulieu + 8, soluong)
 
         self.tientrinh.start_thread(self.diachihammuavatphamkytrancac)
+
         return True
 
     def khoitaohamphucsinh(self):

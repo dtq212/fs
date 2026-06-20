@@ -1278,7 +1278,7 @@ class TacTu:
                 if is_muathanhcong:
                     return True
                 return False
-
+        
         return False
 
     def action_tudongphucsinh(self):
@@ -1296,5 +1296,5 @@ class TacTu:
         if not is_tudongphucsinh:
             return
 
-        if self.moitruong.get_is_nhanvatdachet() and self.moitruong.get_is_cohieuungbotro(NIETBANCHU):
+        if self.moitruong.get_is_nhanvatdachet() and self.moitruong.get_is_cohieuungbotro(IDHIEUUNGBOTRO_NIETBANCHU):
             self.moitruong.action_phucsinh()
