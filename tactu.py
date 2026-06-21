@@ -1318,7 +1318,7 @@ class TacTu:
             return False
         
         if self.moitruong.get_idmaupk() == IDMAUPK_DO or self.moitruong.get_diempk() > 0:
-            if not self.get_is_dusoluongtoithieu(QUANAMTHUY, 1):
+            if not self.get_is_dusoluongtoithieu(QUANAMTHUY, 2):
                 if self.get_is_dusoluongtoithieu(TIENDONG, 2):
                     is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 10, 1)
                     if is_muathanhcong:
