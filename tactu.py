@@ -495,9 +495,6 @@ class TacTu:
         if self.get_is_dusoluongtoithieu(TIENDONG, 2):
             self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_BIENPHU, 12, 1)
 
-    def get_is_hanhtrangday(self):
-        return self.get_tongsovatphamhanhtrang() >= 35 or self.moitruong.get_trongluongtoida() - self.get_tongtrongluongvatpham() <= 25
-
     def get_tongsovatphamhanhtrang(self):
         tongsovatphamhanhtrang = 0
 
@@ -856,9 +853,6 @@ class TacTu:
             return
 
         self._thoidiemtudongnhatdogannhat = time.time()
-
-        if self.get_is_hanhtrangday():
-            return
 
         for idvatphamduoidat in range(SOLUONGVATPHAMTOIDADUOIDAT):
             if self.moitruong.get_is_vatphamduoidattontai(idvatphamduoidat):
