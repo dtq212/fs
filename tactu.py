@@ -746,7 +746,7 @@ class TacTu:
         toadonhanvat = self.moitruong.get_toado()
         if self._is_tudongdanhtheosautruongnhom and self.moitruong.get_idtodoi() > 0 and not self.moitruong.get_is_truongnhom():
             toadocosox, toadocosoy = self.moitruong.get_toadotruongnhom()
-            if toadocosox <= 0 or toadocosoy <= 0 or int(math.dist(toadonhanvat, (toadocosox, toadocosoy))) > 600:
+            if toadocosox <= 0 or toadocosoy <= 0 or int(math.dist(toadonhanvat, (toadocosox, toadocosoy))) > 900:
                 toadocosox, toadocosoy = toadonhanvat
         else:
             toadocosox, toadocosoy = toadonhanvat
@@ -759,26 +759,25 @@ class TacTu:
             else:
                 idungvienso1 = 0
 
-        if idungvienso1 == 0:
-            idnhanvatxemxet = 0
-            while True:
-                idnhanvatxemxet = self.moitruong.get_idnhanvattieptheo(idnhanvatxemxet)
-                if idnhanvatxemxet <= 0:
-                    break
+        idnhanvatxemxet = 0
+        while True:
+            idnhanvatxemxet = self.moitruong.get_idnhanvattieptheo(idnhanvatxemxet)
+            if idnhanvatxemxet <= 0:
+                break
 
-                if idnhanvatxemxet == 1:
-                    continue
+            if idnhanvatxemxet == 1 or idnhanvatxemxet == idungvienso1:
+                continue
 
-                khoangcach = self.moitruong.get_khoangcachdiem(idnhanvatxemxet, toadocosox, toadocosoy)
+            khoangcach = self.moitruong.get_khoangcachdiem(idnhanvatxemxet, toadocosox, toadocosoy)
 
-                if khoangcach >= khoangcachtoida:
-                    continue
+            if khoangcach >= khoangcachtoida:
+                continue
 
-                if not self._kiemtrathoamandieukientancong(idnhanvatxemxet):
-                    continue
+            if not self._kiemtrathoamandieukientancong(idnhanvatxemxet):
+                continue
 
-                if self._sosanhmuctieuuutien(idnhanvatxemxet, idungvienso1, toadocosox, toadocosoy):
-                    idungvienso1 = idnhanvatxemxet
+            if self._sosanhmuctieuuutien(idnhanvatxemxet, idungvienso1, toadocosox, toadocosoy):
+                idungvienso1 = idnhanvatxemxet
 
         idmuctieudangchon = self.moitruong.get_idmuctieudangchon()
         idmuctieutancong = self.moitruong.get_idmuctieutancong()
@@ -786,6 +785,8 @@ class TacTu:
         if idungvienso1 > 0:
             self._idmuctieu = idungvienso1
             if idungvienso1 != idmuctieudangchon or idungvienso1 != idmuctieutancong:
+                if idmuctieudangchon > 0 or idmuctieutancong > 0:
+                    self.moitruong.set_idmuctieu(0)
                 self.moitruong.set_idmuctieu(idungvienso1)
         else:
             self._idmuctieu = 0
