@@ -876,10 +876,12 @@ class TacTu:
                 if not is_nhatvatpham and self.moitruong.get_is_thucuoiduoidat(idvatphamduoidat):
                     is_nhatvatpham = True
                 if not is_nhatvatpham:
-                    for tenvatpham in (TENVATPHAM_LAMBAOTHACH, TENVATPHAM_MANHHONGTHUYTINH, TENVATPHAM_HONGTHUYTINH, TENVATPHAM_HONGBAOTHACH, ):
-                        if tenvatpham in tenvatphamduoidat:
-                            is_nhatvatpham = True
-                            break
+                    if any(tenvatpham in tenvatphamduoidat for tenvatpham in (TENVATPHAM_LAMBAOTHACH, TENVATPHAM_MANHHONGTHUYTINH, TENVATPHAM_HONGTHUYTINH, TENVATPHAM_HONGBAOTHACH, )):
+                        is_nhatvatpham = True
+                if not is_nhatvatpham and tuchatvatphamduoidat == IDTUCHATVATPHAMDUOIDAT_TRANG:
+                    if any(hautodaocu in tenvatphamduoidat for hautodaocu in ("x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9")):
+                        is_nhatvatpham = True
+
                 if is_nhatvatpham and self.moitruong.get_khoangcachvatphamduoidat(idvatphamduoidat) < 400:
                     self.moitruong.action_nhatvatpham(idvatphamduoidat)
                     time.sleep(0.02)
