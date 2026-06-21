@@ -866,10 +866,12 @@ class TacTu:
                 tuchatvatphamduoidat = self.moitruong.get_tuchatvatphamduoidat(idvatphamduoidat)
                 if tuchatvatphamduoidat >= IDTUCHATVATPHAMDUOIDAT_LUC:
                     is_nhatvatpham = True
-
+                if not is_nhatvatpham and tuchatvatphamduoidat == IDTUCHATVATPHAMDUOIDAT_TRANG and self.moitruong.get_is_nhattrangbitrang():
+                    is_nhatvatpham = True
+                if not is_nhatvatpham and tuchatvatphamduoidat == IDTUCHATVATPHAMDUOIDAT_LAM and self.moitruong.get_is_nhattrangbilam():
+                    is_nhatvatpham = True
                 if not is_nhatvatpham and self.moitruong.get_is_thucuoiduoidat(idvatphamduoidat):
                     is_nhatvatpham = True
-
                 if not is_nhatvatpham:
                     tenvatphamduoidat = self.moitruong.get_tenvatphamduoidat(idvatphamduoidat)
                     for tenvatpham in (TENVATPHAM_LAMBAOTHACH, TENVATPHAM_MANHHONGTHUYTINH, TENVATPHAM_HONGTHUYTINH, TENVATPHAM_HONGBAOTHACH, ):

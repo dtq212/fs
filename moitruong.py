@@ -806,6 +806,15 @@ class MoiTruong:
         if self.get_is_dichuyenhoatdongquanhphamvi() != is_dichuyenhoatdongquanhphamvi:
             write_int(self.tientrinh, self.diachigame + self.offsetdiachicosocauhinh + 0xB100, 1 if is_dichuyenhoatdongquanhphamvi else 0)
 
+    def get_is_tudongnhatvatpham(self):
+        return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosocauhinh + 0xB47C) > 0
+
+    def get_is_nhattrangbitrang(self):
+        return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosocauhinh + 0xB0E4) > 0
+
+    def get_is_nhattrangbilam(self):
+        return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosocauhinh + 0xB0E8) > 0
+
     def get_is_dangkhoa(self):
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosocauhinh + 0xB47C) > 0
 
@@ -1942,10 +1951,10 @@ class MoiTruong:
 
         aob_vpdd = "8B C8 69 C9 ?? ?? ?? ?? 83 B9 ?? ?? ?? ?? 00 7E ?? 39 B9 ?? ?? ?? ?? 74 ?? 50 8B CE"
         scan_vpdd = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_vpdd))
+
         if scan_vpdd:
             size_vpdd = read_int(self.tientrinh, scan_vpdd + 4)
             base_vpdd = read_int(self.tientrinh, scan_vpdd + 19) - self.diachigame
-
             self.offsetdiachicosomoivatphamduoidat = size_vpdd
             self.offsetdiachicosothongtinvatphamduoidat = base_vpdd
         else:
