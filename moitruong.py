@@ -10,6 +10,8 @@ from tienich import *
 class MoiTruong:
 
     def __init__(self, idcuaso):
+        self._thoidiemmoitodoigannhat = 0.
+        self.diachihammoitodoi = 0
         self._thoidiemdongkytrancacgannhat = 0.
         self._thoidiemphucsinhgannhat = 0.
         self.diachihamphucsinh = 0
@@ -1735,6 +1737,71 @@ class MoiTruong:
         write_int(self.tientrinh, diachidulieu, tuychonphucsinh)
 
         self.tientrinh.start_thread(self.diachihamphucsinh)
+        return True
+
+    def khoitaohammoitodoi(self):
+        if self.diachihammoitodoi:
+            return
+
+        self.diachihammoitodoi = self.tientrinh.allocate(256)
+        diachidulieu = self.diachihammoitodoi + 0x40
+
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        asm_code = f"""
+            push ebp
+            mov ebp, esp
+            sub esp, 16                     
+
+            mov eax, dword ptr [{hex(diachidulieu)}]
+
+            mov byte ptr [ebp - 12], 0x63
+            mov dword ptr [ebp - 11], eax
+
+            mov dword ptr [ebp - 4], 5        
+
+            mov eax, dword ptr [{hex(self.diachigame)} + {hex(self.offsetdiachicosothuchiencaulenh)}]
+            test eax, eax
+            je ketthuc
+
+            lea edx, [ebp - 4]
+            push edx
+
+            lea edx, [ebp - 12]
+            push edx
+
+            push eax
+
+            mov ecx, dword ptr [eax]
+            mov edx, dword ptr [ecx + 0x1C]
+            call edx                        
+
+            ketthuc:
+            mov esp, ebp
+            pop ebp
+            ret                           
+        """
+
+        encoding, _ = ks.asm(asm_code)
+        write_bytes(self.tientrinh, self.diachihammoitodoi, bytes(encoding), len(encoding))
+
+    def action_moitodoi(self, dbidnhanvat, delay = 0.25):
+        if not self.diachihammoitodoi:
+            self.khoitaohammoitodoi()
+
+        if time.time() - self._thoidiemmoitodoigannhat < delay:
+            return False
+
+        if dbidnhanvat <= 0:
+            return False
+
+        self._thoidiemmoitodoigannhat = time.time()
+
+        diachidulieu = self.diachihammoitodoi + 0x40
+        write_int(self.tientrinh, diachidulieu, dbidnhanvat)
+
+        self.tientrinh.start_thread(self.diachihammoitodoi)
+
         return True
 
     def action_timkiemtoanbodiachiham(self):

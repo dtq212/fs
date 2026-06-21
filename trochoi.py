@@ -1,18 +1,15 @@
-import time
 import os
-import traceback
-
-import pymem
-import win32gui
+import time
 import tkinter as tk
-import keyboard
+import traceback
 from multiprocessing import Process, Manager, freeze_support
+
+import keyboard
+import win32gui
+
 from cuaso import CuaSo
 from giaodienhienthi import GiaoDienHienThi
-import os
 
-import ctypes
-import sys
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 def run_bot_process(hwnd, shared_data, command_dict):
@@ -120,6 +117,8 @@ class TroChoiManager:
                     cmd = "botoanbo_tennhanvattancong"
                 elif keyboard.is_pressed("ctrl+alt+x"):
                     cmd = "botoanbo_tennhanvatkhongtancong"
+                elif keyboard.is_pressed("ctrl+alt+v"):
+                    cmd = "botoanbo_tennhanvattodoitudong"
                 elif keyboard.is_pressed("ctrl+alt+1"):
                     cmd = "luusetdo_1"
                 elif keyboard.is_pressed("ctrl+alt+2"):
@@ -132,6 +131,8 @@ class TroChoiManager:
                     cmd = "them_tennhanvattancong"
                 elif keyboard.is_pressed("ctrl+x"):
                     cmd = "them_tennhanvatkhongtancong"
+                elif keyboard.is_pressed("ctrl+v"):
+                    cmd = "them_tennhanvattodoitudong"
                 elif keyboard.is_pressed("ctrl+d"):
                     cmd = "bat_is_chidanhnguoichoivatrieuhoithu"
                 elif keyboard.is_pressed("ctrl+s"):

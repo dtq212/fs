@@ -236,6 +236,10 @@ class CuaSo:
                     self.tactu.tat_is_chidanhnguoichoivatrieuhoithu()
                 elif cmd == "battat_is_chidanhnguoichoivatrieuhoithu":
                     self.tactu.battat_is_chidanhnguoichoivatrieuhoithu()
+                elif cmd == "them_tennhanvattodoitudong":
+                    self.tactu.them_tennhanvattodoitudong()
+                elif cmd == "botoanbo_tennhanvattodoitudong":
+                    self.tactu.botoanbo_tennhanvattodoitudong()
                 elif cmd == "battat_is_danhtheotennhanvat":
                     self.tactu.battat_is_danhtheotennhanvat()
                 elif cmd == "battat_is_danhphudau":
