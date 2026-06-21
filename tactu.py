@@ -856,9 +856,16 @@ class TacTu:
 
         for idvatphamduoidat in range(SOLUONGVATPHAMTOIDADUOIDAT):
             if self.moitruong.get_is_vatphamduoidattontai(idvatphamduoidat):
-                is_nhatvatpham = False
                 tenvatphamduoidat = self.moitruong.get_tenvatphamduoidat(idvatphamduoidat)
                 tuchatvatphamduoidat = self.moitruong.get_tuchatvatphamduoidat(idvatphamduoidat)
+
+                if not tenvatphamduoidat:
+                    continue
+
+                if "Bảo Rương" in tenvatphamduoidat:
+                    continue
+
+                is_nhatvatpham = False
 
                 if tuchatvatphamduoidat >= IDTUCHATVATPHAMDUOIDAT_LUC:
                     is_nhatvatpham = True
@@ -869,7 +876,6 @@ class TacTu:
                 if not is_nhatvatpham and self.moitruong.get_is_thucuoiduoidat(idvatphamduoidat):
                     is_nhatvatpham = True
                 if not is_nhatvatpham:
-                    tenvatphamduoidat = self.moitruong.get_tenvatphamduoidat(idvatphamduoidat)
                     for tenvatpham in (TENVATPHAM_LAMBAOTHACH, TENVATPHAM_MANHHONGTHUYTINH, TENVATPHAM_HONGTHUYTINH, TENVATPHAM_HONGBAOTHACH, ):
                         if tenvatpham in tenvatphamduoidat:
                             is_nhatvatpham = True
