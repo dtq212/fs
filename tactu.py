@@ -653,11 +653,11 @@ class TacTu:
         trihoanxcvk = self.moitruong.get_trihoanxuatchieuvukhi()
         trihoanxcbp = self.moitruong.get_trihoanxuatchieubuaphap()
 
-        if self._trihoanxcvk != trihoanxcvk and time.time() - self._thoigiancapnhattrihoanxcvkgannhat > 3.:
+        if self._trihoanxcvk != trihoanxcvk and trihoanxcvk != 18 and time.time() - self._thoigiancapnhattrihoanxcvkgannhat > 3.:
             self._thoigiancapnhattrihoanxcvkgannhat = time.time()
             self._trihoanxcvk = trihoanxcvk
 
-        if self._trihoanxcbp != trihoanxcbp and time.time() - self._thoigiancapnhattrihoanxcbpgannhat > 3.:
+        if self._trihoanxcbp != trihoanxcbp and trihoanxcbp != 18 and time.time() - self._thoigiancapnhattrihoanxcbpgannhat > 3.:
             self._thoigiancapnhattrihoanxcbpgannhat = time.time()
             self._trihoanxcbp = trihoanxcbp
 
