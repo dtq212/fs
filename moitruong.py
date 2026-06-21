@@ -258,14 +258,14 @@ class MoiTruong:
 
     def set_trihoanxuatchieuvukhi(self, trihoanxuatchieuvukhi, idnhanvat = 1):
         if trihoanxuatchieuvukhi != self.get_trihoanxuatchieuvukhi(idnhanvat):
-            return write_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x948 + idnhanvat * self.offsetdiachicosomoinhanvat, trihoanxuatchieuvukhi)
+            write_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x948 + idnhanvat * self.offsetdiachicosomoinhanvat, trihoanxuatchieuvukhi)
 
     def get_trihoanxuatchieubuaphap(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x94C + idnhanvat * self.offsetdiachicosomoinhanvat)
 
     def set_trihoanxuatchieubuaphap(self, trihoanxuatchieubuaphap, idnhanvat = 1):
         if trihoanxuatchieubuaphap != self.get_trihoanxuatchieubuaphap(idnhanvat):
-            return write_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x94C + idnhanvat * self.offsetdiachicosomoinhanvat, trihoanxuatchieubuaphap)
+            write_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x94C + idnhanvat * self.offsetdiachicosomoinhanvat, trihoanxuatchieubuaphap)
 
     def get_is_nhanvatdachet(self, idnhanvat = 1):
         return self.get_idtrangthainhanvat(idnhanvat) == IDTRANGTHAINHANVAT_DACHET
@@ -643,6 +643,9 @@ class MoiTruong:
     def get_is_kynangsansang(self, idkynang):
         if not self.get_is_dahockynang(idkynang):
             return False
+
+        if idkynang == IDKYNANG_KHUYNHTHANHNHATKICH:
+            return True
 
         thoidiemhoiphuckynang = self.get_thoidiemhoiphuckynang(idkynang)
 
