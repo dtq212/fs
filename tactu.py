@@ -1378,6 +1378,81 @@ class TacTu:
         if self.moitruong.get_is_nhanvatdachet() and self.moitruong.get_is_cohieuungbotro(IDHIEUUNGBOTRO_NIETBANCHU):
             self.moitruong.action_phucsinh()
 
+    def action_tudongvutvatpham(self):
+        if not self._is_tudongvutvatpham:
+            return False
+
+        if not self.moitruong.get_is_khuvuccothetancong():
+            return False
+
+        if time.time() - self._thoidiemvutvatphamgannhat < 1.0:
+            return False
+
+        vitriracs = []
+        for sothutuvatpham in range(SOLUONGVATPHAMTOIDA):
+            vitrivatpham = self.moitruong.get_vitrivatpham(sothutuvatpham)
+            if not vitrivatpham:
+                continue
+
+            idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
+
+            if vitriruong != IDVITRIRUONG_HANHTRANG:
+                continue
+
+            tenvatpham = self.moitruong.get_tenvatpham(idvatpham)
+            if not tenvatpham or tenvatpham in VATPHAMKHONGBANs:
+                continue
+
+            loaivatpham = self.moitruong.get_loaivatpham(idvatpham)
+            if not loaivatpham:
+                continue
+
+            phamchat, danhmucvattutieuhao, danhmuctrangbi, _ = loaivatpham
+
+            if danhmuctrangbi not in DANHMUCTRANGBI_MAP:
+                continue
+
+            if danhmuctrangbi == IDDANHMUCTRANGBI_THUCUOI:
+                continue
+
+            if phamchat != IDPHAMCHATVATPHAM_TRANGLAM:
+                continue
+
+            dobentoida = self.moitruong.get_dobentoidavatpham(idvatpham)
+            if dobentoida <= 0:
+                continue
+
+            thuoctinh_map = self.moitruong.get_thuoctinhvatpham_map(idvatpham)
+
+            if danhmuctrangbi in (IDDANHMUCTRANGBI_VUKHI, IDDANHMUCTRANGBI_PHIPHONG):
+                if thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 20 or thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUBUAPHAP, 0) >= 20:
+                    continue
+                if thuoctinh_map.get(IDTHUOCTINHVATPHAM_XUATCHIEUVUKHI, 0) >= 10 and thuoctinh_map.get(IDTHUOCTINHVATPHAM_DANHTAPTRUNG, 0) >= 10:
+                    continue
+
+            if danhmuctrangbi == IDDANHMUCTRANGBI_AO:
+                if thuoctinh_map.get(IDTHUOCTINHVATPHAM_GIAMTRUNGTHUONG, 0) >= 15:
+                    continue
+
+            vitriracs.append(sothutuvatpham)
+
+        soluongractoithieudevut = 5
+
+        if len(vitriracs) >= soluongractoithieudevut:
+            self._is_dangdondeprac = True
+        elif len(vitriracs) == 0:
+            self._is_dangdondeprac = False
+
+        if self._is_dangdondeprac and len(vitriracs) > 0:
+            vitricanvut = vitriracs[0]
+            is_thanhcong = self.moitruong.action_vutvatpham(vitricanvut)
+
+            if is_thanhcong:
+                self._thoidiemvutvatphamgannhat = time.time()
+                return True
+
+        return False
+
     def action_tudongmoitodoi(self):
         if not self._tennhanvattodoitudongs:
             return
