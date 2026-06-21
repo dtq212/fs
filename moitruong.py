@@ -1643,6 +1643,82 @@ class MoiTruong:
         self.tientrinh.start_thread(self.diachihamdongkytrancac)
         return True
 
+    def khoitaohamvutvatpham(self):
+        if self.diachihamvutvatpham:
+            return
+
+        self.diachihamvutvatpham = self.tientrinh.allocate(256)
+        diachidulieu = self.diachihamvutvatpham + 0x40
+
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        asm_code = f"""
+            push ebp
+            mov ebp, esp
+            sub esp, 12                     
+
+            mov eax, dword ptr [{hex(diachidulieu)}]
+
+            mov byte ptr [ebp - 12], 0x5C
+            mov dword ptr [ebp - 11], eax
+
+            mov dword ptr [ebp - 4], 5        
+
+            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosothuchiencaulenh)}]
+            test eax, eax
+            je ketthuc
+
+            lea edx, [ebp - 4]
+            push edx
+
+            lea edx, [ebp - 12]
+            push edx
+
+            push eax
+
+            mov ecx, dword ptr [eax]
+            mov edx, dword ptr [ecx + 0x1C]
+            call edx                        
+
+            add esp, 0x0C                   
+
+            ketthuc:
+            mov esp, ebp
+            pop ebp
+            ret 4                           
+        """
+
+        encoding, _ = ks.asm(asm_code)
+        write_bytes(self.tientrinh, self.diachihamvutvatpham, bytes(encoding), len(encoding))
+
+    def action_vutvatpham(self, sothutuvatpham, delay = 0.25):
+        if not self.diachihamvutvatpham:
+            self.khoitaohamvutvatpham()
+
+        if time.time() - self._thoidiemvutvatphamgannhat < delay:
+            return False
+
+        vitrivatpham = self.get_vitrivatpham(sothutuvatpham)
+        if not vitrivatpham:
+            return False
+
+        idvatpham, vitriruong, vitrix, vitriy = vitrivatpham
+
+        if vitriruong != IDVITRIRUONG_HANHTRANG:
+            return False
+
+        dbid = self.get_dbidvatpham(idvatpham)
+        if dbid <= 0:
+            return False
+
+        self._thoidiemvutvatphamgannhat = time.time()
+
+        diachidulieu = self.diachihamvutvatpham + 0x40
+        write_int(self.tientrinh, diachidulieu, dbid)
+
+        self.tientrinh.start_thread(self.diachihamvutvatpham)
+        return True
+
     def khoitaohammotabkytrancac(self):
         if self.diachihammotabkytrancac:
             return
