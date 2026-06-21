@@ -881,7 +881,7 @@ class TacTu:
                     if any(tenvatpham in tenvatphamduoidat for tenvatpham in (TENVATPHAM_LAMBAOTHACH, TENVATPHAM_MANHHONGTHUYTINH, TENVATPHAM_HONGTHUYTINH, TENVATPHAM_HONGBAOTHACH, )):
                         is_nhatvatpham = True
                 if not is_nhatvatpham and tuchatvatphamduoidat == IDTUCHATVATPHAMDUOIDAT_TRANG:
-                    if any(hautodaocu in tenvatphamduoidat for hautodaocu in ("x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9")):
+                    if any(hautodaocu in tenvatphamduoidat for hautodaocu in ("x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9")) and all(hautoduoc not in tenvatphamduoidat for hautoduoc in ("Trung Hoàn", "Trung Hồng", "Tiểu Hồng", "Tiểu Hoàn")):
                         is_nhatvatpham = True
 
                 if is_nhatvatpham and self.moitruong.get_khoangcachvatphamduoidat(idvatphamduoidat) < 400:
