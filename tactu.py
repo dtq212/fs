@@ -857,7 +857,11 @@ class TacTu:
         for idvatphamduoidat in range(SOLUONGVATPHAMTOIDADUOIDAT):
             if self.moitruong.get_is_vatphamduoidattontai(idvatphamduoidat):
                 is_nhatvatpham = False
+                tenvatphamduoidat = self.moitruong.get_tenvatphamduoidat(idvatphamduoidat)
                 tuchatvatphamduoidat = self.moitruong.get_tuchatvatphamduoidat(idvatphamduoidat)
+
+                print("{}: {}".format(tenvatphamduoidat, tuchatvatphamduoidat))
+
                 if tuchatvatphamduoidat >= IDTUCHATVATPHAMDUOIDAT_LUC:
                     is_nhatvatpham = True
                 if not is_nhatvatpham and tuchatvatphamduoidat == IDTUCHATVATPHAMDUOIDAT_TRANG and self.moitruong.get_is_nhattrangbitrang():

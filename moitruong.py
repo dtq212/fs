@@ -807,7 +807,7 @@ class MoiTruong:
             write_int(self.tientrinh, self.diachigame + self.offsetdiachicosocauhinh + 0xB100, 1 if is_dichuyenhoatdongquanhphamvi else 0)
 
     def get_is_tudongnhatvatpham(self):
-        return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosocauhinh + 0xB47C) > 0
+        return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosocauhinh + 0xA98C) > 0
 
     def get_is_nhattrangbitrang(self):
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosocauhinh + 0xB0E4) > 0
