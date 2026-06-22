@@ -1167,7 +1167,8 @@ class TacTu:
                                     self.moitruong.set_idkynang1(IDKYNANG_TAMMUOICHANHOA)
                                 if 400 <= khoangcachmuctieu <= 500 and is_cothesudungkynang:
                                     self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_BANGPHONGBAO, random.randint(350, 375))
-
+                            else:
+                                self.moitruong.set_idkynang1(IDKYNANG_TAMMUOICHANHOA)
                     elif self._is_sudungkynangtoadochichuot:
                         if self.moitruong.get_idbandohientai() == IDBANDO_NGOCHUCUNG10NAMTRUOC:
                             if not self.moitruong.get_is_cohieuungbotro(IDHIEUUNGBOTRO_CHUCDUNGCHANKHI):

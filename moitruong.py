@@ -649,7 +649,7 @@ class MoiTruong:
 
         thoidiemhoiphuckynang = self.get_thoidiemhoiphuckynang(idkynang)
 
-        return not thoidiemhoiphuckynang or thoidiemhoiphuckynang < self.get_donghothoigian() - 5
+        return not thoidiemhoiphuckynang or thoidiemhoiphuckynang < self.get_donghothoigian()
 
     def get_dbidvatphamduoidat(self, idvatphamduoidat):
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosothongtinvatphamduoidat + idvatphamduoidat * self.offsetdiachicosomoivatphamduoidat)
