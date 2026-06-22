@@ -651,18 +651,11 @@ class TacTu:
             self._thoidiemtamngungtanconggannhat = time.time()
 
         if self._is_tudongdoisetdo:
-            trihoanxcvk = self.moitruong.get_trihoanxuatchieuvukhi()
-            trihoanxcbp = self.moitruong.get_trihoanxuatchieubuaphap()
+            trihoanxcvk = self.moitruong.get_trihoanxuatchieuvukhithucte()
+            trihoanxcbp = self.moitruong.get_trihoanxuatchieubuaphapthucte()
 
-            if self._trihoanxcvk != trihoanxcvk and trihoanxcvk != 18:
-                self._trihoanxcvk = trihoanxcvk
-
-            if self._trihoanxcbp != trihoanxcbp and trihoanxcbp != 18.:
-                self._thoigiancapnhattrihoanxcbpgannhat = time.time()
-                self._trihoanxcbp = trihoanxcbp
-
-            self.moitruong.set_trihoanxuatchieuvukhi(self._trihoanxcvk)
-            self.moitruong.set_trihoanxuatchieubuaphap(self._trihoanxcbp)
+            self.moitruong.set_trihoanxuatchieuvukhi(trihoanxcvk)
+            self.moitruong.set_trihoanxuatchieubuaphap(trihoanxcbp)
 
     def action_kiemtraxulyloitudongtimduong(self):
         if self.moitruong.get_idtrangthainhanvat() == IDTRANGTHAINHANVAT_DUNGIM and time.time() - self._thoidiemnhanvattudongtimduongdungimgannhat > 2. and self.moitruong.get_is_dangtudongtimduong() and time.time() - self._thoidiemtudongtimduonggannhat >= 3.0:

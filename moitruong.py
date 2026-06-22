@@ -253,6 +253,34 @@ class MoiTruong:
     def get_tocdodichuyen(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x934 + idnhanvat * self.offsetdiachicosomoinhanvat)
 
+    def _tinhtoantrihoanthucte(self, tocdo):
+        bangmoctocdo = [
+            (160, 6),
+            (130, 7),
+            (110, 8),
+            (100, 9),
+            (85, 10),
+            (70, 11),
+            (55, 12),
+            (40, 13),
+            (30, 14),
+            (20, 16),
+            (10, 17),
+            (0, 18)
+        ]
+        for moc, trihoan in bangmoctocdo:
+            if tocdo >= moc:
+                return trihoan
+        return 18
+
+    def get_trihoanxuatchieuvukhithucte(self, idnhanvat = 1):
+        tocdo = self.get_tocdoxuatchieuvukhi(idnhanvat)
+        return self._tinhtoantrihoanthucte(tocdo)
+
+    def get_trihoanxuatchieubuaphapthucte(self, idnhanvat = 1):
+        tocdo = self.get_tocdoxuatchieubuaphap(idnhanvat)
+        return self._tinhtoantrihoanthucte(tocdo)
+
     def get_tocdoxuatchieuvukhi(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x940 + idnhanvat * self.offsetdiachicosomoinhanvat)
 
