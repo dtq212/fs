@@ -599,7 +599,7 @@ class TacTu:
                         for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN): self.moitruong.action_tathieuungbotro(idhieuungbotro)
                 return
 
-            idmuctieu = self._idmuctieu #self.moitruong.get_idmuctieutancong()
+            idmuctieu = self._idmuctieu if self._is_tudongtimkiemmuctieu else self.moitruong.get_idmuctieutancong()
             if idmuctieu > 0 and (self.moitruong.get_idloainhanvat(idmuctieu) in (IDLOAINHANVAT_NGUOICHOI, IDLOAINHANVAT_TRIEUHOITHU) or self.moitruong.get_is_boss(
                     idmuctieu) or self.moitruong.get_is_quaixanh(idmuctieu)):
                 self._thoidiembathieuungbotrogannhat = time.time()
@@ -1037,7 +1037,7 @@ class TacTu:
                 is_cothesudungkynang = self.moitruong.get_is_dangbatauto() and self.moitruong.get_is_khuvuccothetancong() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong()
                 if is_cothesudungkynang:
                     idkynang1 = IDKYNANG_LACDIATRAM
-                    idmuctieu = self._idmuctieu # self.moitruong.get_idmuctieutancong()
+                    idmuctieu = self._idmuctieu if self._is_tudongtimkiemmuctieu else  self.moitruong.get_idmuctieutancong()
                     is_tiepcan = False
                     if idmuctieu > 0:
                         khoangcachmuctieu = self.moitruong.get_khoangcach(idmuctieu)
@@ -1064,7 +1064,7 @@ class TacTu:
 
                 is_cothesudungkynang = self.moitruong.get_is_dangbatauto() and self.moitruong.get_is_khuvuccothetancong() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong()
                 if is_cothesudungkynang:
-                    idmuctieu = self._idmuctieu # self.moitruong.get_idmuctieutancong()
+                    idmuctieu = self._idmuctieu if self._is_tudongtimkiemmuctieu else self.moitruong.get_idmuctieutancong()
                     if idmuctieu > 0:
                         khoangcachmuctieu = self.moitruong.get_khoangcach(idmuctieu)
                         khoangcachmuctieusaptoi = self.moitruong.get_khoangcachsaptoi(idmuctieu)
@@ -1191,7 +1191,7 @@ class TacTu:
             elif self.moitruong.get_idhephai() == IDHEPHAI_VUSI:
                 is_cothesudungkynang = self.moitruong.get_is_dangbatauto() and self.moitruong.get_is_khuvuccothetancong() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong()
                 if is_cothesudungkynang:
-                    idmuctieu = self._idmuctieu # self.moitruong.get_idmuctieutancong()
+                    idmuctieu = self._idmuctieu if self._is_tudongtimkiemmuctieu else self.moitruong.get_idmuctieutancong()
                     if idmuctieu > 0:
                         khoangcachmuctieu = self.moitruong.get_khoangcach(idmuctieu)
                         khoangcachmuctieusaptoi = self.moitruong.get_khoangcachsaptoi(idmuctieu)
