@@ -1083,12 +1083,12 @@ class TacTu:
                                 if not self._is_khongsudungnhieukynang:
                                     if self.moitruong.get_is_kynangsansang(IDKYNANG_TAMMUOICHANHOA):
                                         self.moitruong.set_idkynang1(IDKYNANG_TAMMUOICHANHOA)
-                                    elif self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGVANLY):
-                                        self.moitruong.set_idkynang1(IDKYNANG_BANGPHONGVANLY)
-                                    elif self.moitruong.get_is_kynangsansang(IDKYNANG_THAPPHUONGLIETHOA):
-                                        self.moitruong.set_idkynang1(IDKYNANG_THAPPHUONGLIETHOA)
                                     elif self.moitruong.get_is_kynangsansang(IDKYNANG_LOIDONGCUUTHIEN):
                                         self.moitruong.set_idkynang1(IDKYNANG_LOIDONGCUUTHIEN)
+                                    elif self.moitruong.get_is_kynangsansang(IDKYNANG_THAPPHUONGLIETHOA):
+                                        self.moitruong.set_idkynang1(IDKYNANG_THAPPHUONGLIETHOA)
+                                    elif self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGVANLY):
+                                        self.moitruong.set_idkynang1(IDKYNANG_BANGPHONGVANLY)
                                     elif khoangcachmuctieu < 400 and self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGBAO):
                                         self.moitruong.set_idkynang1(IDKYNANG_BANGPHONGBAO)
                                     else:
@@ -1154,12 +1154,12 @@ class TacTu:
                         if not self._is_khongsudungnhieukynang:
                             if self.moitruong.get_is_kynangsansang(IDKYNANG_TAMMUOICHANHOA):
                                 self.moitruong.set_idkynang1(IDKYNANG_TAMMUOICHANHOA)
-                            elif self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGVANLY):
-                                self.moitruong.set_idkynang1(IDKYNANG_BANGPHONGVANLY)
-                            elif self.moitruong.get_is_kynangsansang(IDKYNANG_THAPPHUONGLIETHOA):
-                                self.moitruong.set_idkynang1(IDKYNANG_THAPPHUONGLIETHOA)
                             elif self.moitruong.get_is_kynangsansang(IDKYNANG_LOIDONGCUUTHIEN):
                                 self.moitruong.set_idkynang1(IDKYNANG_LOIDONGCUUTHIEN)
+                            elif self.moitruong.get_is_kynangsansang(IDKYNANG_THAPPHUONGLIETHOA):
+                                self.moitruong.set_idkynang1(IDKYNANG_THAPPHUONGLIETHOA)
+                            elif self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGVANLY):
+                                self.moitruong.set_idkynang1(IDKYNANG_BANGPHONGVANLY)
                             elif self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGBAO):
                                 if khoangcachmuctieu < 400:
                                     self.moitruong.set_idkynang1(IDKYNANG_BANGPHONGBAO)
@@ -1180,12 +1180,12 @@ class TacTu:
                         else:
                             if self.moitruong.get_is_kynangsansang(IDKYNANG_TAMMUOICHANHOA):
                                 self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_TAMMUOICHANHOA, random.randint(450, 475))
-                            if self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGVANLY):
-                                self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_BANGPHONGVANLY, random.randint(450, 475))
-                            if self.moitruong.get_is_kynangsansang(IDKYNANG_THAPPHUONGLIETHOA):
-                                self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_THAPPHUONGLIETHOA, random.randint(450, 475))
                             if self.moitruong.get_is_kynangsansang(IDKYNANG_LOIDONGCUUTHIEN):
                                 self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_LOIDONGCUUTHIEN, random.randint(450, 475))
+                            if self.moitruong.get_is_kynangsansang(IDKYNANG_THAPPHUONGLIETHOA):
+                                self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_THAPPHUONGLIETHOA, random.randint(450, 475))
+                            if self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGVANLY):
+                                self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_BANGPHONGVANLY, random.randint(450, 475))
                             if self.moitruong.get_is_kynangsansang(IDKYNANG_BANGPHONGBAO):
                                 self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_BANGPHONGBAO, random.randint(350, 375))
 
