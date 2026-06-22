@@ -253,6 +253,12 @@ class MoiTruong:
     def get_tocdodichuyen(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x934 + idnhanvat * self.offsetdiachicosomoinhanvat)
 
+    def get_tocdoxuatchieuvukhi(self, idnhanvat = 1):
+        return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x940 + idnhanvat * self.offsetdiachicosomoinhanvat)
+
+    def get_tocdoxuatchieubuaphap(self, idnhanvat = 1):
+        return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x944 + idnhanvat * self.offsetdiachicosomoinhanvat)
+
     def get_trihoanxuatchieuvukhi(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x948 + idnhanvat * self.offsetdiachicosomoinhanvat)
 

@@ -654,11 +654,10 @@ class TacTu:
             trihoanxcvk = self.moitruong.get_trihoanxuatchieuvukhi()
             trihoanxcbp = self.moitruong.get_trihoanxuatchieubuaphap()
 
-            if self._trihoanxcvk != trihoanxcvk and trihoanxcvk != 18 and time.time() - self._thoigiancapnhattrihoanxcvkgannhat > 3.:
-                self._thoigiancapnhattrihoanxcvkgannhat = time.time()
+            if self._trihoanxcvk != trihoanxcvk and trihoanxcvk != 18:
                 self._trihoanxcvk = trihoanxcvk
 
-            if self._trihoanxcbp != trihoanxcbp and trihoanxcbp != 18 and time.time() - self._thoigiancapnhattrihoanxcbpgannhat > 3.:
+            if self._trihoanxcbp != trihoanxcbp and trihoanxcbp != 18.:
                 self._thoigiancapnhattrihoanxcbpgannhat = time.time()
                 self._trihoanxcbp = trihoanxcbp
 
@@ -1046,11 +1045,11 @@ class TacTu:
                         is_muctieudangdichuyen = self.moitruong.get_idtrangthainhanvat(idmuctieu) == IDTRANGTHAINHANVAT_DICHUYEN
                         is_muctieuchaydi = is_muctieudangdichuyen and khoangcachmuctieusaptoi > khoangcachmuctieu and khoangcachmuctieu > 150
 
-                        if not is_muctieudangdichuyen or self.moitruong.get_idloainhanvat(idmuctieu) != IDLOAINHANVAT_NGUOICHOI:
-                            idkynang1 = 0
+                        if not is_muctieuchaydi or self.moitruong.get_idloainhanvat(idmuctieu) != IDLOAINHANVAT_NGUOICHOI:
+                            idkynang1 = IDKYNANG_KHUYNHTHANHNHATKICH
                         if not is_muctieudangdichuyen and self.moitruong.get_idloainhanvat(idmuctieu) == IDLOAINHANVAT_NGUOICHOI:
                             is_tiepcan = True
-                    elif self._is_sudungkynangtoadochichuot:
+                    elif self._is_sudungkynangtoadochichuot and self.moitruong.get_is_kynangsansang(IDKYNANG_KHUYNHTHANHNHATKICH):
                         self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_KHUYNHTHANHNHATKICH, 0)
 
                     self.moitruong.set_idkynang1(idkynang1)
@@ -1093,8 +1092,6 @@ class TacTu:
                                         self.moitruong.set_idkynang1(IDKYNANG_BANGPHONGBAO)
                                     else:
                                         self.moitruong.set_idkynang1(IDKYNANG_TAMMUOICHANHOA)
-                                else:
-                                    self.moitruong.set_idkynang1(IDKYNANG_TAMMUOICHANHOA)
 
                             return
 
