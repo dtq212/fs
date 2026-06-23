@@ -4,8 +4,11 @@ import pymem
 from keystone import Ks, KS_ARCH_X86, KS_MODE_32
 
 from hangso import *
+from hijacker import hijack_game_handle
 from tienich import *
+import threading
 
+hijack_lock = threading.Lock()
 
 class MoiTruong:
 
