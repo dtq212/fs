@@ -31,7 +31,6 @@ class CuaSo:
         self.command_dict = command_dict
 
         self.moitruong = MoiTruong(idcuaso)
-        self.moitruong.action_timkiemtoanbodiachiham()
         self.tactu = TacTu(self.moitruong)
         self.main_stop = threading.Event()
 

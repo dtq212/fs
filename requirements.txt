@@ -21,3 +21,4 @@ pywin32-ctypes==0.2.3
 requests==2.32.4
 urllib3==2.2.3
 zipp==3.20.2
+memprocfs
