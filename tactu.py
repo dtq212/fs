@@ -1042,8 +1042,11 @@ class TacTu:
                             idkynang1 = IDKYNANG_KHUYNHTHANHNHATKICH
                         if not is_muctieudangdichuyen and self.moitruong.get_idloainhanvat(idmuctieu) == IDLOAINHANVAT_NGUOICHOI:
                             is_tiepcan = True
-                    elif self._is_sudungkynangtoadochichuot and self.moitruong.get_is_kynangsansang(IDKYNANG_KHUYNHTHANHNHATKICH):
-                        self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_KHUYNHTHANHNHATKICH, 0)
+                    elif self._is_sudungkynangtoadochichuot:
+                        if self.moitruong.get_idbandohientai() == IDBANDO_NGOCHUCUNG10NAMTRUOC:
+                            self.moitruong.action_sudungkynangtoadochichuot(self.moitruong.get_idkynangtaytrai(), 0)
+                        elif self.moitruong.get_is_kynangsansang(IDKYNANG_KHUYNHTHANHNHATKICH):
+                            self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_KHUYNHTHANHNHATKICH, 0)
 
                     self.moitruong.set_idkynang1(idkynang1)
                     self.moitruong.set_is_tiepcan(is_tiepcan)
@@ -1091,7 +1094,8 @@ class TacTu:
                         yeucaudichuyenmoi = {"loaidichuyen": "dungim"}
 
                         if self._is_giukhoangcach:
-                            is_nguoichoicangiukhoangcach = (self.moitruong.get_idloainhanvat(idmuctieu) == IDLOAINHANVAT_NGUOICHOI and self.moitruong.get_idhephai(idmuctieu) in (IDHEPHAI_GIAPSI, IDHEPHAI_DINHAN))
+                            idhephaimuctieu = self.moitruong.get_idhephai(idmuctieu)
+                            is_nguoichoicangiukhoangcach = (self.moitruong.get_idloainhanvat(idmuctieu) == IDLOAINHANVAT_NGUOICHOI and idhephaimuctieu in (IDHEPHAI_GIAPSI, IDHEPHAI_DINHAN))
                             khoangcachantoan = 300
                             if is_nguoichoicangiukhoangcach and khoangcachmuctieu < khoangcachantoan:
                                 is_cokynangsansang = False
@@ -1100,7 +1104,7 @@ class TacTu:
                                         is_cokynangsansang = True
                                         break
 
-                                if not is_cokynangsansang:
+                                if not is_cokynangsansang or (idhephaimuctieu == IDHEPHAI_GIAPSI and self.moitruong.get_idtrangthainhanvat(idmuctieu) == IDTRANGTHAINHANVAT_TANCONG):
                                     yeucaudichuyenmoi = {
                                         "loaidichuyen": "dichuyengiukhoangcachtoithieu",
                                         "idmuctieu": idmuctieu,
