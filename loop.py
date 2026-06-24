@@ -4,8 +4,10 @@ import traceback
 
 import pymem.exception
 
+from hangso import IDHEPHAI_DAOSI
 from moitruong import MoiTruong
 from tactu import TacTu
+
 
 class LoopChinh:
     def __init__(self, moitruong: MoiTruong, tactu: TacTu, stop: threading.Event):
@@ -35,10 +37,12 @@ class LoopChinh:
             return
         if self.moitruong.get_is_dangmatketnoi():
             return
+
         self.tactu.action_tudongtimkiemmuctieu()
         self.tactu.action_xulydichuyenuutien()
         self.tactu.action_xulytancong()
         self.tactu.action_tudongdoisetdo()
+
 
 class LoopLamMoiTrangThaiTacTu:
     def __init__(self, moitruong: MoiTruong, tactu: TacTu, stop: threading.Event):
@@ -68,6 +72,7 @@ class LoopLamMoiTrangThaiTacTu:
             return
         self.tactu.action_lammoitrangthaitactu()
         self.tactu.action_kiemtraxulyloitudongtimduong()
+
 
 class LoopPhu:
     def __init__(self, moitruong: MoiTruong, tactu: TacTu, stop: threading.Event):
@@ -111,3 +116,9 @@ class LoopPhu:
         self.tactu.action_tudongphucsinh()
         self.tactu.action_tudongmoitodoi()
         self.tactu.action_tudongvutvatpham()
+
+        idmuctieu = self.moitruong.get_idmuctieudangchon()
+        if idmuctieu > 0:
+            tenmuctieu = self.moitruong.get_tennhanvat(idmuctieu)
+            if tenmuctieu in ["VươngTrùngDương", "TiểuYTiên"]:
+                print("{} hiệu ứng bổ trợ: {}".format(tenmuctieu, self.moitruong.get_hieuungbotros(idmuctieu), ))

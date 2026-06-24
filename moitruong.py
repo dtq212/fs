@@ -16,6 +16,7 @@ class MoiTruong:
         self._thoidiemphucsinhgannhat = 0.
         self.diachihamphucsinh = 0
         self.diachihamsudungkynangtoado2 = 0
+        self.diachihamsudungkynangmuctieu2 = 0
         self._thoidiemboquabossgannhat = 0.
         self._thoidiemdichuyengiukhoangcachtoithieu = 0.
         self._thoidiemtudongtimduonggannhat = 0.
@@ -61,7 +62,6 @@ class MoiTruong:
         # Lưu ý: Base từ 0
         self.offsetdiachicosothongtinvatpham = 0
         self.offsetdiachicosomoivatpham = 0
-
         #
         self.offsetdiachicosothongtinvatphamduoidat = 0
         self.offsetdiachicosomoivatphamduoidat = 0
@@ -142,6 +142,9 @@ class MoiTruong:
             "diachihamnhatvatpham",
             "diachihamdoimaupk",
             "diachihammokhoa",
+
+            "diachihamsudungkynangtoado2",
+            "diachihamsudungkynangmuctieu2",
 
             "diachihamdongcuahang",
             "diachihamdoithoai",
@@ -957,7 +960,7 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamsudungvatpham, bytes(encoding), len(encoding))
 
-    def action_sudungvatpham(self, sothutuvatpham, delay = 0.2):
+    def action_sudungvatpham(self, sothutuvatpham, delay = 0.0):
         if not self.diachihamsudungvatpham:
             self.khoitaohamsudungvatpham()
 
@@ -1090,7 +1093,7 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamdichuyen, bytes(encoding), len(encoding))
 
-    def action_dichuyen(self, toadox, toadoy, delay = 0.05):
+    def action_dichuyen(self, toadox, toadoy, delay = 0.00):
         if not self.diachihamdichuyen:
             self.khoitaohamdichuyen()
 
@@ -1105,7 +1108,7 @@ class MoiTruong:
         self.tientrinh.start_thread(self.diachihamdichuyen)
         return True
 
-    def action_dichuyengiukhoangcachtoida(self, idnhanvat2, khoangcachtoida, buocditoithieu = 30, delay = 0.05):
+    def action_dichuyengiukhoangcachtoida(self, idnhanvat2, khoangcachtoida, buocditoithieu = 30, delay = 0.00):
         if not self.get_is_nhanvattontai(idnhanvat2):
             return False
 
@@ -1135,7 +1138,7 @@ class MoiTruong:
 
         return False
 
-    def action_dichuyengiukhoangcachtoidadiem(self, toadox, toadoy, khoangcachtoida, buocditoithieu = 30, delay = 0.05):
+    def action_dichuyengiukhoangcachtoidadiem(self, toadox, toadoy, khoangcachtoida, buocditoithieu = 30, delay = 0.00):
         if time.time() - self._thoidiemdichuyengiukhoangcachtoithieu < delay:
             return False
 
@@ -1163,7 +1166,7 @@ class MoiTruong:
 
         return False
 
-    def action_dichuyengiukhoangcachtoithieu(self, idnhanvat2, khoangcachtoithieu, buocditoithieu = 30, delay = 0.05):
+    def action_dichuyengiukhoangcachtoithieu(self, idnhanvat2, khoangcachtoithieu, buocditoithieu = 30, delay = 0.00):
         if not self.get_is_nhanvattontai(idnhanvat2):
             return False
 
@@ -1384,7 +1387,7 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamnhatvatpham, bytes(encoding), len(encoding))
 
-    def action_nhatvatpham(self, idvatphamduoidat, delay = 0.05):
+    def action_nhatvatpham(self, idvatphamduoidat, delay = 0.00):
         if not self.diachihamnhatvatpham:
             self.khoitaohamnhatvatpham()
 
@@ -1557,7 +1560,7 @@ class MoiTruong:
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamsudungkynangtoado, bytes(encoding), len(encoding))
 
-    def action_sudungkynangtoado(self, idkynang, toadox, toadoy, delay = 0.05):
+    def action_sudungkynangtoado(self, idkynang, toadox, toadoy, delay = 0.00):
         if not self.diachihamsudungkynangtoado:
             self.khoitaohamsudungkynangtoado()
 
@@ -1574,7 +1577,7 @@ class MoiTruong:
         self.tientrinh.start_thread(self.diachihamsudungkynangtoado)
         return True
 
-    def action_sudungkynangphudau(self, idnhanvat, idkynang, khoangcachtoida, delay = 0.05):
+    def action_sudungkynangphudau(self, idnhanvat, idkynang, khoangcachtoida, delay = 0.00):
         if time.time() - self._thoidiemsudungkynanggannhat_map.get(idkynang, 0.) < delay:
             return False
 
@@ -1612,7 +1615,7 @@ class MoiTruong:
 
         return self.action_sudungkynangtoado(idkynang, int(target_x), int(target_y), delay = delay)
 
-    def action_sudungkynangtoadochichuot(self, idkynang, khoangcachtoida, delay = 0.05):
+    def action_sudungkynangtoadochichuot(self, idkynang, khoangcachtoida, delay = 0.00):
         if time.time() - self._thoidiemsudungkynanggannhat_map.get(idkynang, 0.) < delay:
             return False
 
@@ -1632,6 +1635,181 @@ class MoiTruong:
         target_y = int(y1 + deltay)
 
         return self.action_sudungkynangtoado(idkynang, target_x, target_y, delay = delay)
+
+    def khoitaohamsudungkynangtoado2(self):
+        if self.diachihamsudungkynangtoado2:
+            return
+
+        self.diachihamsudungkynangtoado2 = self.tientrinh.allocate(256)
+        diachidulieu = self.diachihamsudungkynangtoado2 + 0x80
+
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        asm_code = f"""
+            push ebp
+            mov ebp, esp
+            sub esp, 32                     
+
+            mov eax, dword ptr [{hex(diachidulieu)}]
+            mov ebx, dword ptr [{hex(diachidulieu + 4)}]
+            mov ecx, dword ptr [{hex(diachidulieu + 8)}]
+            mov edx, dword ptr [{hex(diachidulieu + 12)}]
+            mov esi, dword ptr [{hex(diachidulieu + 16)}]
+
+            mov byte ptr [ebp - 28], 0x4D
+            mov dword ptr [ebp - 27], esi
+            mov dword ptr [ebp - 23], ebx
+            mov dword ptr [ebp - 19], ecx
+            mov dword ptr [ebp - 15], eax
+            mov dword ptr [ebp - 11], edx
+
+            mov dword ptr [ebp - 4], 21        
+
+            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosothuchiencaulenh)}]
+            test eax, eax
+            je ketthuc
+
+            lea edx, [ebp - 4]
+            push edx
+
+            lea edx, [ebp - 28]
+            push edx
+
+            push eax
+
+            mov edx, dword ptr [eax]
+            mov edx, dword ptr [edx + 0x1C]
+            call edx                        
+
+            ketthuc:
+            mov esp, ebp
+            pop ebp
+            ret 4                           
+        """
+
+        encoding, _ = ks.asm(asm_code)
+        write_bytes(self.tientrinh, self.diachihamsudungkynangtoado2, bytes(encoding), len(encoding))
+
+    def action_sudungkynangtoado2(self, idkynang, toadox, toadoy, delay = 0.00):
+        if not self.diachihamsudungkynangtoado2:
+            self.khoitaohamsudungkynangtoado2()
+
+        if time.time() - self._thoidiemsudungkynanggannhat_map.get(idkynang, 0.) < delay:
+            return False
+
+        toadoxhientai, toadoyhientai = self.get_toado()
+
+        self._thoidiemsudungkynanggannhat_map[idkynang] = time.time()
+
+        diachidulieu = self.diachihamsudungkynangtoado2 + 0x80
+        write_int(self.tientrinh, diachidulieu, toadox)  # Target X
+        write_int(self.tientrinh, diachidulieu + 4, toadoxhientai)  # Current X
+        write_int(self.tientrinh, diachidulieu + 8, toadoyhientai)  # Current Y
+        write_int(self.tientrinh, diachidulieu + 12, toadoy)  # Target Y
+        write_int(self.tientrinh, diachidulieu + 16, idkynang)  # Skill ID
+
+        self.tientrinh.start_thread(self.diachihamsudungkynangtoado2)
+        return True
+
+    def action_sudungkynangtoadochichuot2(self, idkynang, khoangcachtoida, delay = 0.00):
+        if time.time() - self._thoidiemsudungkynanggannhat_map.get(idkynang, 0.) < delay:
+            return False
+
+        x1, y1 = self.get_toado()
+        x2, y2 = self.get_toadoclick()
+
+        deltax = x2 - x1
+        deltay = y2 - y1
+
+        khoangcach = max(round(math.sqrt(deltax ** 2 + deltay ** 2)), 1)
+
+        if khoangcach > khoangcachtoida:
+            deltax = deltax * khoangcachtoida / khoangcach
+            deltay = deltay * khoangcachtoida / khoangcach
+
+        target_x = int(x1 + deltax)
+        target_y = int(y1 + deltay)
+
+        return self.action_sudungkynangtoado2(idkynang, target_x, target_y, delay = delay)
+
+    def khoitaohamsudungkynangmuctieu2(self):
+        if self.diachihamsudungkynangmuctieu2:
+            return
+
+        self.diachihamsudungkynangmuctieu2 = self.tientrinh.allocate(256)
+        diachidulieu = self.diachihamsudungkynangmuctieu2 + 0x80
+
+        ks = Ks(KS_ARCH_X86, KS_MODE_32)
+
+        asm_code = f"""
+            push ebp
+            mov ebp, esp
+            sub esp, 32                     
+
+            mov eax, dword ptr [{hex(diachidulieu)}]
+            mov ecx, dword ptr [{hex(diachidulieu + 4)}]
+            mov edx, dword ptr [{hex(diachidulieu + 8)}]
+            mov ebx, dword ptr [{hex(diachidulieu + 12)}]
+
+            mov byte ptr [ebp - 28], 0x4D
+            mov dword ptr [ebp - 27], eax
+            mov dword ptr [ebp - 23], ecx
+            mov dword ptr [ebp - 19], edx
+            mov dword ptr [ebp - 15], 0xFFFFFFFF
+            mov dword ptr [ebp - 11], ebx
+
+            mov dword ptr [ebp - 4], 21
+
+            mov eax, dword ptr [{hex(self.diachigame + self.offsetdiachicosothuchiencaulenh)}]
+            test eax, eax
+            je ketthuc
+
+            lea edx, [ebp - 4]
+            push edx
+
+            lea edx, [ebp - 28]
+            push edx
+
+            push eax
+
+            mov edx, dword ptr [eax]
+            mov edx, dword ptr [edx + 0x1C]
+            call edx                        
+
+            ketthuc:
+            mov esp, ebp
+            pop ebp
+            ret 4                           
+        """
+
+        encoding, _ = ks.asm(asm_code)
+        write_bytes(self.tientrinh, self.diachihamsudungkynangmuctieu2, bytes(encoding), len(encoding))
+
+    def action_sudungkynangmuctieu2(self, idkynang, idnhanvat, delay = 0.00):
+        if not self.diachihamsudungkynangmuctieu2:
+            self.khoitaohamsudungkynangmuctieu2()
+
+        if time.time() - self._thoidiemsudungkynanggannhat_map.get(idkynang, 0.) < delay:
+            return False
+
+        self._thoidiemsudungkynanggannhat_map[idkynang] = time.time()
+
+        dbidnhanvat = self.get_dbidnhanvat(idnhanvat)
+        if not dbidnhanvat:
+            return False
+
+        toadoxhientai, toadoyhientai = self.get_toado()
+
+        diachidulieu = self.diachihamsudungkynangmuctieu2 + 0x80
+
+        write_int(self.tientrinh, diachidulieu, idkynang)
+        write_int(self.tientrinh, diachidulieu + 4, toadoxhientai)
+        write_int(self.tientrinh, diachidulieu + 8, toadoyhientai)
+        write_int(self.tientrinh, diachidulieu + 12, dbidnhanvat)
+
+        self.tientrinh.start_thread(self.diachihamsudungkynangmuctieu2)
+
+        return True
 
     def khoitaohamdongkytrancac(self):
         if self.diachihamdongkytrancac:
