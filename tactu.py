@@ -1104,7 +1104,7 @@ class TacTu:
                                         is_cokynangsansang = True
                                         break
 
-                                if not is_cokynangsansang or (idhephaimuctieu == IDHEPHAI_GIAPSI and self.moitruong.get_idtrangthainhanvat(idmuctieu) == IDTRANGTHAINHANVAT_TANCONG):
+                                if not is_cokynangsansang or (self.moitruong.get_is_bidongbang(idmuctieu) and not self.moitruong.get_is_bidongbang()) or (idhephaimuctieu == IDHEPHAI_GIAPSI and self.moitruong.get_idtrangthainhanvat(idmuctieu) == IDTRANGTHAINHANVAT_TANCONG):
                                     yeucaudichuyenmoi = {
                                         "loaidichuyen": "dichuyengiukhoangcachtoithieu",
                                         "idmuctieu": idmuctieu,
