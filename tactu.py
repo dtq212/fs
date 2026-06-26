@@ -1005,7 +1005,7 @@ class TacTu:
             if not self._is_duoitheo:
                 self.moitruong.set_is_duoitheo(False)
                 self.moitruong.set_is_dichuyenhoatdongquanhphamvi(False)
-            elif self.moitruong.get_idhephai() in (IDHEPHAI_GIAPSI, IDHEPHAI_DINHAN, IDHEPHAI_VUSI):
+            elif self.moitruong.get_idhephai() in (IDHEPHAI_GIAPSI, IDHEPHAI_DINHAN, ):
                 self.moitruong.set_is_duoitheo(True)
             else:
                 self.moitruong.set_is_duoitheo(False)
@@ -1196,6 +1196,7 @@ class TacTu:
                 else:
                     self.moitruong.set_idkynang1(IDKYNANG_TAMMUOICHANHOA)
             elif self.moitruong.get_idhephai() == IDHEPHAI_VUSI:
+                khoangcachtancong = 600 if self.moitruong.get_idkynangtaytrai() == IDKYNANG_XUYENTAMTIEN else 500
                 is_cothesudungkynang = self.moitruong.get_is_dangbatauto() and self.moitruong.get_is_khuvuccothetancong() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong()
                 if is_cothesudungkynang:
                     idmuctieu = self._idmuctieu if self._is_tudongtimkiemmuctieu else self.moitruong.get_idmuctieutancong()
@@ -1204,23 +1205,20 @@ class TacTu:
                         khoangcachmuctieusaptoi = self.moitruong.get_khoangcachsaptoi(idmuctieu)
 
                         if self._is_danhphudau and not self._is_duoitheo:
-                            if 500 < khoangcachmuctieu <= 900:
-                                danhsachkynang = [IDKYNANG_XASAT] if self._is_khongsudungnhieukynang else [IDKYNANG_XASAT, IDKYNANG_BACHBOXUYENDUONG, ]
-
-                                for idkynang in danhsachkynang:
-                                    if self.moitruong.get_is_kynangsansang(idkynang):
-                                        self.moitruong.action_sudungkynangphudau(idmuctieu, idkynang, random.randint(450, 475))
-                                        break
-                                return
-
-                            elif khoangcachmuctieu <= 500:
+                            if 900 < khoangcachmuctieu <= 1200 and self.moitruong.get_is_kynangsansang(IDKYNANG_XASAT):
+                                self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_XASAT, random.randint(550, 575))
+                            elif 500 < khoangcachmuctieu <= 1200 and self.moitruong.get_is_kynangsansang(IDKYNANG_BACHBOXUYENDUONG):
+                                self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_BACHBOXUYENDUONG, random.randint(450, 475))
+                            elif 600 < khoangcachmuctieu <= 900 and self.moitruong.get_is_kynangsansang(IDKYNANG_XUYENTAMTIEN):
+                                self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_XUYENTAMTIEN, random.randint(550, 575))
+                            elif khoangcachmuctieu <= 600:
                                 if not self._is_khongsudungnhieukynang:
-                                    if self.moitruong.get_is_kynangsansang(IDKYNANG_XASAT):
-                                        self.moitruong.set_idkynang1(IDKYNANG_XASAT)
-                                    elif self.moitruong.get_is_kynangsansang(IDKYNANG_BACHBOXUYENDUONG):
+                                    if khoangcachmuctieu <= 500 and self.moitruong.get_is_kynangsansang(IDKYNANG_BACHBOXUYENDUONG):
                                         self.moitruong.set_idkynang1(IDKYNANG_BACHBOXUYENDUONG)
-                                else:
-                                    self.moitruong.set_idkynang1(IDKYNANG_XASAT)
+                                    elif khoangcachmuctieu <= 500 and self.moitruong.get_is_kynangsansang(IDKYNANG_NHATNHANTHANHQUAN):
+                                        self.moitruong.set_idkynang1(IDKYNANG_NHATNHANTHANHQUAN)
+                                    elif khoangcachmuctieu <= 600 and self.moitruong.get_is_kynangsansang(IDKYNANG_XUYENTAMTIEN):
+                                        self.moitruong.set_idkynang1(IDKYNANG_XUYENTAMTIEN)
                             return
 
                         yeucaudichuyenmoi = {"loaidichuyen": "dungim"}
@@ -1230,7 +1228,7 @@ class TacTu:
                             khoangcachantoan = 300
                             if is_nguoichoicangiukhoangcach and khoangcachmuctieu < khoangcachantoan:
                                 is_cokynangsansang = False
-                                for idkynang in (IDKYNANG_XASAT, IDKYNANG_BACHBOXUYENDUONG, ):
+                                for idkynang in (IDKYNANG_BACHBOXUYENDUONG, IDKYNANG_NHATNHANTHANHQUAN, ):
                                     if self.moitruong.get_is_kynangsansang(idkynang):
                                         is_cokynangsansang = True
                                         break
@@ -1248,7 +1246,7 @@ class TacTu:
                         is_muctieutiepcan = is_muctieudangdichuyen and khoangcachmuctieusaptoi < khoangcachmuctieu
 
                         if self._is_danhphudau:
-                            khoangcachphudau = 900
+                            khoangcachphudau = 1200
 
                             if khoangcachmuctieu > khoangcachphudau:
                                 yeucaudichuyenmoi = {
@@ -1259,15 +1257,18 @@ class TacTu:
                                 self.moitruong.set_idkynang1(IDKYNANG_XASAT)
                                 return
 
-                            if 500 < khoangcachmuctieu < khoangcachphudau:
-                                if self.moitruong.get_is_kynangsansang(IDKYNANG_XASAT):
-                                    self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_XASAT, random.randint(450, 475))
+                            if khoangcachtancong < khoangcachmuctieu < khoangcachphudau:
+                                if khoangcachmuctieu > 900 and self.moitruong.get_is_kynangsansang(IDKYNANG_XASAT):
+                                    self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_XASAT, random.randint(550, 575))
                                     return
                                 elif self.moitruong.get_is_kynangsansang(IDKYNANG_BACHBOXUYENDUONG):
                                     self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_BACHBOXUYENDUONG, random.randint(450, 475))
                                     return
+                                elif khoangcachmuctieu <= 900 and self.moitruong.get_is_kynangsansang(IDKYNANG_XUYENTAMTIEN):
+                                    self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_XUYENTAMTIEN, random.randint(550, 575))
+                                    return
 
-                        if khoangcachmuctieu > 500:
+                        if khoangcachmuctieu > khoangcachtancong:
                             yeucaudichuyenmoi = {
                                 "loaidichuyen": "dichuyengiukhoangcachtoida",
                                 "idmuctieu": idmuctieu,
@@ -1276,16 +1277,28 @@ class TacTu:
                             return
 
                         if not self._is_khongsudungnhieukynang:
-                            if self.moitruong.get_is_kynangsansang(IDKYNANG_XASAT):
+                            if khoangcachmuctieu > 900 and self.moitruong.get_is_kynangsansang(IDKYNANG_XASAT):
                                 self.moitruong.set_idkynang1(IDKYNANG_XASAT)
                             elif self.moitruong.get_is_kynangsansang(IDKYNANG_BACHBOXUYENDUONG):
                                 self.moitruong.set_idkynang1(IDKYNANG_BACHBOXUYENDUONG)
+                                if 500 < khoangcachmuctieu <= khoangcachtancong and is_cothesudungkynang:
+                                    self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_BACHBOXUYENDUONG, random.randint(450, 475))
+                            elif self.moitruong.get_is_kynangsansang(IDKYNANG_NHATNHANTHANHQUAN):
+                                self.moitruong.set_idkynang1(IDKYNANG_NHATNHANTHANHQUAN)
+                                if 500 < khoangcachmuctieu <= khoangcachtancong and is_cothesudungkynang:
+                                    self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_NHATNHANTHANHQUAN, random.randint(450, 475))
+                            elif khoangcachmuctieu > 500 and self.moitruong.get_is_kynangsansang(IDKYNANG_XUYENTAMTIEN):
+                                self.moitruong.set_idkynang1(IDKYNANG_XUYENTAMTIEN)
 
                     elif self._is_sudungkynangtoadochichuot:
                         if self.moitruong.get_is_kynangsansang(IDKYNANG_XASAT):
-                            self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_XASAT, random.randint(450, 475))
+                            self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_XASAT, random.randint(550, 575))
                         if self.moitruong.get_is_kynangsansang(IDKYNANG_BACHBOXUYENDUONG):
                             self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_BACHBOXUYENDUONG, random.randint(450, 475))
+                        if self.moitruong.get_is_kynangsansang(IDKYNANG_NHATNHANTHANHQUAN):
+                            self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_NHATNHANTHANHQUAN, random.randint(450, 475))
+                        if self.moitruong.get_is_kynangsansang(IDKYNANG_XUYENTAMTIEN):
+                            self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_XUYENTAMTIEN, random.randint(550, 575))
         finally:
             self._yeucaudichuyentancong = yeucaudichuyenmoi
 
