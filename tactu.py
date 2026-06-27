@@ -1228,7 +1228,8 @@ class TacTu:
                         yeucaudichuyenmoi = {"loaidichuyen": "dungim"}
 
                         if self._is_giukhoangcach:
-                            is_nguoichoicangiukhoangcach = (self.moitruong.get_idloainhanvat(idmuctieu) == IDLOAINHANVAT_NGUOICHOI and self.moitruong.get_idhephai(idmuctieu) in (IDHEPHAI_GIAPSI, IDHEPHAI_DINHAN))
+                            idloainhanvatmuctieu = self.moitruong.get_idloainhanvat(idmuctieu)
+                            is_nguoichoicangiukhoangcach = (idloainhanvatmuctieu == IDLOAINHANVAT_NGUOICHOI and self.moitruong.get_idhephai(idmuctieu) in (IDHEPHAI_GIAPSI, IDHEPHAI_DINHAN)) or idloainhanvatmuctieu == IDKYNANG_PHONGQUYENTANVAN
                             khoangcachantoan = 300
                             if is_nguoichoicangiukhoangcach and khoangcachmuctieu < khoangcachantoan:
                                 is_cokynangsansang = False
@@ -1237,7 +1238,7 @@ class TacTu:
                                         is_cokynangsansang = True
                                         break
 
-                                if not is_cokynangsansang:
+                                if not is_cokynangsansang or IDHIEUUNGBOTRO_ANTHAN in self.moitruong.get_hieuungbotros():
                                     yeucaudichuyenmoi = {
                                         "loaidichuyen": "dichuyengiukhoangcachtoithieu",
                                         "idmuctieu": idmuctieu,
