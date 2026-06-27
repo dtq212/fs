@@ -1601,7 +1601,9 @@ class MoiTruong:
                 offset_phudau = min(offset_phudau, khoangcachdukien)  # Đoạn này đang không hoạt động tốt nếu mục tiêu dí chuột để di chuyển
 
                 if self.get_idhephai() == IDHEPHAI_VUSI:
-                    offset_phudau = tocdo * 8 if is_bidongbang else tocdo * 18
+                    offset_phudau = tocdo * 12 if is_bidongbang else tocdo * 27
+
+                offset_phudau = min(offset_phudau, 450)
 
                 x2 = x2 + (deltax_vector * offset_phudau / khoangcachdukien)
                 y2 = y2 + (deltay_vector * offset_phudau / khoangcachdukien)
