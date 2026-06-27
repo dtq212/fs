@@ -1591,22 +1591,17 @@ class MoiTruong:
             deltay_vector = y2_saptoi - y2
 
             khoangcachdukien = math.dist((x2, y2), (x2_saptoi, y2_saptoi))
-            khoangcachhientai = math.dist((x1, y1), (x2, y2))
 
             if khoangcachdukien > 0:
-                tocdo = self.get_tocdodichuyen(idnhanvat)
                 is_bidongbang = self.get_is_bidongbang(idnhanvat)
+                tocdo = self.get_tocdodichuyen(idnhanvat)
+
 
                 offset_phudau = tocdo * 4 if is_bidongbang else tocdo * 9
-                danhsach_kynang_danbay = [IDKYNANG_XASAT, IDKYNANG_BACHBOXUYENDUONG, IDKYNANG_XUYENTAMTIEN]
+                offset_phudau = min(offset_phudau, khoangcachdukien)  # Đoạn này đang không hoạt động tốt nếu mục tiêu dí chuột để di chuyển
 
-                if idkynang in danhsach_kynang_danbay:
-                    tocdo_dan = 1500
-                    thoi_gian_bay = khoangcachhientai / tocdo_dan
-                    offset_danbay = tocdo * thoi_gian_bay
-                    offset_phudau += offset_danbay
-
-                offset_phudau = min(offset_phudau, khoangcachdukien)
+                if self.get_idhephai() == IDHEPHAI_VUSI:
+                    offset_phudau = tocdo * 8 if is_bidongbang else tocdo * 18
 
                 x2 = x2 + (deltax_vector * offset_phudau / khoangcachdukien)
                 y2 = y2 + (deltay_vector * offset_phudau / khoangcachdukien)
