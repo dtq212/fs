@@ -252,6 +252,39 @@ class MoiTruong:
             read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x102C + idnhanvat * self.offsetdiachicosomoinhanvat)
         )
 
+    def get_toadodukien(self, idnhanvat = 1, thoigiandukien = 1.0):
+        x1, y1 = self.get_toado(idnhanvat)
+        if x1 == -1 or y1 == -1:
+            return -1, -1
+
+        idtrangthai = self.get_idtrangthainhanvat(idnhanvat)
+        if idtrangthai != IDTRANGTHAINHANVAT_DICHUYEN:
+            return x1, y1
+
+        x2, y2 = self.get_toadosaptoi(idnhanvat)
+        if x2 <= 0:
+            return x1, y1
+
+        khoangcachdich = math.dist((x1, y1), (x2, y2))
+        if khoangcachdich <= 0:
+            return x1, y1
+
+        tocdo = self.get_tocdodichuyen(idnhanvat)
+        vantocthucte = tocdo * 20
+
+        if self.get_is_bidongbang(idnhanvat):
+            vantocthucte = vantocthucte / 2.25
+
+        quangduong_dukien = vantocthucte * thoigiandukien
+
+        quangduong_dukien = min(quangduong_dukien, khoangcachdich)
+
+        tile = quangduong_dukien / khoangcachdich
+        x_dukien = x1 + (x2 - x1) * tile
+        y_dukien = y1 + (y2 - y1) * tile
+
+        return int(x_dukien), int(y_dukien)
+
     def get_tocdodichuyen(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x934 + idnhanvat * self.offsetdiachicosomoinhanvat)
 
@@ -1579,40 +1612,21 @@ class MoiTruong:
     def action_sudungkynangphudau(self, idnhanvat, idkynang, khoangcachtoida, delay = 0.00):
         if time.time() - self._thoidiemsudungkynanggannhat_map.get(idkynang, 0.) < delay:
             return False
-
         x1, y1 = self.get_toado()
-        x2, y2 = self.get_toado(idnhanvat)
+        if self.get_idhephai() == IDHEPHAI_VUSI:
+            khoangcachhientai = self.get_khoangcach(idnhanvat)
+            tocdomuiten = 600.0
+            thoigiandelay = khoangcachhientai / tocdomuiten
+        else:
+            thoigiandelay = 0.5
 
-        x2_saptoi, y2_saptoi = self.get_toadosaptoi(idnhanvat)
-        idtrangthai = self.get_idtrangthainhanvat(idnhanvat)
+        x_dukien, y_dukien = self.get_toadodukien(idnhanvat, thoigiandelay)
 
-        if idtrangthai == IDTRANGTHAINHANVAT_DICHUYEN and x2_saptoi > 0:
-            deltax_vector = x2_saptoi - x2
-            deltay_vector = y2_saptoi - y2
+        deltax_final = x_dukien - x1
+        deltay_final = y_dukien - y1
+        khoangcachdendiemdon = math.dist((x1, y1), (x_dukien, y_dukien))
 
-            khoangcachdukien = math.dist((x2, y2), (x2_saptoi, y2_saptoi))
-
-            if khoangcachdukien > 0:
-                is_bidongbang = self.get_is_bidongbang(idnhanvat)
-                tocdo = self.get_tocdodichuyen(idnhanvat)
-
-
-                offset_phudau = tocdo * 4 if is_bidongbang else tocdo * 9
-                offset_phudau = min(offset_phudau, khoangcachdukien)  # Đoạn này đang không hoạt động tốt nếu mục tiêu dí chuột để di chuyển
-
-                if self.get_idhephai() == IDHEPHAI_VUSI:
-                    offset_phudau = tocdo * 12 if is_bidongbang else tocdo * 27
-
-                offset_phudau = min(offset_phudau, 450)
-
-                x2 = x2 + (deltax_vector * offset_phudau / khoangcachdukien)
-                y2 = y2 + (deltay_vector * offset_phudau / khoangcachdukien)
-
-        deltax_final = x2 - x1
-        deltay_final = y2 - y1
-        khoangcachdendiemdon = math.dist((x1, y1), (x2, y2))
-
-        target_x, target_y = x2, y2
+        target_x, target_y = x_dukien, y_dukien
 
         if khoangcachdendiemdon > khoangcachtoida:
             ratio = khoangcachtoida / max(khoangcachdendiemdon, 1)

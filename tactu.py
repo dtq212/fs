@@ -1235,20 +1235,21 @@ class TacTu:
                     idmuctieu = self._idmuctieu if self._is_tudongtimkiemmuctieu else self.moitruong.get_idmuctieutancong()
                     if idmuctieu > 0:
                         khoangcachmuctieu = self.moitruong.get_khoangcach(idmuctieu)
+
                         khoangcachmuctieusaptoi = self.moitruong.get_khoangcachsaptoi(idmuctieu)
 
                         is_muctieudangdichuyen = self.moitruong.get_idtrangthainhanvat(idmuctieu) == IDTRANGTHAINHANVAT_DICHUYEN
                         is_muctieutiepcan = is_muctieudangdichuyen and khoangcachmuctieusaptoi < khoangcachmuctieu
 
                         is_duongthang = self._get_is_dichuyenduongthang(idmuctieu)
-                        is_sudungxasat = (not is_muctieudangdichuyen) or is_duongthang
+                        is_sudungxasat = not is_muctieudangdichuyen or is_duongthang
 
                         if self._is_danhphudau and not self._is_duoitheo:
                             if 900 < khoangcachmuctieu <= 1200 and self.moitruong.get_is_kynangsansang(IDKYNANG_XASAT) and is_sudungxasat:
                                 self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_XASAT, random.randint(550, 575))
-                            elif 500 < khoangcachmuctieu <= 1200 and self.moitruong.get_is_kynangsansang(IDKYNANG_BACHBOXUYENDUONG):
+                            elif khoangcachmuctieu <= 1200 and self.moitruong.get_is_kynangsansang(IDKYNANG_BACHBOXUYENDUONG):
                                 self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_BACHBOXUYENDUONG, random.randint(450, 475))
-                            elif 600 < khoangcachmuctieu <= 900 and self.moitruong.get_is_kynangsansang(IDKYNANG_XUYENTAMTIEN):
+                            elif khoangcachmuctieu <= 1200 and self.moitruong.get_is_kynangsansang(IDKYNANG_XUYENTAMTIEN):
                                 self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_XUYENTAMTIEN, random.randint(550, 575))
                             elif khoangcachmuctieu <= 600:
                                 if khoangcachmuctieu <= 500 and self.moitruong.get_is_kynangsansang(IDKYNANG_BACHBOXUYENDUONG):
@@ -1299,13 +1300,13 @@ class TacTu:
                                 return
 
                             if khoangcachtancong < khoangcachmuctieu < khoangcachphudau:
-                                if khoangcachmuctieu > 900 and self.moitruong.get_is_kynangsansang(IDKYNANG_XASAT) and is_sudungxasat:
+                                if 900 < khoangcachmuctieu <= 1200 and self.moitruong.get_is_kynangsansang(IDKYNANG_XASAT) and is_sudungxasat:
                                     self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_XASAT, random.randint(550, 575))
                                     return
-                                elif self.moitruong.get_is_kynangsansang(IDKYNANG_BACHBOXUYENDUONG):
+                                elif khoangcachmuctieu <= 1200 and self.moitruong.get_is_kynangsansang(IDKYNANG_BACHBOXUYENDUONG):
                                     self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_BACHBOXUYENDUONG, random.randint(450, 475))
                                     return
-                                elif 600 < khoangcachmuctieu <= 900 and self.moitruong.get_is_kynangsansang(IDKYNANG_XUYENTAMTIEN):
+                                elif 600 < khoangcachmuctieu <= 1200 and self.moitruong.get_is_kynangsansang(IDKYNANG_XUYENTAMTIEN):
                                     self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_XUYENTAMTIEN, random.randint(550, 575))
                                     return
 
