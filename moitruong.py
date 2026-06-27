@@ -5,7 +5,6 @@ from keystone import Ks, KS_ARCH_X86, KS_MODE_32
 
 from hangso import *
 from tienich import *
-import threading
 
 class MoiTruong:
 
@@ -954,7 +953,7 @@ class MoiTruong:
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret                           
+            ret 4                           
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -1237,7 +1236,7 @@ class MoiTruong:
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret
+            ret 4
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -1381,7 +1380,7 @@ class MoiTruong:
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret                           
+            ret 4                           
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -1592,11 +1591,21 @@ class MoiTruong:
             deltay_vector = y2_saptoi - y2
 
             khoangcachdukien = math.dist((x2, y2), (x2_saptoi, y2_saptoi))
+            khoangcachhientai = math.dist((x1, y1), (x2, y2))
 
             if khoangcachdukien > 0:
-                is_bidongbang = self.get_is_bidongbang(idnhanvat)
                 tocdo = self.get_tocdodichuyen(idnhanvat)
+                is_bidongbang = self.get_is_bidongbang(idnhanvat)
+
                 offset_phudau = tocdo * 4 if is_bidongbang else tocdo * 9
+                danhsach_kynang_danbay = [IDKYNANG_XASAT, IDKYNANG_BACHBOXUYENDUONG, IDKYNANG_XUYENTAMTIEN]
+
+                if idkynang in danhsach_kynang_danbay:
+                    tocdo_dan = 1500
+                    thoi_gian_bay = khoangcachhientai / tocdo_dan
+                    offset_danbay = tocdo * thoi_gian_bay
+                    offset_phudau += offset_danbay
+
                 offset_phudau = min(offset_phudau, khoangcachdukien)
 
                 x2 = x2 + (deltax_vector * offset_phudau / khoangcachdukien)
@@ -1684,7 +1693,7 @@ class MoiTruong:
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret                           
+            ret 4                           
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -1779,7 +1788,7 @@ class MoiTruong:
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret                           
+            ret 4                           
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -1839,7 +1848,7 @@ class MoiTruong:
             mov eax, {hex(diachi_ham)}
             call eax
             add esp, 4
-            ret               
+            ret 4               
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -1897,7 +1906,7 @@ class MoiTruong:
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret                           
+            ret 4                           
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -1975,7 +1984,7 @@ class MoiTruong:
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret                           
+            ret 4                           
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -2043,7 +2052,7 @@ class MoiTruong:
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret                           
+            ret 4                           
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -2117,7 +2126,7 @@ class MoiTruong:
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret                           
+            ret 4                           
         """
 
         encoding, _ = ks.asm(asm_code)
