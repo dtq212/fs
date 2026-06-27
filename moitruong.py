@@ -954,7 +954,7 @@ class MoiTruong:
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret 4                           
+            ret                           
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -1237,7 +1237,7 @@ class MoiTruong:
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret 4
+            ret
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -1381,7 +1381,7 @@ class MoiTruong:
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret 4                           
+            ret                           
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -1684,7 +1684,7 @@ class MoiTruong:
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret 4                           
+            ret                           
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -1779,7 +1779,7 @@ class MoiTruong:
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret 4                           
+            ret                           
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -1839,7 +1839,7 @@ class MoiTruong:
             mov eax, {hex(diachi_ham)}
             call eax
             add esp, 4
-            ret 4               
+            ret               
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -1897,7 +1897,7 @@ class MoiTruong:
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret 4                           
+            ret                           
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -1975,7 +1975,7 @@ class MoiTruong:
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret 4                           
+            ret                           
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -2043,7 +2043,7 @@ class MoiTruong:
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret 4                           
+            ret                           
         """
 
         encoding, _ = ks.asm(asm_code)
@@ -2117,7 +2117,7 @@ class MoiTruong:
             ketthuc:
             mov esp, ebp
             pop ebp
-            ret 4                           
+            ret                           
         """
 
         encoding, _ = ks.asm(asm_code)
