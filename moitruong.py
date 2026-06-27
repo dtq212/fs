@@ -7,8 +7,6 @@ from hangso import *
 from tienich import *
 import threading
 
-hijack_lock = threading.Lock()
-
 class MoiTruong:
 
     def __init__(self, idcuaso):
