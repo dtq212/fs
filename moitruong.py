@@ -936,12 +936,6 @@ class MoiTruong:
     def set_idmuctieu(self, idnhanvat):
         self.set_idmuctieudangchon(idnhanvat)
         self.set_idmuctieutancong(idnhanvat)
-        if idnhanvat > 0:
-            tennhanvat = self.get_tennhanvat(idnhanvat)
-            self.set_chidanh(tennhanvat)
-        else:
-            self.set_chidanh(self.get_tennhanvat())
-
         idmuctieudangkhoa = self.get_idmuctieudangkhoa()
         if idmuctieudangkhoa and idmuctieudangkhoa != idnhanvat:
             self.set_idmuctieudangkhoa(0)
