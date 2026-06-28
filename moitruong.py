@@ -359,6 +359,9 @@ class MoiTruong:
     def get_capdonhanvat(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x1C + idnhanvat * self.offsetdiachicosomoinhanvat)
 
+    def get_is_anthan(self, idnhanvat = 1):
+        return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x90 + idnhanvat * self.offsetdiachicosomoinhanvat) > 0
+
     def get_idbienthannhanvat(self, idnhanvat = 1):
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0xB10 + idnhanvat * self.offsetdiachicosomoinhanvat)
 
