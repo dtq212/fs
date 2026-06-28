@@ -846,6 +846,13 @@ class MoiTruong:
         if self.get_is_danhquai() != is_danhquai:
             write_int(self.tientrinh, self.diachigame + self.offsetdiachicosocauhinh + 0xA99C, 1 if is_danhquai else 0)
 
+    def get_chidanh(self):
+        return read_string(self.tientrinh, self.diachigame + self.offsetdiachicosocauhinh + 0xB018)
+
+    def set_chidanh(self, chidanh):
+        if self.get_chidanh() != chidanh:
+            write_string(self.tientrinh, self.diachigame + self.offsetdiachicosocauhinh + 0xB018, chidanh)
+
     def get_is_boss(self, idnhanvat = 1):
         if self.get_idloainhanvat(idnhanvat) != IDLOAINHANVAT_QUAIVAT:
             return
@@ -929,6 +936,11 @@ class MoiTruong:
     def set_idmuctieu(self, idnhanvat):
         self.set_idmuctieudangchon(idnhanvat)
         self.set_idmuctieutancong(idnhanvat)
+        if idnhanvat > 0:
+            tennhanvat = self.get_tennhanvat(idnhanvat)
+            self.set_chidanh(tennhanvat)
+        else:
+            self.set_chidanh(self.get_tennhanvat())
 
         idmuctieudangkhoa = self.get_idmuctieudangkhoa()
         if idmuctieudangkhoa and idmuctieudangkhoa != idnhanvat:
