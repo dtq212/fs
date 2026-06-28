@@ -336,6 +336,13 @@ class MoiTruong:
         if trihoanxuatchieubuaphap != self.get_trihoanxuatchieubuaphap(idnhanvat):
             write_int(self.tientrinh, self.diachigame + self.offsetdiachicosonhanvat + 0x94C + idnhanvat * self.offsetdiachicosomoinhanvat, trihoanxuatchieubuaphap)
 
+    def get_trihoanxuatchieutongquat(self, idnhanvat = 1):
+        return read_int(self.tientrinh, self.diachigame + 0x734F28)
+
+    def set_trihoanxuatchieutongquat(self, trihoanxuatchieutongquat, idnhanvat = 1):
+        if trihoanxuatchieutongquat != self.get_trihoanxuatchieutongquat(idnhanvat):
+            write_int(self.tientrinh, self.diachigame + 0x734F28, trihoanxuatchieutongquat)
+
     def get_is_nhanvatdachet(self, idnhanvat = 1):
         return self.get_idtrangthainhanvat(idnhanvat) == IDTRANGTHAINHANVAT_DACHET
 

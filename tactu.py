@@ -483,10 +483,9 @@ class TacTu:
                 chukyhanhtrang = self._taochukyvatpham(idvatpham)
 
                 if chukyhanhtrang and chukyhanhtrang in chukyhanhtrangcanmacs:
+                    self.moitruong.set_trihoanxuatchieutongquat(min(self.moitruong.get_trihoanxuatchieuvukhithucte(), self.moitruong.get_trihoanxuatchieubuaphapthucte()))
                     self.moitruong.action_sudungvatpham(sothutuvatpham, delay = 0.00)
                     chukyhanhtrangcanmacs.remove(chukyhanhtrang)
-                    #time.sleep(0.05)
-
                     if not chukyhanhtrangcanmacs:
                         break
 
@@ -649,13 +648,6 @@ class TacTu:
 
         if not self.moitruong.get_is_tamngungtancong():
             self._thoidiemtamngungtanconggannhat = time.time()
-
-        if self._is_tudongdoisetdo:
-            trihoanxcvk = self.moitruong.get_trihoanxuatchieuvukhithucte()
-            trihoanxcbp = self.moitruong.get_trihoanxuatchieubuaphapthucte()
-
-            self.moitruong.set_trihoanxuatchieuvukhi(trihoanxcvk)
-            self.moitruong.set_trihoanxuatchieubuaphap(trihoanxcbp)
 
     def action_kiemtraxulyloitudongtimduong(self):
         if self.moitruong.get_idtrangthainhanvat() == IDTRANGTHAINHANVAT_DUNGIM and time.time() - self._thoidiemnhanvattudongtimduongdungimgannhat > 2. and self.moitruong.get_is_dangtudongtimduong() and time.time() - self._thoidiemtudongtimduonggannhat >= 3.0:
