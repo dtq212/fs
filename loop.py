@@ -118,9 +118,3 @@ class LoopPhu:
         self.tactu.action_tudongphucsinh()
         self.tactu.action_tudongmoitodoi()
         self.tactu.action_tudongvutvatpham()
-
-        idmuctieu = self.moitruong.get_idmuctieudangchichuot()
-        if idmuctieu > 0:
-            tenmuctieu = self.moitruong.get_tennhanvat(idmuctieu)
-            if tenmuctieu in ["VươngTrùngDương", "TiểuYTiên", "3LanPhaiKhoc"]:
-                print("{} hiệu ứng bổ trợ: {}, hiệu ứng của tôi: {}".format(tenmuctieu, self.moitruong.get_hieuungbotros(idmuctieu), self.moitruong.get_hieuungbotros()))
