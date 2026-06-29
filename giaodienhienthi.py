@@ -107,7 +107,7 @@ class GiaoDienHienThi:
         r += 1
         self.add_check(self.grp_config, "Giữ khoảng cách (Đạo sĩ)", "_is_giukhoangcach", r, "Ctrl+Alt+Shift+K", "battat_is_giukhoangcach")
         r += 1
-        self.add_check(self.grp_config, "Đánh phủ đầu (Đạo sĩ / Vũ sĩ)", "_is_danhphudau", r, "", "battat_is_danhphudau")
+        self.add_check(self.grp_config, "Đánh chặn (Đạo sĩ / Vũ sĩ)", "_is_danhchan", r, "", "battat_is_danhchan")
         r += 1
         self.add_check(self.grp_config, "Không ưu tiên Giáp sĩ", "_is_khonguutiengiapsi", r, "Ctrl+Alt+Shift+Z", "battat_is_khonguutiengiapsi")
         r += 1
