@@ -1125,7 +1125,7 @@ class TacTu:
                             idhephaimuctieu = self.moitruong.get_idhephai(idmuctieu)
                             is_boss = self.moitruong.get_is_boss(idmuctieu)
                             is_nguoichoicangiukhoangcach = self.moitruong.get_idloainhanvat(idmuctieu) == IDLOAINHANVAT_NGUOICHOI and idhephaimuctieu in (IDHEPHAI_GIAPSI, IDHEPHAI_DINHAN)
-                            khoangcachantoan = 500 if is_boss else 300
+                            khoangcachantoan = 450 if is_boss else 300
                             if (is_nguoichoicangiukhoangcach or is_boss) and khoangcachmuctieu < khoangcachantoan:
                                 is_cokynangsansang = False
                                 for idkynang in (IDKYNANG_TAMMUOICHANHOA, IDKYNANG_THAPPHUONGLIETHOA, IDKYNANG_LOIDONGCUUTHIEN, ):
@@ -1267,7 +1267,7 @@ class TacTu:
                             idhephaimuctieu = self.moitruong.get_idhephai(idmuctieu)
                             is_boss = self.moitruong.get_is_boss(idmuctieu)
                             is_nguoichoicangiukhoangcach = self.moitruong.get_idloainhanvat(idmuctieu) == IDLOAINHANVAT_NGUOICHOI and idhephaimuctieu in (IDHEPHAI_GIAPSI, IDHEPHAI_DINHAN)
-                            khoangcachantoan = 500 if is_boss else 300
+                            khoangcachantoan = 450 if is_boss else 300
                             if (is_nguoichoicangiukhoangcach or is_boss) and khoangcachmuctieu < khoangcachantoan:
                                 is_cokynangsansang = False
                                 for idkynang in (IDKYNANG_BACHBOXUYENDUONG, IDKYNANG_NHATNHANTHANHQUAN, ):
