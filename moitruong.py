@@ -746,23 +746,23 @@ class MoiTruong:
 
     def get_donghothoigian(self):
         # game.g_SubWorldSet
-        return read_int(self.tientrinh, self.diachigame + 0x7118D8)
+        return read_int(self.tientrinh, self.diachigame + 0x714910)
 
     def get_is_khuvuccothetancong(self):
-        return read_int(self.tientrinh, self.diachigame + 0x7118D8 + 0x8 + 0xC0F4) > 0
+        return read_int(self.tientrinh, self.diachigame + 0x714910 + 0x8 + 0xC0F4) > 0
 
     def get_trihoanxuatchieutongquat(self):
-        return read_int(self.tientrinh, self.diachigame + 0x734F28)
+        return read_int(self.tientrinh, self.diachigame + 0x737F60)
 
     def set_trihoanxuatchieutongquat(self, trihoanxuatchieutongquat):
         if trihoanxuatchieutongquat != self.get_trihoanxuatchieutongquat():
-            write_int(self.tientrinh, self.diachigame + 0x734F28, trihoanxuatchieutongquat)
+            write_int(self.tientrinh, self.diachigame + 0x737F60, trihoanxuatchieutongquat)
 
     def get_idbandohientai(self):
-        return read_int(self.tientrinh, self.diachigame + 0x6D8204)
+        return read_int(self.tientrinh, self.diachigame + 0x6DB23C)
 
     def get_tenbandohientai(self):
-        return read_string(self.tientrinh, self.diachigame + 0x6D81B4)
+        return read_string(self.tientrinh, self.diachigame + 0x6DB1EC)
 
     def get_is_dangbatauto(self):
         return read_int(self.tientrinh, self.diachigame + self.offsetdiachicosocauhinh + 0xB370)
@@ -948,17 +948,17 @@ class MoiTruong:
         return idnhanvattieptheo
 
     def get_idtrangthaiclickchuot(self):
-        return read_int(self.tientrinh, self.diachigame + 0x26E6F4)
+        return read_int(self.tientrinh, self.diachigame + 0x271724)
 
     def get_toadoclick(self):
         toadox, toadoy = self.get_toado()
         return (
-            toadox + read_int(self.tientrinh, self.diachigame + 0x2689F4) - int(self.kichthuoccuasogame[0] / 2),
-            toadoy + int(read_int(self.tientrinh, self.diachigame + 0x2689F8) - int(self.kichthuoccuasogame[1] / 2)) * 2
+            toadox + read_int(self.tientrinh, self.diachigame + 0x26BA14) - int(self.kichthuoccuasogame[0] / 2),
+            toadoy + int(read_int(self.tientrinh, self.diachigame + 0x26BA18) - int(self.kichthuoccuasogame[1] / 2)) * 2
         )
 
     def get_is_dangmokytrancac(self):
-        return read_int(self.tientrinh, self.diachigame + 0x26B8D4)
+        return read_int(self.tientrinh, self.diachigame + 0x26E904)
 
     def khoitaohamsudungvatpham(self):
         if self.diachihamsudungvatpham:
@@ -2315,8 +2315,10 @@ class MoiTruong:
 
         if scan_cauhinh:
             diachi_ptr_cauhinh = read_int(self.tientrinh, scan_cauhinh + 2)
+            print("diachi_ptr_cauhinh: {}".format(hex(diachi_ptr_cauhinh)))
             diachi_thuc_te_cauhinh = read_int(self.tientrinh, diachi_ptr_cauhinh)
             self.offsetdiachicosocauhinh = diachi_thuc_te_cauhinh - self.diachigame
+            print("self.offsetdiachicosocauhinh: {}".format(hex(self.offsetdiachicosocauhinh)))
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset cơ sở cấu hình (Auto/Settings)!")
 
