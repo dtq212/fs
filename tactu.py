@@ -215,10 +215,10 @@ class TacTu:
 
     def battat_is_danhtheotennhanvat(self):
         self._is_danhtheotennhanvat = not self._is_danhtheotennhanvat
-        if self._is_danhtheotennhanvat:
-            phatam("Bật chỉ đánh theo tên nhân vật")
-        else:
-            phatam("Tắt chỉ đánh theo tên nhân vật, chuyển sang đánh tự do")
+        # if self._is_danhtheotennhanvat:
+        #     phatam("Bật chỉ đánh theo tên nhân vật")
+        # else:
+        #     phatam("Tắt chỉ đánh theo tên nhân vật, chuyển sang đánh tự do")
 
     def them_tennhanvattodoitudong(self):
         idmuctieu = self.moitruong.get_idmuctieudangchichuot()
@@ -1325,8 +1325,8 @@ class TacTu:
                             self.moitruong.set_idkynang1(idkynangtaytrai)
 
                     elif self._is_sudungkynangtoadochichuot:
-                        if self.moitruong.get_is_kynangsansang(IDKYNANG_XASAT):
-                            self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_XASAT, random.randint(550, 575))
+                        if self.moitruong.get_is_kynangsansang(IDKYNANG_CAMBAY):
+                            self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_CAMBAY, 0)
                     else:
                         self.moitruong.set_idkynang1(idkynangtaytrai)
                 else:
