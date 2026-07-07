@@ -950,10 +950,9 @@ class TacTu:
                 yeucauduocchon = self._yeucaudichuyentheosautruongnhom
 
         if yeucauduocchon:
-            self.moitruong.set_is_duoitheo(False)
-            self.moitruong.set_is_dichuyenhoatdongquanhphamvi(False)
-
             loaidichuyen = yeucauduocchon.get("loaidichuyen")
+
+            self.moitruong.set_is_duoitheo(False if loaidichuyen == "dungim" or not self._is_duoitheo else True)
 
             if loaidichuyen == "dichuyengiukhoangcachtoithieu" or (yeucauduocchon == self._yeucaudichuyentheosautruongnhom and is_quaxatruongnhom):
                 self.moitruong.set_is_tamngungtancong(True)
@@ -997,15 +996,10 @@ class TacTu:
             self.moitruong.set_is_tamngungtancong(False)
             if not self._is_duoitheo:
                 self.moitruong.set_is_duoitheo(False)
-                self.moitruong.set_is_dichuyenhoatdongquanhphamvi(False)
             elif self.moitruong.get_idhephai() in (IDHEPHAI_GIAPSI, IDHEPHAI_DINHAN, ):
                 self.moitruong.set_is_duoitheo(True)
             else:
                 self.moitruong.set_is_duoitheo(False)
-            if self._is_duoitheo and (not self._is_tudongdanhtheosautruongnhom or self.moitruong.get_idtodoi() <= 0 or not self.moitruong.get_is_truongnhomcungbando()):
-                self.moitruong.set_is_dichuyenhoatdongquanhphamvi(True)
-            else:
-                self.moitruong.set_is_dichuyenhoatdongquanhphamvi(False)
 
     def _get_is_dichuyenduongthang(self, idmuctieu, saisogoc = 15):
         x1, y1 = self.moitruong.get_toado()
