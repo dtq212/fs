@@ -117,7 +117,7 @@ class MoiTruong:
         self.offsetdiachithietlapmuctieutancong_ingame = 0
         self.offsetdiachithietlapmuctieutancong_ngoaiphamvi = 0
         self.offsetdiachithietlapmuctieutancong_dichuot = 0
-        self.offsetdiachithietlapmuctieutancong_theolaitan = 0
+        self.offsetdiachithietlapmuctieutancong_laiganmuctieutheosau = 0
         self.offsetdiachithietlapmuctieutancong_ngoaiphamvidichuyen = 0
 
         self.offsetdiachicosocauhinh = 0
@@ -934,7 +934,8 @@ class MoiTruong:
             write_int(self.tientrinh, self.diachigame + self.offsetdiachicosocauhinh + 0xA30C, idmuctieutancong)
 
     def set_idmuctieu(self, idnhanvat):
-        self.set_idmuctieudangchon(idnhanvat)
+        if self.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI:
+            self.set_idmuctieudangchon(idnhanvat)
         self.set_idmuctieutancong(idnhanvat)
         idmuctieudangkhoa = self.get_idmuctieudangkhoa()
         if idmuctieudangkhoa and idmuctieudangkhoa != idnhanvat:
@@ -1007,6 +1008,123 @@ class MoiTruong:
 
         encoding, _ = ks.asm(asm_code)
         write_bytes(self.tientrinh, self.diachihamsudungvatpham, bytes(encoding), len(encoding))
+
+    #TODO: địa chỉ 0x3AF8 dùng aob được thì đẹp, nhớ lưu lại giá trị b'\xE8\x53\xB3\x06\x00' chứ không mỗi lần code bị sửa lại phải mò
+    def action_tatvohieuhoapopuptabkytrancac(self):
+        diachi = self.diachigame + 0x3AF8
+        if read_bytes(self.tientrinh, self.diachigame + 0x3AF8, 1) != bytes.fromhex("E8"):
+            write_bytes(self.tientrinh, diachi, b'\xE8\x53\xB3\x06\x00', 5)
+
+    def action_vohieuhoapopuptabkytrancac(self):
+        diachi = self.diachigame + 0x3AF8
+        if read_bytes(self.tientrinh, self.diachigame + 0x3AF8, 1) != bytes.fromhex("90"):
+            write_bytes(self.tientrinh, diachi, b'\x90\x90\x90\x90\x90', 5)
+
+    def action_vohieuhoagiamxuatchieukhithaydo(self):
+        if not self.offsetdiachigiamxuatchieu1 or not self.offsetdiachigiamxuatchieu2:
+            return
+
+        diachixuatchieuvukhi = self.diachigame + self.offsetdiachicosonhanvat + self.offsetdiachicosomoinhanvat + 0x948
+        diachixuatchieubuaphap = self.diachigame + self.offsetdiachicosonhanvat + self.offsetdiachicosomoinhanvat + 0x94C
+
+        diachisua1 = self.diachigame + self.offsetdiachigiamxuatchieu1
+        if read_int(self.tientrinh, diachisua1 + 0x2) != diachixuatchieuvukhi:
+            write_int(self.tientrinh, diachisua1 + 0x2, diachixuatchieuvukhi)
+
+        diachisua2 = self.diachigame + self.offsetdiachigiamxuatchieu2
+        if read_int(self.tientrinh, diachisua2 + 0x2) != diachixuatchieubuaphap:
+            write_int(self.tientrinh, diachisua2 + 0x2, diachixuatchieubuaphap)
+
+    def action_tatvohieuhoathietlapmuctieudangchon(self):
+        if not self.offsetdiachithietlapmuctieu_890D or not self.offsetdiachithietlapmuctieu_C705:
+            return
+
+        diachi_890D = self.diachigame + self.offsetdiachithietlapmuctieu_890D
+        diachi_C705 = self.diachigame + self.offsetdiachithietlapmuctieu_C705
+
+        if read_bytes(self.tientrinh, diachi_890D, 1) != bytes.fromhex("89"):
+            write_bytes(self.tientrinh, diachi_890D, bytes.fromhex("89 88"), 2)
+            write_int(self.tientrinh, diachi_890D + 0x2, 0xB490)
+
+        if read_bytes(self.tientrinh, diachi_C705, 1) != bytes.fromhex("C7"):
+            write_bytes(self.tientrinh, diachi_C705, bytes.fromhex("C7 80"), 2)
+            write_int(self.tientrinh, diachi_C705 + 0x2, 0xB490)
+            write_int(self.tientrinh, diachi_C705 + 0x6, 0)
+
+    def action_vohieuhoathietlapmuctieudangchon(self):
+        if not self.offsetdiachithietlapmuctieu_890D or not self.offsetdiachithietlapmuctieu_C705:
+            return
+
+        diachi_890D = self.diachigame + self.offsetdiachithietlapmuctieu_890D
+        diachi_C705 = self.diachigame + self.offsetdiachithietlapmuctieu_C705
+
+        if read_bytes(self.tientrinh, diachi_890D, 1) != bytes.fromhex("90"):
+            write_bytes(self.tientrinh, diachi_890D, bytes.fromhex("90 90 90 90 90 90"), 6)
+
+        if read_bytes(self.tientrinh, diachi_C705, 1) != bytes.fromhex("90"):
+            write_bytes(self.tientrinh, diachi_C705, bytes.fromhex("90 90 90 90 90 90 90 90 90 90"), 10)
+
+    def action_tatvohieuhoathietlapmuctieutancong(self):
+        # 1. Auto ingame tự chọn quái
+        if self.offsetdiachithietlapmuctieutancong_ingame:
+            diachi1 = self.diachigame + self.offsetdiachithietlapmuctieutancong_ingame
+            if read_bytes(self.tientrinh, diachi1, 1) != bytes.fromhex("89"):
+                write_bytes(self.tientrinh, diachi1, bytes.fromhex("89 BE AC000000"), 6)
+
+        # 2. Lúc dí chuột
+        if self.offsetdiachithietlapmuctieutancong_dichuot:
+            diachi2 = self.diachigame + self.offsetdiachithietlapmuctieutancong_dichuot
+            if read_bytes(self.tientrinh, diachi2, 1) != bytes.fromhex("89"):
+                write_bytes(self.tientrinh, diachi2, bytes.fromhex("89 9E AC 00 00 00"), 6)
+
+        # 3. Lúc theo lại gần mục tiêu theo sau
+        if self.offsetdiachithietlapmuctieutancong_laiganmuctieutheosau:
+            diachi3 = self.diachigame + self.offsetdiachithietlapmuctieutancong_laiganmuctieutheosau
+            if read_bytes(self.tientrinh, diachi3, 1) != bytes.fromhex("89"):
+                write_bytes(self.tientrinh, diachi3, bytes.fromhex("89 86 AC 00 00 00"), 6)
+
+        # 4. Lúc ngoài phạm vi điểm di chuyển xung quanh
+        if self.offsetdiachithietlapmuctieutancong_ngoaiphamvidichuyen:
+            diachi4 = self.diachigame + self.offsetdiachithietlapmuctieutancong_ngoaiphamvidichuyen
+            if read_bytes(self.tientrinh, diachi4, 1) != bytes.fromhex("89"):
+                write_bytes(self.tientrinh, diachi4, bytes.fromhex("89 AE AC 00 00 00"), 6)
+
+        # 5. Lúc ngoài phạm vi tìm kiếm
+        if self.offsetdiachithietlapmuctieutancong_ngoaiphamvi:
+            diachi5 = self.diachigame + self.offsetdiachithietlapmuctieutancong_ngoaiphamvi
+            if read_bytes(self.tientrinh, diachi5, 1) != bytes.fromhex("89"):
+                write_bytes(self.tientrinh, diachi5, bytes.fromhex("89 AE AC000000"), 6)
+
+    def action_vohieuhoathietlapmuctieutancong(self):
+        # 1. Auto ingame tự chọn quái
+        if self.offsetdiachithietlapmuctieutancong_ingame:
+            diachi1 = self.diachigame + self.offsetdiachithietlapmuctieutancong_ingame
+            if read_bytes(self.tientrinh, diachi1, 1) != bytes.fromhex("90"):
+                write_bytes(self.tientrinh, diachi1, bytes.fromhex("90 90 90909090"), 6)
+
+        # 2. Lúc dí chuột
+        if self.offsetdiachithietlapmuctieutancong_dichuot:
+            diachi2 = self.diachigame + self.offsetdiachithietlapmuctieutancong_dichuot
+            if read_bytes(self.tientrinh, diachi2, 1) != bytes.fromhex("90"):
+                write_bytes(self.tientrinh, diachi2, bytes.fromhex("90 90 90909090"), 6)
+
+        # 3. Lúc theo lại gần mục tiêu theo sau
+        if self.offsetdiachithietlapmuctieutancong_laiganmuctieutheosau:
+            diachi3 = self.diachigame + self.offsetdiachithietlapmuctieutancong_laiganmuctieutheosau
+            if read_bytes(self.tientrinh, diachi3, 1) != bytes.fromhex("90"):
+                write_bytes(self.tientrinh, diachi3, bytes.fromhex("90 90 90909090"), 6)
+
+        # 4. Lúc ngoài phạm vi điểm di chuyển xung quanh
+        if self.offsetdiachithietlapmuctieutancong_ngoaiphamvidichuyen:
+            diachi4 = self.diachigame + self.offsetdiachithietlapmuctieutancong_ngoaiphamvidichuyen
+            if read_bytes(self.tientrinh, diachi4, 1) != bytes.fromhex("90"):
+                write_bytes(self.tientrinh, diachi4, bytes.fromhex("90 90 90909090"), 6)
+
+        # 5. Lúc ngoài phạm vi tìm kiếm
+        if self.offsetdiachithietlapmuctieutancong_ngoaiphamvi:
+            diachi5 = self.diachigame + self.offsetdiachithietlapmuctieutancong_ngoaiphamvi
+            if read_bytes(self.tientrinh, diachi5, 1) != bytes.fromhex("90"):
+                write_bytes(self.tientrinh, diachi5, bytes.fromhex("90 90 90909090"), 6)
 
     def action_sudungvatpham(self, sothutuvatpham, delay = 0.0):
         if not self.diachihamsudungvatpham:
@@ -2092,10 +2210,11 @@ class MoiTruong:
         if self.get_idtabkytrancac() != idtab:
             vitritab = VITRITAB_MAP.get(idtab)
             if vitritab is not None:
+                self.action_vohieuhoapopuptabkytrancac()
                 self.action_motabkytrancac(vitritab)
             return False
-        if self.get_is_dangmokytrancac():
-            self.action_dongkytrancac()
+
+        self.action_tatvohieuhoapopuptabkytrancac()
 
         if time.time() - self._thoidiemmuakytrancacgannhat < delay:
             return False
@@ -2315,10 +2434,8 @@ class MoiTruong:
 
         if scan_cauhinh:
             diachi_ptr_cauhinh = read_int(self.tientrinh, scan_cauhinh + 2)
-            print("diachi_ptr_cauhinh: {}".format(hex(diachi_ptr_cauhinh)))
             diachi_thuc_te_cauhinh = read_int(self.tientrinh, diachi_ptr_cauhinh)
             self.offsetdiachicosocauhinh = diachi_thuc_te_cauhinh - self.diachigame
-            print("self.offsetdiachicosocauhinh: {}".format(hex(self.offsetdiachicosocauhinh)))
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Offset cơ sở cấu hình (Auto/Settings)!")
 
@@ -2382,11 +2499,11 @@ class MoiTruong:
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Thiết lập mục tiêu tấn công lúc dí chuột!")
 
-        aob_muctieutancong_theolaitan = "51 8B CF 69 C9 ?? ?? ?? ?? 03 0D ?? ?? ?? ?? 8D 54 24 18 52 E8 ?? ?? ?? ?? 8B 44 24 10 8B 4C 24 14 50 51 8B CE E8 ?? ?? ?? ?? 5D 33 C0 5F 89 86 ?? ?? ?? ??"
-        scan_muctieutancong_theolaitan = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_muctieutancong_theolaitan))
+        aob_muctieutancong_laiganmuctieutheosau = "51 8B CF 69 C9 ?? ?? ?? ?? 03 0D ?? ?? ?? ?? 8D 54 24 18 52 E8 ?? ?? ?? ?? 8B 44 24 10 8B 4C 24 14 50 51 8B CE E8 ?? ?? ?? ?? 5D 33 C0 5F 89 86 ?? ?? ?? ??"
+        scan_muctieutancong_laiganmuctieutheosau = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_muctieutancong_laiganmuctieutheosau))
 
-        if scan_muctieutancong_theolaitan:
-            self.offsetdiachithietlapmuctieutancong_theolaitan = scan_muctieutancong_theolaitan + 46 - self.diachigame
+        if scan_muctieutancong_laiganmuctieutheosau:
+            self.offsetdiachithietlapmuctieutancong_laiganmuctieutheosau = scan_muctieutancong_laiganmuctieutheosau + 46 - self.diachigame
         else:
             print("[LỖI NGHIÊM TRỌNG] Không tìm thấy Pattern Thiết lập mục tiêu tấn công lúc theo lại gần!")
 
