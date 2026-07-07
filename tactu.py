@@ -1105,9 +1105,8 @@ class TacTu:
                                         "khoangcach": khoangcachantoan + 50
                                     }
                                     self._yeucaudichuyentancong = yeucaudichuyenmoi
-                                    return  # Thoát sớm để nhân vật lùi lại an toàn
+                                    return
 
-                        # Logic Đánh Phủ Đầu (Giờ đã nằm an toàn bên dưới Giữ khoảng cách)
                         if self._is_danhchan and not self._is_duoitheo and not self._is_khongsudungnhieukynang:
                             if 500 < khoangcachmuctieu <= 750:
                                 danhsachkynang = [IDKYNANG_TAMMUOICHANHOA, IDKYNANG_BANGPHONGVANLY, IDKYNANG_THAPPHUONGLIETHOA, IDKYNANG_LOIDONGCUUTHIEN, IDKYNANG_BANGPHONGBAO]
