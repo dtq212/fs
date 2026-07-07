@@ -934,8 +934,7 @@ class MoiTruong:
             write_int(self.tientrinh, self.diachigame + self.offsetdiachicosocauhinh + 0xA30C, idmuctieutancong)
 
     def set_idmuctieu(self, idnhanvat):
-        if self.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI:
-            self.set_idmuctieudangchon(idnhanvat)
+        self.set_idmuctieudangchon(idnhanvat)
         self.set_idmuctieutancong(idnhanvat)
         idmuctieudangkhoa = self.get_idmuctieudangkhoa()
         if idmuctieudangkhoa and idmuctieudangkhoa != idnhanvat:
@@ -2362,8 +2361,31 @@ class MoiTruong:
         return True
 
     def action_timkiemtoanbodiachiham(self):
-        write_bytes(self.tientrinh, self.diachigame + 0xFF661, b'\x85\xD8', 2)
-        write_bytes(self.tientrinh, self.diachigame + 0xFF5F5, b'\x85\xD8', 2)
+        aob_bypass_1 = "0F BE 05 ?? ?? ?? ?? 85 ?? 74 ?? 68 ?? ?? ?? ?? 68 ?? ?? ?? ?? 8D 8D ?? ?? ?? ?? 51 FF 15"
+        scan_bypass_1 = pymem.pattern.pattern_scan_module(
+            self.tientrinh.process_handle,
+            self.gamemodule,
+            taopatterntuaob(aob_bypass_1)
+        )
+
+        if scan_bypass_1:
+            write_bytes(self.tientrinh, scan_bypass_1 + 7, b'\x85\xD8', 2)
+            print("[THÀNH CÔNG] Đã áp dụng Bypass 1!")
+        else:
+            print("[CẢNH BÁO] Không tìm thấy Pattern Bypass 1! Có thể game đã update.")
+
+        aob_bypass_2 = "8B 4D ?? 89 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 85 ?? 74 ?? C7 05 ?? ?? ?? ?? 01 00 00 00 83 3D ?? ?? ?? ?? 00 74"
+        scan_bypass_2 = pymem.pattern.pattern_scan_module(
+            self.tientrinh.process_handle,
+            self.gamemodule,
+            taopatterntuaob(aob_bypass_2)
+        )
+
+        if scan_bypass_2:
+            write_bytes(self.tientrinh, scan_bypass_2 + 14, b'\x85\xD8', 2)
+            print("[THÀNH CÔNG] Đã áp dụng Bypass 2!")
+        else:
+            print("[CẢNH BÁO] Không tìm thấy Pattern Bypass 2! Có thể game đã update.")
 
         aob_nv = "A1 ?? ?? ?? ?? 8B 15 ?? ?? ?? ?? 56 8B F1 8B 88 ?? ?? ?? ?? 69 C9 ?? ?? ?? ?? 8B 84 ?? ?? ?? ?? ?? 8B 0D ?? ?? ?? ?? 8B 15 ?? ?? ?? ?? 57 50 51 52"
         scan_nv = pymem.pattern.pattern_scan_module(self.tientrinh.process_handle, self.gamemodule, taopatterntuaob(aob_nv))

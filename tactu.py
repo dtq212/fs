@@ -773,8 +773,6 @@ class TacTu:
         if idungvienso1 > 0:
             self._idmuctieu = idungvienso1
             if idungvienso1 != idmuctieudangchon or idungvienso1 != idmuctieutancong:
-                if idmuctieudangchon > 0 or idmuctieutancong > 0:
-                    self.moitruong.set_idmuctieu(0)
                 self.moitruong.set_idmuctieu(idungvienso1)
         else:
             self._idmuctieu = 0
