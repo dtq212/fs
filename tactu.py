@@ -1045,6 +1045,12 @@ class TacTu:
                 else:
                     self.moitruong.set_idkynangbotro4(0)
 
+                is_cothesudungkynang = self.moitruong.get_is_dangbatauto() and self.moitruong.get_is_khuvuccothetancong() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong()
+                if is_cothesudungkynang:
+                    if self._is_sudungkynangtoadochichuot:
+                        if self.moitruong.get_is_kynangsansang(IDKYNANG_VANCOTTOANKHO):
+                            self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_VANCOTTOANKHO, 0)
+
             elif self.moitruong.get_idhephai() == IDHEPHAI_GIAPSI:
                 is_cothesudungkynang = self.moitruong.get_is_dangbatauto() and self.moitruong.get_is_khuvuccothetancong() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong()
                 if is_cothesudungkynang:
@@ -1105,9 +1111,8 @@ class TacTu:
                                         "khoangcach": khoangcachantoan + 50
                                     }
                                     self._yeucaudichuyentancong = yeucaudichuyenmoi
-                                    return  # Thoát sớm để nhân vật lùi lại an toàn
+                                    return
 
-                        # Logic Đánh Phủ Đầu (Giờ đã nằm an toàn bên dưới Giữ khoảng cách)
                         if self._is_danhchan and not self._is_duoitheo and not self._is_khongsudungnhieukynang:
                             if 500 < khoangcachmuctieu <= 750:
                                 danhsachkynang = [IDKYNANG_TAMMUOICHANHOA, IDKYNANG_BANGPHONGVANLY, IDKYNANG_THAPPHUONGLIETHOA, IDKYNANG_LOIDONGCUUTHIEN, IDKYNANG_BANGPHONGBAO]
