@@ -1045,6 +1045,12 @@ class TacTu:
                 else:
                     self.moitruong.set_idkynangbotro4(0)
 
+                is_cothesudungkynang = self.moitruong.get_is_dangbatauto() and self.moitruong.get_is_khuvuccothetancong() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong()
+                if is_cothesudungkynang:
+                    if self._is_sudungkynangtoadochichuot:
+                        if self.moitruong.get_is_kynangsansang(IDKYNANG_VANCOTTOANKHO):
+                            self.moitruong.action_sudungkynangtoadochichuot(IDKYNANG_VANCOTTOANKHO, 0)
+
             elif self.moitruong.get_idhephai() == IDHEPHAI_GIAPSI:
                 is_cothesudungkynang = self.moitruong.get_is_dangbatauto() and self.moitruong.get_is_khuvuccothetancong() and self.moitruong.get_idtrangthaiclickchuot() != IDTRANGTHAICLICKCHUOT_CHUOTTRAI and not self.moitruong.get_is_dangtudongtimduong()
                 if is_cothesudungkynang:
