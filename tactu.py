@@ -1242,7 +1242,7 @@ class TacTu:
 
                         is_muctieudangdichuyen = self.moitruong.get_idtrangthainhanvat(idmuctieu) == IDTRANGTHAINHANVAT_DICHUYEN
                         is_muctieutiepcan = is_muctieudangdichuyen and khoangcachmuctieusaptoi < khoangcachmuctieu
-
+                        is_muctieubidongbang = self.moitruong.get_is_bidongbang(idmuctieu)
                         is_duongthang = self._get_is_dichuyenduongthang(idmuctieu)
                         is_sudungxasat = not is_muctieudangdichuyen or is_duongthang
 
@@ -1283,6 +1283,8 @@ class TacTu:
                                     self.moitruong.set_idkynang1(IDKYNANG_BACHBOXUYENDUONG if is_sudungbachboxuyenduong else IDKYNANG_BACHBOXUYENDUONGTATPHONGLV1)
                                 elif khoangcachmuctieu <= 500 and self.moitruong.get_is_kynangsansang(IDKYNANG_NHATNHANTHANHQUAN) and not is_muctieudangdichuyen:
                                     self.moitruong.set_idkynang1(IDKYNANG_NHATNHANTHANHQUAN)
+                                elif khoangcachmuctieu <= 500 and (is_muctieudangdichuyen and not is_muctieubidongbang):
+                                    self.moitruong.set_idkynang1(IDKYNANG_XUYENTAMTIEN)
                                 elif 500 < khoangcachmuctieu <= 600 and self.moitruong.get_is_kynangsansang(IDKYNANG_XUYENTAMTIEN) and not is_muctieudangdichuyen:
                                     self.moitruong.set_idkynang1(IDKYNANG_XUYENTAMTIEN)
                                 else:
@@ -1333,7 +1335,7 @@ class TacTu:
                             self.moitruong.set_idkynang1(IDKYNANG_NHATNHANTHANHQUAN)
                             if 500 < khoangcachmuctieu <= khoangcachtancong and is_cothesudungkynang:
                                 self.moitruong.action_sudungkynangphudau(idmuctieu, IDKYNANG_NHATNHANTHANHQUAN, random.randint(450, 475))
-                        elif khoangcachmuctieu > 500 and self.moitruong.get_is_kynangsansang(IDKYNANG_XUYENTAMTIEN):
+                        elif (is_muctieudangdichuyen and not is_muctieubidongbang) and self.moitruong.get_is_kynangsansang(IDKYNANG_XUYENTAMTIEN):
                             self.moitruong.set_idkynang1(IDKYNANG_XUYENTAMTIEN)
                         else:
                             self.moitruong.set_idkynang1(idkynangtaytrai)
