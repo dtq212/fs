@@ -94,6 +94,9 @@ class TacTu:
 
         self._idmuctieu = 0
 
+        self._is_dangchobatlac = False
+        self._thoidiemdukienbatlac = 0.
+
     def __del__(self):
         try:
             pass
@@ -592,31 +595,41 @@ class TacTu:
 
     def action_tudongbattathieuungbotro(self):
         if not self._is_tudongbattathieuungbotro:
+            self._is_dangchobatlac = False
             return
+
+        is_dieukienbatlac = False
 
         if self.moitruong.get_is_khuvuccothetancong():
             if self.moitruong.get_idhephai() == IDHEPHAI_DINHAN:
                 if not self.moitruong.get_is_datrieuhoithu() and not self.moitruong.get_is_dangtudongtimduong():
-                    self._thoidiembathieuungbotrogannhat = time.time()
-                    # for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
-                    #     self.moitruong.action_bathieuungbotro(idhieuungbotro)
+                    is_dieukienbatlac = True
                 else:
                     if time.time() - self._thoidiembathieuungbotrogannhat > 1.5:
-                        for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN): self.moitruong.action_tathieuungbotro(idhieuungbotro)
-                return
-
-            idmuctieu = self._idmuctieu if self._is_tudongtimkiemmuctieu else self.moitruong.get_idmuctieutancong()
-            if idmuctieu > 0 and (self.moitruong.get_idloainhanvat(idmuctieu) in (IDLOAINHANVAT_NGUOICHOI, IDLOAINHANVAT_TRIEUHOITHU) or self.moitruong.get_is_boss(
-                    idmuctieu) or self.moitruong.get_is_quaixanh(idmuctieu)):
-                self._thoidiembathieuungbotrogannhat = time.time()
-                # for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
-                #     self.moitruong.action_bathieuungbotro(idhieuungbotro)
-            elif time.time() - self._thoidiembathieuungbotrogannhat > 30.:
-                for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
-                    self.moitruong.action_tathieuungbotro(idhieuungbotro)
+                        for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN): 
+                            self.moitruong.action_tathieuungbotro(idhieuungbotro)
+            else:
+                idmuctieu = self._idmuctieu if self._is_tudongtimkiemmuctieu else self.moitruong.get_idmuctieutancong()
+                if idmuctieu > 0 and (self.moitruong.get_idloainhanvat(idmuctieu) in (IDLOAINHANVAT_NGUOICHOI, IDLOAINHANVAT_TRIEUHOITHU) or self.moitruong.get_is_boss(idmuctieu) or self.moitruong.get_is_quaixanh(idmuctieu)):
+                    is_dieukienbatlac = True
+                elif time.time() - self._thoidiembathieuungbotrogannhat > 30.:
+                    for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
+                        self.moitruong.action_tathieuungbotro(idhieuungbotro)
         else:
             for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
                 self.moitruong.action_tathieuungbotro(idhieuungbotro)
+
+        if is_dieukienbatlac:
+            if not self._is_dangchobatlac:
+                self._is_dangchobatlac = True
+                thoigiantre = random.uniform(1.0, 10.0)
+                self._thoidiemdukienbatlac = time.time() + thoigiantre
+            elif time.time() >= self._thoidiemdukienbatlac:
+                self._thoidiembathieuungbotrogannhat = time.time()
+                for idhieuungbotro in (IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN):
+                    self.moitruong.action_bathieuungbotro(idhieuungbotro)
+        else:
+            self._is_dangchobatlac = False
 
     def get_tongtrongluongvatpham(self):
         tongtrongluongvatpham = 0
@@ -1397,13 +1410,13 @@ class TacTu:
                     return False
 
         hieuungbotros = self.moitruong.get_hieuungbotros()
-        # if IDHIEUUNGBOTRO_NIETBANCHU not in hieuungbotros:
-        #     if not self.get_is_dusoluongtoithieu(NIETBANCHU, 1):
-        #         if self.get_is_dusoluongtoithieu(TIENDONG, 6):
-        #             is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_GIOITHIEU, 24, 1)
-        #             if is_muathanhcong:
-        #                 return True
-        #             return False
+        if IDHIEUUNGBOTRO_NIETBANCHU not in hieuungbotros:
+            if not self.get_is_dusoluongtoithieu(NIETBANCHU, 1):
+                if self.get_is_dusoluongtoithieu(TIENDONG, 6):
+                    is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_GIOITHIEU, 24, 1)
+                    if is_muathanhcong:
+                        return True
+                    return False
 
         if self._is_tudongbattathieuungbotro:
             if not ({IDHIEUUNGBOTRO_THANTIENTAN, IDHIEUUNGBOTRO_DAOTRAMTAN, IDHIEUUNGBOTRO_DAOHUYENTAN, IDHIEUUNGBOTRO_DAOTINHTAN} & set(hieuungbotros)):
