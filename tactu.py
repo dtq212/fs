@@ -944,7 +944,7 @@ class TacTu:
                         if not self._is_dangchophanhungtheosau:
                             self._is_dangchophanhungtheosau = True
                             self._thoidiemchodichuyentheosau = time.time()
-                            self._trihoandichuyentheosau = random.uniform(0.3, 1.5)
+                            self._trihoandichuyentheosau = random.uniform(1.0, 3.0)
                             return
 
                         if time.time() - self._thoidiemchodichuyentheosau < self._trihoandichuyentheosau:
@@ -967,13 +967,10 @@ class TacTu:
                         else:
                             loaidichuyen = "dichuyengiukhoangcachtoidadiem"
 
-                        do_lech_x = random.randint(-80, 80)
-                        do_lech_y = random.randint(-80, 80)
-
                         yeucaudichuyenmoi = {
                             "loaidichuyen": loaidichuyen,
-                            "toadodich": (xtruongnhom + do_lech_x, ytruongnhom + do_lech_y),
-                            "khoangcach": random.randint(30, 150)
+                            "toadodich": (xtruongnhom, ytruongnhom),
+                            "khoangcach": random.randint(150, 300)
                         }
                     else:
                         self._is_dangchophanhungtheosau = False
