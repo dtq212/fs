@@ -7,8 +7,8 @@ from multiprocessing import Process, Manager, freeze_support
 import keyboard
 import win32gui
 
-from cuaso import CuaSo
-from giaodienhienthi import GiaoDienHienThi
+from cuaso_fs import CuaSo
+from giaodienhienthi_fs import GiaoDienHienThi
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 

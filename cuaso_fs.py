@@ -2,14 +2,14 @@ import threading
 import time
 import traceback
 
-from hangso import *
-from loop import (
+from hangso_fs import *
+from loop_fs import (
     LoopChinh,
     LoopPhu,
     LoopLamMoiTrangThaiTacTu,
 )
-from moitruong import MoiTruong
-from tactu import TacTu
+from moitruong_fs import MoiTruong
+from tactu_fs import TacTu
 
 
 def khoidong_loopchinh(moitruong, tactu, stop):

@@ -5,9 +5,9 @@ import traceback
 
 import pymem.exception
 
-from hangso import IDHEPHAI_DAOSI, IDTRANGTHAINHANVAT_DICHUYEN, IDKYNANG_BACHBOXUYENDUONG, IDKYNANG_BACHBOXUYENDUONGTATPHONGLV1
-from moitruong import MoiTruong
-from tactu import TacTu
+from hangso_fs import IDHEPHAI_DAOSI, IDTRANGTHAINHANVAT_DICHUYEN, IDKYNANG_BACHBOXUYENDUONG, IDKYNANG_BACHBOXUYENDUONGTATPHONGLV1
+from moitruong_fs import MoiTruong
+from tactu_fs import TacTu
 
 
 class LoopChinh:

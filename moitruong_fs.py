@@ -3,8 +3,8 @@ import ctypes
 import pymem
 from keystone import Ks, KS_ARCH_X86, KS_MODE_32
 
-from hangso import *
-from tienich import *
+from hangso_fs import *
+from tienich_fs import *
 
 class MoiTruong:
 

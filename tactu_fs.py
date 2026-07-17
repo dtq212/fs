@@ -5,10 +5,10 @@ import time
 
 import pymem
 
-from hangso import *
-from moitruong import MoiTruong
-from tienich import luuthietlap as util_luuthietlap
-from tienich import taithietlap as util_taithietlap, phatam
+from hangso_fs import *
+from moitruong_fs import MoiTruong
+from tienich_fs import luuthietlap as util_luuthietlap
+from tienich_fs import taithietlap as util_taithietlap, phatam
 
 class TacTu:
     def __init__(self, moitruong: MoiTruong):
