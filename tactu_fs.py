@@ -97,13 +97,13 @@ class TacTu:
         self._is_dangchobatlac = False
         self._thoidiemdukienbatlac = 0.
 
-        self._thoidiemmuavatphamgannhat_map = {}
-
         self._is_dangchophanhungtheosau = False
         self._thoidiemchodichuyentheosau = 0.
         self._trihoandichuyentheosau = 0.
 
         self._thoidiemthoatket = 0.
+        self._thoidiemvatphamtontaihanhtrang_map = {}
+        self._trihoansudungvatpham_map = {}
 
     def __del__(self):
         try:
@@ -844,19 +844,35 @@ class TacTu:
 
         if diempk > 0:
             if diempk >= 8 or (diempk >= 5 and phantramsinhluchientai <= 70) or (diempk >= 3 and phantramsinhluchientai <= 60) or phantramsinhluchientai <= 50 or self._phantramsinhlucmatdi >= 20:
-                thoidiemmuaquanamthuy = self._thoidiemmuavatphamgannhat_map.get(QUANAMTHUY, 0)
+                sothutuvatpham = self.action_timkiemvatpham(QUANAMTHUY)
 
-                if thoidiemmuaquanamthuy == 0:
-                    self._thoidiemmuavatphamgannhat_map[QUANAMTHUY] = time.time()
-                    return
+                if sothutuvatpham != -1:
+                    thoidiemcoquanamthuy = self._thoidiemvatphamtontaihanhtrang_map.get(QUANAMTHUY, 0)
 
-                thoigiandatroiqua = time.time() - thoidiemmuaquanamthuy
+                    if thoidiemcoquanamthuy == 0:
+                        self._thoidiemvatphamtontaihanhtrang_map[QUANAMTHUY] = time.time()
 
-                if thoigiandatroiqua < 1.25:
-                    return
+                        if phantramsinhluchientai <= 30 or self._phantramsinhlucmatdi >= 20:
+                            self._trihoansudungvatpham_map[QUANAMTHUY] = random.uniform(0.1, 0.4)
+                        elif 30 < phantramsinhluchientai <= 60:
+                            self._trihoansudungvatpham_map[QUANAMTHUY] = random.uniform(0.8, 1.5)
+                        else:
+                            self._trihoansudungvatpham_map[QUANAMTHUY] = random.uniform(1.5, 3.0)
+                        return
 
-                if self.action_sudungvatpham(QUANAMTHUY, delay = 0):
-                    return
+                    thoigiandatroiqua = time.time() - thoidiemcoquanamthuy
+                    trihoanthucte = self._trihoansudungvatpham_map.get(QUANAMTHUY, 1.25)
+
+                    if (phantramsinhluchientai <= 30 or self._phantramsinhlucmatdi >= 20) and trihoanthucte > 0.4:
+                        trihoanthucte = random.uniform(0.1, 0.4)
+                        self._trihoansudungvatpham_map[QUANAMTHUY] = trihoanthucte
+
+                    if thoigiandatroiqua >= trihoanthucte:
+                        if self.action_sudungvatpham(QUANAMTHUY, delay = 0):
+                            self._thoidiemvatphamtontaihanhtrang_map[QUANAMTHUY] = 0
+                            return
+                else:
+                    self._thoidiemvatphamtontaihanhtrang_map[QUANAMTHUY] = 0
 
         if self.moitruong.get_idbienthannhanvat() >= 0:
             self._thoidiemyeucaubienthan = time.time()
@@ -871,16 +887,23 @@ class TacTu:
                 return
 
         for tenvatpham in [THANCAUPHU, THANTIENTAN, NIETBANCHU, ]:
-            thoidiemmua = self._thoidiemmuavatphamgannhat_map.get(tenvatpham, 0)
-            if thoidiemmua == 0:
-                self._thoidiemmuavatphamgannhat_map[tenvatpham] = time.time()
-                continue
+            sothutuvatpham = self.action_timkiemvatpham(tenvatpham)
 
-            if (time.time() - thoidiemmua) < 2.5:
-                continue
+            if sothutuvatpham != -1:
+                thoidiemcovatpham = self._thoidiemvatphamtontaihanhtrang_map.get(tenvatpham, 0)
 
-            if self.action_sudungvatpham(tenvatpham, delay = random.uniform(2, 4)):
-                return
+                if thoidiemcovatpham == 0:
+                    self._thoidiemvatphamtontaihanhtrang_map[tenvatpham] = time.time()
+                    continue
+
+                if (time.time() - thoidiemcovatpham) < 2.5:
+                    continue
+
+                if self.action_sudungvatpham(tenvatpham, delay = random.uniform(2, 4)):
+                    self._thoidiemvatphamtontaihanhtrang_map[tenvatpham] = 0
+                    return
+            else:
+                self._thoidiemvatphamtontaihanhtrang_map[tenvatpham] = 0
 
     def action_tudongnhatvatpham(self):
         if not self.moitruong.get_is_tudongnhatvatpham():
@@ -1018,7 +1041,7 @@ class TacTu:
 
             self.moitruong.set_is_duoitheo(False if loaidichuyen == "dungim" or not self._is_duoitheo else True)
 
-            if loaidichuyen == "dichuyengiukhoangcachtoithieu" or (yeucauduocchon == self._yeucaudichuyentheosautruongnhom and is_quaxatruongnhom):
+            if loaidichuyen == "dichuyengiukhoangcachtoithieu" or (yeucauduocchon == self._yeucaudichuyentheosautruongnhom and is_quaxatruongnhom) or (self.moitruong.get_idmaupk() == IDMAUPK_DO and not self.get_is_dusoluongtoithieu(QUANAMTHUY, 1)):
                 self.moitruong.set_is_tamngungtancong(True)
             else:
                 self.moitruong.set_is_tamngungtancong(False)
@@ -1051,7 +1074,11 @@ class TacTu:
             elif loaidichuyen == "dichuyengiukhoangcachtoithieu":
                 self.moitruong.action_dichuyengiukhoangcachtoithieu(yeucauduocchon.get("idmuctieu"), khoangcachtoithieu = yeucauduocchon.get("khoangcach"))
         else:
-            self.moitruong.set_is_tamngungtancong(False)
+            if self.moitruong.get_idmaupk() == IDMAUPK_DO and not self.get_is_dusoluongtoithieu(QUANAMTHUY, 1):
+                self.moitruong.set_is_tamngungtancong(True)
+            else:
+                self.moitruong.set_is_tamngungtancong(False)
+
             if not self._is_duoitheo:
                 self.moitruong.set_is_duoitheo(False)
             elif self.moitruong.get_idhephai() in (IDHEPHAI_GIAPSI, IDHEPHAI_DINHAN, ):
@@ -1094,6 +1121,9 @@ class TacTu:
     def action_xulytancong(self):
         yeucaudichuyenmoi = None
         try:
+            if self.moitruong.get_idmaupk() == IDMAUPK_DO and not self.get_is_dusoluongtoithieu(QUANAMTHUY, 1):
+                return
+
             idkynangtaytrai = self.moitruong.get_idkynangtaytrai()
             if self.moitruong.get_idhephai() == IDHEPHAI_DINHAN:
                 is_datrieuhoithu = self.moitruong.get_is_datrieuhoithu()
@@ -1443,7 +1473,6 @@ class TacTu:
                 if self.get_is_dusoluongtoithieu(TIENDONG, 2):
                     is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 10, 2)
                     if is_muathanhcong:
-                        self._thoidiemmuavatphamgannhat_map[QUANAMTHUY] = time.time()
                         return True
                     return False
 
@@ -1453,7 +1482,6 @@ class TacTu:
                 if self.get_is_dusoluongtoithieu(TIENDONG, 6):
                     is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_GIOITHIEU, 24, 1)
                     if is_muathanhcong:
-                        self._thoidiemmuavatphamgannhat_map[NIETBANCHU] = time.time()
                         return True
                     return False
 
@@ -1463,7 +1491,6 @@ class TacTu:
                     if self.get_is_dusoluongtoithieu(TIENDONG, 9):
                         is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 23, 1, delay = random.uniform(1.0, 2.0))
                         if is_muathanhcong:
-                            self._thoidiemmuavatphamgannhat_map[THANTIENTAN] = time.time()
                             return True
                         return False
 
@@ -1471,7 +1498,6 @@ class TacTu:
             if self.get_is_dusoluongtoithieu(TIENDONG, 8):
                 is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 21, 1, delay = random.uniform(1.0, 2.0))
                 if is_muathanhcong:
-                    self._thoidiemmuavatphamgannhat_map[THANHLO] = time.time()
                     return True
                 return False
 
@@ -1479,7 +1505,6 @@ class TacTu:
             if self.get_is_dusoluongtoithieu(TIENDONG, 8):
                 is_muathanhcong = self.moitruong.action_muavatphamkytrancac(IDTABVATPHAMKYTRANCAC_DUOCLIEU, 22, 1, delay = random.uniform(1.0, 2.0))
                 if is_muathanhcong:
-                    self._thoidiemmuavatphamgannhat_map[CHANKHI] = time.time()
                     return True
                 return False
 
